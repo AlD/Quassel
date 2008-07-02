@@ -96,35 +96,13 @@ bool InputLine::addToHistory(const QString &text) {
 
 void InputLine::on_returnPressed() {
   addToHistory(text());
-  emit sendText(text());
+  foreach(QString newText, text().split(QRegExp("[\\r\\n]+")))
+    emit sendText(newText);
   clear();
 }
 
 void InputLine::on_textChanged(QString newText) {
-  QStringList lineSeperators;
-  lineSeperators << QString("\r\n")
-		 << QString('\n')
-		 << QString('\r');
-  
-  QString lineSep;
-  foreach(QString seperator, lineSeperators) {
-    if(newText.contains(seperator)) {
-      lineSep = seperator;
-      break;
-    }
-  }
-
-  if(lineSep.isEmpty())
-    return;
-  
-  if(newText.contains(lineSep)) {
-    clear();
-    QString line = newText.section(lineSep, 0, 0);
-    QString remainder = newText.section(lineSep, 1);
-    insert(line);
-    emit returnPressed();
-    insert(remainder);
-  }
-  
+  Q_UNUSED(newText);
+  return;
 }
 
