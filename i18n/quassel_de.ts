@@ -1399,7 +1399,7 @@ space</source>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="367"/>
         <source>The Quassel Core you are connected to is not configured yet. You may now launch a configuration wizard that helps you setting up your Core.</source>
-        <translation>Der Quassel-Kern, mit dem Sie eine Verbindung herstellen möchten, ist noch unkonfiguriert. Sie können jetzt einen Konfigurationshelfer starten, der Ihnen bei der Konfiguration Ihres Kerns behilflich ist.</translation>
+        <translation>Der Quassel-Kern, mit dem Sie eine Verbindung herstellen möchten, ist noch unkonfiguriert. Sie können jetzt den Konfigurationshelfer starten, der Ihnen bei der Konfiguration Ihres Kerns behilflich ist.</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="395"/>
