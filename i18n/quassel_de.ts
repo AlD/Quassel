@@ -546,7 +546,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/qtui/settingspages/colorsettingspage.cpp" line="33"/>
         <source>Color settings</source>
-        <translation>Farbeinstellungen</translation>
+        <translation>Farben</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/colorsettingspage.ui" line="19"/>
@@ -1806,7 +1806,7 @@ space</source>
     <message>
         <location filename="../src/qtui/settingspages/highlightsettingspage.ui" line="32"/>
         <source>Highlight</source>
-        <translation>Hervorhebung</translation>
+        <translation>Hervorhebungen</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/highlightsettingspage.cpp" line="157"/>
