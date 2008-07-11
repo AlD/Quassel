@@ -546,7 +546,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/qtui/settingspages/colorsettingspage.cpp" line="33"/>
         <source>Color settings</source>
-        <translation>Farbeinstellungen</translation>
+        <translation>Farben</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/colorsettingspage.ui" line="19"/>
@@ -1399,7 +1399,7 @@ space</source>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="367"/>
         <source>The Quassel Core you are connected to is not configured yet. You may now launch a configuration wizard that helps you setting up your Core.</source>
-        <translation>Der Quassel-Kern, mit dem Sie eine Verbindung herstellen möchten, ist noch unkonfiguriert. Sie können jetzt einen Konfigurationshelfer starten, der Ihnen bei der Konfiguration Ihres Kerns behilflich ist.</translation>
+        <translation>Der Quassel-Kern, mit dem Sie eine Verbindung herstellen möchten, ist noch unkonfiguriert. Sie können jetzt den Konfigurationshelfer starten, der Ihnen bei der Konfiguration Ihres Kerns behilflich ist.</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="395"/>
@@ -1806,7 +1806,7 @@ space</source>
     <message>
         <location filename="../src/qtui/settingspages/highlightsettingspage.ui" line="32"/>
         <source>Highlight</source>
-        <translation>Hervorhebung</translation>
+        <translation>Hervorhebungen</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/highlightsettingspage.cpp" line="157"/>
