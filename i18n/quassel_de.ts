@@ -1414,7 +1414,7 @@ space</source>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="477"/>
         <source>&lt;b&gt;Please be patient while your client synchronizes with the Quassel Core!&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Bitte haben Sie etwas Geduld während Ihr Client sich mit dem Quassel-Kern synchronisiert!&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;Bitte haben Sie etwas Geduld, während sich Ihr Client mit dem Quassel-Kern synchronisiert!&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="492"/>
