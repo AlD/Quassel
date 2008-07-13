@@ -2756,7 +2756,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/common/message.cpp" line="118"/>
         <source>%Dj%DN%1%DN %DH(%2@%3)%DH has joined %DC%4%DC</source>
-        <translation>%Dj%DN%1%DN %DH(%2@%3)%DH ist %DC%4%DC beigetreten</translation>
+        <translation>%Dj%DN%1%DN %DH(%2@%3)%DH hat %DC%4%DC betreten</translation>
     </message>
     <message>
         <location filename="../src/common/message.cpp" line="120"/>
@@ -3544,7 +3544,7 @@ Lassen Sie dies auf ISO-8859-1 gesetzt, falls Sie nicht *wirklich* wissen, was S
     <message>
         <location filename="../src/uisupport/uistyle.cpp" line="286"/>
         <source>%Dj%DN%1%DN %DH(%2@%3)%DH has joined %DC%4%DC</source>
-        <translation>%Dj%DN%1%DN %DH(%2@%3)%DH ist %DC%4%DC beigetreten</translation>
+        <translation>%Dj%DN%1%DN %DH(%2@%3)%DH hat %DC%4%DC betreten</translation>
     </message>
     <message>
         <location filename="../src/uisupport/uistyle.cpp" line="288"/>
