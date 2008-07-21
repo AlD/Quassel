@@ -48,7 +48,7 @@ void Core::destroy() {
 }
 
 Core::Core() : storage(0) {
-  startTime = QDateTime::currentDateTime();  // for uptime :)
+  _startTime = QDateTime::currentDateTime();  // for uptime :)
 
   // Register storage backends here!
   registerStorageBackend(new SqliteStorage(this));
@@ -353,7 +353,7 @@ bool Core::startListening(uint port) {
   if(!success) {
     qWarning("%s", qPrintable(QString("Could not open GUI client port %1: %2").arg(port).arg(server.errorString())));
   } else {
-    qDebug() << "Listening for GUI clients on port" << server.serverPort();
+    qDebug() << "Listening for GUI clients on port" << server.serverPort() << "using protocol version" << Global::protocolVersion;
   }
   
   return success;
@@ -423,14 +423,14 @@ void Core::processClientMessage(QTcpSocket *socket, const QVariantMap &msg) {
     reply["CoreBuild"] = 860; // FIXME legacy
     reply["ProtocolVersion"] = Global::protocolVersion;
     // TODO: Make the core info configurable
-    int uptime = startTime.secsTo(QDateTime::currentDateTime());
+    int uptime = startTime().secsTo(QDateTime::currentDateTime());
     int updays = uptime / 86400; uptime %= 86400;
     int uphours = uptime / 3600; uptime %= 3600;
     int upmins = uptime / 60;
     reply["CoreInfo"] = tr("<b>Quassel Core Version %1</b><br>"
-                            "Built: %2<br>"
-                            "Up %3d%4h%5m (since %6)").arg(Global::quasselVersion).arg(Global::quasselBuildDate)
-                            .arg(updays).arg(uphours,2,10,QChar('0')).arg(upmins,2,10,QChar('0')).arg(startTime.toString(Qt::TextDate));
+			   "Built: %2<br>"
+			   "Up %3d%4h%5m (since %6)").arg(Global::quasselVersion).arg(Global::quasselBuildDate)
+      .arg(updays).arg(uphours,2,10,QChar('0')).arg(upmins,2,10,QChar('0')).arg(startTime().toString(Qt::TextDate));
 
 #ifndef QT_NO_OPENSSL
     SslServer *sslServer = qobject_cast<SslServer *>(&server);
@@ -532,9 +532,12 @@ void Core::clientDisconnected() {
   if(socket) {
     // here it's safe to call methods on socket!
     qDebug() << qPrintable(tr("Non-authed client disconnected.")) << qPrintable(socket->peerAddress().toString());
+    blocksizes.remove(socket);
+    clientInfo.remove(socket);
     socket->deleteLater();
   } else {
     // we have to crawl through the hashes and see if we find a victim to remove
+    qDebug() << qPrintable(tr("Non-authed client disconnected. (socket allready destroyed)"));
 
     // DO NOT CALL ANY METHODS ON socket!!
     socket = static_cast<QTcpSocket *>(sender());

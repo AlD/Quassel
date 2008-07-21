@@ -18,18 +18,24 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef UISETTINGS_H
-#define UISETTINGS_H
+#include "corecoreinfo.h"
 
-#include "clientsettings.h"
+#include "core.h"
+#include "coresession.h"
+#include "global.h"
+#include "signalproxy.h"
 
-class UiSettings : public ClientSettings {
-public:
-  UiSettings(const QString &group = "Ui");
-  
-  void setValue(const QString &key, const QVariant &data);
-  QVariant value(const QString &key, const QVariant &def = QVariant());
-  void remove(const QString &key);
-};
+CoreCoreInfo::CoreCoreInfo(CoreSession *parent)
+  : CoreInfo(parent),
+    _coreSession(parent)
+{
+}
 
-#endif
+QVariantMap CoreCoreInfo::coreData() const {
+  QVariantMap data;
+  data["quasselVersion"] = Global::quasselVersion;
+  data["quasselBuildDate"] = Global::quasselBuildDate;
+  data["startTime"] = Core::instance()->startTime();
+  data["sessionConnectedClients"] = _coreSession->signalProxy()->peerCount();
+  return data;
+}

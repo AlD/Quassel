@@ -20,13 +20,15 @@ set(SOURCES
     util.cpp
     network.cpp
     ircuser.cpp
-    ircchannel.cpp)
+    ircchannel.cpp
+    cliparser.cpp)
 
 set(MOC_HDRS
     backlogmanager.h
     buffersyncer.h
     bufferviewconfig.h
     bufferviewmanager.h
+    coreinfo.h
     identity.h
     ircchannel.h
     irclisthelper.h
@@ -42,7 +44,8 @@ set(HEADERS ${MOC_HDRS}
     message.h
     settings.h
     types.h
-    util.h)
+    util.h
+    cliparser.h)
 
 qt4_wrap_cpp(MOC ${MOC_HDRS})
 

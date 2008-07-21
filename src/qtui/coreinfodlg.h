@@ -18,18 +18,33 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef UISETTINGS_H
-#define UISETTINGS_H
+#ifndef COREINFODLG_H
+#define COREINFODLG_H
 
-#include "clientsettings.h"
+#include "ui_coreinfodlg.h"
+#include <QDialog>
 
-class UiSettings : public ClientSettings {
+#include "clientcoreinfo.h"
+
+class CoreInfoDlg : public QDialog {
+  Q_OBJECT
+
 public:
-  UiSettings(const QString &group = "Ui");
-  
-  void setValue(const QString &key, const QVariant &data);
-  QVariant value(const QString &key, const QVariant &def = QVariant());
-  void remove(const QString &key);
+  CoreInfoDlg(QWidget *parent = 0);
+
+public slots:
+  void coreInfoAvailable();
+
+protected:
+  virtual void timerEvent(QTimerEvent *) { updateUptime(); }
+
+private slots:
+  void on_closeButton_clicked() { reject(); }
+  void updateUptime();
+
+private:
+  Ui::CoreInfoDlg ui;
+  ClientCoreInfo _coreInfo;
 };
 
-#endif
+#endif //COREINFODLG_H

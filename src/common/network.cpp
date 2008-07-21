@@ -36,6 +36,7 @@ Network::Network(const NetworkId &networkid, QObject *parent)
     _networkId(networkid),
     _identity(0),
     _myNick(QString()),
+    _latency(0),
     _networkName(QString("<not initialized>")),
     _currentServer(QString()),
     _connected(false),
@@ -429,6 +430,13 @@ void Network::setMyNick(const QString &nickname) {
   emit myNickSet(nickname);
 }
 
+void Network::setLatency(int latency) {
+  if(_latency == latency)
+    return;
+  _latency = latency;
+  emit latencySet(latency);
+}
+
 void Network::setIdentity(IdentityId id) {
   _identity = id;
   emit identitySet(id);
@@ -684,6 +692,12 @@ void Network::determinePrefixes() {
   } else {
     QString defaultPrefixes("~&@%+");
     QString defaultPrefixModes("qaohv");
+
+    if(PREFIX.isEmpty()) {
+      _prefixes = defaultPrefixes;
+      _prefixModes = defaultPrefixModes;
+      return;
+    }
 
     // we just assume that in PREFIX are only prefix chars stored
     for(int i = 0; i < defaultPrefixes.size(); i++) {
