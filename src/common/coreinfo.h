@@ -18,41 +18,26 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef IRCLISTHELPER_H
-#define IRCLISTHELPER_H
+#ifndef COREINFO_H
+#define COREINFO_H
 
 #include "syncableobject.h"
-#include "types.h"
 
 /*
- * This is a little helper to display channel lists of a network.
- * The whole process is done in 3 steps:
- *  1.) the client requests to issue a LIST command with requestChannelList()
- *  2.) RPL_LIST fills on the core the list of available channels
- *      when RPL_LISTEND is received the clients will be informed, that they can pull the data
- *  3.) client pulls the data by calling requestChannelList again. receiving the data in receiveChannelList
+ * gather various informations about the core.
  */
-class IrcListHelper : public SyncableObject {
+
+class CoreInfo : public SyncableObject {
   Q_OBJECT
 
-public:
-  inline IrcListHelper(QObject *parent = 0) : SyncableObject(parent) { setInitialized(); };
+  Q_PROPERTY(QVariantMap coreData READ coreData WRITE setCoreData STORED false)
 
-  struct ChannelDescription {
-    QString channelName;
-    quint32 userCount;
-    QString topic;
-    ChannelDescription(const QString &channelName_, quint32 userCount_, const QString &topic_) : channelName(channelName_), userCount(userCount_), topic(topic_) {};
-  };
+public:
+  CoreInfo(QObject *parent = 0) : SyncableObject(parent) {}
 
 public slots:
-  inline virtual QVariantList requestChannelList(const NetworkId &netId, const QStringList &channelFilters) { emit channelListRequested(netId, channelFilters); return QVariantList(); }
-  inline virtual void receiveChannelList(const NetworkId &, const QStringList &, const QVariantList &) {};
-  inline virtual void reportFinishedList(const NetworkId &netId) { emit finishedListReported(netId); }
-
-signals:
-  void channelListRequested(const NetworkId &netId, const QStringList &channelFilters);
-  void finishedListReported(const NetworkId &netId);
+  virtual inline QVariantMap coreData() const { return QVariantMap(); }
+  virtual inline void setCoreData(const QVariantMap &) {}
 };
 
-#endif //IRCLISTHELPER_H
+#endif //COREINFO_H
