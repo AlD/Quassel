@@ -18,18 +18,61 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef UISETTINGS_H
-#define UISETTINGS_H
+#include "aliasmanager.h"
 
-#include "clientsettings.h"
+#include <QDebug>
+#include <QStringList>
 
-class UiSettings : public ClientSettings {
-public:
-  UiSettings(const QString &group = "Ui");
-  
-  void setValue(const QString &key, const QVariant &data);
-  QVariant value(const QString &key, const QVariant &def = QVariant());
-  void remove(const QString &key);
-};
+AliasManager &AliasManager::operator=(const AliasManager &other) {
+  _aliases = other._aliases;
+  return *this;
+}
 
-#endif
+int AliasManager::indexOf(const QString &name) const {
+  for(int i = 0; i < _aliases.count(); i++) {
+    if(_aliases[i].name == name)
+      return i;
+  }
+  return -1;
+}
+
+QVariantMap AliasManager::initAliases() const {
+  QVariantMap aliases;
+  QStringList names;
+  QStringList expansions;
+
+  for(int i = 0; i < _aliases.count(); i++) {
+    names << _aliases[i].name;
+    expansions << _aliases[i].expansion;
+  }
+
+  aliases["names"] = names;
+  aliases["expansions"] = expansions;
+  return aliases;
+}
+
+void AliasManager::initSetAliases(const QVariantMap &aliases) {
+  QStringList names = aliases["names"].toStringList();
+  QStringList expansions = aliases["expansions"].toStringList();
+
+  if(names.count() != expansions.count()) {
+    qWarning() << "AliasesManager::initSetAliases: received" << names.count() << "alias names but only" << expansions.count() << "expansions!";
+    return;
+  }
+
+  _aliases.clear();
+  for(int i = 0; i < names.count(); i++) {
+    _aliases << Alias(names[i], expansions[i]);
+  }
+}
+
+
+void AliasManager::addAlias(const QString &name, const QString &expansion) {
+  if(contains(name)) {
+    return;
+  }
+
+  _aliases << Alias(name, expansion);
+
+  emit aliasAdded(name, expansion);
+}

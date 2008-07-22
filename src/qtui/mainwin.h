@@ -67,6 +67,7 @@ class MainWin : public QMainWindow {
   protected slots:
     void connectedToCore();
     void setConnectedState();
+    void updateLagIndicator(int lag);
     void securedConnection();
     void disconnectedFromCore();
     void setDisconnectedState();
@@ -77,6 +78,7 @@ class MainWin : public QMainWindow {
     void removeBufferView(int bufferViewConfigId);
     void receiveMessage(const Message &msg);
     void showChannelList(NetworkId netId = NetworkId());
+    void showCoreInfoDlg();
     void showSettingsDlg();
     void on_actionEditNetworks_triggered();
     void on_actionManageViews_triggered();
@@ -109,6 +111,7 @@ class MainWin : public QMainWindow {
     QtUi *gui;
 
     QMenu *systrayMenu;
+    QLabel *coreLagLabel;
     QLabel *sslLabel;
 
     TitleSetter _titleSetter;

@@ -18,18 +18,41 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef UISETTINGS_H
-#define UISETTINGS_H
+#include "corealiasmanager.h"
 
-#include "clientsettings.h"
+#include "core.h"
+#include "coresession.h"
 
-class UiSettings : public ClientSettings {
-public:
-  UiSettings(const QString &group = "Ui");
-  
-  void setValue(const QString &key, const QVariant &data);
-  QVariant value(const QString &key, const QVariant &def = QVariant());
-  void remove(const QString &key);
-};
+CoreAliasManager::CoreAliasManager(CoreSession *parent)
+  : AliasManager(parent)
+{
+  CoreSession *session = qobject_cast<CoreSession *>(parent);
+  if(!session) {
+    qWarning() << "CoreAliasManager: unable to load Aliases. Parent is not a Coresession!";
+    loadDefaults();
+    return;
+  }
 
-#endif
+  QVariantMap aliases = Core::getUserSetting(session->user(), "Aliases").toMap();
+  if(aliases.isEmpty()) {
+    loadDefaults();
+  } else {
+    initSetAliases(aliases);
+  }
+}
+
+
+CoreAliasManager::~CoreAliasManager() {
+  CoreSession *session = qobject_cast<CoreSession *>(parent());
+  if(!session) {
+    qWarning() << "CoreAliasManager: unable to save Aliases. Parent is not a Coresession!";
+    return;
+  }
+
+  Core::setUserSetting(session->user(), "Aliases", initAliases());
+}
+
+void CoreAliasManager::loadDefaults() {
+  // Default Aliases:
+  addAlias("j", "/join $1");
+}

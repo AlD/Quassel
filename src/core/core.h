@@ -282,6 +282,8 @@ class Core : public QObject {
      */
     static QHash<BufferId, MsgId> bufferLastSeenMsgIds(UserId user);
 
+  const QDateTime &startTime() const { return _startTime; }
+
   public slots:
     //! Make storage data persistent
     /** \note This method is threadsafe.
@@ -293,7 +295,7 @@ class Core : public QObject {
     void bufferInfoUpdated(UserId user, const BufferInfo &info);
 
   private slots:
-    bool startListening(uint port = Global::defaultPort);
+    bool startListening(uint port = Global::parser.value("port").toUInt());
     void stopListening();
     void incomingConnection();
     void clientHasData();
@@ -336,7 +338,7 @@ class Core : public QObject {
 
     QHash<QString, Storage *> _storageBackends;
 
-    QDateTime startTime;
+    QDateTime _startTime;
 
     bool configured;
 

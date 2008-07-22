@@ -48,7 +48,8 @@ public:
     RpcCall,
     InitRequest,
     InitData,
-    HeartBeat
+    HeartBeat,
+    HeartBeatReply
   };
 
   SignalProxy(QObject *parent);
@@ -57,7 +58,7 @@ public:
   virtual ~SignalProxy();
 
   void setProxyMode(ProxyMode mode);
-  ProxyMode proxyMode() const;
+  inline ProxyMode proxyMode() const { return _proxyMode; }
 
   bool addPeer(QIODevice *iodev);
   void removePeer(QIODevice *iodev = 0);
@@ -67,8 +68,8 @@ public:
 
   void synchronize(SyncableObject *obj);
 
-  void setInitialized(SyncableObject *obj);
-  bool isInitialized(SyncableObject *obj) const;
+//   void setInitialized(SyncableObject *obj);
+//   bool isInitialized(SyncableObject *obj) const;
   void requestInit(SyncableObject *obj);
 
   void detachObject(QObject *obj);
@@ -120,14 +121,18 @@ private slots:
   void objectRenamed(const QString &newname, const QString &oldname);
   void objectRenamed(const QByteArray &classname, const QString &newname, const QString &oldname);
   void sendHeartBeat();
-
+  void receiveHeartBeat(QIODevice *dev, const QVariantList &params);
+  void receiveHeartBeatReply(QIODevice *dev, const QVariantList &params);
+  
 signals:
-  void peerRemoved(QIODevice *obj);
+  void peerRemoved(QIODevice *dev);
   void connected();
   void disconnected();
   void objectInitialized(SyncableObject *);
+  void lagUpdated(int lag);
   
 private:
+  void init();
   void initServer();
   void initClient();
   
@@ -158,15 +163,20 @@ private:
   QVariantMap initData(SyncableObject *obj) const;
   void setInitData(SyncableObject *obj, const QVariantMap &properties);
 
+  void updateLag(QIODevice *dev, int lag);
+
 public:
   void dumpSyncMap(SyncableObject *object);
+  inline int peerCount() const { return _peers.size(); }
   
 private:
   // Hash of used QIODevices
   struct peerInfo {
     quint32 byteCount;
     bool usesCompression;
-    peerInfo() : byteCount(0), usesCompression(false) {};
+    int sentHeartBeats;
+    int lag;
+    peerInfo() : byteCount(0), usesCompression(false), sentHeartBeats(0) {}
   };
   //QHash<QIODevice*, peerInfo> _peerByteCount;
   QHash<QIODevice*, peerInfo> _peers;

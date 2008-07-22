@@ -52,6 +52,7 @@ public slots:
   void handleOper(const BufferInfo &bufferInfo, const QString &text);
   void handleOp(const BufferInfo &bufferInfo, const QString &text);
   void handlePart(const BufferInfo &bufferInfo, const QString &text);
+  void handlePing(const BufferInfo &bufferInfo, const QString &text);
   void handleQuery(const BufferInfo &bufferInfo, const QString &text);
   void handleQuit(const BufferInfo &bufferInfo, const QString &text);
   void handleQuote(const BufferInfo &bufferInfo, const QString &text);
@@ -63,6 +64,9 @@ public slots:
   void handleWhowas(const BufferInfo &bufferInfo, const QString &text);
 
   void defaultHandler(QString cmd, const BufferInfo &bufferInfo, const QString &text);
+
+private:
+  void expand(const QString &alias, const BufferInfo &bufferInfo, const QString &msg);
 };
 
 

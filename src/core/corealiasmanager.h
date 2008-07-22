@@ -18,18 +18,25 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef UISETTINGS_H
-#define UISETTINGS_H
+#ifndef COREALIASMANAGER_H
+#define COREALIASMANAGER_H
 
-#include "clientsettings.h"
+#include "aliasmanager.h"
 
-class UiSettings : public ClientSettings {
+class CoreSession;
+
+class CoreAliasManager : public AliasManager {
+  Q_OBJECT
+
 public:
-  UiSettings(const QString &group = "Ui");
+  CoreAliasManager(CoreSession *parent = 0);
+  ~CoreAliasManager();
+
+  inline virtual const QMetaObject *syncMetaObject() const { return &AliasManager::staticMetaObject; }
+
+private:
+  void loadDefaults();
   
-  void setValue(const QString &key, const QVariant &data);
-  QVariant value(const QString &key, const QVariant &def = QVariant());
-  void remove(const QString &key);
 };
 
-#endif
+#endif //COREALIASMANAGER_H

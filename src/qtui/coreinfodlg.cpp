@@ -18,18 +18,36 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef UISETTINGS_H
-#define UISETTINGS_H
+#include "coreinfodlg.h"
 
-#include "clientsettings.h"
+#include "client.h"
+#include "signalproxy.h"
 
-class UiSettings : public ClientSettings {
-public:
-  UiSettings(const QString &group = "Ui");
+CoreInfoDlg::CoreInfoDlg(QWidget *parent)
+  : QDialog(parent),
+    _coreInfo(this)
+{
+  ui.setupUi(this);
+  connect(&_coreInfo, SIGNAL(initDone()), this, SLOT(coreInfoAvailable()));
+  Client::signalProxy()->synchronize(&_coreInfo);
+}
+
+void CoreInfoDlg::coreInfoAvailable() {
+  ui.labelCoreVersion->setText(_coreInfo["quasselVersion"].toString());
+  ui.labelCoreBuildDate->setText(_coreInfo["quasselBuildDate"].toString());
+  ui.labelClientCount->setNum(_coreInfo["sessionConnectedClients"].toInt());
+  updateUptime();
+  startTimer(1000);
+}
+
+void CoreInfoDlg::updateUptime() {
+  QDateTime startTime = _coreInfo["startTime"].toDateTime();
   
-  void setValue(const QString &key, const QVariant &data);
-  QVariant value(const QString &key, const QVariant &def = QVariant());
-  void remove(const QString &key);
-};
+  int uptime = startTime.secsTo(QDateTime::currentDateTime());
+  int updays = uptime / 86400; uptime %= 86400;
+  int uphours = uptime / 3600; uptime %= 3600;
+  int upmins = uptime / 60; uptime %= 60;
 
-#endif
+  QString uptimeText = QString("%1 Day(s) %2:%3:%4 (since %5)").arg(updays).arg(uphours,2,10,QChar('0')).arg(upmins,2,10,QChar('0')).arg(uptime,2,10,QChar('0')).arg(startTime.toString(Qt::TextDate));
+  ui.labelUptime->setText(uptimeText);
+}

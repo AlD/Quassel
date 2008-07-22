@@ -18,18 +18,58 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef UISETTINGS_H
-#define UISETTINGS_H
+#ifndef ALIASESMODEL_H
+#define ALIASESMODEL_H
 
-#include "clientsettings.h"
+#include <QAbstractItemModel>
+#include <QPointer>
 
-class UiSettings : public ClientSettings {
+#include "aliasmanager.h"
+
+class AliasesModel : public QAbstractItemModel {
+  Q_OBJECT
+
 public:
-  UiSettings(const QString &group = "Ui");
+  AliasesModel(QObject *parent = 0);
+
+  virtual QVariant data(const QModelIndex &index, int role) const;
+  virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+
+  virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+
+  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+
+  QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+
+  inline QModelIndex parent(const QModelIndex &) const { return QModelIndex(); }
+
+  inline int rowCount(const QModelIndex &parent = QModelIndex()) const { Q_UNUSED(parent) return aliasManager().count(); }
+  inline int columnCount(const QModelIndex &parent = QModelIndex()) const { Q_UNUSED(parent) return 2; }
+
+  inline bool configChanged() const { return _configChanged; }
+
+public slots:
+  void newAlias();
+  void removeAlias(int index);
+  void revert();
+  void commit();
+
+signals:
+  void configChanged(bool);
+  void modelReady();
   
-  void setValue(const QString &key, const QVariant &data);
-  QVariant value(const QString &key, const QVariant &def = QVariant());
-  void remove(const QString &key);
+private:
+  AliasManager _aliasManager;
+  AliasManager _clonedAliasManager;
+  bool _configChanged;
+
+  const AliasManager &aliasManager() const;
+  AliasManager &aliasManager();
+  AliasManager &cloneAliasManager();
+
+private slots:
+  void clientConnected();
+  void initDone();
 };
 
-#endif
+#endif //ALIASESMODEL_H

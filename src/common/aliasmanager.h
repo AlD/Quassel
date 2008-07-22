@@ -18,41 +18,50 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef IRCLISTHELPER_H
-#define IRCLISTHELPER_H
+#ifndef ALIASMANAGER_H
+#define ALIASMANAGER_H
 
 #include "syncableobject.h"
-#include "types.h"
 
-/*
- * This is a little helper to display channel lists of a network.
- * The whole process is done in 3 steps:
- *  1.) the client requests to issue a LIST command with requestChannelList()
- *  2.) RPL_LIST fills on the core the list of available channels
- *      when RPL_LISTEND is received the clients will be informed, that they can pull the data
- *  3.) client pulls the data by calling requestChannelList again. receiving the data in receiveChannelList
- */
-class IrcListHelper : public SyncableObject {
+#include <QVariantMap>
+
+class AliasManager : public SyncableObject {
   Q_OBJECT
 
 public:
-  inline IrcListHelper(QObject *parent = 0) : SyncableObject(parent) { setInitialized(); };
-
-  struct ChannelDescription {
-    QString channelName;
-    quint32 userCount;
-    QString topic;
-    ChannelDescription(const QString &channelName_, quint32 userCount_, const QString &topic_) : channelName(channelName_), userCount(userCount_), topic(topic_) {};
+  inline AliasManager(QObject *parent = 0) : SyncableObject(parent) { setAllowClientUpdates(true); }
+  AliasManager &operator=(const AliasManager &other);
+  
+  struct Alias {
+    QString name;
+    QString expansion;
+    Alias(const QString &name_, const QString &expansion_) : name(name_), expansion(expansion_) {}
   };
 
+  int indexOf(const QString &name) const;
+  inline bool contains(const QString &name) const { return indexOf(name) != -1; }
+  inline bool isEmpty() const { return _aliases.isEmpty(); }
+  inline int count() const { return _aliases.count(); }
+  inline void removeAt(int index) { _aliases.removeAt(index); }
+  inline Alias &operator[](int i) { return _aliases[i]; }
+  inline const Alias &operator[](int i) const { return _aliases[i]; }
+  inline const QList<Alias> &aliases() const { return _aliases; }
+
 public slots:
-  inline virtual QVariantList requestChannelList(const NetworkId &netId, const QStringList &channelFilters) { emit channelListRequested(netId, channelFilters); return QVariantList(); }
-  inline virtual void receiveChannelList(const NetworkId &, const QStringList &, const QVariantList &) {};
-  inline virtual void reportFinishedList(const NetworkId &netId) { emit finishedListReported(netId); }
+  virtual QVariantMap initAliases() const;
+  virtual void initSetAliases(const QVariantMap &aliases);
+
+  virtual void addAlias(const QString &name, const QString &expansion);
+  
+protected:
+  void setAliases(const QList<Alias> &aliases) { _aliases = aliases; }
 
 signals:
-  void channelListRequested(const NetworkId &netId, const QStringList &channelFilters);
-  void finishedListReported(const NetworkId &netId);
+  void aliasAdded(const QString &name, const QString &expansion);
+  
+private:
+  QList<Alias> _aliases;
+
 };
 
-#endif //IRCLISTHELPER_H
+#endif //ALIASMANAGER_H

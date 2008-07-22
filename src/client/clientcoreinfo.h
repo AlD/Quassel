@@ -18,18 +18,30 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef UISETTINGS_H
-#define UISETTINGS_H
+#ifndef CLIENTCOREINFO_H
+#define CLIENTCOREINFO_H
 
-#include "clientsettings.h"
+#include "coreinfo.h"
 
-class UiSettings : public ClientSettings {
+/*
+ * Yes this name is somewhat stupid... but it fits the general naming scheme
+ * which is prefixing client specific sync objects with "Client"... ;)
+ */ 
+class ClientCoreInfo : public CoreInfo {
+  Q_OBJECT
+
 public:
-  UiSettings(const QString &group = "Ui");
-  
-  void setValue(const QString &key, const QVariant &data);
-  QVariant value(const QString &key, const QVariant &def = QVariant());
-  void remove(const QString &key);
+  ClientCoreInfo(QObject *parent = 0) : CoreInfo(parent) {}
+
+  inline virtual const QMetaObject *syncMetaObject() const { return &CoreInfo::staticMetaObject; }
+
+  inline QVariant &operator[](const QString &key) { return _coreData[key]; }
+
+public slots:
+  inline virtual void setCoreData(const QVariantMap &data) { _coreData = data; }
+
+private:
+  QVariantMap _coreData;
 };
 
-#endif
+#endif //CLIENTCOREINFO_H

@@ -20,38 +20,12 @@
 
 #include "settingspage.h"
 
-SettingsPage::SettingsPage(const QString &category, const QString &title, QWidget *parent) : QWidget(parent),
-     _category(category), _title(title) {
-
-  _changed = false;
-}
-
-QString SettingsPage::category() const {
-  return _category;
-}
-
-QString SettingsPage::title() const {
-  return _title;
-}
-
-bool SettingsPage::hasDefaults() const {
-  return false;
-}
-
-void SettingsPage::defaults() {
-
-}
-
-bool SettingsPage::hasChanged() const {
-  return _changed;
-}
-
-bool SettingsPage::aboutToSave() {
-  return true;
-}
-
-void SettingsPage::changed() {
-  setChangedState(true);
+SettingsPage::SettingsPage(const QString &category, const QString &title, QWidget *parent)
+  : QWidget(parent),
+    _category(category),
+    _title(title),
+    _changed(false)
+{
 }
 
 void SettingsPage::setChangedState(bool hasChanged) {

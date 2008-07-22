@@ -18,18 +18,38 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef UISETTINGS_H
-#define UISETTINGS_H
+#ifndef ALIASESSETTINGSPAGE_H
+#define ALIASESSETTINGSPAGE_H
 
-#include "clientsettings.h"
+#include "settingspage.h"
+#include "ui_aliasessettingspage.h"
 
-class UiSettings : public ClientSettings {
+#include "aliasesmodel.h"
+
+class AliasesSettingsPage : public SettingsPage {
+  Q_OBJECT
+
 public:
-  UiSettings(const QString &group = "Ui");
+  AliasesSettingsPage(QWidget *parent = 0);
+
+public slots:
+  void save();
+  void load();
+//   void defaults();
+		 
+// private slots:
+//   void widgetHasChanged();
   
-  void setValue(const QString &key, const QVariant &data);
-  QVariant value(const QString &key, const QVariant &def = QVariant());
-  void remove(const QString &key);
+private:
+  Ui::AliasesSettingsPage ui;
+
+  AliasesModel _aliasesModel;
+
+  //   bool testHasChanged();
+
+private slots:
+  void enableDialog();
+  void deleteSelectedAlias();
 };
 
-#endif
+#endif //ALIASESSETTINGSPAGE_H

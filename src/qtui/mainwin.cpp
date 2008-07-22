@@ -28,6 +28,7 @@
 #include "channellistdlg.h"
 #include "client.h"
 #include "clientbacklogmanager.h"
+#include "coreinfodlg.h"
 #include "coreconnectdlg.h"
 #include "networkmodel.h"
 #include "buffermodel.h"
@@ -40,6 +41,7 @@
 #include "irclistmodel.h"
 #include "verticaldock.h"
 #include "uisettings.h"
+#include "util.h"
 #include "qtuisettings.h"
 #include "jumpkeyhandler.h"
 
@@ -48,6 +50,7 @@
 #include "selectionmodelsynchronizer.h"
 #include "mappedselectionmodel.h"
 
+#include "settingspages/aliasessettingspage.h"
 #include "settingspages/appearancesettingspage.h"
 #include "settingspages/bufferviewsettingspage.h"
 #include "settingspages/colorsettingspage.h"
@@ -66,6 +69,7 @@
 MainWin::MainWin(QtUi *_gui, QWidget *parent)
   : QMainWindow(parent),
     gui(_gui),
+    coreLagLabel(new QLabel()),
     sslLabel(new QLabel()),
     _titleSetter(this),
     systray(new QSystemTrayIcon(this)),
@@ -78,6 +82,14 @@ MainWin::MainWin(QtUi *_gui, QWidget *parent)
     settingsDlg(new SettingsDlg(this)),
     debugConsole(new DebugConsole(this))
 {
+  UiSettings uiSettings;
+  loadTranslation(uiSettings.value("Locale", QLocale::system()).value<QLocale>());
+  
+  QString style = uiSettings.value("Style", QString("")).toString();
+  if(style != "") {
+    QApplication::setStyle(style);
+  }
+  
   ui.setupUi(this);
   setWindowTitle("Quassel IRC");
   setWindowIcon(offlineTrayIcon);
@@ -89,11 +101,6 @@ MainWin::MainWin(QtUi *_gui, QWidget *parent)
 
   installEventFilter(new JumpKeyHandler(this));
 
-  UiSettings uiSettings;
-  QString style = uiSettings.value("Style", QString("")).toString();
-  if(style != "") {
-    QApplication::setStyle(style);
-  }
 }
 
 void MainWin::init() {
@@ -162,6 +169,7 @@ MainWin::~MainWin() {
 void MainWin::setupMenus() {
   connect(ui.actionConnectCore, SIGNAL(triggered()), this, SLOT(showCoreConnectionDlg()));
   connect(ui.actionDisconnectCore, SIGNAL(triggered()), Client::instance(), SLOT(disconnectFromCore()));
+  connect(ui.actionCoreInfo, SIGNAL(triggered()), this, SLOT(showCoreInfoDlg()));
   connect(ui.actionQuit, SIGNAL(triggered()), QCoreApplication::instance(), SLOT(quit()));
   connect(ui.actionSettingsDlg, SIGNAL(triggered()), this, SLOT(showSettingsDlg()));
   // connect(ui.actionDebug_Console, SIGNAL(triggered()), this, SLOT(showDebugConsole()));
@@ -226,6 +234,7 @@ void MainWin::setupSettingsDlg() {
   //Category: Behaviour
   settingsDlg->registerSettingsPage(new GeneralSettingsPage(settingsDlg));
   settingsDlg->registerSettingsPage(new HighlightSettingsPage(settingsDlg));
+  settingsDlg->registerSettingsPage(new AliasesSettingsPage(settingsDlg));
   //Category: General
   settingsDlg->registerSettingsPage(new IdentitiesSettingsPage(settingsDlg));
   settingsDlg->registerSettingsPage(new NetworksSettingsPage(settingsDlg));
@@ -326,6 +335,12 @@ void MainWin::setupTopicWidget() {
 }
 
 void MainWin::setupStatusBar() {
+  // Core Lag:
+  updateLagIndicator(0);
+  statusBar()->addPermanentWidget(coreLagLabel);
+  connect(Client::signalProxy(), SIGNAL(lagUpdated(int)), this, SLOT(updateLagIndicator(int)));
+
+  // SSL indicator
   connect(Client::instance(), SIGNAL(securedConnection()), this, SLOT(securedConnection()));
   sslLabel->setPixmap(QPixmap());
   statusBar()->addPermanentWidget(sslLabel);
@@ -408,10 +423,11 @@ void MainWin::connectedToCore() {
 }
 
 void MainWin::setConnectedState() {
-  ui.menuViews->setEnabled(true);
   //ui.menuCore->setEnabled(true);
   ui.actionConnectCore->setEnabled(false);
   ui.actionDisconnectCore->setEnabled(true);
+  ui.actionCoreInfo->setEnabled(true);
+  ui.menuViews->setEnabled(true);
   ui.bufferWidget->show();
   statusBar()->showMessage(tr("Connected to core."));
   setWindowIcon(onlineTrayIcon);
@@ -432,6 +448,11 @@ void MainWin::saveLayout() {
   int accountId = Client::currentCoreAccount().toInt();
   if(accountId > 0) s.setValue(QString("MainWinState-%1").arg(accountId) , saveState(accountId));
 }
+
+void MainWin::updateLagIndicator(int lag) {
+  coreLagLabel->setText(QString("Core Lag: %1 msec").arg(lag));
+}
+
 
 void MainWin::securedConnection() {
   // todo: make status bar entry
@@ -460,11 +481,12 @@ void MainWin::disconnectedFromCore() {
 }
 
 void MainWin::setDisconnectedState() {
-  ui.menuViews->setEnabled(false);
   //ui.menuCore->setEnabled(false);
-  ui.actionDisconnectCore->setEnabled(false);
-  ui.bufferWidget->hide();
   ui.actionConnectCore->setEnabled(true);
+  ui.actionDisconnectCore->setEnabled(false);
+  ui.actionCoreInfo->setEnabled(false);
+  ui.menuViews->setEnabled(false);
+  ui.bufferWidget->hide();
   statusBar()->showMessage(tr("Not connected to core."));
   setWindowIcon(offlineTrayIcon);
   qApp->setWindowIcon(offlineTrayIcon);
@@ -492,6 +514,11 @@ void MainWin::showChannelList(NetworkId netId) {
   }
   channelListDlg->setNetwork(netId);
   channelListDlg->show();
+}
+
+void MainWin::showCoreInfoDlg() {
+  CoreInfoDlg dlg(this);
+  dlg.exec();
 }
 
 void MainWin::showSettingsDlg() {
