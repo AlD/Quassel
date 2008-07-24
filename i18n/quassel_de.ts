@@ -3286,17 +3286,17 @@ Lassen Sie dies auf ISO-8859-1 gesetzt, falls Sie nicht *wirklich* wissen, was S
     <message>
         <location filename="../src/common/util.cpp" line="167"/>
         <source>h</source>
-        <translation>S</translation>
+        <translation>Std.</translation>
     </message>
     <message>
         <location filename="../src/common/util.cpp" line="168"/>
         <source>min</source>
-        <translation>Min</translation>
+        <translation>Min.</translation>
     </message>
     <message>
         <location filename="../src/common/util.cpp" line="169"/>
         <source>sec</source>
-        <translation>Sek</translation>
+        <translation>Sek.</translation>
     </message>
 </context>
 <context>
