@@ -2771,7 +2771,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/common/message.cpp" line="139"/>
         <source>%Dr%DN%1%DN is now known as %DN%2%DN</source>
-        <translation>%Dr%DN%1%DN ist jetzt als %DN%2%DN bekannt</translation>
+        <translation>%Dr%DN%1%DN nennt sich jetzt %DN%2%DN</translation>
     </message>
     <message>
         <location filename="../src/common/message.cpp" line="144"/>
