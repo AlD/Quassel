@@ -55,8 +55,22 @@ QVariant NetworkItem::data(int column, int role) const {
   }
 }
 
+BufferItem *NetworkItem::findBufferItem(BufferId bufferId) {
+  BufferItem *bufferItem = 0;
+  
+  for(int i = 0; i < childCount(); i++) {
+    bufferItem = qobject_cast<BufferItem *>(child(i));
+    if(!bufferItem)
+      continue;
+    if(bufferItem->bufferId() == bufferId)
+      return bufferItem;
+  }
+  return 0;
+}
+
+
 BufferItem *NetworkItem::bufferItem(const BufferInfo &bufferInfo) {
-  BufferItem *bufferItem = qobject_cast<BufferItem *>(childById(qHash(bufferInfo.bufferId())));
+  BufferItem *bufferItem = findBufferItem(bufferInfo);
   if(bufferItem)
     return bufferItem;
   
@@ -418,23 +432,22 @@ void ChannelBufferItem::ircChannelDestroyed() {
   removeAllChilds();
 }
 
-void ChannelBufferItem::ircUserDestroyed() {
-  // PRIVATE
-  IrcUser *ircUser = static_cast<IrcUser *>(sender());
-  removeUserFromCategory(ircUser);
+void ChannelBufferItem::join(const QList<IrcUser *> &ircUsers) {
+  addUsersToCategory(ircUsers);
   emit dataChanged(2);
 }
 
-void ChannelBufferItem::join(const QList<IrcUser *> &ircUsers) {
-  addUsersToCategory(ircUsers);
-
-  foreach(IrcUser *ircUser, ircUsers) {
-    if(!ircUser)
-      continue;
-    connect(ircUser, SIGNAL(destroyed()), this, SLOT(ircUserDestroyed()));
-  }
+UserCategoryItem *ChannelBufferItem::findCategoryItem(int categoryId) {
+  UserCategoryItem *categoryItem = 0;
   
-  emit dataChanged(2);
+  for(int i = 0; i < childCount(); i++) {
+    categoryItem = qobject_cast<UserCategoryItem *>(child(i));
+    if(!categoryItem)
+      continue;
+    if(categoryItem->categoryId() == categoryId)
+      return categoryItem;
+  }
+  return 0;
 }
 
 void ChannelBufferItem::addUserToCategory(IrcUser *ircUser) {
@@ -451,7 +464,7 @@ void ChannelBufferItem::addUsersToCategory(const QList<IrcUser *> &ircUsers) {
   
   foreach(IrcUser *ircUser, ircUsers) {
     categoryId = UserCategoryItem::categoryFromModes(_ircChannel->userModes(ircUser));
-    categoryItem = qobject_cast<UserCategoryItem *>(childById(qHash(categoryId)));
+    categoryItem = findCategoryItem(categoryId);
     if(!categoryItem) {
       categoryItem = new UserCategoryItem(categoryId, this);
       categories[categoryItem] = QList<IrcUser *>();
@@ -501,11 +514,12 @@ void ChannelBufferItem::userModeChanged(IrcUser *ircUser) {
   Q_ASSERT(_ircChannel);
 
   int categoryId = UserCategoryItem::categoryFromModes(_ircChannel->userModes(ircUser));
-  UserCategoryItem *categoryItem = qobject_cast<UserCategoryItem *>(childById(qHash(categoryId)));
+  UserCategoryItem *categoryItem = findCategoryItem(categoryId);
     
   if(categoryItem) {
-    if(categoryItem->childById(qHash(ircUser)))
+    if(categoryItem->findIrcUser(ircUser)) {
       return; // already in the right category;
+    }
   } else {
     categoryItem = new UserCategoryItem(categoryId, this);
     newChild(categoryItem);
@@ -514,8 +528,9 @@ void ChannelBufferItem::userModeChanged(IrcUser *ircUser) {
   // find the item that needs reparenting
   IrcUserItem *ircUserItem = 0;
   for(int i = 0; i < childCount(); i++) {
-    UserCategoryItem *categoryItem = qobject_cast<UserCategoryItem *>(child(i));
-    IrcUserItem *userItem = qobject_cast<IrcUserItem *>(categoryItem->childById(qHash(ircUser)));
+    UserCategoryItem *oldCategoryItem = qobject_cast<UserCategoryItem *>(child(i));
+    Q_ASSERT(oldCategoryItem);
+    IrcUserItem *userItem = oldCategoryItem->findIrcUser(ircUser);
     if(userItem) {
       ircUserItem = userItem;
       break;
@@ -540,6 +555,8 @@ UserCategoryItem::UserCategoryItem(int category, AbstractTreeItem *parent)
   : PropertyMapItem(QStringList() << "categoryName", parent),
     _category(category)
 {
+  setTreeItemFlags(AbstractTreeItem::DeleteOnLastChildRemoved);
+  setObjectName(parent->data(0, Qt::DisplayRole).toString() + "/" + QString::number(category));
 }
 
 // caching this makes no sense, since we display the user number dynamically
@@ -555,8 +572,17 @@ QString UserCategoryItem::categoryName() const {
   }
 }
 
-quint64 UserCategoryItem::id() const {
-  return qHash(_category);
+IrcUserItem *UserCategoryItem::findIrcUser(IrcUser *ircUser) {
+  IrcUserItem *userItem = 0;
+
+  for(int i = 0; i < childCount(); i++) {
+    userItem = qobject_cast<IrcUserItem *>(child(i));
+    if(!userItem)
+      continue;
+    if(userItem->ircUser() == ircUser)
+      return userItem;
+  }
+  return 0;
 }
 
 void UserCategoryItem::addUsers(const QList<IrcUser *> &ircUsers) {
@@ -568,9 +594,12 @@ void UserCategoryItem::addUsers(const QList<IrcUser *> &ircUsers) {
 }
 
 bool UserCategoryItem::removeUser(IrcUser *ircUser) {
-  bool success = removeChildById(qHash(ircUser));
-  if(success)
+  IrcUserItem *userItem = findIrcUser(ircUser);
+  bool success = (bool)userItem;
+  if(success) {
+    removeChild(userItem);
     emit dataChanged(0);
+  }
   return success;
 }
 
@@ -607,28 +636,12 @@ QVariant UserCategoryItem::data(int column, int role) const {
 *****************************************/
 IrcUserItem::IrcUserItem(IrcUser *ircUser, AbstractTreeItem *parent)
   : PropertyMapItem(QStringList() << "nickName", parent),
-    _ircUser(ircUser),
-    _id(qHash(ircUser))
+    _ircUser(ircUser)
 {
-  // we don't need to handle the ircUser's destroyed signal since it's automatically removed
-  // by the IrcChannel::ircUserParted();
-  
+  setObjectName(ircUser->nick());  
+  connect(ircUser, SIGNAL(destroyed()), this, SLOT(ircUserDestroyed()));
   connect(ircUser, SIGNAL(nickSet(QString)), this, SIGNAL(dataChanged()));
   connect(ircUser, SIGNAL(awaySet(bool)), this, SIGNAL(dataChanged()));
-}
-
-QString IrcUserItem::nickName() const {
-  if(_ircUser)
-    return _ircUser->nick();
-  else
-    return QString();
-}
-
-bool IrcUserItem::isActive() const {
-  if(_ircUser)
-    return !_ircUser->isAway();
-  else
-    return false;
 }
 
 QVariant IrcUserItem::data(int column, int role) const {
@@ -679,6 +692,12 @@ QString IrcUserItem::toolTip(int column) const {
   return QString("<p> %1 </p>").arg(toolTip.join("<br />"));
 }
 
+// void IrcUserItem::ircUserDestroyed() {
+//   parent()->removeChild(this);
+//   if(parent()->childCount() == 0)
+//     parent()->parent()->removeChild(parent());
+// }
+
 /*****************************************
  * NetworkModel
  *****************************************/
@@ -704,49 +723,78 @@ Buffer *NetworkModel::getBufferByIndex(const QModelIndex &index) const {
 }
 */
 
-
-// experimental stuff :)
-QModelIndex NetworkModel::networkIndex(NetworkId networkId) {
-  return indexById(qHash(networkId));
+int NetworkModel::networkRow(NetworkId networkId) {
+  NetworkItem *netItem = 0;
+  for(int i = 0; i < rootItem->childCount(); i++) {
+    netItem = qobject_cast<NetworkItem *>(rootItem->child(i));
+    if(!netItem)
+      continue;
+    if(netItem->networkId() == networkId)
+      return i;
+  }
+  return -1;
 }
 
-NetworkItem *NetworkModel::existsNetworkItem(NetworkId networkId) {
-  return qobject_cast<NetworkItem *>(rootItem->childById(networkId.toInt()));
+QModelIndex NetworkModel::networkIndex(NetworkId networkId) {
+  int netRow = networkRow(networkId);
+  if(netRow == -1)
+    return QModelIndex();
+  else
+    return indexByItem(qobject_cast<NetworkItem *>(rootItem->child(netRow)));
+}
+
+NetworkItem *NetworkModel::findNetworkItem(NetworkId networkId) {
+  int netRow = networkRow(networkId);
+  if(netRow == -1)
+    return 0;
+  else
+    return qobject_cast<NetworkItem *>(rootItem->child(netRow));
 }
 
 NetworkItem *NetworkModel::networkItem(NetworkId networkId) {
-  NetworkItem *netItem = existsNetworkItem(networkId);
+  NetworkItem *netItem = findNetworkItem(networkId);
 
   if(netItem == 0) {
     netItem = new NetworkItem(networkId, rootItem);
     rootItem->newChild(netItem);
   }
-
-  Q_ASSERT(netItem);
   return netItem;
 }
 
 void NetworkModel::networkRemoved(const NetworkId &networkId) {
-  rootItem->removeChildById(qHash(networkId));
+  int netRow = networkRow(networkId);
+  if(netRow != -1) {
+    rootItem->removeChild(netRow);
+  }
 }
 
 QModelIndex NetworkModel::bufferIndex(BufferId bufferId) {
-  AbstractTreeItem *netItem, *bufferItem;
-  for(int i = 0; i < rootItem->childCount(); i++) {
-    netItem = rootItem->child(i);
-    if((bufferItem = netItem->childById(qHash(bufferId)))) {
-      return indexByItem(bufferItem);
-    }
-  }
-  return QModelIndex();
+  BufferItem *bufferItem = findBufferItem(bufferId);
+  if(bufferItem)
+    return indexByItem(bufferItem);
+  else
+    return QModelIndex();
 }
 
-BufferItem *NetworkModel::existsBufferItem(const BufferInfo &bufferInfo) {
-  QModelIndex bufferIdx = bufferIndex(bufferInfo.bufferId());
-  if(bufferIdx.isValid())
-    return static_cast<BufferItem *>(bufferIdx.internalPointer());
-  else
+BufferItem *NetworkModel::findBufferItem(const BufferInfo &bufferInfo) {
+  NetworkItem *netItem = findNetworkItem(bufferInfo.networkId());
+  if(!netItem)
     return 0;
+
+  BufferItem *bufferItem = netItem->findBufferItem(bufferInfo);
+  return bufferItem;
+}
+
+BufferItem *NetworkModel::findBufferItem(BufferId bufferId) {
+  NetworkItem *netItem;
+  BufferItem *bufferItem;
+  
+  for(int i = 0; i < rootItem->childCount(); i++) {
+    netItem = qobject_cast<NetworkItem *>(rootItem->child(i));
+    if((bufferItem = netItem->findBufferItem(bufferId)))
+      return bufferItem;
+  }
+  return 0;
 }
 
 BufferItem *NetworkModel::bufferItem(const BufferInfo &bufferInfo) {
@@ -830,13 +878,15 @@ bool NetworkModel::dropMimeData(const QMimeData *data, Qt::DropAction action, in
   // no self merges (would kill us)
   if(bufferId == parent.data(BufferIdRole).value<BufferId>())
     return false; 
-  
-  Q_ASSERT(rootItem->childById(qHash(netId)));
-  Q_ASSERT(rootItem->childById(qHash(netId))->childById(qHash(bufferId)));
+
+  NetworkItem *netItem = findNetworkItem(netId);
+  Q_ASSERT(netItem);
+
+  BufferItem *bufferItem = netItem->findBufferItem(bufferId);
+  Q_ASSERT(bufferItem);
 
   // source must be a query too
-  BufferInfo::Type sourceType = (BufferInfo::Type)rootItem->childById(qHash(netId))->childById(qHash(bufferId))->data(0, BufferTypeRole).toInt();
-  if(sourceType != BufferInfo::QueryBuffer)
+  if(bufferItem->bufferType() != BufferInfo::QueryBuffer)
     return false;
     
   // TODO: warn user about buffermerge!
@@ -858,14 +908,9 @@ void NetworkModel::bufferUpdated(BufferInfo bufferInfo) {
 }
 
 void NetworkModel::removeBuffer(BufferId bufferId) {
-  const int numNetworks = rootItem->childCount();
-  if(numNetworks == 0)
-    return;
-
-  for(int i = 0; i < numNetworks; i++) {
-    if(rootItem->child(i)->removeChildById(qHash(bufferId)))
-      break;
-  }
+  BufferItem *bufferItem = findBufferItem(bufferId);
+  if(bufferItem)
+    bufferItem->parent()->removeChild(bufferItem);
 }
 
 /*

@@ -1,11 +1,11 @@
 /***************************************************************************
- *   Copyright (C) 2005-08 by the Quassel Project                          *
+ *   Copyright (C) 2005-08 by the Quassel IRC Team                         *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) version 3.                                           *
+ *   (at your option) any later version.                                   *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -18,43 +18,35 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef _NICKVIEW_H_
-#define _NICKVIEW_H_
+#ifndef NOTIFICATIONSSETTINGSPAGE_H_
+#define NOTIFICATIONSSETTINGSPAGE_H_
 
+#include <QHash>
 
-#include <QTreeView>
+#include "settingspage.h"
+#include "ui_notificationssettingspage.h"
 
-#include "types.h"
-#include "bufferinfo.h"
-
-
-class NickModel;
-class FilteredNickModel;
-class QSortFilterProxyModel;
-class QResizeEvent;
-
-class NickView : public QTreeView {
+class NotificationsSettingsPage : public SettingsPage {
   Q_OBJECT
 
-public:
-  NickView(QWidget *parent = 0);
+  public:
+    NotificationsSettingsPage(QWidget *parent = 0);
 
-protected:
-  virtual void rowsInserted(const QModelIndex &parent, int start, int end);
-  virtual void customEvent(QEvent *event);
+    bool hasDefaults() const;
 
-public slots:
-  virtual void setModel(QAbstractItemModel *model);
-  virtual void setRootIndex(const QModelIndex &index);
-  void init();
-  void showContextMenu(const QPoint & pos);
-  void startQuery(const QModelIndex & modelIndex);
+  public slots:
+    void save();
+    void load();
+    void defaults();
 
-private:
-  BufferInfo bufferInfoFromModelIndex(const QModelIndex & index);
-  QString nickFromModelIndex(const QModelIndex & index);
-  void executeCommand(const BufferInfo & bufferInfo, const QString & command);
+  private slots:
+    void widgetHasChanged();
+
+  private:
+    Ui::NotificationsSettingsPage ui;
+    QHash<QString, QVariant> settings;
+
+    bool testHasChanged();
 };
-
 
 #endif

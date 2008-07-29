@@ -37,7 +37,12 @@ void UserInputHandler::handleUserInput(const BufferInfo &bufferInfo, const QStri
       return;
     QString cmd;
     QString msg = msg_;
-    if(!msg.startsWith('/')) {
+    // leading slashes indicate there's a command to call unless there is anothere one in the first section (like a path /proc/cpuinfo)
+    int secondSlashPos = msg.indexOf('/', 1);
+    int firstSpacePos = msg.indexOf(' ');
+    if(!msg.startsWith('/') || (secondSlashPos != -1 && (secondSlashPos < firstSpacePos || firstSpacePos == -1))) {
+      if(msg.startsWith("//"))
+	msg.remove(0, 1); // //asdf is transformed to /asdf
       cmd = QString("SAY");
     } else {
       cmd = msg.section(' ', 0, 0).remove(0, 1).toUpper();
@@ -144,13 +149,6 @@ void UserInputHandler::handleInvite(const BufferInfo &bufferInfo, const QString 
   QStringList params;
   params << msg << bufferInfo.bufferName();
   emit putCmd("INVITE", serverEncode(params));
-}
-
-void UserInputHandler::handleJ(const BufferInfo &bufferInfo, const QString &msg) {
-  QString trimmed = msg.trimmed();
-  if(trimmed.length() == 0) return;
-  if(trimmed[0].isLetter()) trimmed.prepend("#");
-  handleJoin(bufferInfo, trimmed);
 }
 
 void UserInputHandler::handleJoin(const BufferInfo &bufferInfo, const QString &msg) {
@@ -367,6 +365,8 @@ void UserInputHandler::expand(const QString &alias, const BufferInfo &bufferInfo
       command = command.replace(QString("$%1").arg(j), params[j - 1]);
     }
     command = command.replace("$0", msg);
+    command = command.replace("$channelname", bufferInfo.bufferName());
+    command = command.replace("$currentnick", network()->myNick());
     handleUserInput(bufferInfo, command);
   }
 }

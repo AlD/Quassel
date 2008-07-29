@@ -45,8 +45,6 @@
 #include "qtuisettings.h"
 #include "jumpkeyhandler.h"
 
-#include "uisettings.h"
-
 #include "selectionmodelsynchronizer.h"
 #include "mappedselectionmodel.h"
 
@@ -59,12 +57,11 @@
 #include "settingspages/highlightsettingspage.h"
 #include "settingspages/identitiessettingspage.h"
 #include "settingspages/networkssettingspage.h"
-
+#include "settingspages/notificationssettingspage.h"
 
 #include "debugconsole.h"
 #include "global.h"
 #include "qtuistyle.h"
-
 
 MainWin::MainWin(QtUi *_gui, QWidget *parent)
   : QMainWindow(parent),
@@ -101,6 +98,15 @@ MainWin::MainWin(QtUi *_gui, QWidget *parent)
 
   installEventFilter(new JumpKeyHandler(this));
 
+#ifdef HAVE_DBUS
+  desktopNotifications = new org::freedesktop::Notifications(
+                            "org.freedesktop.Notifications",
+                            "/org/freedesktop/Notifications",
+                            QDBusConnection::sessionBus(), this);
+  notificationId = 0;
+  connect(desktopNotifications, SIGNAL(NotificationClosed(uint, uint)), this, SLOT(desktopNotificationClosed(uint, uint)));
+  connect(desktopNotifications, SIGNAL(ActionInvoked(uint, const QString&)), this, SLOT(desktopNotificationInvoked(uint, const QString&)));
+#endif
 }
 
 void MainWin::init() {
@@ -235,6 +241,7 @@ void MainWin::setupSettingsDlg() {
   settingsDlg->registerSettingsPage(new GeneralSettingsPage(settingsDlg));
   settingsDlg->registerSettingsPage(new HighlightSettingsPage(settingsDlg));
   settingsDlg->registerSettingsPage(new AliasesSettingsPage(settingsDlg));
+  settingsDlg->registerSettingsPage(new NotificationsSettingsPage(settingsDlg));
   //Category: General
   settingsDlg->registerSettingsPage(new IdentitiesSettingsPage(settingsDlg));
   settingsDlg->registerSettingsPage(new NetworksSettingsPage(settingsDlg));
@@ -415,7 +422,7 @@ void MainWin::connectedToCore() {
   connect(Client::bufferViewManager(), SIGNAL(bufferViewConfigAdded(int)), this, SLOT(addBufferView(int)));
   connect(Client::bufferViewManager(), SIGNAL(bufferViewConfigDeleted(int)), this, SLOT(removeBufferView(int)));
   connect(Client::bufferViewManager(), SIGNAL(initDone()), this, SLOT(loadLayout()));
-  
+
   foreach(BufferInfo id, Client::allBufferInfos()) {
     Client::backlogManager()->requestBacklog(id.bufferId(), 500, -1);
   }
@@ -594,10 +601,15 @@ void MainWin::receiveMessage(const Message &msg) {
     UiSettings uiSettings;
 
 #ifndef SPUTDEV
-    if(uiSettings.value("DisplayPopupMessages", QVariant(true)).toBool()) {
+    bool displayBubble = uiSettings.value("NotificationBubble", QVariant(true)).toBool();
+    bool displayDesktop = uiSettings.value("NotificationDesktop", QVariant(true)).toBool();
+    if(displayBubble || displayDesktop) {
       // FIXME don't invoke style engine for this!
       QString text = QtUi::style()->styleString(Message::mircToInternal(msg.contents())).plainText;
-      displayTrayIconMessage(title, text);
+      if(displayBubble) displayTrayIconMessage(title, text);
+#  ifdef HAVE_DBUS
+      if(displayDesktop) sendDesktopNotification(title, text);
+#  endif
     }
 #endif
     if(uiSettings.value("AnimateTrayIcon", QVariant(true)).toBool()) {
@@ -612,6 +624,60 @@ bool MainWin::event(QEvent *event) {
     setTrayIconActivity(false);
   return QMainWindow::event(event);
 }
+
+#ifdef HAVE_DBUS
+
+/*
+Using the notification-daemon from Freedesktop's Galago project
+http://www.galago-project.org/specs/notification/0.9/x408.html#command-notify
+*/
+void MainWin::sendDesktopNotification(const QString &title, const QString &message) {
+  QStringList actions;
+  QMap<QString, QVariant> hints;
+  UiSettings uiSettings;
+
+  hints["x"] = uiSettings.value("NotificationDesktopHintX", QVariant(0)).toInt(); // Standard hint: x location for the popup to show up
+  hints["y"] = uiSettings.value("NotificationDesktopHintY", QVariant(0)).toInt(); // Standard hint: y location for the popup to show up
+
+  actions << "click" << "Click Me!";
+
+  QDBusReply<uint> reply = desktopNotifications->Notify(
+                "Quassel", // Application name
+                notificationId, // ID of previous notification to replace
+                "", // Icon to display
+                title, // Summary / Header of the message to display
+                QString("%1: %2:\n%3").arg(QTime::currentTime().toString()).arg(title).arg(message), // Body of the message to display
+                actions, // Actions from which the user may choose
+                hints, // Hints to the server displaying the message
+                uiSettings.value("NotificationDesktopTimeout", QVariant(5000)).toInt() // Timeout in milliseconds
+        );
+
+  if(!reply.isValid()) {
+    /* ERROR */
+    // could also happen if no notification service runs, so... whatever :)
+    //qDebug() << "Error on sending notification..." << reply.error();
+    return;
+  }
+
+  notificationId = reply.value();
+
+  // qDebug() << "ID: " << notificationId << " Time: " << QTime::currentTime().toString();
+}
+
+
+void MainWin::desktopNotificationClosed(uint id, uint reason) {
+  Q_UNUSED(id); Q_UNUSED(reason);
+  // qDebug() << "OID: " << notificationId << " ID: " << id << " Reason: " << reason << " Time: " << QTime::currentTime().toString();
+  notificationId = 0;
+}
+
+
+void MainWin::desktopNotificationInvoked(uint id, const QString & action) {
+  Q_UNUSED(id); Q_UNUSED(action);
+  // qDebug() << "OID: " << notificationId << " ID: " << id << " Action: " << action << " Time: " << QTime::currentTime().toString();
+}
+
+#endif /* HAVE_DBUS */
 
 void MainWin::displayTrayIconMessage(const QString &title, const QString &message) {
   systray->showMessage(title, message);
@@ -700,3 +766,16 @@ void MainWin::connectOrDisconnectFromNet() {
   else net->requestDisconnect();
 }
 
+
+
+void MainWin::on_actionDebugNetworkModel_triggered(bool) {
+  QTreeView *view = new QTreeView;
+  view->setAttribute(Qt::WA_DeleteOnClose);
+  view->setWindowTitle("Debug NetworkModel View");
+  view->setModel(Client::networkModel());
+  view->setColumnWidth(0, 250);
+  view->setColumnWidth(1, 250);
+  view->setColumnWidth(2, 80);
+  view->resize(610, 300);
+  view->show();
+}

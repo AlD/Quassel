@@ -30,15 +30,13 @@ AliasesModel::AliasesModel(QObject *parent)
   : QAbstractItemModel(parent),
     _configChanged(false)
 {
-//   _aliasManager.addAlias("a", "aa");
-//   _aliasManager.addAlias("b", "bb");
-//   _aliasManager.addAlias("c", "cc");
-//   _aliasManager.addAlias("d", "dd");
-
   // we need this signal for future connects to reset the data;
   connect(Client::instance(), SIGNAL(connected()), this, SLOT(clientConnected()));
+  connect(Client::instance(), SIGNAL(disconnected()), this, SLOT(clientDisconnected()));
   if(Client::isConnected())
     clientConnected();
+  else
+    emit modelReady(false);
 }
 
 QVariant AliasesModel::data(const QModelIndex &index, int role) const {
@@ -54,13 +52,18 @@ QVariant AliasesModel::data(const QModelIndex &index, int role) const {
 	"<b>Example:</b> \"foo\" can be used per /foo";
     case 1:
       return "<b>The string the shortcut will be expanded to</b><br />"
-	"$i represenents the i'th parameter. $0 the whole string.<br />"
+	"<b>special variables:</b><br />"
+	" - <b>$i</b> represenents the i'th parameter.<br />"
+	" - <b>$0</b> the whole string.<br />"
+	" - <b>$currentnick</b> your current nickname<br />"
+	" - <b>$channelname</b> the name of the selected channel<br /><br />"
 	"Multiple commands can be separated with semicolons<br /><br />"
 	"<b>Example:</b> \"Test $1; Test $2; Test All $0\" will be expanded to three separate messages \"Test 1\", \"Test 2\" and \"Test All 1 2 3\" when called like /test 1 2 3";
     default:
       return QVariant();
     }
   case Qt::DisplayRole:
+  case Qt::EditRole:
     switch(index.column()) {
     case 0:
       return aliasManager()[index.row()].name;
@@ -192,7 +195,7 @@ void AliasesModel::commit() {
 
 void AliasesModel::initDone() {
   reset();
-  emit modelReady();
+  emit modelReady(true);
 }
 
 void AliasesModel::clientConnected() {
@@ -200,4 +203,12 @@ void AliasesModel::clientConnected() {
   Client::signalProxy()->synchronize(&_aliasManager);
   connect(&_aliasManager, SIGNAL(initDone()), this, SLOT(initDone()));
   connect(&_aliasManager, SIGNAL(updated(const QVariantMap &)), this, SLOT(revert()));
+}
+
+void AliasesModel::clientDisconnected() {
+  // clear alias managers
+  _aliasManager = AliasManager();
+  _clonedAliasManager = AliasManager();
+  reset();
+  emit modelReady(false);
 }
