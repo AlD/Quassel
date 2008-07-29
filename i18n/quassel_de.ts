@@ -116,57 +116,52 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/client/networkmodel.cpp" line="157"/>
         <source>Status Buffer</source>
-        <translation>Statuspuffer</translation>
+        <translation type="obsolete">Statuspuffer</translation>
     </message>
     <message>
         <location filename="../src/client/networkmodel.cpp" line="295"/>
         <source>&lt;b&gt;Status buffer of %1&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Statuspuffer von %1&lt;/b&gt;</translation>
+        <translation type="obsolete">&lt;b&gt;Statuspuffer von %1&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../src/client/networkmodel.cpp" line="299"/>
         <source>&lt;b&gt;Channel %1&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Kanal %1&lt;/b&gt;</translation>
+        <translation type="obsolete">&lt;b&gt;Kanal %1&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../src/client/networkmodel.cpp" line="302"/>
         <source>&lt;b&gt;Users:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Benutzer:&lt;/b&gt; %1</translation>
+        <translation type="obsolete">&lt;b&gt;Benutzer:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../src/client/networkmodel.cpp" line="312"/>
         <source>&lt;b&gt;Topic:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Thema:&lt;/b&gt; %1</translation>
+        <translation type="obsolete">&lt;b&gt;Thema:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../src/client/networkmodel.cpp" line="318"/>
         <source>&lt;b&gt;Mode:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Modus:&lt;/b&gt; %1</translation>
+        <translation type="obsolete">&lt;b&gt;Modus:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../src/client/networkmodel.cpp" line="321"/>
         <source>Not active &lt;br /&gt; Double-click to join</source>
-        <translation>Nicht aktiv &lt;br /&gt; Doppelklicken zum Beitreten</translation>
+        <translation type="obsolete">Nicht aktiv &lt;br /&gt; Doppelklicken zum Beitreten</translation>
     </message>
     <message>
         <location filename="../src/client/networkmodel.cpp" line="325"/>
         <source>&lt;b&gt;Query with %1&lt;/b&gt;</source>
-        <translation type="unfinished">&lt;b&gt;Dialog mit %1&lt;/b&gt;</translation>
+        <translation type="obsolete">&lt;b&gt;Dialog mit %1&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../src/client/networkmodel.cpp" line="326"/>
         <source>Away Message: %1</source>
-        <translation>Abwesenheitsmeldung: %1</translation>
+        <translation type="obsolete">Abwesenheitsmeldung: %1</translation>
     </message>
     <message>
-        <location filename="../src/client/networkmodel.cpp" line="329"/>
-        <source>%1 - %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/client/networkmodel.cpp" line="333"/>
-        <source>&lt;p&gt; %1 &lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/client/networkmodel.cpp" line="201"/>
+        <source>&lt;p&gt; %1 - %2 &lt;/p&gt;</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -436,7 +431,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/qtopia/bufferviewwidget.cpp" line="39"/>
         <source>Queries</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dialoge</translation>
     </message>
     <message>
         <location filename="../src/qtopia/bufferviewwidget.cpp" line="40"/>
@@ -451,7 +446,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/qtopia/ui/bufferviewwidget.ui" line="29"/>
         <source>Tab 1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -465,6 +460,39 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/quassel/96x96/apps/quassel.png&quot; /&gt;&lt;span style=&quot; font-size:89pt; color:#00008b;&quot;&gt;uassel IRC&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:49pt;&quot;&gt;&lt;span style=&quot; font-size:22pt;&quot;&gt;Chat comfortably. Anywhere.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ChannelBufferItem</name>
+    <message>
+        <location filename="../src/client/networkmodel.cpp" line="280"/>
+        <source>&lt;b&gt;Channel %1&lt;/b&gt;</source>
+        <translation type="unfinished">&lt;b&gt;Kanal %1&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/client/networkmodel.cpp" line="283"/>
+        <source>&lt;b&gt;Users:&lt;/b&gt; %1</source>
+        <translation type="unfinished">&lt;b&gt;Benutzer:&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <location filename="../src/client/networkmodel.cpp" line="287"/>
+        <source>&lt;b&gt;Mode:&lt;/b&gt; %1</source>
+        <translation type="unfinished">&lt;b&gt;Modus:&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <location filename="../src/client/networkmodel.cpp" line="298"/>
+        <source>&lt;b&gt;Topic:&lt;/b&gt; %1</source>
+        <translation type="unfinished">&lt;b&gt;Thema:&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <location filename="../src/client/networkmodel.cpp" line="302"/>
+        <source>Not active &lt;br /&gt; Double-click to join</source>
+        <translation type="unfinished">Nicht aktiv &lt;br /&gt; Doppelklicken zum Beitreten</translation>
+    </message>
+    <message>
+        <location filename="../src/client/networkmodel.cpp" line="305"/>
+        <source>&lt;p&gt; %1 &lt;/p&gt;</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -521,17 +549,17 @@ p, li { white-space: pre-wrap; }
         <translation>&lt;b&gt;Dieser Client wurde ohne SSL-Unterstützung gebaut!&lt;/b&gt;&lt;br /&gt;Schalten Sie die SSL-Benutzung in den Kontoeinstellungen ab.</translation>
     </message>
     <message>
-        <location filename="../src/client/clientsyncer.cpp" line="194"/>
+        <location filename="../src/client/clientsyncer.cpp" line="192"/>
         <source>&lt;b&gt;The Quassel Core you are trying to connect to is too old!&lt;/b&gt;&lt;br&gt;Need at least core/client protocol v%1 to connect.</source>
         <translation>&lt;b&gt;Der Quasselkern, zu dem Sie eine Verbindung herzustellen versuchen, ist veraltet!&lt;/b&gt;&lt;br&gt;Benötige mindestens Kern/Client-Protokoll v%1 zum Verbinden.</translation>
     </message>
     <message>
-        <location filename="../src/client/clientsyncer.cpp" line="210"/>
+        <location filename="../src/client/clientsyncer.cpp" line="208"/>
         <source>&lt;b&gt;The Quassel Core you are trying to connect to does not support SSL!&lt;/b&gt;&lt;br /&gt;If you want to connect anyways, disable the usage of SSL in the account settings.</source>
         <translation>&lt;b&gt;Der Quasselkern, zu dem Sie eine Verbindung herzustellen versuchen, unterstützt kein SSL!&lt;/b&gt;&lt;br /&gt;Wenn Sie dennoch eine Verbindung herstellen wollen, schalten Sie die SSL-Benutzung in den Kontoeinstellungen ab.</translation>
     </message>
     <message>
-        <location filename="../src/client/clientsyncer.cpp" line="240"/>
+        <location filename="../src/client/clientsyncer.cpp" line="238"/>
         <source>Logging in...</source>
         <translation>Anmelden...</translation>
     </message>
@@ -886,60 +914,95 @@ wird benötigt, damit der Quassel-Kern funktioniert.</translation>
         <translation>Erstelle Administrativbenutzer...</translation>
     </message>
     <message>
-        <location filename="../src/core/core.cpp" line="388"/>
+        <location filename="../src/core/core.cpp" line="399"/>
         <source>Antique client trying to connect... refusing.</source>
         <translation>Antiquierter Client versucht zu verbinden... lehne ab.</translation>
     </message>
     <message>
-        <location filename="../src/core/core.cpp" line="404"/>
+        <location filename="../src/core/core.cpp" line="415"/>
         <source>&lt;b&gt;Your Quassel Client is too old!&lt;/b&gt;&lt;br&gt;This core needs at least client/core protocol version %1.&lt;br&gt;Please consider upgrading your client.</source>
         <translation>&lt;b&gt;Ihr Quasselclient ist zu alt!&lt;/b&gt;&lt;br&gt;Dieser Kern benötigt mindestens Client-/Kern-Protokollversion %1.&lt;br&gt;Bitte ziehen Sie in Erwägung, Ihren Client zu aktualisieren.</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="406"/>
         <source>Client %1 too old, rejecting.</source>
-        <translation>Client %1 zu alt, lehne ab.</translation>
+        <translation type="obsolete">Client %1 zu alt, lehne ab.</translation>
     </message>
     <message>
-        <location filename="../src/core/core.cpp" line="421"/>
+        <location filename="../src/core/core.cpp" line="432"/>
         <source>&lt;b&gt;Quassel Core Version %1&lt;/b&gt;&lt;br&gt;Built: %2&lt;br&gt;Up %3d%4h%5m (since %6)</source>
         <translation>&lt;b&gt;Quassel-Kern Version %1&lt;/b&gt;&lt;br&gt;Gebaut: %2&lt;br&gt;An %3T%4S%5M (seit %6)</translation>
     </message>
     <message>
-        <location filename="../src/core/core.cpp" line="484"/>
+        <location filename="../src/core/core.cpp" line="495"/>
         <source>&lt;b&gt;Client not initialized!&lt;/b&gt;&lt;br&gt;You need to send an init message before trying to login.</source>
         <translation>&lt;b&gt;Client nicht initialisiert!&lt;/b&gt;&lt;br&gt;Sie müssen vor dem Anmeldungsversuch eine init-Meldung senden.</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="486"/>
         <source>Client %1 did not send an init message before trying to login, rejecting.</source>
-        <translation>Client %1 hat vor dem Anmeldungsversuch keine init-Meldung gesendet, lehne ab.</translation>
+        <translation type="obsolete">Client %1 hat vor dem Anmeldungsversuch keine init-Meldung gesendet, lehne ab.</translation>
     </message>
     <message>
-        <location filename="../src/core/core.cpp" line="506"/>
+        <location filename="../src/core/core.cpp" line="517"/>
         <source>&lt;b&gt;Invalid username or password!&lt;/b&gt;&lt;br&gt;The username/password combination you supplied could not be found in the database.</source>
         <translation>&lt;b&gt;Ungültiger Benutzername oder Passwort!&lt;/b&gt;&lt;br&gt;Die angegebene Benutzername/Passwort-Kombination konnte in der Datenbank nicht gefunden werden.</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="512"/>
         <source>Client %1 initialized and authenticated successfully as &quot;%2&quot; (UserId: %3).</source>
-        <translation>Client %1 erfolgreich als &quot;%2&quot; (BenutzerId: %3) initialisiert und authentifziert.</translation>
+        <translation type="obsolete">Client %1 erfolgreich als &quot;%2&quot; (BenutzerId: %3) initialisiert und authentifziert.</translation>
     </message>
     <message>
-        <location filename="../src/core/core.cpp" line="523"/>
+        <location filename="../src/core/core.cpp" line="534"/>
         <source>Non-authed client disconnected.</source>
         <translation>Nicht-authentifizierter Client getrennt.</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="568"/>
         <source>Could not initialize session for client %1!</source>
-        <translation>Konnte Sitzung für Client %1 nicht initialisieren!</translation>
+        <translation type="obsolete">Konnte Sitzung für Client %1 nicht initialisieren!</translation>
+    </message>
+    <message>
+        <location filename="../src/core/core.cpp" line="376"/>
+        <source>Client connected from</source>
+        <translation type="unfinished">Client verbunden von</translation>
+    </message>
+    <message>
+        <location filename="../src/core/core.cpp" line="523"/>
+        <source>Client</source>
+        <translation type="unfinished">Client</translation>
+    </message>
+    <message>
+        <location filename="../src/core/core.cpp" line="417"/>
+        <source>too old, rejecting.</source>
+        <translation type="unfinished">zu alt, lehne ab.</translation>
+    </message>
+    <message>
+        <location filename="../src/core/core.cpp" line="477"/>
+        <source>Starting TLS for Client:</source>
+        <translation type="unfinished">Starte TLS für Client:</translation>
+    </message>
+    <message>
+        <location filename="../src/core/core.cpp" line="497"/>
+        <source>did not send an init message before trying to login, rejecting.</source>
+        <translation type="unfinished">hat vor dem Anmeldungsversuch keine init-Meldung gesendet, lehne ab.</translation>
+    </message>
+    <message>
+        <location filename="../src/core/core.cpp" line="523"/>
+        <source>initialized and authenticated successfully as &quot;%1&quot; (UserId: %2).</source>
+        <translation>initialisiert und erfolgreich als &quot;%1&quot; (BenutzerId: %2) authentifziert.</translation>
+    </message>
+    <message>
+        <location filename="../src/core/core.cpp" line="579"/>
+        <source>Could not initialize session for client:</source>
+        <translation type="unfinished">Konnte Sitzung für Client nicht erfolgreich initialisieren:</translation>
     </message>
 </context>
 <context>
     <name>CoreAccountEditDlg</name>
     <message>
-        <location filename="../src/qtui/coreconnectdlg.cpp" line="492"/>
+        <location filename="../src/qtui/coreconnectdlg.cpp" line="461"/>
         <source>Add Core Account</source>
         <translation>Kernkonto hinzufügen</translation>
     </message>
@@ -1205,7 +1268,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/qtui/ui/coreconfigwizardstorageselectionpage.ui" line="62"/>
         <source>Foobar</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1228,7 +1291,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/qtui/ui/coreconfigwizardsyncpage.ui" line="42"/>
         <source>foo</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconfigwizardsyncpage.ui" line="55"/>
@@ -1238,7 +1301,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/qtui/ui/coreconfigwizardsyncpage.ui" line="62"/>
         <source>bar</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconfigwizardsyncpage.ui" line="102"/>
@@ -1309,52 +1372,52 @@ p, li { white-space: pre-wrap; }
         <translation>Verbinden</translation>
     </message>
     <message>
-        <location filename="../src/qtui/coreconnectdlg.cpp" line="174"/>
+        <location filename="../src/qtui/coreconnectdlg.cpp" line="172"/>
         <source>Remove Account Settings</source>
         <translation>Kontoeinstellungen entfernen</translation>
     </message>
     <message>
-        <location filename="../src/qtui/coreconnectdlg.cpp" line="176"/>
+        <location filename="../src/qtui/coreconnectdlg.cpp" line="174"/>
         <source>Do you really want to remove your local settings for this Quassel Core account?&lt;br&gt;Note: This will &lt;em&gt;not&lt;/em&gt; remove or change any data on the Core itself!</source>
         <translation>Möchten Sie wirklich Ihre lokalen Einstellungen für dieses Quassel-Kernkonto löschen?&lt;br&gt;Anmerkung: Dies wird die Daten im Kern selbst &lt;em&gt;nicht&lt;/em&gt; entfernen oder ändern!</translation>
     </message>
     <message>
-        <location filename="../src/qtui/coreconnectdlg.cpp" line="221"/>
+        <location filename="../src/qtui/coreconnectdlg.cpp" line="219"/>
         <source>Connect to %1</source>
         <translation>Mit %1 verbinden</translation>
     </message>
     <message>
-        <location filename="../src/qtui/coreconnectdlg.cpp" line="238"/>
+        <location filename="../src/qtui/coreconnectdlg.cpp" line="236"/>
         <source>&lt;div style=color:red;&gt;Connection to %1 failed!&lt;/div&gt;</source>
         <translation>&lt;div style=color:red;&gt;Verbindung zu %1 fehlgeschlagen!&lt;/div&gt;</translation>
     </message>
     <message>
-        <location filename="../src/qtui/coreconnectdlg.cpp" line="262"/>
+        <location filename="../src/qtui/coreconnectdlg.cpp" line="260"/>
         <source>Not connected to %1.</source>
         <translation>Nicht mit %1 verbunden.</translation>
     </message>
     <message>
-        <location filename="../src/qtui/coreconnectdlg.cpp" line="263"/>
+        <location filename="../src/qtui/coreconnectdlg.cpp" line="261"/>
         <source>Looking up %1...</source>
         <translation>Schlage %1 nach...</translation>
     </message>
     <message>
-        <location filename="../src/qtui/coreconnectdlg.cpp" line="264"/>
+        <location filename="../src/qtui/coreconnectdlg.cpp" line="262"/>
         <source>Connecting to %1...</source>
         <translation>Verbinde mit %1...</translation>
     </message>
     <message>
-        <location filename="../src/qtui/coreconnectdlg.cpp" line="265"/>
+        <location filename="../src/qtui/coreconnectdlg.cpp" line="263"/>
         <source>Connected to %1</source>
         <translation>Verbunden mit %1</translation>
     </message>
     <message>
-        <location filename="../src/qtui/coreconnectdlg.cpp" line="266"/>
+        <location filename="../src/qtui/coreconnectdlg.cpp" line="264"/>
         <source>Unknown connection state to %1</source>
         <translation>Unbekannter Verbindungsstatus zu %1</translation>
     </message>
     <message>
-        <location filename="../src/qtui/coreconnectdlg.cpp" line="318"/>
+        <location filename="../src/qtui/coreconnectdlg.cpp" line="316"/>
         <source>Logging in...</source>
         <translation>Anmelden...</translation>
     </message>
@@ -1427,19 +1490,19 @@ space</source>
         <translation>Netzwerkstati:</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/coreconnectdlg.ui" line="565"/>
+        <location filename="../src/qtui/ui/coreconnectdlg.ui" line="522"/>
         <source>0/0</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="529"/>
         <source>Channel states:</source>
-        <translation>Kanalstati:</translation>
+        <translation type="obsolete">Kanalstati:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="549"/>
         <source>User states:</source>
-        <translation>Benutzerstati:</translation>
+        <translation type="obsolete">Benutzerstati:</translation>
     </message>
 </context>
 <context>
@@ -1490,7 +1553,7 @@ space</source>
     <message>
         <location filename="../src/core/coresession.cpp" line="241"/>
         <source>Client %1 disconnected (UserId: %2).</source>
-        <translation type="unfinished">Client %1 hat Verbindung getrennt (BenutzerId: %2).</translation>
+        <translation type="obsolete">Client %1 hat Verbindung getrennt (BenutzerId: %2).</translation>
     </message>
     <message>
         <location filename="../src/core/coresession.cpp" line="410"/>
@@ -1500,6 +1563,16 @@ space</source>
     <message>
         <location filename="../src/core/coresession.cpp" line="425"/>
         <source>CoreSession::createNetwork(): Trying to create a network that already exists, updating instead!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/core/coresession.cpp" line="241"/>
+        <source>Client</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/core/coresession.cpp" line="241"/>
+        <source>disconnected (UserId: %1).</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2154,165 +2227,170 @@ space</source>
 <context>
     <name>IrcServerHandler</name>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="411"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="415"/>
         <source>%1 has changed topic for %2 to: &quot;%3&quot;</source>
         <translation type="unfinished">%1 hat das Thema für %2 geändert zu: &quot;%3&quot;</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="784"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="783"/>
         <source>No topic is set for %1.</source>
         <translation>Für %1 ist kein Thema gesetzt.</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="796"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="795"/>
         <source>Topic for %1 is &quot;%2&quot;</source>
         <translation>Thema für %1 ist &quot;%2&quot;</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="807"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="806"/>
         <source>Topic set by %1 on %2</source>
         <translation>Thema in %2 gesetzt von %1</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="480"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="486"/>
         <source>%1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="515"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="521"/>
         <source>[Whois] %1 is away: &quot;%2&quot;</source>
         <translation>[Whois] %1 ist abwesend: &quot;%2&quot;</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="526"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="532"/>
         <source>%1 is away: &quot;%2&quot;</source>
         <translation>%1 ist abwesend: &quot;%2&quot;</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="723"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="729"/>
         <source>[Whois] %1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="597"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="603"/>
         <source>[Whois] %1 is %2 (%3)</source>
         <translation>[Whois] %1 ist %2 (%3)</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="612"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="618"/>
         <source>%1 is online via %2 (%3)</source>
         <translation>%1 ist angemeldet über %2 (%3)</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="871"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="870"/>
         <source>[Whowas] %1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="642"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="648"/>
         <source>[Whowas] %1 was %2 (%3)</source>
         <translation>[Whowas] %1 war %2 (%3)</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="656"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="662"/>
         <source>[Who] End of /WHO list for %1</source>
         <translation>[Who] Ende der /WHO Liste für %1</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="676"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="682"/>
         <source>[Whois] %1 is logged in since %2</source>
         <translation>[Whois] %1 ist seit %2 angemeldet</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="678"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="684"/>
         <source>[Whois] %1 is idling for %2 (%3)</source>
         <translation>[Whois] %1 ist seit %2 (%3) inaktiv</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="681"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="687"/>
         <source>[Whois] idle message: %1</source>
         <translation>[Whois] Inaktivmeldung: %1</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="713"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="719"/>
         <source>[Whois] %1 is a user on channels: %2</source>
         <translation>[Whois] %1 ist Benutzer in den Kanälen: %2</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="715"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="721"/>
         <source>[Whois] %1 has voice on channels: %2</source>
         <translation>[Whois] %1 hat Voice in den Kanälen: %2</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="717"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="723"/>
         <source>[Whois] %1 is an operator on channels: %2</source>
         <translation>[Whois] %1 ist Operator in den Kanälen: %2</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="745"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="751"/>
         <source>Channel %1 has %2 users. Topic is: %3</source>
         <translation>Kanal %1 hat %2 Benutzer. Thema ist: %3</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="754"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="760"/>
         <source>End of channel list</source>
         <translation>Ende der Kanalliste</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="830"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="829"/>
         <source>[Who] %1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="884"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="883"/>
         <source>There is a nickname in your identity&apos;s nicklist which contains illegal characters</source>
         <translation>Ein Spitzname der Spitznamensliste Ihrer Identität enthält ungültige Zeichen</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="885"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="884"/>
         <source>Due to a bug in Unreal IRCd (and maybe other irc-servers too) we&apos;re unable to determine the erroneous nick</source>
         <translation>Auf Grund eines Fehlers im Unreal IRCs (und evtl. auch anderen IRC-Servern) können wir den fehlerhaften Spitznamen nicht ermitteln</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="886"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="885"/>
         <source>Please use: /nick &lt;othernick&gt; to continue or clean up your nicklist</source>
         <translation>Bitte benutzen Sie: /nick &lt;andererSpitzname&gt; zum Fortfahren oder säubern Sie Ihre Spitznamensliste</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="889"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="888"/>
         <source>Nick %1 contains illegal characters</source>
         <translation>Spitzname %1 enthält ungültige Zeichen</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="901"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="900"/>
         <source>Nick already in use: %1</source>
         <translation>Spitzname bereits in Benutzung: %1</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="924"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="923"/>
         <source>No free and valid nicks in nicklist found. use: /nick &lt;othernick&gt; to continue</source>
         <translation>Keine freien und gültigen Spitznamen in Spitznamensliste gefunden. Benutze: /nick &lt;andererSpitzname&gt; zum Fortfahren</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="773"/>
-        <source>[Whois] %1 %3 %2</source>
+        <location filename="../src/core/ircserverhandler.cpp" line="440"/>
+        <source>Received RPL_ISUPPORT (005) without parameters!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/core/ircserverhandler.cpp" line="448"/>
+        <source>Received non RFC compliant RPL_ISUPPORT: this can lead to unexpected behavior!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>IrcUserItem</name>
     <message>
-        <location filename="../src/client/networkmodel.cpp" line="608"/>
+        <location filename="../src/client/networkmodel.cpp" line="594"/>
         <source>idling since %1</source>
         <translation>nichtstuend seit %1</translation>
     </message>
     <message>
-        <location filename="../src/client/networkmodel.cpp" line="611"/>
+        <location filename="../src/client/networkmodel.cpp" line="597"/>
         <source>login time: %1</source>
         <translation>Anmeldezeitpunkt: %1</translation>
     </message>
     <message>
-        <location filename="../src/client/networkmodel.cpp" line="614"/>
+        <location filename="../src/client/networkmodel.cpp" line="600"/>
         <source>server: %1</source>
         <translation>Server: %1</translation>
     </message>
@@ -2403,7 +2481,7 @@ p, li { white-space: pre-wrap; }
         <translation>S&amp;chnell verbinden...</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="238"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="247"/>
         <source>Disconnect</source>
         <translation>Trennen</translation>
     </message>
@@ -2443,42 +2521,42 @@ p, li { white-space: pre-wrap; }
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="206"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="209"/>
         <source>Manage Views...</source>
         <translation>Ansichten verwalten...</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="211"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="214"/>
         <source>About Qt...</source>
         <translation>Über Qt...</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="223"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="229"/>
         <source>About Quassel IRC...</source>
         <translation>Über Quassel IRC...</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="228"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="237"/>
         <source>Import Backlog</source>
         <translation>Rückspeicher importieren</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="233"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="242"/>
         <source>Connect</source>
         <translation>Verbinden</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="243"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="252"/>
         <source>Internal</source>
         <translation>Intern</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="255"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="264"/>
         <source>Disconnect from Core</source>
         <translation>Von Kern trennen</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="267"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="276"/>
         <source>Connect to Core...</source>
         <translation>Mit Kern verbinden...</translation>
     </message>
@@ -2488,7 +2566,7 @@ p, li { white-space: pre-wrap; }
         <translation>Mit Kern verbunden.</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="303"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="312"/>
         <source>Edit &amp;Networks...</source>
         <translation>N&amp;etzwerke ändern...</translation>
     </message>
@@ -2543,12 +2621,12 @@ p, li { white-space: pre-wrap; }
         <translation>&amp;Hilfe</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="272"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="281"/>
         <source>Debug &amp;Console</source>
         <translation>Fehler&amp;konsole</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="277"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="286"/>
         <source>Disconnect from Network...</source>
         <translation>Von Netzwerk trennen...</translation>
     </message>
@@ -2563,12 +2641,12 @@ p, li { white-space: pre-wrap; }
         <translation>Pufferansichten</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="286"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="295"/>
         <source>Manage Buffer Views</source>
         <translation>Pufferansichten verwalten</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="294"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="303"/>
         <source>Lock Dock Positions</source>
         <translation>Andockerpositionen sperren</translation>
     </message>
@@ -2678,7 +2756,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/common/message.cpp" line="118"/>
         <source>%Dj%DN%1%DN %DH(%2@%3)%DH has joined %DC%4%DC</source>
-        <translation>%Dj%DN%1%DN %DH(%2@%3)%DH ist %DC%4%DC beigetreten</translation>
+        <translation>%Dj%DN%1%DN %DH(%2@%3)%DH hat %DC%4%DC betreten</translation>
     </message>
     <message>
         <location filename="../src/common/message.cpp" line="120"/>
@@ -2693,7 +2771,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/common/message.cpp" line="139"/>
         <source>%Dr%DN%1%DN is now known as %DN%2%DN</source>
-        <translation>%Dr%DN%1%DN ist jetzt als %DN%2%DN bekannt</translation>
+        <translation>%Dr%DN%1%DN nennt sich jetzt %DN%2%DN</translation>
     </message>
     <message>
         <location filename="../src/common/message.cpp" line="144"/>
@@ -2755,17 +2833,17 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>NetworkModel</name>
     <message>
-        <location filename="../src/client/networkmodel.cpp" line="639"/>
+        <location filename="../src/client/networkmodel.cpp" line="625"/>
         <source>Buffer</source>
         <translation>Puffer</translation>
     </message>
     <message>
-        <location filename="../src/client/networkmodel.cpp" line="639"/>
+        <location filename="../src/client/networkmodel.cpp" line="625"/>
         <source>Topic</source>
         <translation>Thema</translation>
     </message>
     <message>
-        <location filename="../src/client/networkmodel.cpp" line="639"/>
+        <location filename="../src/client/networkmodel.cpp" line="625"/>
         <source>Nick Count</source>
         <translation>Spitznamenzähler</translation>
     </message>
@@ -3208,17 +3286,35 @@ Lassen Sie dies auf ISO-8859-1 gesetzt, falls Sie nicht *wirklich* wissen, was S
     <message>
         <location filename="../src/common/util.cpp" line="167"/>
         <source>h</source>
-        <translation>S</translation>
+        <translation>Std.</translation>
     </message>
     <message>
         <location filename="../src/common/util.cpp" line="168"/>
         <source>min</source>
-        <translation>Min</translation>
+        <translation>Min.</translation>
     </message>
     <message>
         <location filename="../src/common/util.cpp" line="169"/>
         <source>sec</source>
-        <translation>Sek</translation>
+        <translation>Sek.</translation>
+    </message>
+</context>
+<context>
+    <name>QueryBufferItem</name>
+    <message>
+        <location filename="../src/client/networkmodel.cpp" line="259"/>
+        <source>&lt;b&gt;Query with %1&lt;/b&gt;</source>
+        <translation type="unfinished">&lt;b&gt;Dialog mit %1&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/client/networkmodel.cpp" line="261"/>
+        <source>Away Message: %1</source>
+        <translation type="unfinished">Abwesenheitsmeldung: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/client/networkmodel.cpp" line="264"/>
+        <source>&lt;p&gt; %1 &lt;/p&gt;</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -3360,6 +3456,24 @@ Lassen Sie dies auf ISO-8859-1 gesetzt, falls Sie nicht *wirklich* wissen, was S
     </message>
 </context>
 <context>
+    <name>StatusBufferItem</name>
+    <message>
+        <location filename="../src/client/networkmodel.cpp" line="241"/>
+        <source>&lt;b&gt;Status buffer of %1&lt;/b&gt;</source>
+        <translation type="unfinished">&lt;b&gt;Statuspuffer von %1&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/client/networkmodel.cpp" line="243"/>
+        <source>&lt;p&gt; %1 &lt;/p&gt;</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../src/client/networkmodel.h" line="138"/>
+        <source>Status Buffer</source>
+        <translation type="unfinished">Statuspuffer</translation>
+    </message>
+</context>
+<context>
     <name>TopicLabel</name>
     <message>
         <location filename="../src/qtui/topiclabel.cpp" line="43"/>
@@ -3430,7 +3544,7 @@ Lassen Sie dies auf ISO-8859-1 gesetzt, falls Sie nicht *wirklich* wissen, was S
     <message>
         <location filename="../src/uisupport/uistyle.cpp" line="286"/>
         <source>%Dj%DN%1%DN %DH(%2@%3)%DH has joined %DC%4%DC</source>
-        <translation>%Dj%DN%1%DN %DH(%2@%3)%DH ist %DC%4%DC beigetreten</translation>
+        <translation>%Dj%DN%1%DN %DH(%2@%3)%DH hat %DC%4%DC betreten</translation>
     </message>
     <message>
         <location filename="../src/uisupport/uistyle.cpp" line="288"/>
@@ -3511,7 +3625,7 @@ Lassen Sie dies auf ISO-8859-1 gesetzt, falls Sie nicht *wirklich* wissen, was S
 <context>
     <name>UserCategoryItem</name>
     <message numerus="yes">
-        <location filename="../src/client/networkmodel.cpp" line="489"/>
+        <location filename="../src/client/networkmodel.cpp" line="470"/>
         <source>%n Owner(s)</source>
         <translation>
             <numerusform>%n Besitzer</numerusform>
@@ -3519,7 +3633,7 @@ Lassen Sie dies auf ISO-8859-1 gesetzt, falls Sie nicht *wirklich* wissen, was S
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/client/networkmodel.cpp" line="490"/>
+        <location filename="../src/client/networkmodel.cpp" line="471"/>
         <source>%n Admin(s)</source>
         <translation>
             <numerusform></numerusform>
@@ -3527,7 +3641,7 @@ Lassen Sie dies auf ISO-8859-1 gesetzt, falls Sie nicht *wirklich* wissen, was S
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/client/networkmodel.cpp" line="491"/>
+        <location filename="../src/client/networkmodel.cpp" line="472"/>
         <source>%n Operator(s)</source>
         <translation>
             <numerusform>%n Operator</numerusform>
@@ -3535,7 +3649,7 @@ Lassen Sie dies auf ISO-8859-1 gesetzt, falls Sie nicht *wirklich* wissen, was S
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/client/networkmodel.cpp" line="492"/>
+        <location filename="../src/client/networkmodel.cpp" line="473"/>
         <source>%n Half-Op(s)</source>
         <translation>
             <numerusform></numerusform>
@@ -3543,7 +3657,7 @@ Lassen Sie dies auf ISO-8859-1 gesetzt, falls Sie nicht *wirklich* wissen, was S
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/client/networkmodel.cpp" line="493"/>
+        <location filename="../src/client/networkmodel.cpp" line="474"/>
         <source>%n Voiced</source>
         <translation>
             <numerusform></numerusform>
@@ -3551,7 +3665,7 @@ Lassen Sie dies auf ISO-8859-1 gesetzt, falls Sie nicht *wirklich* wissen, was S
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/client/networkmodel.cpp" line="494"/>
+        <location filename="../src/client/networkmodel.cpp" line="475"/>
         <source>%n User(s)</source>
         <translation>
             <numerusform>%n Benutzer</numerusform>
@@ -3562,7 +3676,7 @@ Lassen Sie dies auf ISO-8859-1 gesetzt, falls Sie nicht *wirklich* wissen, was S
 <context>
     <name>UserInputHandler</name>
     <message>
-        <location filename="../src/core/userinputhandler.cpp" line="114"/>
+        <location filename="../src/core/userinputhandler.cpp" line="116"/>
         <source>sending CTCP-%1 request</source>
         <translation>sende CTCP-%1-Anfrage</translation>
     </message>
