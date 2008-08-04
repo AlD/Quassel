@@ -18,16 +18,18 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef _CHATITEM_H_
-#define _CHATITEM_H_
+#ifndef CHATITEM_H_
+#define CHATITEM_H_
 
 #include <QGraphicsItem>
-#include <QTextLayout>
-#include <QTextOption>
+#include <QObject>
 
 #include "chatline.h"
 #include "chatlinemodel.h"
+#include "chatscene.h"
 #include "uistyle.h"
+
+class QTextLayout;
 
 class ChatItem : public QGraphicsItem {
 
@@ -38,29 +40,77 @@ class ChatItem : public QGraphicsItem {
     inline QPersistentModelIndex index() const { return _index; }
     inline const MessageModel *model() const { return _index.isValid() ? qobject_cast<const MessageModel *>(_index.model()) : 0; }
     inline int row() const { return _index.isValid() ? _index.row() : 0; }
+    inline ChatScene *chatScene() const { return qobject_cast<ChatScene *>(scene()); }
 
+    inline QFontMetricsF *fontMetrics() const { return _fontMetrics; }
     inline virtual QRectF boundingRect() const { return _boundingRect; }
+    inline qreal width() const { return _boundingRect.width(); }
+    inline qreal height() const { return _boundingRect.height(); }
+
+    inline bool haveLayout() const { return _layout != 0; }
+    void clearLayout();
+    void updateLayout();
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
     virtual QVariant data(int role) const;
-    //QString text() const;
-    //void setText(const UiStyle::StyledText &text);
-
-    //QTextOption textOption() const;
-    //void setTextOption(const QTextOption &option);
 
     // returns height
-    int setWidth(int width);
-    //virtual void layout();
+    qreal setWidth(qreal width);
+
+    // selection stuff, to be called by the scene
+    void clearSelection();
+    void setFullSelection();
+    void continueSelecting(const QPointF &pos);
 
   protected:
-    //void mouseMoveEvent ( QGraphicsSceneMouseEvent * event );
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
+
+    virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+    virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+    virtual void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
 
   private:
+    qint16 posToCursor(const QPointF &pos);
+    qreal computeHeight();
+    QTextLayout *createLayout(QTextOption::WrapMode, Qt::Alignment = Qt::AlignLeft);
+
+    // internal selection stuff
+    void setSelection(int start, int length);
+
     QRectF _boundingRect;
-    //QTextLayout _layout;
-    //QTextOption _textOption;
+    QFontMetricsF *_fontMetrics;
+    quint8 _lines;
     QPersistentModelIndex _index;
+
+    QTextLayout * _layout;
+    QList<quint16> _wrapPositions;
+
+    enum SelectionMode { NoSelection, PartialSelection, FullSelection };
+    SelectionMode _selectionMode;
+    qint16 _selectionStart, _selectionEnd;
+
+    class WrapColumnFinder;
+};
+
+class ChatItem::WrapColumnFinder {
+  public:
+    WrapColumnFinder(ChatItem *parent);
+    ~WrapColumnFinder();
+
+    qint16 nextWrapColumn();
+
+  private:
+    ChatItem *item;
+    QTextLayout *layout;
+    QTextLine line;
+    ChatLineModel::WrapList wrapList;
+    qint16 wordidx;
+    qint16 lastwrapcol;
+    qreal lastwrappos;
+    qreal w;
 };
 
 #endif

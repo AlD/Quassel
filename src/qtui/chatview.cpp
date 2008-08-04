@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <QGraphicsTextItem>
+#include <QScrollBar>
 
 #include "buffer.h"
 #include "chatlinemodelitem.h"
@@ -29,22 +30,26 @@
 #include "quasselui.h"
 
 ChatView::ChatView(Buffer *buf, QWidget *parent) : QGraphicsView(parent), AbstractChatView() {
-  setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  setOptimizationFlags(QGraphicsView::DontClipPainter
-      |QGraphicsView::DontSavePainterState
-      |QGraphicsView::DontAdjustForAntialiasing);
-
   QList<BufferId> filterList;
   filterList.append(buf->bufferInfo().bufferId());
   MessageFilter *filter = new MessageFilter(Client::messageModel(), filterList, this);
-
-  _scene = new ChatScene(filter, this);
-  connect(_scene, SIGNAL(heightChanged(int)), this, SLOT(sceneHeightChanged(int)));
-  setScene(_scene);
-  setSceneRect(0, 0, width(), 0);
+  init(filter);
 
 }
 
+ChatView::ChatView(MessageFilter *filter, QWidget *parent) : QGraphicsView(parent), AbstractChatView() {
+  init(filter);
+}
+
+void ChatView::init(MessageFilter *filter) {
+  setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  setAlignment(Qt::AlignBottom);
+  setInteractive(true);
+
+  _scene = new ChatScene(filter, filter->idString(), this);
+  connect(_scene, SIGNAL(heightChanged(qreal)), this, SLOT(sceneHeightChanged(qreal)));
+  setScene(_scene);
+}
 
 ChatView::~ChatView() {
 
@@ -56,11 +61,15 @@ ChatScene *ChatView::scene() const {
 }
 
 void ChatView::resizeEvent(QResizeEvent *event) {
-  scene()->setWidth(event->size().width());
+  scene()->setWidth(event->size().width() - 2);  // FIXME figure out why we have to hardcode the -2 here
+  verticalScrollBar()->setValue(verticalScrollBar()->maximum());
 }
 
-void ChatView::sceneHeightChanged(int h) {
-  setSceneRect(0, 0, width(), h);
+void ChatView::sceneHeightChanged(qreal h) {
+  Q_UNUSED(h)
+  bool scrollable = qAbs(verticalScrollBar()->value() - verticalScrollBar()->maximum()) <= 2; // be a bit tolerant here, also FIXME (why we need this?)
+  setSceneRect(scene()->sceneRect());
+  if(scrollable) verticalScrollBar()->setValue(verticalScrollBar()->maximum());
 }
 
 void ChatView::clear()
@@ -94,7 +103,7 @@ void ChatView::appendChatLine(ChatLine *line) {
 
 void ChatView::appendChatLines(QList<ChatLine *> list) {
   //foreach(ChatLine *line, list) {
-    
+
   //}
 }
 

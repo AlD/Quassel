@@ -20,12 +20,27 @@
 
 #include "messagefilter.h"
 
+MessageFilter::MessageFilter(QAbstractItemModel *source, QObject *parent) : QSortFilterProxyModel(parent) {
+  setSourceModel(source);
+}
+
 MessageFilter::MessageFilter(MessageModel *source, const QList<BufferId> &buffers, QObject *parent)
   : QSortFilterProxyModel(parent),
     _bufferList(buffers)
 {
   setSourceModel(source);
 
+}
+
+QString MessageFilter::idString() const {
+  if(_bufferList.isEmpty()) return "*";
+  QString idstr;
+  QStringList bufids;
+  foreach(BufferId id, _bufferList) bufids << QString::number(id.toInt());
+  bufids.sort();
+  foreach(QString id, bufids) idstr += id + '|';
+  idstr.chop(1);
+  return idstr;
 }
 
 bool MessageFilter::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const {

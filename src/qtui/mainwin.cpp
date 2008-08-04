@@ -20,12 +20,13 @@
 #include "mainwin.h"
 
 #include "aboutdlg.h"
-#include "chatwidget.h"
 #include "bufferview.h"
 #include "bufferviewconfig.h"
 #include "bufferviewfilter.h"
 #include "bufferviewmanager.h"
 #include "channellistdlg.h"
+#include "chatmonitorfilter.h"
+#include "chatview.h"
 #include "client.h"
 #include "clientbacklogmanager.h"
 #include "coreinfodlg.h"
@@ -81,12 +82,12 @@ MainWin::MainWin(QtUi *_gui, QWidget *parent)
 {
   UiSettings uiSettings;
   loadTranslation(uiSettings.value("Locale", QLocale::system()).value<QLocale>());
-  
+
   QString style = uiSettings.value("Style", QString("")).toString();
   if(style != "") {
     QApplication::setStyle(style);
   }
-  
+
   ui.setupUi(this);
   setWindowTitle("Quassel IRC");
   setWindowIcon(offlineTrayIcon);
@@ -150,9 +151,9 @@ void MainWin::init() {
   // restore mainwin state
   restoreState(s.value("MainWinState").toByteArray());
 
-  // restore locked state of docks  
+  // restore locked state of docks
   ui.actionLockDockPositions->setChecked(s.value("LockDocks", false).toBool());
-  
+
 
   setDisconnectedState();  // Disable menus and stuff
   showCoreConnectionDlg(true); // autoconnect if appropriate
@@ -204,7 +205,7 @@ void MainWin::addBufferView(BufferViewConfig *config) {
   view->show();
 
   connect(&view->showChannelList, SIGNAL(triggered()), this, SLOT(showChannelList()));
-  
+
   Client::bufferModel()->synchronizeView(view);
 
   dock->setWidget(view);
@@ -286,26 +287,17 @@ void MainWin::setupNickWidget() {
 }
 
 void MainWin::setupChatMonitor() {
-#ifndef SPUTDEV
   VerticalDock *dock = new VerticalDock(tr("Chat Monitor"), this);
   dock->setObjectName("ChatMonitorDock");
 
-  ChatWidget *chatWidget = new ChatWidget(0, this);
-  chatWidget->show();
-  dock->setWidget(chatWidget);
+  ChatMonitorFilter *filter = new ChatMonitorFilter(Client::messageModel(), this);
+  ChatView *chatView = new ChatView(filter, this);
+  chatView->show();
+  dock->setWidget(chatView);
   dock->show();
-
-  Buffer *buf = Client::monitorBuffer();
-  if(!buf)
-    return;
-
-  chatWidget->setContents(buf->contents());
-  connect(buf, SIGNAL(msgAppended(AbstractUiMsg *)), chatWidget, SLOT(appendMsg(AbstractUiMsg *)));
-  connect(buf, SIGNAL(msgPrepended(AbstractUiMsg *)), chatWidget, SLOT(prependMsg(AbstractUiMsg *)));
 
   addDockWidget(Qt::TopDockWidgetArea, dock, Qt::Vertical);
   ui.menuViews->addAction(dock->toggleViewAction());
-#endif /* SPUTDEV */
 }
 
 void MainWin::setupInputWidget() {
@@ -600,21 +592,21 @@ void MainWin::receiveMessage(const Message &msg) {
 
     UiSettings uiSettings;
 
-#ifndef SPUTDEV
     bool displayBubble = uiSettings.value("NotificationBubble", QVariant(true)).toBool();
     bool displayDesktop = uiSettings.value("NotificationDesktop", QVariant(true)).toBool();
     if(displayBubble || displayDesktop) {
-      // FIXME don't invoke style engine for this!
-      QString text = QtUi::style()->styleString(Message::mircToInternal(msg.contents())).plainText;
-      if(displayBubble) displayTrayIconMessage(title, text);
+      if(uiSettings.value("DisplayPopupMessages", QVariant(true)).toBool()) {
+        // FIXME don't invoke style engine for this!
+        QString text = QtUi::style()->styleString(msg.contents()).plainText;
+        if(displayBubble) displayTrayIconMessage(title, text);
 #  ifdef HAVE_DBUS
-      if(displayDesktop) sendDesktopNotification(title, text);
+        if(displayDesktop) sendDesktopNotification(title, text);
 #  endif
-    }
-#endif
-    if(uiSettings.value("AnimateTrayIcon", QVariant(true)).toBool()) {
-      QApplication::alert(this);
-      setTrayIconActivity(true);
+      }
+      if(uiSettings.value("AnimateTrayIcon", QVariant(true)).toBool()) {
+        QApplication::alert(this);
+        setTrayIconActivity(true);
+      }
     }
   }
 }
@@ -753,7 +745,7 @@ void MainWin::clientNetworkRemoved(NetworkId id) {
   QAction *action = findChild<QAction *>(QString("NetworkAction-%1").arg(id.toInt()));
   if(!action)
     return;
-  
+
   action->deleteLater();
 }
 

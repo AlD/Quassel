@@ -23,39 +23,69 @@
 
 #include <QAbstractItemModel>
 #include <QGraphicsScene>
+#include <QSet>
 
 class AbstractUiMsg;
 class Buffer;
 class ChatItem;
 class ChatLine;
+class ColumnHandleItem;
+
 class QGraphicsSceneMouseEvent;
 
 class ChatScene : public QGraphicsScene {
   Q_OBJECT
 
   public:
-    ChatScene(QAbstractItemModel *model, QObject *parent);
+    ChatScene(QAbstractItemModel *model, const QString &idString, QObject *parent);
     virtual ~ChatScene();
 
     Buffer *buffer() const;
     inline QAbstractItemModel *model() const { return _model; }
+    inline QString idString() const { return _idString; }
 
   public slots:
-    void setWidth(int);
+    void setWidth(qreal);
+
+    // these are used by the chatitems to notify the scene and manage selections
+    void setSelectingItem(ChatItem *item);
+    ChatItem *selectingItem() const { return _selectingItem; }
+    void startGlobalSelection(ChatItem *item, const QPointF &itemPos);
 
   signals:
-    void heightChanged(int height);
+    void heightChanged(qreal height);
+
+  protected:
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent);
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent);
 
   protected slots:
     void rowsInserted(const QModelIndex &, int, int);
-    void mousePressEvent ( QGraphicsSceneMouseEvent * mouseEvent );
+    void modelReset();
+
+  private slots:
+    void rectChanged(const QRectF &);
+    void handlePositionChanged(qreal xpos);
 
   private:
-    int _width, _height;
-    int _timestampWidth, _senderWidth;
+    void updateSelection(const QPointF &pos);
+    QString selectionToString() const;
+
+    QString _idString;
+    qreal _width, _height;
     QAbstractItemModel *_model;
     QList<ChatLine *> _lines;
 
+    ColumnHandleItem *firstColHandle, *secondColHandle;
+    qreal firstColHandlePos, secondColHandlePos;
+
+    ChatItem *_selectingItem, *_lastItem;
+    QSet<ChatLine *> _selectedItems;
+    int _selectionStartCol, _selectionMinCol;
+    int _selectionStart;
+    int _selectionEnd;
+    bool _isSelecting;
 };
 
 #endif

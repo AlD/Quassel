@@ -9,6 +9,14 @@ set(SOURCES
     aboutdlg.cpp
     bufferwidget.cpp
     channellistdlg.cpp
+    chatitem.cpp
+    chatline.cpp
+    chatlinemodel.cpp
+    chatlinemodelitem.cpp
+    chatmonitorfilter.cpp
+    chatscene.cpp
+    chatview.cpp
+    columnhandleitem.cpp
     coreconfigwizard.cpp
     coreconnectdlg.cpp
     coreinfodlg.cpp
@@ -31,6 +39,11 @@ set(MOC_HDRS
     aboutdlg.h
     bufferwidget.h
     channellistdlg.h
+    chatlinemodel.h
+    chatmonitorfilter.h
+    chatscene.h
+    chatview.h
+    columnhandleitem.h
     coreconfigwizard.h
     coreconnectdlg.h
     coreinfodlg.h
@@ -48,18 +61,11 @@ set(MOC_HDRS
     verticaldock.h)
 
 set(HEADERS
+    chatitem.h
+    chatline.h
+    chatlinemodelitem.h
     qtuisettings.h
     qtuistyle.h)
-
-if(SPUTDEV)
-  set(SOURCES ${SOURCES} chatitem.cpp chatline.cpp chatlinemodelitem.cpp
-                         chatlinemodel.cpp chatscene.cpp chatview.cpp)
-  set(MOC_HDRS ${MOC_HDRS} chatlinemodel.h chatscene.h chatview.h)
-  set(HEADERS ${HEADERS} chatitem.h chatline.h chatlinemodelitem.h)
-else(SPUTDEV)
-  set(SOURCES ${SOURCES} chatline-old.cpp chatwidget.cpp)
-  set(MOC_HDRS ${MOC_HDRS} chatline-old.h chatwidget.h)
-endif(SPUTDEV)
 
 set(FORMS
     aboutdlg.ui

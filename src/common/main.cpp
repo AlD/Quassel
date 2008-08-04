@@ -22,6 +22,7 @@
 #include <QString>
 #include <QTimer>
 #include <QTranslator>
+#include <QFile>
 
 #include "global.h"
 #include "logger.h"
@@ -64,8 +65,6 @@ int main(int argc, char **argv) {
   signal(SIGTERM, handle_signal);
   signal(SIGINT, handle_signal);
 
-  // Logger logger;
-
   Global::registerMetaTypes();
   Global::setupVersion();
 
@@ -86,6 +85,9 @@ int main(int argc, char **argv) {
 // put core-only arguments here
   Global::parser.addOption("port",'p',"The port quasselcore will listen at",QString("4242"));
   Global::parser.addSwitch("norestore", 'n', "Don't restore last core's state");
+  Global::parser.addOption("logfile",'l',"Path to logfile");
+  Global::parser.addOption("loglevel",'L',"Loglevel Debug|Info|Warning|Error","Info");
+  Global::parser.addOption("datadir", 0, "Specify the directory holding datafiles like the Sqlite DB and the SSL Cert");
 #endif // BUILD_QTUI
 #ifndef BUILD_CORE
 // put client-only arguments here
@@ -99,6 +101,20 @@ int main(int argc, char **argv) {
   if(!Global::parser.parse() || Global::parser.isSet("help")) {
     Global::parser.usage();
     return 1;
+  }
+
+  /*
+   This is an initial check if logfile is writable since the warning would spam stdout if done
+   in current Logger implementation. Can be dropped whenever the logfile is only opened once.
+  */
+  if(Global::runMode != Global::ClientOnly) {
+    QFile logFile;
+    if(!Global::parser.value("logfile").isEmpty()) {
+      logFile.setFileName(Global::parser.value("logfile"));
+      if(!logFile.open(QIODevice::Append | QIODevice::Text))
+        qWarning("Warning: Couldn't open logfile '%s' - will log to stdout instead",qPrintable(logFile.fileName()));
+      else logFile.close();
+    }
   }
 
   qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));

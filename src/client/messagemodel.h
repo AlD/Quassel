@@ -28,7 +28,7 @@
 #include "types.h"
 
 class MessageModelItem;
-class MsgId;
+struct MsgId;
 
 class MessageModel : public QAbstractItemModel {
   Q_OBJECT
@@ -42,6 +42,7 @@ class MessageModel : public QAbstractItemModel {
       TimestampRole,
       DisplayRole,
       FormatRole,
+      ColumnTypeRole,
       UserRole
     };
 
@@ -64,6 +65,8 @@ class MessageModel : public QAbstractItemModel {
 
     void insertMessage(const Message &);
     void insertMessages(const QList<Message> &);
+
+    void clear();
 
   protected:
     virtual MessageModelItem *createMessageModelItem(const Message &) = 0;

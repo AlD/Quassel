@@ -23,19 +23,20 @@
 #include "message.h"
 
 MessageModel::MessageModel(QObject *parent) : QAbstractItemModel(parent) {
-  
-  
-  
+
+
+
 }
 
 MessageModel::~MessageModel() {
-  
-  
+
+
 }
 
 QVariant MessageModel::data(const QModelIndex &index, int role) const {
-  int row = index.row();
-  if(row < 0 || row >= _messageList.count()) return QVariant();
+  int row = index.row(); int column = index.column();
+  if(row < 0 || row >= _messageList.count() || column < 0) return QVariant();
+  if(role == ColumnTypeRole) return column;
   return _messageList[row]->data(index.column(), role);
 }
 
@@ -63,6 +64,12 @@ void MessageModel::insertMessages(const QList<Message> &msglist) {
   // FIXME make this more efficient by grouping msgs
   foreach(Message msg, msglist) insertMessage(msg);
 
+}
+
+void MessageModel::clear() {
+  reset();
+  qDeleteAll(_messageList);
+  _messageList.clear();
 }
 
 // returns index of msg with given Id or of the next message after that (i.e., the index where we'd insert this msg)
