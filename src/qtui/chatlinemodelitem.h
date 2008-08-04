@@ -21,12 +21,16 @@
 #ifndef CHATLINEMODELITEM_H_
 #define CHATLINEMODELITEM_H_
 
-#include "messagemodel.h"
+#include <QVector>
+#include <QPair>
+
+#include "chatlinemodel.h"
 #include "uistyle.h"
 
 class ChatLineModelItem : public MessageModelItem {
 
   public:
+
     ChatLineModelItem(const Message &);
     //virtual ~ChatLineModelItem() {};
 
@@ -34,13 +38,15 @@ class ChatLineModelItem : public MessageModelItem {
     virtual bool setData(int column, const QVariant &value, int role);
 
   private:
+    void computeWrapList();
+
     struct ChatLinePart {
       QString plainText;
       UiStyle::FormatList formatList;
-
     };
-
     ChatLinePart _timestamp, _sender, _contents;
+
+    ChatLineModel::WrapList _wrapList;
 };
 
 #endif

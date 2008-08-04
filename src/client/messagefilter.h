@@ -29,11 +29,14 @@
 class MessageFilter : public QSortFilterProxyModel {
   Q_OBJECT
 
+  protected:
+    MessageFilter(QAbstractItemModel *source, QObject *parent = 0);
+
   public:
     MessageFilter(MessageModel *, const QList<BufferId> &buffers = QList<BufferId>(), QObject *parent = 0);
 
     virtual bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
-
+    virtual QString idString() const;
 
   private:
     QList<BufferId> _bufferList;

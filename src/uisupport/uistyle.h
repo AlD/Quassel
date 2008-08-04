@@ -21,11 +21,8 @@
 #ifndef _UISTYLE_H_
 #define _UISTYLE_H_
 
-#ifndef SPUTDEV
-# include "old-uistyle.h"
-#else
-
 #include <QDataStream>
+#include <QFontMetricsF>
 #include <QTextCharFormat>
 #include <QTextLayout>
 #include <QUrl>
@@ -40,7 +37,7 @@ class UiStyle {
     UiStyle(const QString &settingsKey);
     virtual ~UiStyle();
 
-    typedef QList<QPair<int, quint32> > FormatList;
+    typedef QList<QPair<quint16, quint32> > FormatList;
 
     //! This enumerates the possible formats a text element may have. */
     /** These formats are ordered on increasing importance, in cases where a given property is specified
@@ -133,24 +130,31 @@ class UiStyle {
 
     StyledString styleString(const QString &);
     StyledMessage styleMessage(const Message &);
+    QString mircToInternal(const QString &) const;
 
     void setFormat(FormatType, QTextCharFormat, Settings::Mode mode/* = Settings::Custom*/);
     QTextCharFormat format(FormatType, Settings::Mode mode = Settings::Custom) const;
     QTextCharFormat mergedFormat(quint32 formatType);
+    QFontMetricsF *fontMetrics(quint32 formatType);
 
     FormatType formatType(const QString &code) const;
     QString formatCode(FormatType) const;
+
+    inline QFont defaultFont() const { return _defaultFont; }
+
+    QList<QTextLayout::FormatRange> toTextLayoutList(const FormatList &, int textLength);
 
   protected:
 
 
   private:
-    QString mircToInternal(const QString &);
 
+    QFont _defaultFont;
     QTextCharFormat _defaultPlainFormat;
     QHash<FormatType, QTextCharFormat> _defaultFormats;
     QHash<FormatType, QTextCharFormat> _customFormats;
     QHash<quint32, QTextCharFormat> _cachedFormats;
+    QHash<quint32, QFontMetricsF *> _cachedFontMetrics;
     QHash<QString, FormatType> _formatCodes;
 
     QString _settingsKey;
@@ -161,5 +165,4 @@ QDataStream &operator>>(QDataStream &in, UiStyle::FormatList &formatList);
 
 Q_DECLARE_METATYPE(UiStyle::FormatList);
 
-#endif // SPUTDEV
 #endif

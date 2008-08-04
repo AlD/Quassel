@@ -2,12 +2,21 @@
 
 set(QT_DONT_USE_QTGUI 0)
 set(QT_USE_QTNETWORK 1)
+set(QT_USE_QTDBUS 1)
 include(${QT_USE_FILE})
 
 set(SOURCES
     aboutdlg.cpp
     bufferwidget.cpp
     channellistdlg.cpp
+    chatitem.cpp
+    chatline.cpp
+    chatlinemodel.cpp
+    chatlinemodelitem.cpp
+    chatmonitorfilter.cpp
+    chatscene.cpp
+    chatview.cpp
+    columnhandleitem.cpp
     coreconfigwizard.cpp
     coreconnectdlg.cpp
     coreinfodlg.cpp
@@ -30,6 +39,11 @@ set(MOC_HDRS
     aboutdlg.h
     bufferwidget.h
     channellistdlg.h
+    chatlinemodel.h
+    chatmonitorfilter.h
+    chatscene.h
+    chatview.h
+    columnhandleitem.h
     coreconfigwizard.h
     coreconnectdlg.h
     coreinfodlg.h
@@ -47,18 +61,11 @@ set(MOC_HDRS
     verticaldock.h)
 
 set(HEADERS
+    chatitem.h
+    chatline.h
+    chatlinemodelitem.h
     qtuisettings.h
     qtuistyle.h)
-
-if(SPUTDEV)
-  set(SOURCES ${SOURCES} chatitem.cpp chatline.cpp chatlinemodelitem.cpp
-                         chatlinemodel.cpp chatscene.cpp chatview.cpp)
-  set(MOC_HDRS ${MOC_HDRS} chatlinemodel.h chatscene.h chatview.h)
-  set(HEADERS ${HEADERS} chatitem.h chatline.h chatlinemodelitem.h)
-else(SPUTDEV)
-  set(SOURCES ${SOURCES} chatline-old.cpp chatwidget.cpp)
-  set(MOC_HDRS ${MOC_HDRS} chatline-old.h chatwidget.h)
-endif(SPUTDEV)
 
 set(FORMS
     aboutdlg.ui
@@ -105,11 +112,15 @@ endforeach(FRM ${SP_FORMS})
 qt4_wrap_cpp(MOC ${MOC_HDRS} ${SPHDR})
 qt4_wrap_ui(UI ${FORMPATH} ${SPFRM})
 
+IF(HAVE_DBUS)
+  qt4_add_dbus_interface(DBUS ../../interfaces/org.freedesktop.Notifications.xml desktopnotifications)
+ENDIF(HAVE_DBUS)
+
 include_directories(${CMAKE_SOURCE_DIR}/src/common
                     ${CMAKE_SOURCE_DIR}/src/client
                     ${CMAKE_SOURCE_DIR}/src/qtui
                     ${CMAKE_SOURCE_DIR}/src/uisupport
                     ${CMAKE_CURRENT_BINARY_DIR})
 
-add_library(mod_qtui STATIC ${SOURCES} ${SPSRC} ${MOC} ${UI} ${HEADERS})
+add_library(mod_qtui STATIC ${SOURCES} ${SPSRC} ${MOC} ${DBUS} ${UI} ${HEADERS})
 add_dependencies(mod_qtui mod_common mod_client mod_uisupport)

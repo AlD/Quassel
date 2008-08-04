@@ -29,26 +29,16 @@
  *****************************************/
 AbstractTreeItem::AbstractTreeItem(AbstractTreeItem *parent)
   : QObject(parent),
-    _flags(Qt::ItemIsSelectable | Qt::ItemIsEnabled)
+    _flags(Qt::ItemIsSelectable | Qt::ItemIsEnabled),
+    _treeItemFlags(0)
 {
 }
 
-AbstractTreeItem::~AbstractTreeItem() {
-}
-
-quint64 AbstractTreeItem::id() const {
-  return qHash(this);
-}
-
 bool AbstractTreeItem::newChild(AbstractTreeItem *item) {
-  // check if a child with that ID is already known
-  Q_ASSERT(childById(item->id()) == 0);
-    
   int newRow = childCount();
   emit beginAppendChilds(newRow, newRow);
   _childItems.append(item);
   emit endAppendChilds();
-  
   return true;
 }
 
@@ -56,53 +46,29 @@ bool AbstractTreeItem::newChilds(const QList<AbstractTreeItem *> &items) {
   if(items.isEmpty())
     return false;
   
-  QList<AbstractTreeItem *>::const_iterator itemIter = items.constBegin();
-  AbstractTreeItem *item;
-  while(itemIter != items.constEnd()) {
-    item = *itemIter;
-    if(childById(item->id()) != 0) {
-      qWarning() << "AbstractTreeItem::newChilds(): received child that is already attached" << item << item->id();
-      return false;
-    }
-    itemIter++;
-  }
-
   int nextRow = childCount();
   int lastRow = nextRow + items.count() - 1;
 
   emit beginAppendChilds(nextRow, lastRow);
-  itemIter = items.constBegin();
-  while(itemIter != items.constEnd()) {
-    _childItems.append(*itemIter);
-    itemIter++;
-  }
+  _childItems << items;
   emit endAppendChilds();
 
   return true;
 }
 
 bool AbstractTreeItem::removeChild(int row) {
-  if(childCount() <= row)
+  if(row < 0 || childCount() <= row)
     return false;
 
   child(row)->removeAllChilds();
   emit beginRemoveChilds(row, row);
   AbstractTreeItem *treeitem = _childItems.takeAt(row);
-  treeitem->deleteLater();
+  delete treeitem;
   emit endRemoveChilds();
 
+  checkForDeletion();
+  
   return true;
-}
-
-bool AbstractTreeItem::removeChildById(const quint64 &id) {
-  const int numChilds = childCount();
-  
-  for(int i = 0; i < numChilds; i++) {
-    if(_childItems[i]->id() == id)
-      return removeChild(i);
-  }
-  
-  return false;
 }
 
 void AbstractTreeItem::removeAllChilds() {
@@ -118,6 +84,7 @@ void AbstractTreeItem::removeAllChilds() {
   childIter = _childItems.begin();
   while(childIter != _childItems.end()) {
     child = *childIter;
+    child->setTreeItemFlags(0); // disable self deletion, as this would only fuck up consitency and the child gets deleted anyways
     child->removeAllChilds();
     childIter++;
   }
@@ -127,9 +94,11 @@ void AbstractTreeItem::removeAllChilds() {
   while(childIter != _childItems.end()) {
     child = *childIter;
     childIter = _childItems.erase(childIter);
-    child->deleteLater();
+    delete child;
   }
   emit endRemoveChilds();
+
+  checkForDeletion();
 }
 
 bool AbstractTreeItem::reParent(AbstractTreeItem *newParent) {
@@ -148,11 +117,15 @@ bool AbstractTreeItem::reParent(AbstractTreeItem *newParent) {
   parent()->_childItems.removeAt(oldRow);
   emit parent()->endRemoveChilds();
 
+  AbstractTreeItem *oldParent = parent();
   setParent(newParent);
 
   bool success = newParent->newChild(this);
   if(!success)
     qWarning() << "AbstractTreeItem::reParent(): failed to attach to new parent after removing from old parent! this:" << this << "new parent:" << newParent;
+
+  if(oldParent)
+    oldParent->checkForDeletion();
 
   return success;
 }
@@ -162,15 +135,6 @@ AbstractTreeItem *AbstractTreeItem::child(int row) const {
     return 0;
   else
     return _childItems[row];
-}
-
-AbstractTreeItem *AbstractTreeItem::childById(const quint64 &id) const {
-  const int numChilds = childCount();
-  for(int i = 0; i < numChilds; i++) {
-    if(_childItems[i]->id() == id)
-      return _childItems[i];
-  }
-  return 0;
 }
 
 int AbstractTreeItem::childCount(int column) const {
@@ -192,26 +156,14 @@ int AbstractTreeItem::row() const {
   return row_;
 }
 
-AbstractTreeItem *AbstractTreeItem::parent() const {
-  return qobject_cast<AbstractTreeItem *>(QObject::parent());
-}
-
-Qt::ItemFlags AbstractTreeItem::flags() const {
-  return _flags;
-}
-
-void AbstractTreeItem::setFlags(Qt::ItemFlags flags) {
-  _flags = flags;
-}
-
 void AbstractTreeItem::dumpChildList() {
-  qDebug() << "==== Childlist for Item:" << this << id() << "====";
+  qDebug() << "==== Childlist for Item:" << this << "====";
   if(childCount() > 0) {
     AbstractTreeItem *child;
     QList<AbstractTreeItem *>::const_iterator childIter = _childItems.constBegin();
     while(childIter != _childItems.constEnd()) {
       child = *childIter;
-      qDebug() << "Row:" << child->row() << child << child->id() << child->data(0, Qt::DisplayRole);
+      qDebug() << "Row:" << child->row() << child << child->data(0, Qt::DisplayRole);
       childIter++;
     }
   }
@@ -351,22 +303,6 @@ QModelIndex TreeModel::index(int row, int column, const QModelIndex &parent) con
 
   if(childItem)
     return createIndex(row, column, childItem);
-  else
-    return QModelIndex();
-}
-
-QModelIndex TreeModel::indexById(quint64 id, const QModelIndex &parent) const {
-  AbstractTreeItem *parentItem; 
-  
-  if(!parent.isValid())
-    parentItem = rootItem;
-  else
-    parentItem = static_cast<AbstractTreeItem *>(parent.internalPointer());
-  
-  AbstractTreeItem *childItem = parentItem->childById(id);
-  
-  if(childItem)
-    return createIndex(childItem->row(), 0, childItem);
   else
     return QModelIndex();
 }
@@ -585,7 +521,7 @@ void TreeModel::debug_rowsAboutToBeRemoved(const QModelIndex &parent, int start,
     child = parent.child(i, 0);
     childItem = parentItem->child(i);
     Q_ASSERT(childItem);
-    qDebug() << ">>>" << i << child << childItem->id() << child.data().toString();
+    qDebug() << ">>>" << i << child << child.data().toString();
   }
 }
 
@@ -602,7 +538,7 @@ void TreeModel::debug_rowsInserted(const QModelIndex &parent, int start, int end
     child = parent.child(i, 0);
     childItem = parentItem->child(i);
     Q_ASSERT(childItem);
-    qDebug() << "<<<" << i << child << childItem->id() << child.data().toString();
+    qDebug() << "<<<" << i << child << child.data().toString();
   }
 }
 

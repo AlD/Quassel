@@ -40,7 +40,6 @@ public slots:
   void handleDeop(const BufferInfo &bufferInfo, const QString &text);
   void handleDevoice(const BufferInfo &bufferInfo, const QString &text);
   void handleInvite(const BufferInfo &bufferInfo, const QString &text);
-  void handleJ(const BufferInfo &bufferInfo, const QString &text);
   void handleJoin(const BufferInfo &bufferInfo, const QString &text);
   void handleKick(const BufferInfo &bufferInfo, const QString &text);
   void handleKill(const BufferInfo &bufferInfo, const QString &text);
@@ -64,6 +63,9 @@ public slots:
   void handleWhowas(const BufferInfo &bufferInfo, const QString &text);
 
   void defaultHandler(QString cmd, const BufferInfo &bufferInfo, const QString &text);
+
+private:
+  void expand(const QString &alias, const BufferInfo &bufferInfo, const QString &msg);
 };
 
 

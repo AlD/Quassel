@@ -55,7 +55,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   endif(HAVE_ANSI)
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
-set(QT_MIN_VERSION "4.3.0")
+set(QT_MIN_VERSION "4.4.0")
 
 if(APPLE AND DEPLOY)
   set(CMAKE_OSX_ARCHITECTURES "i386;ppc")
@@ -82,6 +82,12 @@ endif(QT)
 
 # Now that we have the correct $PATH, lets find Qt!
 find_package(Qt4 REQUIRED)
+
+if(QT_QTDBUS_FOUND)
+  add_definitions(-DHAVE_DBUS)
+  set(LINK_DBUS DBUS)
+  set(HAVE_DBUS true)
+endif(QT_QTDBUS_FOUND)
 
 set(QT_DONT_USE_QTGUI 1)
 include(${QT_USE_FILE})
@@ -174,7 +180,7 @@ if(WANT_CORE)
 endif(WANT_CORE)
 
 if(WANT_QTCLIENT)
-  setup_qt4_variables(GUI NETWORK)
+  setup_qt4_variables(${LINK_DBUS} GUI NETWORK)
   add_executable(quasselclient WIN32 ${CMAKE_SOURCE_DIR}/src/common/main.cpp
                                      ${RC_ICONS} ${RC_QUASSEL_ICONS} ${RC_I18N} ${WIN32_RC})
   set_target_properties(quasselclient PROPERTIES
@@ -184,7 +190,7 @@ if(WANT_QTCLIENT)
 endif(WANT_QTCLIENT)
 
 if(WANT_MONO)
-  setup_qt4_variables(GUI NETWORK SCRIPT SQL)
+  setup_qt4_variables(${LINK_DBUS} GUI NETWORK SCRIPT SQL)
   add_executable(quassel WIN32 ${CMAKE_SOURCE_DIR}/src/common/main.cpp
                                ${RC_ICONS} ${RC_QUASSEL_ICONS} ${RC_SQL} ${RC_I18N} ${WIN32_RC})
   set_target_properties(quassel PROPERTIES 

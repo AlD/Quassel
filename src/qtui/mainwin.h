@@ -29,7 +29,6 @@
 #include <QSystemTrayIcon>
 #include <QTimer>
 
-
 class ServerListDlg;
 class ChannelListDlg;
 class CoreConnectDlg;
@@ -41,6 +40,9 @@ class Message;
 class NickListWidget;
 class DebugConsole;
 
+#ifdef HAVE_DBUS
+#  include "desktopnotifications.h"
+#endif
 
 //!\brief The main window of Quassel's QtUi.
 class MainWin : public QMainWindow {
@@ -54,6 +56,10 @@ class MainWin : public QMainWindow {
     void addBufferView(BufferViewConfig *config = 0);
 
     void displayTrayIconMessage(const QString &title, const QString &message);
+
+#ifdef HAVE_DBUS
+    void sendDesktopNotification(const QString &title, const QString &message);
+#endif
 
     virtual bool event(QEvent *event);
 
@@ -85,6 +91,7 @@ class MainWin : public QMainWindow {
     void on_actionLockDockPositions_toggled(bool lock);
     void showAboutDlg();
     void showDebugConsole();
+    void on_actionDebugNetworkModel_triggered(bool);
 
     void showCoreConnectionDlg(bool autoConnect = false);
     void coreConnectionDlgFinished(int result);
@@ -100,7 +107,12 @@ class MainWin : public QMainWindow {
 
     void loadLayout();
     void saveLayout();
-  
+
+#ifdef HAVE_DBUS
+    void desktopNotificationClosed(uint id, uint reason);
+    void desktopNotificationInvoked(uint id, const QString & action);
+#endif
+
   signals:
     void connectToCore(const QVariantMap &connInfo);
     void disconnectFromCore();
@@ -148,6 +160,11 @@ class MainWin : public QMainWindow {
 
     QList<QDockWidget *> _netViews;
     NickListWidget *nickListWidget;
+
+#ifdef HAVE_DBUS
+    org::freedesktop::Notifications *desktopNotifications;
+    quint32 notificationId;
+#endif
 
     friend class QtUi;
 };

@@ -53,7 +53,6 @@ class NetworkItem : public PropertyMapItem {
 public:
   NetworkItem(const NetworkId &netid, AbstractTreeItem *parent = 0);
 
-  virtual quint64 id() const { return qHash(_networkId); }
   virtual QVariant data(int column, int row) const;
 
   inline bool isActive() const { return (bool)_network ? _network->isConnected() : false; }
@@ -65,6 +64,8 @@ public:
 
   virtual QString toolTip(int column) const;
 
+  BufferItem *findBufferItem(BufferId bufferId);
+  inline BufferItem *findBufferItem(const BufferInfo &bufferInfo) { return findBufferItem(bufferInfo.bufferId()); }
   BufferItem *bufferItem(const BufferInfo &bufferInfo);
 
 public slots:
@@ -94,7 +95,6 @@ public:
   BufferItem(const BufferInfo &bufferInfo, AbstractTreeItem *parent = 0);
 
   inline const BufferInfo &bufferInfo() const { return _bufferInfo; }
-  virtual inline quint64 id() const { return qHash(_bufferInfo.bufferId()); }
   virtual QVariant data(int column, int role) const;
   virtual bool setData(int column, const QVariant &value, int role);
 
@@ -148,7 +148,8 @@ class QueryBufferItem : public BufferItem {
 public:
   QueryBufferItem(const BufferInfo &bufferInfo, NetworkItem *parent);
 
-  virtual bool isActive() const;
+  virtual QVariant data(int column, int role) const;
+  virtual inline bool isActive() const { return (bool)_ircUser; }
   virtual QString toolTip(int column) const;
 
 public slots:
@@ -162,6 +163,8 @@ private:
 /*****************************************
 *  ChannelBufferItem
 *****************************************/
+class UserCategoryItem;
+
 class ChannelBufferItem : public BufferItem {
   Q_OBJECT
 
@@ -180,6 +183,7 @@ public slots:
   void join(const QList<IrcUser *> &ircUsers);
   void part(IrcUser *ircUser);
 
+  UserCategoryItem *findCategoryItem(int categoryId);
   void addUserToCategory(IrcUser *ircUser);
   void addUsersToCategory(const QList<IrcUser *> &ircUser);
   void removeUserFromCategory(IrcUser *ircUser);
@@ -187,7 +191,6 @@ public slots:
 
 private slots:
   void ircChannelDestroyed();
-  void ircUserDestroyed();
 
 private:
   IrcChannel *_ircChannel;
@@ -196,6 +199,7 @@ private:
 /*****************************************
 *  User Category Items (like @vh etc.)
 *****************************************/
+class IrcUserItem;
 class UserCategoryItem : public PropertyMapItem {
   Q_OBJECT
   Q_PROPERTY(QString categoryName READ categoryName)
@@ -204,9 +208,10 @@ public:
   UserCategoryItem(int category, AbstractTreeItem *parent);
 
   QString categoryName() const;
-  virtual quint64 id() const;
+  inline int categoryId() const { return _category; }
   virtual QVariant data(int column, int role) const;
-  
+
+  IrcUserItem *findIrcUser(IrcUser *ircUser);
   void addUsers(const QList<IrcUser *> &ircUser);
   bool removeUser(IrcUser *ircUser);
 
@@ -228,17 +233,18 @@ class IrcUserItem : public PropertyMapItem {
 public:
   IrcUserItem(IrcUser *ircUser, AbstractTreeItem *parent);
 
-  QString nickName() const;
-  bool isActive() const;
+  inline QString nickName() const { return _ircUser ? _ircUser->nick() : QString(); }
+  inline bool isActive() const { return _ircUser ? !_ircUser->isAway() : false; }
 
   inline IrcUser *ircUser() { return _ircUser; }
-  inline virtual quint64 id() const { return _id; }
   virtual QVariant data(int column, int role) const;
   virtual QString toolTip(int column) const;
 
+private slots:
+  inline void ircUserDestroyed() { parent()->removeChild(this); }
+
 private:
   QPointer<IrcUser> _ircUser;
-  quint64 _id;
 };
 
 
@@ -256,7 +262,8 @@ public:
     BufferIdRole,
     NetworkIdRole,
     BufferInfoRole,
-    ItemTypeRole
+    ItemTypeRole,
+    UserAwayRole
   };
 
   enum itemType {
@@ -295,10 +302,12 @@ public slots:
   void networkRemoved(const NetworkId &networkId);
   
 private:
+  int networkRow(NetworkId networkId);
+  NetworkItem *findNetworkItem(NetworkId networkId);
   NetworkItem *networkItem(NetworkId networkId);
-  NetworkItem *existsNetworkItem(NetworkId networkId);
+  BufferItem *findBufferItem(const BufferInfo &bufferInfo);
+  BufferItem *findBufferItem(BufferId bufferId);
   BufferItem *bufferItem(const BufferInfo &bufferInfo);
-  BufferItem *existsBufferItem(const BufferInfo &bufferInfo);
 
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(NetworkModel::itemTypes);

@@ -32,13 +32,15 @@ UiStyle::UiStyle(const QString &settingsKey) : _settingsKey(settingsKey) {
     Q_ASSERT(QVariant::nameToType("UiStyle::FormatList") != QVariant::Invalid);
   }
 
+  _defaultFont = QFont("Monospace", QApplication::font().pointSize());
+
   // Default format
   _defaultPlainFormat.setForeground(QBrush("#000000"));
-  _defaultPlainFormat.setFont(QFont("Monospace", QApplication::font().pointSize()));
+  _defaultPlainFormat.setFont(_defaultFont);
   _defaultPlainFormat.font().setFixedPitch(true);
   _defaultPlainFormat.font().setStyleHint(QFont::TypeWriter);
   setFormat(None, _defaultPlainFormat, Settings::Default);
-  
+
   // Load saved custom formats
   UiStyleSettings s(_settingsKey);
   foreach(FormatType type, s.availableFormats()) {
@@ -103,7 +105,7 @@ UiStyle::UiStyle(const QString &settingsKey) : _settingsKey(settingsKey) {
 }
 
 UiStyle::~ UiStyle() {
-  
+  qDeleteAll(_cachedFontMetrics);
 }
 
 void UiStyle::setFormat(FormatType ftype, QTextCharFormat fmt, Settings::Mode mode) {
@@ -131,7 +133,7 @@ QTextCharFormat UiStyle::format(FormatType ftype, Settings::Mode mode) const {
 // NOTE: This function is intimately tied to the values in FormatType. Don't change this
 //       until you _really_ know what you do!
 QTextCharFormat UiStyle::mergedFormat(quint32 ftype) {
-  if(_cachedFormats.contains(ftype)) return _cachedFormats[ftype];
+  if(_cachedFormats.contains(ftype)) return _cachedFormats.value(ftype);
   if(ftype == Invalid) return QTextCharFormat();
   // Now we construct the merged format, starting with the default
   QTextCharFormat fmt = format(None);
@@ -146,8 +148,13 @@ QTextCharFormat UiStyle::mergedFormat(quint32 ftype) {
   if(ftype & 0x00800000) fmt.merge(format((FormatType)(ftype & 0xf0800000))); // background
   // URL
   if(ftype & Url) fmt.merge(format(Url));
-  _cachedFormats[ftype] = fmt;
-  return fmt;
+  return _cachedFormats[ftype] = fmt;
+}
+
+QFontMetricsF *UiStyle::fontMetrics(quint32 ftype) {
+  // QFontMetricsF is not assignable, so we need to store pointers :/
+  if(_cachedFontMetrics.contains(ftype)) return _cachedFontMetrics.value(ftype);
+  return (_cachedFontMetrics[ftype] = new QFontMetricsF(mergedFormat(ftype).font()));
 }
 
 UiStyle::FormatType UiStyle::formatType(const QString & code) const {
@@ -159,14 +166,32 @@ QString UiStyle::formatCode(FormatType ftype) const {
   return _formatCodes.key(ftype);
 }
 
+QList<QTextLayout::FormatRange> UiStyle::toTextLayoutList(const FormatList &formatList, int textLength) {
+  QList<QTextLayout::FormatRange> formatRanges;
+  QTextLayout::FormatRange range;
+  int i = 0;
+  for(i = 0; i < formatList.count(); i++) {
+    range.format = mergedFormat(formatList.at(i).second);
+    range.start = formatList.at(i).first;
+    if(i > 0) formatRanges.last().length = range.start - formatRanges.last().start;
+    formatRanges.append(range);
+  }
+  if(i > 0) formatRanges.last().length = textLength - formatRanges.last().start;
+  return formatRanges;
+}
+
 // This method expects a well-formatted string, there is no error checking!
 // Since we create those ourselves, we should be pretty safe that nobody does something crappy here.
 UiStyle::StyledString UiStyle::styleString(const QString &s_) {
   QString s = s_;
+  if(s.length() > 65535) {
+    qWarning() << QString("String too long to be styled: %1").arg(s);
+    return StyledString();
+  }
   StyledString result;
-  result.formatList.append(qMakePair(0, (quint32)None));
+  result.formatList.append(qMakePair((quint16)0, (quint32)None));
   quint32 curfmt = (quint32)None;
-  int pos = 0; int length = 0;
+  int pos = 0; quint16 length = 0;
   for(;;) {
     pos = s.indexOf('%', pos);
     if(pos < 0) break;
@@ -211,13 +236,13 @@ UiStyle::StyledString UiStyle::styleString(const QString &s_) {
     if(pos == result.formatList.last().first)
       result.formatList.last().second = curfmt;
     else
-      result.formatList.append(qMakePair(pos, curfmt));
+      result.formatList.append(qMakePair((quint16)pos, curfmt));
   }
   result.plainText = s;
   return result;
 }
 
-QString UiStyle::mircToInternal(const QString &mirc_) {
+QString UiStyle::mircToInternal(const QString &mirc_) const {
   QString mirc = mirc_;
   mirc.replace('%', "%%");      // escape % just to be sure
   mirc.replace('\x02', "%B");
@@ -335,12 +360,12 @@ QDataStream &operator<<(QDataStream &out, const UiStyle::FormatList &formatList)
 }
 
 QDataStream &operator>>(QDataStream &in, UiStyle::FormatList &formatList) {
-  int cnt;
+  quint16 cnt;
   in >> cnt;
-  for(int i = 0; i < cnt; i++) {
-    int pos; quint32 ftype;
+  for(quint16 i = 0; i < cnt; i++) {
+    quint16 pos; quint32 ftype;
     in >> pos >> ftype;
-    formatList.append(qMakePair(pos, ftype));
+    formatList.append(qMakePair((quint16)pos, ftype));
   }
   return in;
 }

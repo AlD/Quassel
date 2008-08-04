@@ -65,7 +65,7 @@ void Buffer::prependMsg(const Message &msg) {
 bool Buffer::layoutMsg() {
   if(layoutQueue.isEmpty())
     return false;
-  
+
   AbstractUiMsg *m = Client::layoutMsg(layoutQueue.takeFirst());
   layoutedMsgs.prepend(m);
   emit msgPrepended(m);
@@ -76,9 +76,11 @@ bool Buffer::layoutMsg() {
 void Buffer::setVisible(bool visible) {
   _isVisible = visible;
   setActivityLevel(NoActivity);
-  if(layoutedMsgs.isEmpty())
-    return;
-  setLastSeenMsg(layoutedMsgs.last()->msgId());
+  //if(layoutedMsgs.isEmpty())
+  //  return;
+  //setLastSeenMsg(layoutedMsgs.last()->msgId());
+  if(_lastRcvdMsg.msgId() > 0) setLastSeenMsg(_lastRcvdMsg.msgId());
+  //qDebug() << "setting last seen" << _lastRcvdMsg.msgId();
 }
 
 void Buffer::setLastSeenMsg(const MsgId &msgId) {
@@ -102,6 +104,10 @@ void Buffer::setActivityLevel(ActivityLevel level) {
 }
 
 void Buffer::updateActivityLevel(const Message &msg) {
+  // FIXME dirty hack to allow the lastSeen stuff to continue to work
+  //       will be made much nicer once Buffer dies, I hope...
+  if(msg.msgId() > _lastRcvdMsg.msgId()) _lastRcvdMsg = msg;
+
   if(isVisible())
     return;
 
@@ -114,7 +120,7 @@ void Buffer::updateActivityLevel(const Message &msg) {
   ActivityLevel level = activityLevel() | OtherActivity;
   if(msg.type() & (Message::Plain | Message::Notice | Message::Action))
     level |= NewMessage;
-  
+
   if(msg.flags() & Message::Highlight)
     level |= Highlight;
 

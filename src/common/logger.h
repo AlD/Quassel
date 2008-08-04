@@ -18,24 +18,56 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef _LOGGER_H_
-#define _LOGGER_H_
+#ifndef LOGGER_H
+#define LOGGER_H
 
-#include <QObject>
+#include "types.h"
 
-class Logger : public QObject {
-  Q_OBJECT
+#include <QString>
+#include <QStringList>
+#include <QTextStream>
 
+class Logger {
   public:
-    Logger();
-    virtual ~Logger();
+    enum LogLevel {
+      DebugLevel,
+      InfoLevel,
+      WarningLevel,
+      ErrorLevel
+    };
 
+    inline Logger(LogLevel level) : _stream(&_buffer, QIODevice::WriteOnly), _logLevel(level) {}
+    ~Logger();
 
+    template<typename T>
+    inline Logger &operator<<(const T &value) { _stream << value << " "; return *this; }
+    inline Logger &operator<<(const QStringList & t) { _stream << t.join(" ") << " "; return *this; }
+    inline Logger &operator<<(bool t) { _stream << (t ? "true" : "false") << " "; return *this; }
 
   private:
-    //void messageHandler(QtMsgType type, const char *msg);
+    void log();
+    QTextStream _stream;
+    QString _buffer;
+    LogLevel _logLevel;
 };
 
+class quDebug : public Logger {
+  public:
+    inline quDebug() : Logger(Logger::DebugLevel) {}
+};
 
+class quInfo : public Logger {
+  public:
+    inline quInfo() : Logger(Logger::InfoLevel) {}
+};
 
+class quWarning : public Logger {
+  public:
+    inline quWarning() : Logger(Logger::WarningLevel) {}
+};
+
+class quError : public Logger {
+  public:
+    inline quError() : Logger(Logger::ErrorLevel) {}
+};
 #endif

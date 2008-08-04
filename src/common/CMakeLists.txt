@@ -5,6 +5,7 @@ set(QT_USE_QTNETWORK 1)
 include(${QT_USE_FILE})
 
 set(SOURCES
+    aliasmanager.cpp
     backlogmanager.cpp
     bufferinfo.cpp
     buffersyncer.cpp
@@ -24,6 +25,7 @@ set(SOURCES
     cliparser.cpp)
 
 set(MOC_HDRS
+    aliasmanager.h
     backlogmanager.h
     buffersyncer.h
     bufferviewconfig.h
@@ -33,7 +35,6 @@ set(MOC_HDRS
     ircchannel.h
     irclisthelper.h
     ircuser.h
-    logger.h
     network.h
     signalproxy.h
     syncableobject.h)
@@ -41,6 +42,7 @@ set(MOC_HDRS
 set(HEADERS ${MOC_HDRS}
     bufferinfo.h
     global.h
+    logger.h
     message.h
     settings.h
     types.h
