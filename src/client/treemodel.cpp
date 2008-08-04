@@ -57,13 +57,13 @@ bool AbstractTreeItem::newChilds(const QList<AbstractTreeItem *> &items) {
 }
 
 bool AbstractTreeItem::removeChild(int row) {
-  if(childCount() <= row)
+  if(row < 0 || childCount() <= row)
     return false;
 
   child(row)->removeAllChilds();
   emit beginRemoveChilds(row, row);
   AbstractTreeItem *treeitem = _childItems.takeAt(row);
-  treeitem->deleteLater();
+  delete treeitem;
   emit endRemoveChilds();
 
   checkForDeletion();
@@ -94,7 +94,7 @@ void AbstractTreeItem::removeAllChilds() {
   while(childIter != _childItems.end()) {
     child = *childIter;
     childIter = _childItems.erase(childIter);
-    child->deleteLater();
+    delete child;
   }
   emit endRemoveChilds();
 
@@ -117,13 +117,15 @@ bool AbstractTreeItem::reParent(AbstractTreeItem *newParent) {
   parent()->_childItems.removeAt(oldRow);
   emit parent()->endRemoveChilds();
 
-  parent()->checkForDeletion();
-
+  AbstractTreeItem *oldParent = parent();
   setParent(newParent);
 
   bool success = newParent->newChild(this);
   if(!success)
     qWarning() << "AbstractTreeItem::reParent(): failed to attach to new parent after removing from old parent! this:" << this << "new parent:" << newParent;
+
+  if(oldParent)
+    oldParent->checkForDeletion();
 
   return success;
 }

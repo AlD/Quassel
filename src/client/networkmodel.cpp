@@ -123,7 +123,7 @@ void NetworkItem::attachIrcChannel(IrcChannel *ircChannel) {
 
     if(channelItem->bufferName().toLower() == ircChannel->name().toLower()) {
       channelItem->attachIrcChannel(ircChannel);
-      break;
+      return;
     }
   }
 }
@@ -293,14 +293,15 @@ QueryBufferItem::QueryBufferItem(const BufferInfo &bufferInfo, NetworkItem *pare
   IrcUser *ircUser = net->ircUser(bufferInfo.bufferName());
   if(ircUser)
     attachIrcUser(ircUser);
-
 }
 
-bool QueryBufferItem::isActive() const {
-  if(_ircUser)
-    return !_ircUser->isAway();
-  else
-    return false;
+QVariant QueryBufferItem::data(int column, int role) const {
+  switch(role) {
+  case NetworkModel::UserAwayRole:
+    return (bool)_ircUser ? _ircUser->isAway() : false;
+  default:
+    return BufferItem::data(column, role);
+  }
 }
 
 QString QueryBufferItem::toolTip(int column) const {
