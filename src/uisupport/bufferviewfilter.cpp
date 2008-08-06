@@ -20,7 +20,9 @@
 
 #include "bufferviewfilter.h"
 
-#include <QCoreApplication>
+#include <QApplication>
+#include <QPalette>
+#include <QBrush>
 
 #include "buffermodel.h"
 #include "client.h"
@@ -44,7 +46,7 @@ BufferViewFilter::BufferViewFilter(QAbstractItemModel *model, BufferViewConfig *
 {
   setConfig(config);
   setSourceModel(model);
-			
+
   setDynamicSortFilter(true);
 
   loadColors();
@@ -54,7 +56,7 @@ BufferViewFilter::BufferViewFilter(QAbstractItemModel *model, BufferViewConfig *
 }
 
 void BufferViewFilter::loadColors() {
-  UiSettings s("QtUi/Colors");
+  UiSettings s("QtUiStyle/Colors");
   _FgColorInactiveActivity = s.value("inactiveActivityFG", QVariant(QColor(Qt::gray))).value<QColor>();
   _FgColorNoActivity = s.value("noActivityFG", QVariant(QColor(Qt::black))).value<QColor>();
   _FgColorHighlightActivity = s.value("highlightActivityFG", QVariant(QColor(Qt::magenta))).value<QColor>();
@@ -65,7 +67,7 @@ void BufferViewFilter::loadColors() {
 void BufferViewFilter::setConfig(BufferViewConfig *config) {
   if(_config == config)
     return;
-  
+
   if(_config) {
     disconnect(_config, 0, this, 0);
   }
@@ -88,7 +90,7 @@ void BufferViewFilter::setConfig(BufferViewConfig *config) {
 void BufferViewFilter::configInitialized() {
   if(!config())
     return;
-    
+
   connect(config(), SIGNAL(bufferViewNameSet(const QString &)), this, SLOT(invalidate()));
   connect(config(), SIGNAL(networkIdSet(const NetworkId &)), this, SLOT(invalidate()));
   connect(config(), SIGNAL(addNewBuffersAutomaticallySet(bool)), this, SLOT(invalidate()));
@@ -169,7 +171,7 @@ void BufferViewFilter::sort(int column, Qt::SortOrder order) {
 void BufferViewFilter::addBuffer(const BufferId &bufferId) const {
   if(!config() || config()->bufferList().contains(bufferId))
     return;
-  
+
   int pos = config()->bufferList().count();
   bool lt;
   for(int i = 0; i < config()->bufferList().count(); i++) {
@@ -177,7 +179,7 @@ void BufferViewFilter::addBuffer(const BufferId &bufferId) const {
       lt = bufferIdLessThan(bufferId, config()->bufferList()[i]);
     else
       lt = bufferId < config()->bufferList()[i];
-    
+
     if(lt) {
       pos = i;
       break;
@@ -206,7 +208,7 @@ bool BufferViewFilter::filterAcceptBuffer(const QModelIndex &source_bufferIndex)
     // note: adding the buffer to the valid list does not temper with the following filters ("show only channels" and stuff)
     return false;
   }
-  
+
   if(config()->networkId().isValid() && config()->networkId() != sourceModel()->data(source_bufferIndex, NetworkModel::NetworkIdRole).value<NetworkId>())
     return false;
 
@@ -237,7 +239,7 @@ bool BufferViewFilter::filterAcceptNetwork(const QModelIndex &source_index) cons
 
 bool BufferViewFilter::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const {
   QModelIndex child = sourceModel()->index(source_row, 0, source_parent);
-  
+
   if(!child.isValid()) {
     qWarning() << "filterAcceptsRow has been called with an invalid Child";
     return false;
@@ -257,7 +259,7 @@ bool BufferViewFilter::lessThan(const QModelIndex &source_left, const QModelInde
   case NetworkModel::BufferItemType:
     return bufferLessThan(source_left, source_right);
   default:
-    return QSortFilterProxyModel::lessThan(source_left, source_right);    
+    return QSortFilterProxyModel::lessThan(source_left, source_right);
   }
 }
 
@@ -281,10 +283,21 @@ bool BufferViewFilter::networkLessThan(const QModelIndex &source_left, const QMo
 }
 
 QVariant BufferViewFilter::data(const QModelIndex &index, int role) const {
-  if(role == Qt::ForegroundRole)
+  switch(role) {
+  case Qt::ForegroundRole:
     return foreground(index);
-  else
+  case Qt::BackgroundRole:
+    if(index.data(NetworkModel::UserAwayRole).toBool()) {
+      QLinearGradient gradient(0, 0, 0, 18);
+      gradient.setColorAt(0.4, QApplication::palette().color(QPalette::Normal, QPalette::Base));
+      gradient.setColorAt(0.5, QApplication::palette().color(QPalette::Disabled, QPalette::Base));
+      gradient.setColorAt(0.6, QApplication::palette().color(QPalette::Normal, QPalette::Base));
+      return QBrush(gradient);
+    }
+    // else: fallthrough to default
+  default:
     return QSortFilterProxyModel::data(index, role);
+  }
 }
 
 QVariant BufferViewFilter::foreground(const QModelIndex &index) const {
@@ -312,10 +325,10 @@ void BufferViewFilter::checkPreviousCurrentForRemoval(const QModelIndex &current
 void BufferViewFilter::customEvent(QEvent *event) {
   if(event->type() != QEvent::User)
     return;
-  
+
   CheckRemovalEvent *removalEvent = static_cast<CheckRemovalEvent *>(event);
   checkItemForRemoval(removalEvent->index);
-  
+
   event->accept();
 }
 
@@ -332,7 +345,7 @@ bool bufferIdLessThan(const BufferId &left, const BufferId &right) {
   Q_CHECK_PTR(Client::networkModel());
   if(!Client::networkModel())
     return true;
-  
+
   QModelIndex leftIndex = Client::networkModel()->bufferIndex(left);
   QModelIndex rightIndex = Client::networkModel()->bufferIndex(right);
 

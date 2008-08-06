@@ -27,22 +27,22 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtui/aboutdlg.cpp" line="47"/>
+        <location filename="../src/qtui/aboutdlg.cpp" line="48"/>
         <source>&lt;b&gt;A modern, distributed IRC Client&lt;/b&gt;&lt;br&gt;&lt;br&gt;&amp;copy;2005-2008 by the Quassel Project&lt;br&gt;&lt;a href=&quot;http://quassel-irc.org&quot;&gt;http://quassel-irc.org&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;irc://irc.freenode.net/quassel&quot;&gt;#quassel&lt;/a&gt; on &lt;a href=&quot;http://www.freenode.net&quot;&gt;Freenode&lt;/a&gt;&lt;br&gt;&lt;br&gt;Quassel IRC is dual-licensed under &lt;a href=&quot;http://www.gnu.org/licenses/gpl-2.0.txt&quot;&gt;GPLv2&lt;/a&gt; and &lt;a href=&quot;http://www.gnu.org/licenses/gpl-3.0.txt&quot;&gt;GPLv3&lt;/a&gt;.&lt;br&gt;Most icons are &amp;copy; by the &lt;a href=&quot;http://www.oxygen-icons.org&quot;&gt;Oxygen Team&lt;/a&gt; and used under the &lt;a href=&quot;http://www.gnu.org/licenses/lgpl.html&quot;&gt;LGPL&lt;/a&gt;.&lt;br&gt;&lt;br&gt;Please use &lt;a href=&quot;http://bugs.quassel-irc.org&quot;&gt;http://bugs.quassel-irc.org&lt;/a&gt; to report bugs.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtui/aboutdlg.cpp" line="55"/>
+        <location filename="../src/qtui/aboutdlg.cpp" line="56"/>
         <source>Quassel IRC is mainly developed by:</source>
         <translation>Quassel IRC wird hauptsächlich entwickelt von:</translation>
     </message>
     <message>
-        <location filename="../src/qtui/aboutdlg.cpp" line="69"/>
+        <location filename="../src/qtui/aboutdlg.cpp" line="70"/>
         <source>We would like to thank the following contributors (in alphabetical order) and everybody we forgot to mention here:</source>
         <translation>Wir möchten den folgenden Unterstützern (in alphabetischer Reihenfolge) und allen, die wir hier vergessen haben zu erwähnen, danken:</translation>
     </message>
     <message>
-        <location filename="../src/qtui/aboutdlg.cpp" line="95"/>
+        <location filename="../src/qtui/aboutdlg.cpp" line="96"/>
         <source>Special thanks goes to:&lt;br&gt;&lt;dl&gt;&lt;dt&gt;&lt;b&gt;John &quot;nox-Hand&quot; Hand&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;for great artwork and the Quassel logo/icon&lt;/dt&gt;&lt;dt&gt;&lt;b&gt;&lt;a href=&quot;http://www.oxygen-icons.org&quot;&gt;The Oxygen Team&lt;/a&gt;&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;for creating most of the other shiny icons you see throughout Quassel&lt;/dd&gt;&lt;dt&gt;&lt;b&gt;&lt;a href=&quot;http://www.trolltech.com&quot;&gt;Trolltech&lt;/a&gt;&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;for creating Qt and Qtopia, and for sponsoring development of Quasseltopia with Greenphones and more&lt;/dd&gt;</source>
         <translation>Besonderer Dank geht an:&lt;br&gt;&lt;dl&gt;&lt;dt&gt;&lt;b&gt;John &quot;nox-Hand&quot; Hand&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;für großartige Gestaltungsarbeit und das Quassel-Logo/-Symbol&lt;/dt&gt;&lt;dt&gt;&lt;b&gt;&lt;a href=&quot;http://www.oxygen-icons.org&quot;&gt;Das Oxygen-Team&lt;/a&gt;&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;für die Erstellungen der meisten anderen schnieken Symbole, die Sie in Quassel sehen&lt;/dd&gt;&lt;dt&gt;&lt;b&gt;&lt;a href=&quot;http://www.trolltech.com&quot;&gt;Trolltech&lt;/a&gt;&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;für die Erstellung von Qt und Qtopia und für die Förderung von Quasseltopia mit Greenphones und mehr&lt;/dd&gt;</translation>
     </message>
@@ -89,14 +89,55 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
+    <name>AliasesModel</name>
+    <message>
+        <location filename="../src/qtui/settingspages/aliasesmodel.cpp" line="139"/>
+        <source>Alias</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/aliasesmodel.cpp" line="139"/>
+        <source>Expansion</source>
+        <translation>Erweiterung</translation>
+    </message>
+</context>
+<context>
+    <name>AliasesSettingsPage</name>
+    <message>
+        <location filename="../src/qtui/settingspages/aliasessettingspage.cpp" line="27"/>
+        <source>Behaviour</source>
+        <translation>Verhalten</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/aliasessettingspage.cpp" line="27"/>
+        <source>Aliases</source>
+        <translation>Aliase</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/aliasessettingspage.ui" line="13"/>
+        <source>Form</source>
+        <translation>Formular</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/aliasessettingspage.ui" line="27"/>
+        <source>New</source>
+        <translation>Neu</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/aliasessettingspage.ui" line="41"/>
+        <source>Delete</source>
+        <translation>Löschen</translation>
+    </message>
+</context>
+<context>
     <name>AppearanceSettingsPage</name>
     <message>
-        <location filename="../src/qtui/settingspages/appearancesettingspage.cpp" line="29"/>
+        <location filename="../src/qtui/settingspages/appearancesettingspage.cpp" line="31"/>
         <source>Appearance</source>
         <translation>Erscheinungsbild</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/appearancesettingspage.cpp" line="29"/>
+        <location filename="../src/qtui/settingspages/appearancesettingspage.cpp" line="31"/>
         <source>General</source>
         <translation>Allgemein</translation>
     </message>
@@ -109,6 +150,26 @@ p, li { white-space: pre-wrap; }
         <location filename="../src/qtui/settingspages/appearancesettingspage.ui" line="19"/>
         <source>Client style:</source>
         <translation>Client-Stil:</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/appearancesettingspage.ui" line="31"/>
+        <source>Language:</source>
+        <translation>Sprache:</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/appearancesettingspage.ui" line="38"/>
+        <source>&lt;System&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/appearancesettingspage.ui" line="43"/>
+        <source>&lt;Original&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/appearancesettingspage.ui" line="51"/>
+        <source>Note: needs client restart for full effect!</source>
+        <translation type="unfinished">Hinweis: Erfordert Client-Neustart, damit sich alle Änderungen auswirken!</translation>
     </message>
 </context>
 <context>
@@ -159,7 +220,7 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">Abwesenheitsmeldung: %1</translation>
     </message>
     <message>
-        <location filename="../src/client/networkmodel.cpp" line="201"/>
+        <location filename="../src/client/networkmodel.cpp" line="235"/>
         <source>&lt;p&gt; %1 - %2 &lt;/p&gt;</source>
         <translation></translation>
     </message>
@@ -298,22 +359,22 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.cpp" line="34"/>
         <source>Buffer Views</source>
-        <translation type="unfinished">Pufferansichten</translation>
+        <translation>Pufferansichten</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.cpp" line="294"/>
         <source>Delete Buffer View?</source>
-        <translation type="unfinished">Pufferansicht löschen?</translation>
+        <translation>Pufferansicht löschen?</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.cpp" line="295"/>
         <source>Do you really want to delete the buffer view &quot;%1&quot;?</source>
-        <translation type="unfinished">Wollen Sie die Pufferansicht &quot;%1&quot; wirklich löschen?</translation>
+        <translation>Wollen Sie die Pufferansicht &quot;%1&quot; wirklich löschen?</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="13"/>
         <source>Form</source>
-        <translation type="unfinished">Formular</translation>
+        <translation>Formular</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="30"/>
@@ -323,7 +384,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="46"/>
         <source>&amp;Add...</source>
-        <translation type="unfinished">&amp;Hinzufügen...</translation>
+        <translation>&amp;Hinzufügen...</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="68"/>
@@ -343,7 +404,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="96"/>
         <source>All</source>
-        <translation type="unfinished">Alle</translation>
+        <translation>Alle</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="106"/>
@@ -363,7 +424,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="126"/>
         <source>Query Buffers</source>
-        <translation type="unfinished">Dialogpuffer</translation>
+        <translation>Dialogpuffer</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="136"/>
@@ -403,7 +464,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="180"/>
         <source>Highlight</source>
-        <translation type="unfinished">Hervorhebung</translation>
+        <translation>Hervorhebung</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="206"/>
@@ -431,7 +492,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/qtopia/bufferviewwidget.cpp" line="39"/>
         <source>Queries</source>
-        <translation type="unfinished">Dialoge</translation>
+        <translation>Dialoge</translation>
     </message>
     <message>
         <location filename="../src/qtopia/bufferviewwidget.cpp" line="40"/>
@@ -465,32 +526,32 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>ChannelBufferItem</name>
     <message>
-        <location filename="../src/client/networkmodel.cpp" line="280"/>
+        <location filename="../src/client/networkmodel.cpp" line="374"/>
         <source>&lt;b&gt;Channel %1&lt;/b&gt;</source>
-        <translation type="unfinished">&lt;b&gt;Kanal %1&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;Kanal %1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/client/networkmodel.cpp" line="283"/>
+        <location filename="../src/client/networkmodel.cpp" line="377"/>
         <source>&lt;b&gt;Users:&lt;/b&gt; %1</source>
-        <translation type="unfinished">&lt;b&gt;Benutzer:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;Benutzer:&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../src/client/networkmodel.cpp" line="287"/>
+        <location filename="../src/client/networkmodel.cpp" line="381"/>
         <source>&lt;b&gt;Mode:&lt;/b&gt; %1</source>
-        <translation type="unfinished">&lt;b&gt;Modus:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;Modus:&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../src/client/networkmodel.cpp" line="298"/>
+        <location filename="../src/client/networkmodel.cpp" line="392"/>
         <source>&lt;b&gt;Topic:&lt;/b&gt; %1</source>
-        <translation type="unfinished">&lt;b&gt;Thema:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;Thema:&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../src/client/networkmodel.cpp" line="302"/>
+        <location filename="../src/client/networkmodel.cpp" line="396"/>
         <source>Not active &lt;br /&gt; Double-click to join</source>
-        <translation type="unfinished">Nicht aktiv &lt;br /&gt; Doppelklicken zum Beitreten</translation>
+        <translation>Nicht aktiv &lt;br /&gt; Doppelklick zum Beitreten</translation>
     </message>
     <message>
-        <location filename="../src/client/networkmodel.cpp" line="305"/>
+        <location filename="../src/client/networkmodel.cpp" line="399"/>
         <source>&lt;p&gt; %1 &lt;/p&gt;</source>
         <translation></translation>
     </message>
@@ -510,20 +571,47 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/qtui/ui/channellistdlg.ui" line="47"/>
         <source>Search Channels</source>
-        <translation>Suche Kanäle</translation>
+        <translation type="obsolete">Suche Kanäle</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/channellistdlg.ui" line="71"/>
+        <location filename="../src/qtui/ui/channellistdlg.ui" line="85"/>
         <source>Filter:</source>
         <translation></translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/ui/channellistdlg.ui" line="47"/>
+        <source>Toggle between simple and advanced mode.
+Advanced mode allows to pass search strings to the IRC Server.</source>
+        <translation>Zwischen einfachem und erweitertem Modus umschalten.
+Der erweiterte Modus ermöglicht es, Suchbegriffe an den IRC-Server weiterzureichen.</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/ui/channellistdlg.ui" line="61"/>
+        <source>Show Channels</source>
+        <translation>Zeige Kanäle</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/ui/channellistdlg.ui" line="97"/>
+        <source>Errors Occured:</source>
+        <translation>Aufgetretene Fehler:</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/ui/channellistdlg.ui" line="131"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Lucida Grande&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;SUPER EVIL CATASTROPHIC ERROR!!11&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Client</name>
     <message>
-        <location filename="../src/client/client.cpp" line="287"/>
+        <location filename="../src/client/client.cpp" line="284"/>
         <source>Identity already exists in client!</source>
-        <translation type="unfinished">Identität im Client schon vorhanden!</translation>
+        <translation>Identität im Client schon vorhanden!</translation>
     </message>
 </context>
 <context>
@@ -531,7 +619,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/client/clientsyncer.cpp" line="55"/>
         <source>The Quassel Core you try to connect to is too old! Please consider upgrading.</source>
-        <translation type="unfinished">Der Quasselkern, zu dem Sie eine Verbindung herzustellen versuchen, ist veraltet! Bitte ziehen Sie eine Aktualisierung in Betracht.</translation>
+        <translation>Der Quasselkern, zu dem Sie eine Verbindung herzustellen versuchen, ist veraltet! Bitte ziehen Sie eine Aktualisierung in Betracht.</translation>
     </message>
     <message>
         <location filename="../src/client/clientsyncer.cpp" line="80"/>
@@ -880,12 +968,12 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Core</name>
     <message>
-        <location filename="../src/core/core.cpp" line="57"/>
+        <location filename="../src/core/core.cpp" line="58"/>
         <source>Could not initialize any storage backend! Exiting...</source>
         <translation>Konnte keinen Speichermechanismus initialisieren! Beende...</translation>
     </message>
     <message>
-        <location filename="../src/core/core.cpp" line="60"/>
+        <location filename="../src/core/core.cpp" line="61"/>
         <source>Currently, Quassel only supports SQLite3. You need to build your
 Qt library with the sqlite plugin enabled in order for quasselcore
 to work.</source>
@@ -894,32 +982,32 @@ Die Qt-Bibliothek mit eingeschaltetem SQLite-Plugin
 wird benötigt, damit der Quassel-Kern funktioniert.</translation>
     </message>
     <message>
-        <location filename="../src/core/core.cpp" line="117"/>
+        <location filename="../src/core/core.cpp" line="118"/>
         <source>Calling restoreState() even though active sessions exist!</source>
         <translation>restoreState() aufgerufen, obwohl aktive Sitzungen vorhanden sind!</translation>
     </message>
     <message>
-        <location filename="../src/core/core.cpp" line="145"/>
+        <location filename="../src/core/core.cpp" line="146"/>
         <source>Admin user or password not set.</source>
         <translation>Administrativbenutzer oder Passwort nicht gesetzt.</translation>
     </message>
     <message>
-        <location filename="../src/core/core.cpp" line="148"/>
+        <location filename="../src/core/core.cpp" line="149"/>
         <source>Could not setup storage!</source>
         <translation>Speicher konnte nicht eingerichtet werden!</translation>
     </message>
     <message>
-        <location filename="../src/core/core.cpp" line="152"/>
+        <location filename="../src/core/core.cpp" line="153"/>
         <source>Creating admin user...</source>
         <translation>Erstelle Administrativbenutzer...</translation>
     </message>
     <message>
-        <location filename="../src/core/core.cpp" line="399"/>
+        <location filename="../src/core/core.cpp" line="400"/>
         <source>Antique client trying to connect... refusing.</source>
         <translation>Antiquierter Client versucht zu verbinden... lehne ab.</translation>
     </message>
     <message>
-        <location filename="../src/core/core.cpp" line="415"/>
+        <location filename="../src/core/core.cpp" line="416"/>
         <source>&lt;b&gt;Your Quassel Client is too old!&lt;/b&gt;&lt;br&gt;This core needs at least client/core protocol version %1.&lt;br&gt;Please consider upgrading your client.</source>
         <translation>&lt;b&gt;Ihr Quasselclient ist zu alt!&lt;/b&gt;&lt;br&gt;Dieser Kern benötigt mindestens Client-/Kern-Protokollversion %1.&lt;br&gt;Bitte ziehen Sie in Erwägung, Ihren Client zu aktualisieren.</translation>
     </message>
@@ -929,12 +1017,12 @@ wird benötigt, damit der Quassel-Kern funktioniert.</translation>
         <translation type="obsolete">Client %1 zu alt, lehne ab.</translation>
     </message>
     <message>
-        <location filename="../src/core/core.cpp" line="432"/>
+        <location filename="../src/core/core.cpp" line="433"/>
         <source>&lt;b&gt;Quassel Core Version %1&lt;/b&gt;&lt;br&gt;Built: %2&lt;br&gt;Up %3d%4h%5m (since %6)</source>
         <translation>&lt;b&gt;Quassel-Kern Version %1&lt;/b&gt;&lt;br&gt;Gebaut: %2&lt;br&gt;An %3T%4S%5M (seit %6)</translation>
     </message>
     <message>
-        <location filename="../src/core/core.cpp" line="495"/>
+        <location filename="../src/core/core.cpp" line="496"/>
         <source>&lt;b&gt;Client not initialized!&lt;/b&gt;&lt;br&gt;You need to send an init message before trying to login.</source>
         <translation>&lt;b&gt;Client nicht initialisiert!&lt;/b&gt;&lt;br&gt;Sie müssen vor dem Anmeldungsversuch eine init-Meldung senden.</translation>
     </message>
@@ -944,7 +1032,7 @@ wird benötigt, damit der Quassel-Kern funktioniert.</translation>
         <translation type="obsolete">Client %1 hat vor dem Anmeldungsversuch keine init-Meldung gesendet, lehne ab.</translation>
     </message>
     <message>
-        <location filename="../src/core/core.cpp" line="517"/>
+        <location filename="../src/core/core.cpp" line="518"/>
         <source>&lt;b&gt;Invalid username or password!&lt;/b&gt;&lt;br&gt;The username/password combination you supplied could not be found in the database.</source>
         <translation>&lt;b&gt;Ungültiger Benutzername oder Passwort!&lt;/b&gt;&lt;br&gt;Die angegebene Benutzername/Passwort-Kombination konnte in der Datenbank nicht gefunden werden.</translation>
     </message>
@@ -954,7 +1042,7 @@ wird benötigt, damit der Quassel-Kern funktioniert.</translation>
         <translation type="obsolete">Client %1 erfolgreich als &quot;%2&quot; (BenutzerId: %3) initialisiert und authentifziert.</translation>
     </message>
     <message>
-        <location filename="../src/core/core.cpp" line="534"/>
+        <location filename="../src/core/core.cpp" line="535"/>
         <source>Non-authed client disconnected.</source>
         <translation>Nicht-authentifizierter Client getrennt.</translation>
     </message>
@@ -964,39 +1052,44 @@ wird benötigt, damit der Quassel-Kern funktioniert.</translation>
         <translation type="obsolete">Konnte Sitzung für Client %1 nicht initialisieren!</translation>
     </message>
     <message>
-        <location filename="../src/core/core.cpp" line="376"/>
+        <location filename="../src/core/core.cpp" line="377"/>
         <source>Client connected from</source>
-        <translation type="unfinished">Client verbunden von</translation>
+        <translation>Client verbunden von</translation>
     </message>
     <message>
-        <location filename="../src/core/core.cpp" line="523"/>
+        <location filename="../src/core/core.cpp" line="524"/>
         <source>Client</source>
         <translation type="unfinished">Client</translation>
     </message>
     <message>
-        <location filename="../src/core/core.cpp" line="417"/>
+        <location filename="../src/core/core.cpp" line="418"/>
         <source>too old, rejecting.</source>
-        <translation type="unfinished">zu alt, lehne ab.</translation>
+        <translation>zu alt, lehne ab.</translation>
     </message>
     <message>
-        <location filename="../src/core/core.cpp" line="477"/>
+        <location filename="../src/core/core.cpp" line="478"/>
         <source>Starting TLS for Client:</source>
-        <translation type="unfinished">Starte TLS für Client:</translation>
+        <translation>Starte TLS für Client:</translation>
     </message>
     <message>
-        <location filename="../src/core/core.cpp" line="497"/>
+        <location filename="../src/core/core.cpp" line="498"/>
         <source>did not send an init message before trying to login, rejecting.</source>
-        <translation type="unfinished">hat vor dem Anmeldungsversuch keine init-Meldung gesendet, lehne ab.</translation>
+        <translation>hat vor dem Anmeldungsversuch keine init-Meldung gesendet, lehne ab.</translation>
     </message>
     <message>
-        <location filename="../src/core/core.cpp" line="523"/>
+        <location filename="../src/core/core.cpp" line="524"/>
         <source>initialized and authenticated successfully as &quot;%1&quot; (UserId: %2).</source>
         <translation>initialisiert und erfolgreich als &quot;%1&quot; (BenutzerId: %2) authentifziert.</translation>
     </message>
     <message>
-        <location filename="../src/core/core.cpp" line="579"/>
+        <location filename="../src/core/core.cpp" line="583"/>
         <source>Could not initialize session for client:</source>
-        <translation type="unfinished">Konnte Sitzung für Client nicht erfolgreich initialisieren:</translation>
+        <translation>Konnte Sitzung für Client nicht erfolgreich initialisieren:</translation>
+    </message>
+    <message>
+        <location filename="../src/core/core.cpp" line="541"/>
+        <source>Non-authed client disconnected. (socket allready destroyed)</source>
+        <translation>Unauthentifizierter Client getrennt. (Socket bereits zerstört)</translation>
     </message>
 </context>
 <context>
@@ -1032,7 +1125,7 @@ wird benötigt, damit der Quassel-Kern funktioniert.</translation>
         <translation>Kernkonto ändern</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="86"/>
+        <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="90"/>
         <source>Port:</source>
         <translation></translation>
     </message>
@@ -1067,64 +1160,74 @@ wird benötigt, damit der Quassel-Kern funktioniert.</translation>
         <translation>Kontoname:</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="56"/>
+        <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="60"/>
         <source>Use built-in Quassel Core</source>
         <translation>Benutze integrierten Quassel-Kern</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="76"/>
         <source>Remote host:</source>
-        <translation type="unfinished">Gegenstelle:</translation>
+        <translation type="obsolete">Gegenstelle:</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="109"/>
+        <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="117"/>
         <source>Use secure connection (SSL)</source>
         <translation>Gesicherte Verbindung (SSL) benutzen</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="124"/>
+        <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="133"/>
         <source>Use a proxy:</source>
         <translation>Einen Proxy benutzen:</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="136"/>
+        <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="145"/>
         <source>Proxy Type:</source>
         <translation>Proxy-Art:</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="144"/>
+        <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="153"/>
         <source>Socks 5</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="149"/>
+        <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="158"/>
         <source>HTTP</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="157"/>
+        <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="166"/>
         <source>Proxy Host:</source>
         <translation>Proxy-Rechner:</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="164"/>
+        <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="173"/>
         <source>Proxy Port:</source>
         <translation>Proxy-Port:</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="171"/>
+        <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="180"/>
         <source>localhost</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="188"/>
+        <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="197"/>
         <source>Proxy Username:</source>
         <translation>Proxy-Benutzername:</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="198"/>
+        <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="207"/>
         <source>Proxy Password:</source>
         <translation>Proxy-Passwort:</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="36"/>
+        <source>Local Core</source>
+        <translation>Lokaler Kern</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="80"/>
+        <source>Hostname:</source>
+        <translation>Rechnername:</translation>
     </message>
 </context>
 <context>
@@ -1544,9 +1647,62 @@ space</source>
     </message>
 </context>
 <context>
+    <name>CoreInfoDlg</name>
+    <message>
+        <location filename="../src/qtui/ui/coreinfodlg.ui" line="13"/>
+        <source>Core Information</source>
+        <translation>Informationen zum Kern</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/ui/coreinfodlg.ui" line="21"/>
+        <source>Version:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/ui/coreinfodlg.ui" line="28"/>
+        <source>&lt;core version&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/ui/coreinfodlg.ui" line="35"/>
+        <source>Uptime:</source>
+        <translation>Betriebsdauer:</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/ui/coreinfodlg.ui" line="42"/>
+        <source>Connected Clients:</source>
+        <translation>Verbundene Clients:</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/ui/coreinfodlg.ui" line="49"/>
+        <source>&lt;connected clients&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/ui/coreinfodlg.ui" line="56"/>
+        <source>&lt;core uptime&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/ui/coreinfodlg.ui" line="63"/>
+        <source>Build date:</source>
+        <translation>Erstellungsdatum:</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/ui/coreinfodlg.ui" line="70"/>
+        <source>&lt;build date&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/ui/coreinfodlg.ui" line="81"/>
+        <source>Close</source>
+        <translation>Schließen</translation>
+    </message>
+</context>
+<context>
     <name>CoreSession</name>
     <message>
-        <location filename="../src/core/coresession.cpp" line="153"/>
+        <location filename="../src/core/coresession.cpp" line="162"/>
         <source>Default Identity</source>
         <translation>Standardidentität</translation>
     </message>
@@ -1556,24 +1712,24 @@ space</source>
         <translation type="obsolete">Client %1 hat Verbindung getrennt (BenutzerId: %2).</translation>
     </message>
     <message>
-        <location filename="../src/core/coresession.cpp" line="410"/>
+        <location filename="../src/core/coresession.cpp" line="419"/>
         <source>CoreSession::createNetwork(): Got invalid networkId from Core when trying to create network %1!</source>
-        <translation type="unfinished"></translation>
+        <translation>CoreSession::createNetwork(): Ungültige networkId vom Kern erhalten beim Versuch Netzwerk %1 anzulegen!</translation>
     </message>
     <message>
-        <location filename="../src/core/coresession.cpp" line="425"/>
+        <location filename="../src/core/coresession.cpp" line="434"/>
         <source>CoreSession::createNetwork(): Trying to create a network that already exists, updating instead!</source>
-        <translation type="unfinished"></translation>
+        <translation>CoreSession::createNetwork(): Versuche ein Netzwerk anzulegen, das bereits existiert, aktualisiere stattdessen!</translation>
     </message>
     <message>
-        <location filename="../src/core/coresession.cpp" line="241"/>
+        <location filename="../src/core/coresession.cpp" line="250"/>
         <source>Client</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../src/core/coresession.cpp" line="241"/>
+        <location filename="../src/core/coresession.cpp" line="250"/>
         <source>disconnected (UserId: %1).</source>
-        <translation type="unfinished"></translation>
+        <translation>getrennt (UserId: %1).</translation>
     </message>
 </context>
 <context>
@@ -1781,7 +1937,7 @@ space</source>
     <message>
         <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="19"/>
         <source>Use system tray icon:</source>
-        <translation type="unfinished">Zu Systemleistensymbol minimieren:</translation>
+        <translation type="obsolete">Zu Systemleistensymbol minimieren:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="28"/>
@@ -1796,7 +1952,7 @@ space</source>
     <message>
         <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="45"/>
         <source>Tray icon:</source>
-        <translation type="unfinished">Systemleistensymbol:</translation>
+        <translation type="obsolete">Systemleistensymbol:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="51"/>
@@ -1806,67 +1962,92 @@ space</source>
     <message>
         <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="64"/>
         <source>User Notification:</source>
-        <translation>Benutzerbenachrichtigung:</translation>
+        <translation type="obsolete">Benutzerbenachrichtigung:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="70"/>
         <source>Animate tray icon</source>
-        <translation type="unfinished">Systemleistensymbol animieren</translation>
+        <translation type="obsolete">Systemleistensymbol animieren</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="80"/>
         <source>Display pop-up messages</source>
-        <translation type="unfinished">Pop-Up-Meldungen anzeigen</translation>
+        <translation type="obsolete">Pop-Up-Meldungen anzeigen</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="93"/>
         <source>Display user related messages and private Notices:</source>
-        <translation>Benutzerbezogene Meldungen und private Notizen anzeigen:</translation>
+        <translation type="obsolete">Benutzerbezogene Meldungen und private Notizen anzeigen:</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="102"/>
+        <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="73"/>
         <source>in status buffer</source>
         <translation type="unfinished">im Statuspuffer</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="115"/>
+        <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="86"/>
         <source>in query buffer (if exists)</source>
         <translation type="unfinished">im Dialogpuffer (falls vorhanden)</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="125"/>
+        <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="96"/>
         <source>in current buffer</source>
         <translation type="unfinished">im aktuellen Puffer</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="135"/>
         <source>Buffer view:</source>
-        <translation type="unfinished">Pufferansicht:</translation>
+        <translation type="obsolete">Pufferansicht:</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="141"/>
+        <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="112"/>
         <source>Display topic in tooltip</source>
         <translation type="unfinished">Thema in Hinweisfläche anzeigen</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="148"/>
+        <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="119"/>
         <source>Mouse wheel changes displayed buffers</source>
         <translation>Mausrad ändert angezeigten Puffer</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="161"/>
+        <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="132"/>
         <source>The suffix appended to a nick on completion via TAB. Default is &quot;: &quot;</source>
         <translation>Das einem Spitznamen durch Tabulatorvervollständigung angehängte Suffix. Standard ist &quot;: &quot;</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="164"/>
         <source>Input Line:</source>
-        <translation>Eingabezeile:</translation>
+        <translation type="obsolete">Eingabezeile:</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="172"/>
+        <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="143"/>
         <source>Completion suffix:</source>
         <translation>Vervollständigungssuffix:</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="19"/>
+        <source>Show System Tray Icon</source>
+        <translation type="unfinished">Zeige Systemleistensymbol</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="45"/>
+        <source>Tray Icon</source>
+        <translation type="unfinished">Systemleistensymbol</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="64"/>
+        <source>Display User-Related Messages And Private Notices:</source>
+        <translation type="unfinished">Zeige benutzerbezogene Meldungen und private Notizen:</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="106"/>
+        <source>Buffer View</source>
+        <translation type="unfinished">Pufferansicht</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="135"/>
+        <source>Input Line</source>
+        <translation type="unfinished">Eingabezeile</translation>
     </message>
 </context>
 <context>
@@ -2227,170 +2408,170 @@ space</source>
 <context>
     <name>IrcServerHandler</name>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="415"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="436"/>
         <source>%1 has changed topic for %2 to: &quot;%3&quot;</source>
         <translation type="unfinished">%1 hat das Thema für %2 geändert zu: &quot;%3&quot;</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="783"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="804"/>
         <source>No topic is set for %1.</source>
         <translation>Für %1 ist kein Thema gesetzt.</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="795"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="816"/>
         <source>Topic for %1 is &quot;%2&quot;</source>
         <translation>Thema für %1 ist &quot;%2&quot;</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="806"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="827"/>
         <source>Topic set by %1 on %2</source>
         <translation>Thema in %2 gesetzt von %1</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="486"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="507"/>
         <source>%1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="521"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="542"/>
         <source>[Whois] %1 is away: &quot;%2&quot;</source>
         <translation>[Whois] %1 ist abwesend: &quot;%2&quot;</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="532"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="553"/>
         <source>%1 is away: &quot;%2&quot;</source>
         <translation>%1 ist abwesend: &quot;%2&quot;</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="729"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="750"/>
         <source>[Whois] %1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="603"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="624"/>
         <source>[Whois] %1 is %2 (%3)</source>
         <translation>[Whois] %1 ist %2 (%3)</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="618"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="639"/>
         <source>%1 is online via %2 (%3)</source>
         <translation>%1 ist angemeldet über %2 (%3)</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="870"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="891"/>
         <source>[Whowas] %1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="648"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="669"/>
         <source>[Whowas] %1 was %2 (%3)</source>
         <translation>[Whowas] %1 war %2 (%3)</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="662"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="683"/>
         <source>[Who] End of /WHO list for %1</source>
         <translation>[Who] Ende der /WHO Liste für %1</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="682"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="703"/>
         <source>[Whois] %1 is logged in since %2</source>
         <translation>[Whois] %1 ist seit %2 angemeldet</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="684"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="705"/>
         <source>[Whois] %1 is idling for %2 (%3)</source>
         <translation>[Whois] %1 ist seit %2 (%3) inaktiv</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="687"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="708"/>
         <source>[Whois] idle message: %1</source>
         <translation>[Whois] Inaktivmeldung: %1</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="719"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="740"/>
         <source>[Whois] %1 is a user on channels: %2</source>
         <translation>[Whois] %1 ist Benutzer in den Kanälen: %2</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="721"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="742"/>
         <source>[Whois] %1 has voice on channels: %2</source>
         <translation>[Whois] %1 hat Voice in den Kanälen: %2</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="723"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="744"/>
         <source>[Whois] %1 is an operator on channels: %2</source>
         <translation>[Whois] %1 ist Operator in den Kanälen: %2</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="751"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="772"/>
         <source>Channel %1 has %2 users. Topic is: %3</source>
         <translation>Kanal %1 hat %2 Benutzer. Thema ist: %3</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="760"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="781"/>
         <source>End of channel list</source>
         <translation>Ende der Kanalliste</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="829"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="850"/>
         <source>[Who] %1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="883"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="904"/>
         <source>There is a nickname in your identity&apos;s nicklist which contains illegal characters</source>
         <translation>Ein Spitzname der Spitznamensliste Ihrer Identität enthält ungültige Zeichen</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="884"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="905"/>
         <source>Due to a bug in Unreal IRCd (and maybe other irc-servers too) we&apos;re unable to determine the erroneous nick</source>
         <translation>Auf Grund eines Fehlers im Unreal IRCs (und evtl. auch anderen IRC-Servern) können wir den fehlerhaften Spitznamen nicht ermitteln</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="885"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="906"/>
         <source>Please use: /nick &lt;othernick&gt; to continue or clean up your nicklist</source>
         <translation>Bitte benutzen Sie: /nick &lt;andererSpitzname&gt; zum Fortfahren oder säubern Sie Ihre Spitznamensliste</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="888"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="909"/>
         <source>Nick %1 contains illegal characters</source>
         <translation>Spitzname %1 enthält ungültige Zeichen</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="900"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="921"/>
         <source>Nick already in use: %1</source>
         <translation>Spitzname bereits in Benutzung: %1</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="923"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="944"/>
         <source>No free and valid nicks in nicklist found. use: /nick &lt;othernick&gt; to continue</source>
         <translation>Keine freien und gültigen Spitznamen in Spitznamensliste gefunden. Benutze: /nick &lt;andererSpitzname&gt; zum Fortfahren</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="440"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="461"/>
         <source>Received RPL_ISUPPORT (005) without parameters!</source>
-        <translation type="unfinished"></translation>
+        <translation>RPL_ISUPPORT (005) ohne Parameter erhalten!</translation>
     </message>
     <message>
-        <location filename="../src/core/ircserverhandler.cpp" line="448"/>
+        <location filename="../src/core/ircserverhandler.cpp" line="469"/>
         <source>Received non RFC compliant RPL_ISUPPORT: this can lead to unexpected behavior!</source>
-        <translation type="unfinished"></translation>
+        <translation>nicht RFC-konformes RPL_ISUPPORT erhalten: Dies kann unerwartete Auswirkungen haben!</translation>
     </message>
 </context>
 <context>
     <name>IrcUserItem</name>
     <message>
-        <location filename="../src/client/networkmodel.cpp" line="594"/>
+        <location filename="../src/client/networkmodel.cpp" line="685"/>
         <source>idling since %1</source>
         <translation>nichtstuend seit %1</translation>
     </message>
     <message>
-        <location filename="../src/client/networkmodel.cpp" line="597"/>
+        <location filename="../src/client/networkmodel.cpp" line="688"/>
         <source>login time: %1</source>
         <translation>Anmeldezeitpunkt: %1</translation>
     </message>
     <message>
-        <location filename="../src/client/networkmodel.cpp" line="600"/>
+        <location filename="../src/client/networkmodel.cpp" line="691"/>
         <source>server: %1</source>
         <translation>Server: %1</translation>
     </message>
@@ -2421,12 +2602,12 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>MainWin</name>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="88"/>
+        <location filename="../src/qtui/mainwin.cpp" line="98"/>
         <source>Waiting for core...</source>
         <translation>Warte auf Kern...</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="468"/>
+        <location filename="../src/qtui/mainwin.cpp" line="489"/>
         <source>Not connected to core.</source>
         <translation>Nicht mit Kern verbunden.</translation>
     </message>
@@ -2456,9 +2637,9 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">Hilfe</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="97"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="96"/>
         <source>Debug</source>
-        <translation type="obsolete">Debug</translation>
+        <translation type="unfinished">Entstörung</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/mainwin.ui" line="102"/>
@@ -2466,132 +2647,132 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">Core</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="116"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="124"/>
         <source>&amp;Network List...</source>
         <translation>&amp;Netzwerkliste...</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="119"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="127"/>
         <source>F2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="127"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="135"/>
         <source>Quick &amp;Connect...</source>
         <translation>S&amp;chnell verbinden...</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="247"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="255"/>
         <source>Disconnect</source>
         <translation>Trennen</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="143"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="151"/>
         <source>Reconnect</source>
         <translation>Wiederverbinden</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="151"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="159"/>
         <source>Join Channel...</source>
         <translation>Kanal beitreteten...</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="162"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="170"/>
         <source>Set Away globally</source>
         <translation>Global abwesend setzen</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="174"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="182"/>
         <source>Quit...</source>
         <translation>Beenden...</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="182"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="190"/>
         <source>Edit Identities...</source>
         <translation>Identitäten ändern...</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="191"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="199"/>
         <source>Configure Quassel...</source>
         <translation>Quassel konfigurieren...</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="194"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="202"/>
         <source>F7</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="209"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="217"/>
         <source>Manage Views...</source>
         <translation>Ansichten verwalten...</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="214"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="222"/>
         <source>About Qt...</source>
         <translation>Über Qt...</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="229"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="237"/>
         <source>About Quassel IRC...</source>
         <translation>Über Quassel IRC...</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="237"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="245"/>
         <source>Import Backlog</source>
         <translation>Rückspeicher importieren</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="242"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="250"/>
         <source>Connect</source>
         <translation>Verbinden</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="252"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="260"/>
         <source>Internal</source>
         <translation>Intern</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="264"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="272"/>
         <source>Disconnect from Core</source>
         <translation>Von Kern trennen</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="276"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="284"/>
         <source>Connect to Core...</source>
         <translation>Mit Kern verbinden...</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="416"/>
+        <location filename="../src/qtui/mainwin.cpp" line="431"/>
         <source>Connected to core.</source>
         <translation>Mit Kern verbunden.</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="312"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="320"/>
         <source>Edit &amp;Networks...</source>
         <translation>N&amp;etzwerke ändern...</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="255"/>
+        <location filename="../src/qtui/mainwin.cpp" line="272"/>
         <source>Nicks</source>
         <translation>Spitznamen</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="274"/>
+        <location filename="../src/qtui/mainwin.cpp" line="290"/>
         <source>Chat Monitor</source>
         <translation>Chatmonitor</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="296"/>
+        <location filename="../src/qtui/mainwin.cpp" line="304"/>
         <source>Inputline</source>
         <translation>Eingabezeile</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="313"/>
+        <location filename="../src/qtui/mainwin.cpp" line="321"/>
         <source>Topic</source>
         <translation>Thema</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="334"/>
+        <location filename="../src/qtui/mainwin.cpp" line="348"/>
         <source>Statusbar</source>
         <translation>Statusleiste</translation>
     </message>
@@ -2606,27 +2787,27 @@ p, li { white-space: pre-wrap; }
         <translation>&amp;Netzwerke</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="70"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="71"/>
         <source>&amp;Settings</source>
         <translation>Ein&amp;stellungen</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="76"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="77"/>
         <source>&amp;Views</source>
         <translation>&amp;Ansichten</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="91"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="92"/>
         <source>&amp;Help</source>
         <translation>&amp;Hilfe</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="281"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="289"/>
         <source>Debug &amp;Console</source>
         <translation>Fehler&amp;konsole</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="286"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="294"/>
         <source>Disconnect from Network...</source>
         <translation>Von Netzwerk trennen...</translation>
     </message>
@@ -2636,178 +2817,98 @@ p, li { white-space: pre-wrap; }
         <translation type="obsolete">N&amp;etzwerke ändern...</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="80"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="81"/>
         <source>Buffer Views</source>
         <translation>Pufferansichten</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="295"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="303"/>
         <source>Manage Buffer Views</source>
         <translation>Pufferansichten verwalten</translation>
     </message>
     <message>
-        <location filename="../src/qtui/ui/mainwin.ui" line="303"/>
+        <location filename="../src/qtui/ui/mainwin.ui" line="311"/>
         <source>Lock Dock Positions</source>
         <translation>Andockerpositionen sperren</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/ui/mainwin.ui" line="329"/>
+        <source>Core Info</source>
+        <translation>Informationen zum Kern</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/ui/mainwin.ui" line="334"/>
+        <source>NetworkModel</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Message</name>
     <message>
-        <location filename="../src/common/message.cpp" line="105"/>
-        <source>%DT[%1]</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/common/message.cpp" line="110"/>
-        <source>%DS&lt;%1&gt;</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/common/message.cpp" line="110"/>
-        <source>%D0%1</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/common/message.cpp" line="114"/>
-        <source>%Ds*</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/common/message.cpp" line="114"/>
-        <source>%Ds%1</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/common/message.cpp" line="116"/>
-        <source>%De*</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/common/message.cpp" line="151"/>
-        <source>%De%1</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/common/message.cpp" line="118"/>
-        <source>%Dj--&gt;</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/common/message.cpp" line="120"/>
-        <source>%Dp&lt;--</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/common/message.cpp" line="124"/>
-        <source>%Dq&lt;--</source>
-        <translation></translation>
-    </message>
-    <message>
         <location filename="../src/common/message.cpp" line="124"/>
         <source>%Dq%DN%DU%1%DU%DN %DH(%2@%3)%DH has quit</source>
-        <translation>%Dq%DN%DU%1%DU%DN %DH(%2@%3)%DH beendet</translation>
-    </message>
-    <message>
-        <location filename="../src/common/message.cpp" line="128"/>
-        <source>%Dk&lt;-*</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/common/message.cpp" line="137"/>
-        <source>%Dr&lt;-&gt;</source>
-        <translation></translation>
+        <translation type="obsolete">%Dq%DN%DU%1%DU%DN %DH(%2@%3)%DH beendet</translation>
     </message>
     <message>
         <location filename="../src/common/message.cpp" line="138"/>
         <source>%DrYou are now known as %DN%1%DN</source>
-        <translation type="unfinished">%DrSie sind jetzt als %DN%1%DN bekannt</translation>
-    </message>
-    <message>
-        <location filename="../src/common/message.cpp" line="142"/>
-        <source>%Dm***</source>
-        <translation></translation>
+        <translation type="obsolete">%DrSie sind jetzt als %DN%1%DN bekannt</translation>
     </message>
     <message>
         <location filename="../src/common/message.cpp" line="143"/>
         <source>%DmUser mode: %DM%1%DM</source>
-        <translation>%DmBenutzermodus: %DM%1%DM</translation>
-    </message>
-    <message>
-        <location filename="../src/common/message.cpp" line="147"/>
-        <source>%Da-*-</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/common/message.cpp" line="152"/>
-        <source>%De[%1]</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/common/message.cpp" line="112"/>
-        <source>%Dn[%1]</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/common/message.cpp" line="112"/>
-        <source>%Dn%1</source>
-        <translation></translation>
+        <translation type="obsolete">%DmBenutzermodus: %DM%1%DM</translation>
     </message>
     <message>
         <location filename="../src/common/message.cpp" line="118"/>
         <source>%Dj%DN%1%DN %DH(%2@%3)%DH has joined %DC%4%DC</source>
-        <translation>%Dj%DN%1%DN %DH(%2@%3)%DH hat %DC%4%DC betreten</translation>
+        <translation type="obsolete">%Dj%DN%1%DN %DH(%2@%3)%DH hat %DC%4%DC betreten</translation>
     </message>
     <message>
         <location filename="../src/common/message.cpp" line="120"/>
         <source>%Dp%DN%1%DN %DH(%2@%3)%DH has left %DC%4%DC</source>
-        <translation>%Dp%DN%1%DN %DH(%2@%3)%DH hat %DC%4%DC verlassen</translation>
+        <translation type="obsolete">%Dp%DN%1%DN %DH(%2@%3)%DH hat %DC%4%DC verlassen</translation>
     </message>
     <message>
         <location filename="../src/common/message.cpp" line="132"/>
         <source>%Dk%DN%1%DN has kicked %DN%2%DN from %DC%3%DC</source>
-        <translation>%Dk%DN%1%DN hat %DN%2%DN aus %DC%3%DC geworfen</translation>
+        <translation type="obsolete">%Dk%DN%1%DN hat %DN%2%DN aus %DC%3%DC geworfen</translation>
     </message>
     <message>
         <location filename="../src/common/message.cpp" line="139"/>
         <source>%Dr%DN%1%DN is now known as %DN%2%DN</source>
-        <translation>%Dr%DN%1%DN nennt sich jetzt %DN%2%DN</translation>
+        <translation type="obsolete">%Dr%DN%1%DN nennt sich jetzt %DN%2%DN</translation>
     </message>
     <message>
         <location filename="../src/common/message.cpp" line="144"/>
         <source>%DmMode %DM%1%DM by %DN%2%DN</source>
-        <translation type="unfinished">%DmModus %DM%1%DM von %DN%2%DN</translation>
-    </message>
-    <message>
-        <location filename="../src/common/message.cpp" line="148"/>
-        <source>%Da%DN%1%DN %2</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">%DmModus %DM%1%DM von %DN%2%DN</translation>
     </message>
 </context>
 <context>
     <name>NetworkConnection</name>
     <message>
-        <location filename="../src/core/networkconnection.cpp" line="190"/>
+        <location filename="../src/core/networkconnection.cpp" line="194"/>
         <source>Connection failed. Cycling to next Server</source>
         <translation>Verbindung fehlgeschlagen. Wechsle zum nächsten Server</translation>
     </message>
     <message>
-        <location filename="../src/core/networkconnection.cpp" line="200"/>
+        <location filename="../src/core/networkconnection.cpp" line="204"/>
         <source>Connecting to %1:%2...</source>
         <translation>Verbinde mint %1:%2...</translation>
     </message>
     <message>
-        <location filename="../src/core/networkconnection.cpp" line="253"/>
+        <location filename="../src/core/networkconnection.cpp" line="260"/>
         <source>Disconnecting.</source>
         <translation>Trenne Verbindung.</translation>
     </message>
     <message>
-        <location filename="../src/core/networkconnection.cpp" line="276"/>
+        <location filename="../src/core/networkconnection.cpp" line="281"/>
         <source>Could not connect to %1 (%2)</source>
         <translation>Konnte nicht mit %1 (%2) verbinden</translation>
     </message>
     <message>
-        <location filename="../src/core/networkconnection.cpp" line="278"/>
+        <location filename="../src/core/networkconnection.cpp" line="283"/>
         <source>Connection failure: %1</source>
         <translation>Verbindungsfehler: %1</translation>
     </message>
@@ -2833,17 +2934,17 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>NetworkModel</name>
     <message>
-        <location filename="../src/client/networkmodel.cpp" line="625"/>
+        <location filename="../src/client/networkmodel.cpp" line="712"/>
         <source>Buffer</source>
         <translation>Puffer</translation>
     </message>
     <message>
-        <location filename="../src/client/networkmodel.cpp" line="625"/>
+        <location filename="../src/client/networkmodel.cpp" line="712"/>
         <source>Topic</source>
         <translation>Thema</translation>
     </message>
     <message>
-        <location filename="../src/client/networkmodel.cpp" line="625"/>
+        <location filename="../src/client/networkmodel.cpp" line="712"/>
         <source>Nick Count</source>
         <translation>Spitznamenzähler</translation>
     </message>
@@ -3153,84 +3254,142 @@ Lassen Sie dies auf ISO-8859-1 gesetzt, falls Sie nicht *wirklich* wissen, was S
 <context>
     <name>NickView</name>
     <message>
-        <location filename="../src/uisupport/nickview.cpp" line="114"/>
+        <location filename="../src/uisupport/nickview.cpp" line="100"/>
         <source>WHOIS</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/uisupport/nickview.cpp" line="115"/>
+        <location filename="../src/uisupport/nickview.cpp" line="101"/>
         <source>VERSION</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/uisupport/nickview.cpp" line="116"/>
+        <location filename="../src/uisupport/nickview.cpp" line="102"/>
         <source>PING</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/uisupport/nickview.cpp" line="120"/>
+        <location filename="../src/uisupport/nickview.cpp" line="106"/>
         <source>Modes</source>
         <translation>Modi</translation>
     </message>
     <message>
-        <location filename="../src/uisupport/nickview.cpp" line="121"/>
+        <location filename="../src/uisupport/nickview.cpp" line="107"/>
         <source>Op %1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/uisupport/nickview.cpp" line="122"/>
+        <location filename="../src/uisupport/nickview.cpp" line="108"/>
         <source>Deop %1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/uisupport/nickview.cpp" line="123"/>
+        <location filename="../src/uisupport/nickview.cpp" line="109"/>
         <source>Voice %1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/uisupport/nickview.cpp" line="124"/>
+        <location filename="../src/uisupport/nickview.cpp" line="110"/>
         <source>Devoice %1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/uisupport/nickview.cpp" line="126"/>
+        <location filename="../src/uisupport/nickview.cpp" line="112"/>
         <source>Kick/Ban</source>
         <translation>Rauswerfen/Verbannen</translation>
     </message>
     <message>
-        <location filename="../src/uisupport/nickview.cpp" line="127"/>
+        <location filename="../src/uisupport/nickview.cpp" line="113"/>
         <source>Kick %1</source>
         <translation>%1 rauswerfen</translation>
     </message>
     <message>
-        <location filename="../src/uisupport/nickview.cpp" line="128"/>
+        <location filename="../src/uisupport/nickview.cpp" line="114"/>
         <source>Ban %1</source>
         <translation>%1 verbannen</translation>
     </message>
     <message>
-        <location filename="../src/uisupport/nickview.cpp" line="129"/>
+        <location filename="../src/uisupport/nickview.cpp" line="115"/>
         <source>Kickban %1</source>
         <translation>%1 rauswerfen und verbannen</translation>
     </message>
     <message>
-        <location filename="../src/uisupport/nickview.cpp" line="130"/>
+        <location filename="../src/uisupport/nickview.cpp" line="116"/>
         <source>Ignore</source>
         <translation>Ignorieren</translation>
     </message>
     <message>
-        <location filename="../src/uisupport/nickview.cpp" line="135"/>
+        <location filename="../src/uisupport/nickview.cpp" line="121"/>
         <source>Query</source>
-        <translation type="unfinished">Dialog</translation>
+        <translation>Dialog</translation>
     </message>
     <message>
-        <location filename="../src/uisupport/nickview.cpp" line="136"/>
+        <location filename="../src/uisupport/nickview.cpp" line="122"/>
         <source>DCC-Chat</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/uisupport/nickview.cpp" line="138"/>
+        <location filename="../src/uisupport/nickview.cpp" line="124"/>
         <source>Send file</source>
         <translation>Datei senden</translation>
+    </message>
+</context>
+<context>
+    <name>NotificationsSettingsPage</name>
+    <message>
+        <location filename="../src/qtui/settingspages/notificationssettingspage.cpp" line="28"/>
+        <source>Behaviour</source>
+        <translation>Verhalten</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/notificationssettingspage.cpp" line="28"/>
+        <source>Notifications</source>
+        <translation>Benachrichtigungen</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/notificationssettingspage.ui" line="13"/>
+        <source>Form</source>
+        <translation>Formular</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/notificationssettingspage.ui" line="19"/>
+        <source>System Tray</source>
+        <translation>Systemleiste</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/notificationssettingspage.ui" line="25"/>
+        <source>Animate tray icon</source>
+        <translation>Systemleistensymbol animieren</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/notificationssettingspage.ui" line="35"/>
+        <source>Show Bubble</source>
+        <translation>Sprechblase zeigen</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/notificationssettingspage.ui" line="45"/>
+        <source>Sends Quassel&apos;s notifications to a notification daemon compliant to Freedesktop&apos;s Notification specification (org.freedesktop.Notification).</source>
+        <translation>Sendet Quassels Benachrichtigungen an einen zur Freedesktop-Spezifikation org.freedesktop.Notification konformen Benachrichtigungsdienst.</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/notificationssettingspage.ui" line="48"/>
+        <source>Desktop Notification (via DBus)</source>
+        <translation>Arbeitsflächenbenachrichtigung (via DBus)</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/notificationssettingspage.ui" line="59"/>
+        <source>Timeout</source>
+        <translation>Zeitüberschreitung</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/notificationssettingspage.ui" line="79"/>
+        <source>X</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/notificationssettingspage.ui" line="93"/>
+        <source>Y</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -3274,27 +3433,27 @@ Lassen Sie dies auf ISO-8859-1 gesetzt, falls Sie nicht *wirklich* wissen, was S
 <context>
     <name>Quassel::secondsToString()</name>
     <message>
-        <location filename="../src/common/util.cpp" line="165"/>
+        <location filename="../src/common/util.cpp" line="192"/>
         <source>year</source>
         <translation>Jahr</translation>
     </message>
     <message>
-        <location filename="../src/common/util.cpp" line="166"/>
+        <location filename="../src/common/util.cpp" line="193"/>
         <source>day</source>
         <translation>Tag</translation>
     </message>
     <message>
-        <location filename="../src/common/util.cpp" line="167"/>
+        <location filename="../src/common/util.cpp" line="194"/>
         <source>h</source>
         <translation>Std.</translation>
     </message>
     <message>
-        <location filename="../src/common/util.cpp" line="168"/>
+        <location filename="../src/common/util.cpp" line="195"/>
         <source>min</source>
         <translation>Min.</translation>
     </message>
     <message>
-        <location filename="../src/common/util.cpp" line="169"/>
+        <location filename="../src/common/util.cpp" line="196"/>
         <source>sec</source>
         <translation>Sek.</translation>
     </message>
@@ -3302,19 +3461,29 @@ Lassen Sie dies auf ISO-8859-1 gesetzt, falls Sie nicht *wirklich* wissen, was S
 <context>
     <name>QueryBufferItem</name>
     <message>
-        <location filename="../src/client/networkmodel.cpp" line="259"/>
+        <location filename="../src/client/networkmodel.cpp" line="312"/>
         <source>&lt;b&gt;Query with %1&lt;/b&gt;</source>
-        <translation type="unfinished">&lt;b&gt;Dialog mit %1&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;Dialog mit %1&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../src/client/networkmodel.cpp" line="261"/>
         <source>Away Message: %1</source>
-        <translation type="unfinished">Abwesenheitsmeldung: %1</translation>
+        <translation type="obsolete">Abwesenheitsmeldung: %1</translation>
     </message>
     <message>
-        <location filename="../src/client/networkmodel.cpp" line="264"/>
-        <source>&lt;p&gt; %1 &lt;/p&gt;</source>
-        <translation></translation>
+        <location filename="../src/client/networkmodel.cpp" line="330"/>
+        <source>idling since %1</source>
+        <translation>nichtstuend seit %1</translation>
+    </message>
+    <message>
+        <location filename="../src/client/networkmodel.cpp" line="333"/>
+        <source>login time: %1</source>
+        <translation>Anmeldezeitpunkt: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/client/networkmodel.cpp" line="336"/>
+        <source>server: %1</source>
+        <translation>Server: %1</translation>
     </message>
 </context>
 <context>
@@ -3448,9 +3617,27 @@ Lassen Sie dies auf ISO-8859-1 gesetzt, falls Sie nicht *wirklich* wissen, was S
     </message>
 </context>
 <context>
+    <name>SignalProxy</name>
+    <message>
+        <location filename="../src/common/signalproxy.cpp" line="956"/>
+        <source>Client tried to send package larger than max package size!</source>
+        <translation>Client versuchte Paket größer als max. Paketgröße zu senden!</translation>
+    </message>
+    <message>
+        <location filename="../src/common/signalproxy.cpp" line="958"/>
+        <source>Disconnecting</source>
+        <translation>Trenne</translation>
+    </message>
+    <message>
+        <location filename="../src/common/signalproxy.cpp" line="958"/>
+        <source>local client</source>
+        <translation>lokaler Client</translation>
+    </message>
+</context>
+<context>
     <name>SqliteStorage</name>
     <message>
-        <location filename="../src/core/sqlitestorage.cpp" line="49"/>
+        <location filename="../src/core/sqlitestorage.cpp" line="50"/>
         <source>SQLite is a file-based database engine that does not require any setup. It is suitable for small and medium-sized databases that do not require access via network. Use SQLite if your Quassel Core should store its data on the same machine it is running on, and if you only expect a few users to use your core.</source>
         <translation>SQLite ist ein dateibasiertes Datenbanksystem, das keiner Einrichtung bedarf. Es ist für kleine bis mittelgroße Datenbanken, die keinen Netzwerkzugriff benötigen, geeignet. Verwenden Sie SQListe, wenn der Quassel-Kern seine Daten auf dem selben Rechner, auf dem er auch läuft, speichern soll und Sie nur mit ein paar Benutzern auf Ihrem Kern rechnen.</translation>
     </message>
@@ -3458,19 +3645,19 @@ Lassen Sie dies auf ISO-8859-1 gesetzt, falls Sie nicht *wirklich* wissen, was S
 <context>
     <name>StatusBufferItem</name>
     <message>
-        <location filename="../src/client/networkmodel.cpp" line="241"/>
+        <location filename="../src/client/networkmodel.cpp" line="275"/>
         <source>&lt;b&gt;Status buffer of %1&lt;/b&gt;</source>
-        <translation type="unfinished">&lt;b&gt;Statuspuffer von %1&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;Statuspuffer von %1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/client/networkmodel.cpp" line="243"/>
+        <location filename="../src/client/networkmodel.cpp" line="277"/>
         <source>&lt;p&gt; %1 &lt;/p&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/client/networkmodel.h" line="138"/>
+        <location filename="../src/client/networkmodel.h" line="139"/>
         <source>Status Buffer</source>
-        <translation type="unfinished">Statuspuffer</translation>
+        <translation>Statuspuffer</translation>
     </message>
 </context>
 <context>
@@ -3492,132 +3679,132 @@ Lassen Sie dies auf ISO-8859-1 gesetzt, falls Sie nicht *wirklich* wissen, was S
 <context>
     <name>UiStyle</name>
     <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="273"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="298"/>
         <source>%DT[%1]</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="278"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="303"/>
         <source>%DS&lt;%1&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="278"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="303"/>
         <source>%D0%1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="280"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="305"/>
         <source>%Dn[%1]</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="280"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="305"/>
         <source>%Dn%1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="282"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="307"/>
         <source>%Ds*</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="282"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="307"/>
         <source>%Ds%1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="284"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="309"/>
         <source>%De*</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="319"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="344"/>
         <source>%De%1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="286"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="311"/>
         <source>%Dj--&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="286"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="311"/>
         <source>%Dj%DN%1%DN %DH(%2@%3)%DH has joined %DC%4%DC</source>
         <translation>%Dj%DN%1%DN %DH(%2@%3)%DH hat %DC%4%DC betreten</translation>
     </message>
     <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="288"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="313"/>
         <source>%Dp&lt;--</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="288"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="313"/>
         <source>%Dp%DN%1%DN %DH(%2@%3)%DH has left %DC%4%DC</source>
         <translation>%Dp%DN%1%DN %DH(%2@%3)%DH hat %DC%4%DC verlassen</translation>
     </message>
     <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="292"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="317"/>
         <source>%Dq&lt;--</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="292"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="317"/>
         <source>%Dq%DN%DU%1%DU%DN %DH(%2@%3)%DH has quit</source>
         <translation>%Dq%DN%DU%1%DU%DN %DH(%2@%3)%DH wurde beendet</translation>
     </message>
     <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="296"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="321"/>
         <source>%Dk&lt;-*</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="300"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="325"/>
         <source>%Dk%DN%1%DN has kicked %DN%2%DN from %DC%3%DC</source>
         <translation>%Dk%DN%1%DN hat %DN%2%DN aus %DC%3%DC geworfen</translation>
     </message>
     <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="305"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="330"/>
         <source>%Dr&lt;-&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="306"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="331"/>
         <source>%DrYou are now known as %DN%1%DN</source>
         <translation>%DrSie sind jetzt als %DN%1%DN bekannt</translation>
     </message>
     <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="307"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="332"/>
         <source>%Dr%DN%1%DN is now known as %DN%2%DN</source>
         <translation>%Dr%DN%1%DN ist jetzt als %DN%2%DN bekannt</translation>
     </message>
     <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="310"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="335"/>
         <source>%Dm***</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="311"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="336"/>
         <source>%DmUser mode: %DM%1%DM</source>
         <translation>%DmBenutzermodus: %DM%1%DM</translation>
     </message>
     <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="312"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="337"/>
         <source>%DmMode %DM%1%DM by %DN%2%DN</source>
         <translation>%DmModus %DM%1%DM durch %DN%2%DN</translation>
     </message>
     <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="315"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="340"/>
         <source>%Da-*-</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="316"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="341"/>
         <source>%Da%DN%1%DN %2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="320"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="345"/>
         <source>%De[%1]</source>
         <translation></translation>
     </message>
@@ -3625,7 +3812,7 @@ Lassen Sie dies auf ISO-8859-1 gesetzt, falls Sie nicht *wirklich* wissen, was S
 <context>
     <name>UserCategoryItem</name>
     <message numerus="yes">
-        <location filename="../src/client/networkmodel.cpp" line="470"/>
+        <location filename="../src/client/networkmodel.cpp" line="567"/>
         <source>%n Owner(s)</source>
         <translation>
             <numerusform>%n Besitzer</numerusform>
@@ -3633,7 +3820,7 @@ Lassen Sie dies auf ISO-8859-1 gesetzt, falls Sie nicht *wirklich* wissen, was S
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/client/networkmodel.cpp" line="471"/>
+        <location filename="../src/client/networkmodel.cpp" line="568"/>
         <source>%n Admin(s)</source>
         <translation>
             <numerusform></numerusform>
@@ -3641,7 +3828,7 @@ Lassen Sie dies auf ISO-8859-1 gesetzt, falls Sie nicht *wirklich* wissen, was S
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/client/networkmodel.cpp" line="472"/>
+        <location filename="../src/client/networkmodel.cpp" line="569"/>
         <source>%n Operator(s)</source>
         <translation>
             <numerusform>%n Operator</numerusform>
@@ -3649,7 +3836,7 @@ Lassen Sie dies auf ISO-8859-1 gesetzt, falls Sie nicht *wirklich* wissen, was S
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/client/networkmodel.cpp" line="473"/>
+        <location filename="../src/client/networkmodel.cpp" line="570"/>
         <source>%n Half-Op(s)</source>
         <translation>
             <numerusform></numerusform>
@@ -3657,7 +3844,7 @@ Lassen Sie dies auf ISO-8859-1 gesetzt, falls Sie nicht *wirklich* wissen, was S
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/client/networkmodel.cpp" line="474"/>
+        <location filename="../src/client/networkmodel.cpp" line="571"/>
         <source>%n Voiced</source>
         <translation>
             <numerusform></numerusform>
@@ -3665,7 +3852,7 @@ Lassen Sie dies auf ISO-8859-1 gesetzt, falls Sie nicht *wirklich* wissen, was S
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/client/networkmodel.cpp" line="475"/>
+        <location filename="../src/client/networkmodel.cpp" line="572"/>
         <source>%n User(s)</source>
         <translation>
             <numerusform>%n Benutzer</numerusform>
@@ -3676,7 +3863,7 @@ Lassen Sie dies auf ISO-8859-1 gesetzt, falls Sie nicht *wirklich* wissen, was S
 <context>
     <name>UserInputHandler</name>
     <message>
-        <location filename="../src/core/userinputhandler.cpp" line="116"/>
+        <location filename="../src/core/userinputhandler.cpp" line="121"/>
         <source>sending CTCP-%1 request</source>
         <translation>sende CTCP-%1-Anfrage</translation>
     </message>
