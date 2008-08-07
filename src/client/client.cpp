@@ -20,6 +20,7 @@
 
 #include "client.h"
 
+#include "abstractmessageprocessor.h"
 #include "bufferinfo.h"
 #include "buffermodel.h"
 #include "buffersettings.h"
@@ -72,6 +73,7 @@ Client::Client(QObject *parent)
     _bufferViewManager(0),
     _ircListHelper(new ClientIrcListHelper(this)),
     _messageModel(0),
+    _messageProcessor(0),
     _connectedToCore(false),
     _syncedToCore(false)
 {
@@ -97,6 +99,7 @@ void Client::init() {
 
   _bufferModel = new BufferModel(_networkModel);
   _messageModel = mainUi->createMessageModel(this);
+  _messageProcessor = mainUi->createMessageProcessor(this);
 
   SignalProxy *p = signalProxy();
 
@@ -339,6 +342,8 @@ void Client::disconnectFromCore() {
   emit disconnected();
   emit coreConnectionStateChanged(false);
 
+  messageProcessor()->reset();
+
   // Clear internal data. Hopefully nothing relies on it at this point.
   setCurrentCoreAccount(0);
 
@@ -431,70 +436,24 @@ void Client::networkDestroyed() {
   }
 }
 
-void Client::recvMessage(const Message &msg_) {
-  Message msg = msg_;
-  checkForHighlight(msg);
-  _messageModel->insertMessage(msg);
-  buffer(msg.bufferInfo())->updateActivityLevel(msg);
-}
-
+// Hmm... we never used this...
 void Client::recvStatusMsg(QString /*net*/, QString /*msg*/) {
   //recvMessage(net, Message::server("", QString("[STATUS] %1").arg(msg)));
 }
 
-void Client::receiveBacklog(BufferId bufferId, const QVariantList &msgs) {
-  //QTime start = QTime::currentTime();
-  foreach(QVariant v, msgs) {
-    Message msg = v.value<Message>();
-    checkForHighlight(msg);
-    _messageModel->insertMessage(msg);
-    buffer(msg.bufferInfo())->updateActivityLevel(msg);
-  }
-  //qDebug() << "processed" << msgs.count() << "backlog lines in" << start.msecsTo(QTime::currentTime());
+void Client::recvMessage(const Message &msg_) {
+  Message msg = msg_;
+  messageProcessor()->process(msg);
 }
 
-// TODO optimize checkForHighlight
-void Client::checkForHighlight(Message &msg) {
-  if(!((msg.type() & (Message::Plain | Message::Notice | Message::Action)) && !(msg.flags() & Message::Self)))
-    return;
-
-  NotificationSettings notificationSettings;
-  const Network *net = network(msg.bufferInfo().networkId());
-  if(net && !net->myNick().isEmpty()) {
-    QStringList nickList;
-    if(notificationSettings.highlightNick() == NotificationSettings::CurrentNick) {
-      nickList << net->myNick();
-    } else if(notificationSettings.highlightNick() == NotificationSettings::AllNicks) {
-      const Identity *myIdentity = identity(net->identity());
-      if(myIdentity)
-	nickList = myIdentity->nicks();
-    }
-    foreach(QString nickname, nickList) {
-      QRegExp nickRegExp("^(.*\\W)?" + QRegExp::escape(nickname) + "(\\W.*)?$");
-      if(nickRegExp.exactMatch(msg.contents())) {
-        msg.setFlags(msg.flags() | Message::Highlight);
-        return;
-      }
-    }
-
-    foreach(QVariant highlight, notificationSettings.highlightList()) {
-      QVariantMap highlightRule = highlight.toMap();
-      if(!highlightRule["enable"].toBool())
-        continue;
-      Qt::CaseSensitivity caseSensitivity = highlightRule["cs"].toBool() ? Qt::CaseSensitive : Qt::CaseInsensitive;
-      QString name = highlightRule["name"].toString();
-      QRegExp userRegExp;
-      if(highlightRule["regex"].toBool()) {
-        userRegExp = QRegExp(name, caseSensitivity);
-      } else {
-        userRegExp = QRegExp("^(.*\\W)?" + QRegExp::escape(name) + "(\\W.*)?$", caseSensitivity);
-      }
-      if(userRegExp.exactMatch(msg.contents())) {
-        msg.setFlags(msg.flags() | Message::Highlight);
-        return;
-      }
-    }
+void Client::receiveBacklog(BufferId bufferId, const QVariantList &msgs) {
+  //QTime start = QTime::currentTime();
+  QList<Message> msglist;
+  foreach(QVariant v, msgs) {
+    msglist << v.value<Message>();
   }
+  messageProcessor()->process(msglist);
+  //qDebug() << "processed" << msgs.count() << "backlog lines in" << start.msecsTo(QTime::currentTime());
 }
 
 void Client::updateLastSeenMsg(BufferId id, const MsgId &msgId) {

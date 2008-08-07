@@ -31,6 +31,7 @@
 class BufferInfo;
 class Message;
 class MessageModel;
+class AbstractMessageProcessor;
 
 class Identity;
 class Network;
@@ -52,6 +53,11 @@ class Client : public QObject {
   Q_OBJECT
 
 public:
+  enum ClientMode {
+    LocalCore,
+    RemoteCore
+  };
+
   static Client *instance();
   static void destroy();
   static void init(AbstractUi *);
@@ -93,6 +99,7 @@ public:
   static inline NetworkModel *networkModel() { return instance()->_networkModel; }
   static inline BufferModel *bufferModel() { return instance()->_bufferModel; }
   static inline MessageModel *messageModel() { return instance()->_messageModel; }
+  static inline AbstractMessageProcessor *messageProcessor() { return instance()->_messageProcessor; }
   static inline SignalProxy *signalProxy() { return instance()->_signalProxy; }
 
   static inline ClientBacklogManager *backlogManager() { return instance()->_backlogManager; }
@@ -106,9 +113,6 @@ public:
 
   static void userInput(BufferInfo bufferInfo, QString message);
 
-  enum ClientMode { LocalCore, RemoteCore };
-
-  static void checkForHighlight(Message &msg);
   static void setBufferLastSeenMsg(BufferId id, const MsgId &msgId); // this is synced to core and other clients
   static void removeBuffer(BufferId id);
 
@@ -213,6 +217,7 @@ private:
   ClientIrcListHelper *_ircListHelper;
 
   MessageModel *_messageModel;
+  AbstractMessageProcessor *_messageProcessor;
 
   ClientMode clientMode;
 

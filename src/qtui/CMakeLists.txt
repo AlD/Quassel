@@ -24,8 +24,10 @@ set(SOURCES
     inputwidget.cpp
     jumpkeyhandler.cpp
     mainwin.cpp
+    msgprocessorstatuswidget.cpp
     nicklistwidget.cpp
     qtui.cpp
+    qtuimessageprocessor.cpp
     qtuisettings.cpp
     qtuistyle.cpp
     settingsdlg.cpp
@@ -51,8 +53,10 @@ set(MOC_HDRS
     inputwidget.h
     jumpkeyhandler.h
     mainwin.h
+    msgprocessorstatuswidget.h
     nicklistwidget.h
     qtui.h
+    qtuimessageprocessor.h
     settingsdlg.h
     settingspagedlg.h
     titlesetter.h
@@ -82,6 +86,7 @@ set(FORMS
     debugconsole.ui
     inputwidget.ui
     mainwin.ui
+    msgprocessorstatuswidget.ui
     nicklistwidget.ui
     settingsdlg.ui
     settingspagedlg.ui
