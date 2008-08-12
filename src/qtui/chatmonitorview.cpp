@@ -68,6 +68,8 @@ void ChatMonitorView::mouseDoubleClickEvent(QMouseEvent *event) {
 
   event->accept();
   ChatItem *chatItem = dynamic_cast<ChatItem *>(itemAt(event->pos()));
+  if (!chatItem)
+    return;
   BufferId bufferId = chatItem->data(MessageModel::BufferIdRole).value<BufferId>();
   if(!bufferId.isValid())
     return;
