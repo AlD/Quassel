@@ -29,7 +29,10 @@
 #include "messagefilter.h"
 #include "quasselui.h"
 
-ChatView::ChatView(Buffer *buf, QWidget *parent) : QGraphicsView(parent), AbstractChatView() {
+ChatView::ChatView(Buffer *buf, QWidget *parent)
+  : QGraphicsView(parent),
+    AbstractChatView()
+{
   QList<BufferId> filterList;
   filterList.append(buf->bufferInfo().bufferId());
   MessageFilter *filter = new MessageFilter(Client::messageModel(), filterList, this);
@@ -37,7 +40,10 @@ ChatView::ChatView(Buffer *buf, QWidget *parent) : QGraphicsView(parent), Abstra
 
 }
 
-ChatView::ChatView(MessageFilter *filter, QWidget *parent) : QGraphicsView(parent), AbstractChatView() {
+ChatView::ChatView(MessageFilter *filter, QWidget *parent)
+  : QGraphicsView(parent),
+    AbstractChatView()
+{
   init(filter);
 }
 
@@ -49,15 +55,10 @@ void ChatView::init(MessageFilter *filter) {
   _scene = new ChatScene(filter, filter->idString(), this);
   connect(_scene, SIGNAL(heightChanged(qreal)), this, SLOT(sceneHeightChanged(qreal)));
   setScene(_scene);
-}
 
-ChatView::~ChatView() {
-
-}
-
-
-ChatScene *ChatView::scene() const {
-  return _scene;
+  connect(verticalScrollBar(), SIGNAL(sliderPressed()), this, SLOT(sliderPressed()));
+  connect(verticalScrollBar(), SIGNAL(sliderReleased()), this, SLOT(sliderReleased()));
+  connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(verticalScrollbarChanged(int)));
 }
 
 void ChatView::resizeEvent(QResizeEvent *event) {
@@ -72,6 +73,32 @@ void ChatView::sceneHeightChanged(qreal h) {
   if(scrollable) verticalScrollBar()->setValue(verticalScrollBar()->maximum());
 }
 
-void ChatView::clear()
-{
+void ChatView::setBufferForBacklogFetching(BufferId id) {
+  scene()->setBufferForBacklogFetching(id);
+}
+
+void ChatView::sliderPressed() {
+  verticalScrollbarChanged(verticalScrollBar()->value());
+}
+
+void ChatView::sliderReleased() {
+  if(scene()->isFetchingBacklog()) scene()->setIsFetchingBacklog(false);
+}
+
+void ChatView::verticalScrollbarChanged(int newPos) {
+  Q_UNUSED(newPos);
+  if(!scene()->isBacklogFetchingEnabled()) return;
+
+  QAbstractSlider *vbar = verticalScrollBar();
+  if(!vbar)
+    return;
+  if(vbar->isSliderDown()) {
+    /*
+    int relativePos = 100;
+    if(vbar->maximum() - vbar->minimum() != 0)
+      relativePos = (newPos - vbar->minimum()) * 100 / (vbar->maximum() - vbar->minimum());
+    scene()->setIsFetchingBacklog(relativePos < 20);
+    */
+    scene()->setIsFetchingBacklog(vbar->value() == vbar->minimum());
+  }
 }

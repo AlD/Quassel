@@ -18,57 +18,28 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef SETTINGS_H
-#define SETTINGS_H
+#ifndef CHATMONITORVIEW_H
+#define CHATMONITORVIEW_H
 
-#include <QCoreApplication>
-#include <QHash>
-#include <QString>
-#include <QVariant>
+#include "chatview.h"
 
-class Settings {
+class ChatMonitorFilter;
+
+class ChatMonitorView : public ChatView {
+  Q_OBJECT
+
 public:
-  enum Mode { Default, Custom };
-  
+  ChatMonitorView(ChatMonitorFilter *filter, QWidget *parent);
+
 protected:
-  inline Settings(QString group_, QString appName_) : group(group_), appName(appName_) {}
-  inline virtual ~Settings() {}
-  
-  inline void setGroup(const QString &group_) { group = group_; }
-  
-  virtual QStringList allLocalKeys();
-  virtual QStringList localChildKeys(const QString &rootkey = QString());
-  virtual QStringList localChildGroups(const QString &rootkey = QString());
-  
-  virtual void setLocalValue(const QString &key, const QVariant &data);
-  virtual const QVariant &localValue(const QString &key, const QVariant &def = QVariant());
-  
-  virtual void removeLocalKey(const QString &key);
-  
-  QString group;
-  QString appName;
+  virtual void contextMenuEvent(QContextMenuEvent *event);
+  virtual void mouseDoubleClickEvent(QMouseEvent *event);
 
+private slots:
+  void showFieldsChanged(bool checked);
+    
 private:
-  inline QString org() {
-#ifdef Q_WS_MAC
-    return QCoreApplication::organizationDomain();
-#else
-    return QCoreApplication::organizationName();
-#endif
-  }
-
-  static QHash<QString, QHash<QString, QVariant> > settingsCache;
-  inline void setCacheValue(const QString &group, const QString &key, const QVariant &data) {
-    settingsCache[group][key] = data;
-  }
-  inline const QVariant &cacheValue(const QString &group, const QString &key) {
-    return settingsCache[group][key];
-  }
-  inline bool isCached(const QString &group, const QString &key) {
-    return settingsCache.contains(group) && settingsCache[group].contains(key);
-  }
+  ChatMonitorFilter *_filter;
 };
 
-
-
-#endif
+#endif //CHATMONITORVIEW_H

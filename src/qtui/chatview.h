@@ -34,27 +34,30 @@ class MessageFilter;
 class ChatView : public QGraphicsView, public AbstractChatView {
   Q_OBJECT
 
-  public:
-    ChatView(MessageFilter *, QWidget *parent = 0);
-    ChatView(Buffer *, QWidget *parent = 0);
-    ~ChatView();
+public:
+  ChatView(MessageFilter *, QWidget *parent = 0);
+  ChatView(Buffer *, QWidget *parent = 0);
 
-    ChatScene *scene() const;
+  inline ChatScene *scene() const { return _scene; }
 
-  public slots:
+public slots:
+  inline virtual void clear() {}
+  void setBufferForBacklogFetching(BufferId buffer);
 
-    void clear();
+protected:
+  virtual void resizeEvent(QResizeEvent *event);
 
-  protected:
-    virtual void resizeEvent(QResizeEvent *event);
+protected slots:
+  virtual void sceneHeightChanged(qreal height);
+  virtual void verticalScrollbarChanged(int);
+  virtual void sliderPressed();
+  virtual void sliderReleased();
+  
+private:
+  void init(MessageFilter *filter);
 
-  protected slots:
-    virtual void sceneHeightChanged(qreal height);
-
-  private:
-    void init(MessageFilter *filter);
-
-    ChatScene *_scene;
+  ChatScene *_scene;
 };
+
 
 #endif
