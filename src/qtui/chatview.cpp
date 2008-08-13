@@ -29,12 +29,12 @@
 #include "messagefilter.h"
 #include "quasselui.h"
 
-ChatView::ChatView(Buffer *buf, QWidget *parent)
+ChatView::ChatView(BufferId bufferId, QWidget *parent)
   : QGraphicsView(parent),
     AbstractChatView()
 {
   QList<BufferId> filterList;
-  filterList.append(buf->bufferInfo().bufferId());
+  filterList.append(bufferId);
   MessageFilter *filter = new MessageFilter(Client::messageModel(), filterList, this);
   init(filter);
 
@@ -101,4 +101,16 @@ void ChatView::verticalScrollbarChanged(int newPos) {
     */
     scene()->setIsFetchingBacklog(vbar->value() == vbar->minimum());
   }
+}
+
+MsgId ChatView::lastMsgId() const {
+  if(!scene())
+    return MsgId();
+
+  QAbstractItemModel *model = scene()->model();
+  if(!model || model->rowCount() == 0)
+    return MsgId();
+
+  
+  return model->data(model->index(model->rowCount() - 1, 0), MessageModel::MsgIdRole).value<MsgId>();
 }

@@ -28,8 +28,6 @@
 #include "types.h"
 
 class AbstractUiMsg;
-class Buffer;
-class BufferId;
 class ChatItem;
 class ChatLine;
 class ColumnHandleItem;
@@ -51,6 +49,7 @@ class ChatScene : public QGraphicsScene {
     inline BufferId bufferForBacklogFetching() const;
     int sectionByScenePos(int x);
     inline int sectionByScenePos(const QPoint &pos) { return sectionByScenePos(pos.x()); }
+    inline bool isSingleBufferScene() const { return _singleBufferScene; }
 
   public slots:
     void setWidth(qreal);
@@ -88,6 +87,7 @@ class ChatScene : public QGraphicsScene {
     qreal _width, _height;
     QAbstractItemModel *_model;
     QList<ChatLine *> _lines;
+    bool _singleBufferScene;
 
     ColumnHandleItem *firstColHandle, *secondColHandle;
     qreal firstColHandlePos, secondColHandlePos;

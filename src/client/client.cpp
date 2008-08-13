@@ -77,7 +77,6 @@ Client::Client(QObject *parent)
     _connectedToCore(false),
     _syncedToCore(false)
 {
-  _monitorBuffer = new Buffer(BufferInfo(), this);
   _signalProxy->synchronize(_ircListHelper);
 
   connect(_backlogManager, SIGNAL(backlog(BufferId, const QVariantList &)),
@@ -161,15 +160,10 @@ Buffer *Client::statusBuffer(const NetworkId &networkId) const {
     return 0;
 }
 
-Buffer *Client::buffer(BufferId bufferId) {
-  if(instance()->_buffers.contains(bufferId))
-    return instance()->_buffers[bufferId];
-  else
-    return 0;
-}
-
 Buffer *Client::buffer(BufferInfo bufferInfo) {
-  Buffer *buff = buffer(bufferInfo.bufferId());
+  Buffer *buff = 0;
+  if(instance()->_buffers.contains(bufferInfo.bufferId()))
+    buff = instance()->_buffers[bufferInfo.bufferId()];
 
   if(!buff) {
     Client *client = Client::instance();
@@ -309,7 +303,7 @@ void Client::setSyncedToCore() {
   // create buffersyncer
   Q_ASSERT(!_bufferSyncer);
   _bufferSyncer = new BufferSyncer(this);
-  connect(bufferSyncer(), SIGNAL(lastSeenMsgSet(BufferId, MsgId)), this, SLOT(updateLastSeenMsg(BufferId, MsgId)));
+  connect(bufferSyncer(), SIGNAL(lastSeenMsgSet(BufferId, MsgId)), _networkModel, SLOT(setLastSeenMsgId(BufferId, MsgId)));
   connect(bufferSyncer(), SIGNAL(bufferRemoved(BufferId)), this, SLOT(bufferRemoved(BufferId)));
   connect(bufferSyncer(), SIGNAL(bufferRenamed(BufferId, QString)), this, SLOT(bufferRenamed(BufferId, QString)));
   signalProxy()->synchronize(bufferSyncer());
@@ -456,15 +450,6 @@ void Client::receiveBacklog(BufferId bufferId, const QVariantList &msgs) {
   }
   messageProcessor()->process(msglist);
   //qDebug() << "processed" << msgs.count() << "backlog lines in" << start.msecsTo(QTime::currentTime());
-}
-
-void Client::updateLastSeenMsg(BufferId id, const MsgId &msgId) {
-  Buffer *b = buffer(id);
-  if(!b) {
-    qWarning() << "Client::updateLastSeen(): Unknown buffer" << id;
-    return;
-  }
-  b->setLastSeenMsg(msgId);
 }
 
 void Client::setBufferLastSeenMsg(BufferId id, const MsgId &msgId) {

@@ -23,7 +23,6 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QPersistentModelIndex>
 
-#include "buffer.h"
 #include "chatitem.h"
 #include "chatline.h"
 #include "chatlinemodelitem.h"
@@ -31,6 +30,7 @@
 #include "client.h"
 #include "clientbacklogmanager.h"
 #include "columnhandleitem.h"
+#include "messagefilter.h"
 #include "qtui.h"
 #include "qtuisettings.h"
 
@@ -38,14 +38,21 @@ const qreal minContentsWidth = 200;
 
 ChatScene::ChatScene(QAbstractItemModel *model, const QString &idString, QObject *parent)
   : QGraphicsScene(parent),
-  _idString(idString),
-  _model(model)
+    _idString(idString),
+    _width(0),
+    _height(0),
+    _model(model),
+    _singleBufferScene(false),
+    _selectingItem(0),
+    _lastItem(0),
+    _selectionStart(-1),
+    _isSelecting(false),
+    _fetchingBacklog(false)
 {
-  _width = 0;
-  _selectingItem = 0;
-  _isSelecting = false;
-  _selectionStart = -1;
-  _fetchingBacklog = false;
+  MessageFilter *filter = qobject_cast<MessageFilter*>(model);
+  if(filter) {
+    _singleBufferScene = filter->isSingleBufferFilter();
+  }
 
   connect(this, SIGNAL(sceneRectChanged(const QRectF &)), this, SLOT(rectChanged(const QRectF &)));
 

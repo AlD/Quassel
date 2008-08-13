@@ -29,13 +29,9 @@ BufferWidget::BufferWidget(QWidget *parent) : AbstractBufferContainer(parent) {
   ui.setupUi(this);
 }
 
-BufferWidget::~BufferWidget() {
-
-}
-
 AbstractChatView *BufferWidget::createChatView(BufferId id) {
   ChatView *chatView;
-  chatView = new ChatView(Client::buffer(id), this);
+  chatView = new ChatView(id, this);
   _chatViews[id] = chatView;
   ui.stackedWidget->addWidget(chatView);
   chatView->setFocusProxy(this);
