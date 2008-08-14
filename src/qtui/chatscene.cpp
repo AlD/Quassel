@@ -44,7 +44,6 @@ ChatScene::ChatScene(QAbstractItemModel *model, const QString &idString, QObject
     _model(model),
     _singleBufferScene(false),
     _selectingItem(0),
-    _lastItem(0),
     _selectionStart(-1),
     _isSelecting(false),
     _fetchingBacklog(false)
@@ -113,6 +112,15 @@ void ChatScene::rowsInserted(const QModelIndex &index, int start, int end) {
     _lines[i]->setRow(i);
   }
 
+  // update selection
+  if(_selectionStart >= 0) {
+    int offset = end - start + 1;
+    if(_selectionStart >= start) _selectionStart += offset;
+    if(_selectionEnd >= start) _selectionEnd += offset;
+    if(_firstSelectionRow >= start) _firstSelectionRow += offset;
+    if(_lastSelectionRow >= start) _lastSelectionRow += offset;
+  }
+
   if(h > 0) {
     _height += h;
     for(int i = end+1; i < _lines.count(); i++) {
@@ -179,7 +187,7 @@ void ChatScene::setSelectingItem(ChatItem *item) {
 }
 
 void ChatScene::startGlobalSelection(ChatItem *item, const QPointF &itemPos) {
-  _selectionStart = _selectionEnd = item->row();
+  _selectionStart = _selectionEnd = _lastSelectionRow = _firstSelectionRow = item->row();
   _selectionStartCol = _selectionMinCol = item->column();
   _isSelecting = true;
   _lines[_selectionStart]->setSelected(true, (ChatLineModel::ColumnType)_selectionMinCol);
@@ -205,27 +213,30 @@ void ChatScene::updateSelection(const QPointF &pos) {
       _lines[l]->setSelected(true, minColumn);
     }
   }
-
-  if(curRow > _selectionEnd && curRow > _selectionStart) {  // select further towards bottom
-    for(int l = _selectionEnd + 1; l <= curRow; l++) {
+  int newstart = qMin(curRow, _firstSelectionRow);
+  int newend = qMax(curRow, _firstSelectionRow);
+  if(newstart < _selectionStart) {
+    for(int l = newstart; l < _selectionStart; l++)
       _lines[l]->setSelected(true, minColumn);
-    }
-  } else if(curRow > _selectionEnd && curRow <= _selectionStart) { // deselect towards bottom
-    for(int l = _selectionEnd; l < curRow; l++) {
-      _lines[l]->setSelected(false);
-    }
-  } else if(curRow < _selectionEnd && curRow >= _selectionStart) {
-    for(int l = _selectionEnd; l > curRow; l--) {
-      _lines[l]->setSelected(false);
-    }
-  } else if(curRow < _selectionEnd && curRow < _selectionStart) {
-    for(int l = _selectionEnd - 1; l >= curRow; l--) {
-      _lines[l]->setSelected(true, minColumn);
-    }
   }
-  _selectionEnd = curRow;
+  if(newstart > _selectionStart) {
+    for(int l = _selectionStart; l < newstart; l++)
+      _lines[l]->setSelected(false);
+  }
+  if(newend > _selectionEnd) {
+    for(int l = _selectionEnd+1; l <= newend; l++)
+      _lines[l]->setSelected(true, minColumn);
+  }
+  if(newend < _selectionEnd) {
+    for(int l = newend+1; l <= _selectionEnd; l++)
+      _lines[l]->setSelected(false);
+  }
 
-  if(curRow == _selectionStart && minColumn == ChatLineModel::ContentsColumn) {
+  _selectionStart = newstart;
+  _selectionEnd = newend;
+  _lastSelectionRow = curRow;
+
+  if(newstart == newend && minColumn == ChatLineModel::ContentsColumn) {
     _lines[curRow]->setSelected(false);
     _isSelecting = false;
     _selectingItem->continueSelecting(_selectingItem->mapFromScene(pos));
@@ -233,7 +244,7 @@ void ChatScene::updateSelection(const QPointF &pos) {
 }
 
 void ChatScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-  if(_isSelecting && event->buttons() & Qt::LeftButton) {
+  if(_isSelecting && event->buttons() == Qt::LeftButton) {
     updateSelection(event->scenePos());
     event->accept();
   } else {
@@ -242,7 +253,7 @@ void ChatScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
 }
 
 void ChatScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-  if(event->buttons() & Qt::LeftButton && _selectionStart >= 0) {
+  if(event->buttons() == Qt::LeftButton && _selectionStart >= 0) {
     for(int l = qMin(_selectionStart, _selectionEnd); l <= qMax(_selectionStart, _selectionEnd); l++) {
       _lines[l]->setSelected(false);
     }
@@ -254,7 +265,7 @@ void ChatScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 }
 
 void ChatScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-  if(_isSelecting) {
+  if(_isSelecting && !event->buttons() & Qt::LeftButton) {
 #   ifdef Q_WS_X11
       QApplication::clipboard()->setText(selectionToString(), QClipboard::Selection);
 #   endif

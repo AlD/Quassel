@@ -92,11 +92,11 @@ class ChatScene : public QGraphicsScene {
     ColumnHandleItem *firstColHandle, *secondColHandle;
     qreal firstColHandlePos, secondColHandlePos;
 
-    ChatItem *_selectingItem, *_lastItem;
-    QSet<ChatLine *> _selectedItems;
+    ChatItem *_selectingItem;
     int _selectionStartCol, _selectionMinCol;
     int _selectionStart;
     int _selectionEnd;
+    int _firstSelectionRow, _lastSelectionRow;
     bool _isSelecting;
 
     bool _fetchingBacklog;
