@@ -14,6 +14,7 @@ set(SOURCES
     chatlinemodel.cpp
     chatlinemodelitem.cpp
     chatmonitorfilter.cpp
+    chatmonitorview.cpp
     chatscene.cpp
     chatview.cpp
     columnhandleitem.cpp
@@ -26,10 +27,12 @@ set(SOURCES
     mainwin.cpp
     msgprocessorstatuswidget.cpp
     nicklistwidget.cpp
+    qtuiapplication.cpp
     qtui.cpp
     qtuimessageprocessor.cpp
     qtuisettings.cpp
     qtuistyle.cpp
+    sessionsettings.cpp
     settingsdlg.cpp
     settingspagedlg.cpp
     titlesetter.cpp
@@ -43,6 +46,7 @@ set(MOC_HDRS
     channellistdlg.h
     chatlinemodel.h
     chatmonitorfilter.h
+    chatmonitorview.h
     chatscene.h
     chatview.h
     columnhandleitem.h
@@ -56,6 +60,7 @@ set(MOC_HDRS
     msgprocessorstatuswidget.h
     nicklistwidget.h
     qtui.h
+    qtuiapplication.h
     qtuimessageprocessor.h
     settingsdlg.h
     settingspagedlg.h

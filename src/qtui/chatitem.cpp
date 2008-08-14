@@ -60,11 +60,11 @@ QVariant ChatItem::data(int role) const {
   return model()->data(index, role);
 }
 
-qreal ChatItem::setWidth(qreal w) {
+qreal ChatItem::setGeometry(qreal w, qreal h) {
   if(w == _boundingRect.width()) return _boundingRect.height();
   prepareGeometryChange();
   _boundingRect.setWidth(w);
-  qreal h = computeHeight();
+  if(h < 0) h = computeHeight();
   _boundingRect.setHeight(h);
   if(haveLayout()) updateLayout();
   return h;
@@ -204,7 +204,7 @@ void ChatItem::continueSelecting(const QPointF &pos) {
 }
 
 void ChatItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-  if(event->buttons() & Qt::LeftButton) {
+  if(event->buttons() == Qt::LeftButton) {
     if(_selectionMode == NoSelection) {
       chatScene()->setSelectingItem(this);  // removes earlier selection if exists
       _selectionStart = _selectionEnd = posToCursor(event->pos());
@@ -221,20 +221,25 @@ void ChatItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 }
 
 void ChatItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-  if(contains(event->pos())) {
-    qint16 end = posToCursor(event->pos());
-    if(end != _selectionEnd) {
-      _selectionEnd = end;
-      update();
+  if(event->buttons() == Qt::LeftButton) {
+    if(contains(event->pos())) {
+      qint16 end = posToCursor(event->pos());
+      if(end != _selectionEnd) {
+        _selectionEnd = end;
+        update();
+      }
+    } else {
+      setFullSelection();
+      chatScene()->startGlobalSelection(this, event->pos());
     }
+    event->accept();
   } else {
-    setFullSelection();
-    chatScene()->startGlobalSelection(this, event->pos());
+    event->ignore();
   }
 }
 
 void ChatItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-  if(_selectionMode != NoSelection) {
+  if(_selectionMode != NoSelection && !event->buttons() & Qt::LeftButton) {
     _selectionEnd = posToCursor(event->pos());
     QString selection
         = data(MessageModel::DisplayRole).toString().mid(qMin(_selectionStart, _selectionEnd), qAbs(_selectionStart - _selectionEnd));
@@ -266,17 +271,17 @@ void ChatItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
 
 void ChatItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
   //qDebug() << (void*)this << "entering";
-
+  event->ignore();
 }
 
 void ChatItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
   //qDebug() << (void*)this << "leaving";
-
+  event->ignore();
 }
 
 void ChatItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event) {
   //qDebug() << (void*)this << event->pos();
-
+  event->ignore();
 }
 
 

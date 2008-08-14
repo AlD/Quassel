@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-08 by the Quassel Project                          *
+ *   Copyright (C) 2005-08 by the Quassel IRC Team                         *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,42 +18,42 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef QTUI_H
-#define QTUI_H
+#include <QStringList>
 
-#include "qtuistyle.h"
-#include "quasselui.h"
+#include "qtuiapplication.h"
+#include "sessionsettings.h"
+#include "client.h"
 
-class MainWin;
-class MessageModel;
-class QtUiMessageProcessor;
+QtUiApplication::QtUiApplication(int &argc, char **argv) : QApplication(argc, argv) {
 
-//! This class encapsulates Quassel's Qt-based GUI.
-/** This is basically a wrapper around MainWin, which is necessary because we cannot derive MainWin
- *  from both QMainWindow and AbstractUi (because of multiple inheritance of QObject).
- */
-class QtUi : public AbstractUi {
-  Q_OBJECT
+}
 
-public:
-  QtUi();
-  ~QtUi();
+void QtUiApplication::saveState(QSessionManager & manager) {
+  //qDebug() << QString("saving session state to id %1").arg(manager.sessionId());
+  AccountId activeCore = Client::currentCoreAccount();
+  SessionSettings s(manager.sessionId());
+  s.setSessionAge(0);
+  emit saveStateToSession(manager.sessionId());
+  emit saveStateToSessionSettings(s);
+}
 
-  MessageModel *createMessageModel(QObject *parent);
-  AbstractMessageProcessor *createMessageProcessor(QObject *parent);
+QtUiApplication::~ QtUiApplication() {
+}
 
-  inline static QtUiStyle *style() { return _style; }
+void QtUiApplication::resumeSessionIfPossible() {
+  // load all sessions
+  if(isSessionRestored()) {
+    qDebug() << QString("restoring from session %1").arg(sessionId());
+    SessionSettings s(sessionId());
+    s.sessionAging();
+    s.setSessionAge(0);
+    emit resumeFromSession(sessionId());
+    emit resumeFromSessionSettings(s);
+    s.cleanup();
+  } else {
+    SessionSettings s(QString("1"));
+    s.sessionAging();
+    s.cleanup();
+  }
+}
 
-public slots:
-  void init();
-
-protected slots:
-  void connectedToCore();
-  void disconnectedFromCore();
-
-private:
-  MainWin *mainWin;
-  static QtUiStyle *_style;
-};
-
-#endif

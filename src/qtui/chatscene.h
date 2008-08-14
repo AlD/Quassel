@@ -25,8 +25,9 @@
 #include <QGraphicsScene>
 #include <QSet>
 
+#include "types.h"
+
 class AbstractUiMsg;
-class Buffer;
 class ChatItem;
 class ChatLine;
 class ColumnHandleItem;
@@ -40,9 +41,15 @@ class ChatScene : public QGraphicsScene {
     ChatScene(QAbstractItemModel *model, const QString &idString, QObject *parent);
     virtual ~ChatScene();
 
-    Buffer *buffer() const;
     inline QAbstractItemModel *model() const { return _model; }
     inline QString idString() const { return _idString; }
+
+    inline bool isFetchingBacklog() const;
+    inline bool isBacklogFetchingEnabled() const;
+    inline BufferId bufferForBacklogFetching() const;
+    int sectionByScenePos(int x);
+    inline int sectionByScenePos(const QPoint &pos) { return sectionByScenePos(pos.x()); }
+    inline bool isSingleBufferScene() const { return _singleBufferScene; }
 
   public slots:
     void setWidth(qreal);
@@ -51,6 +58,9 @@ class ChatScene : public QGraphicsScene {
     void setSelectingItem(ChatItem *item);
     ChatItem *selectingItem() const { return _selectingItem; }
     void startGlobalSelection(ChatItem *item, const QPointF &itemPos);
+
+    void setIsFetchingBacklog(bool);
+    inline void setBufferForBacklogFetching(BufferId buffer);
 
   signals:
     void heightChanged(qreal height);
@@ -71,21 +81,44 @@ class ChatScene : public QGraphicsScene {
   private:
     void updateSelection(const QPointF &pos);
     QString selectionToString() const;
+    void requestBacklogIfNeeded();
 
     QString _idString;
     qreal _width, _height;
     QAbstractItemModel *_model;
     QList<ChatLine *> _lines;
+    bool _singleBufferScene;
 
     ColumnHandleItem *firstColHandle, *secondColHandle;
     qreal firstColHandlePos, secondColHandlePos;
 
-    ChatItem *_selectingItem, *_lastItem;
-    QSet<ChatLine *> _selectedItems;
+    ChatItem *_selectingItem;
     int _selectionStartCol, _selectionMinCol;
     int _selectionStart;
     int _selectionEnd;
+    int _firstSelectionRow, _lastSelectionRow;
     bool _isSelecting;
+
+    bool _fetchingBacklog;
+    BufferId _backlogFetchingBuffer;
+    MsgId _lastBacklogOffset;
+    int _lastBacklogSize;
 };
+
+bool ChatScene::isFetchingBacklog() const {
+  return _fetchingBacklog;
+}
+
+bool ChatScene::isBacklogFetchingEnabled() const {
+  return _backlogFetchingBuffer.isValid();
+}
+
+BufferId ChatScene::bufferForBacklogFetching() const {
+  return _backlogFetchingBuffer;
+}
+
+void ChatScene::setBufferForBacklogFetching(BufferId buf) {
+  _backlogFetchingBuffer = buf;
+}
 
 #endif

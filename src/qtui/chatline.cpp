@@ -23,9 +23,14 @@
 #include <QtGui>
 
 #include "bufferinfo.h"
+#include "buffersyncer.h"
+#include "client.h"
 #include "chatitem.h"
 #include "chatline.h"
+#include "messagemodel.h"
+#include "networkmodel.h"
 #include "qtui.h"
+#include "qtuisettings.h"
 
 ChatLine::ChatLine(int row, QAbstractItemModel *model, QGraphicsItem *parent)
   : QGraphicsItem(parent),
@@ -66,9 +71,9 @@ qreal ChatLine::setGeometry(qreal width, qreal firstHandlePos, qreal secondHandl
   qreal firstsep = QtUi::style()->firstColumnSeparator()/2;
   qreal secondsep = QtUi::style()->secondColumnSeparator()/2;
 
-  _timestampItem.setWidth(firstHandlePos - firstsep);
-  _senderItem.setWidth(secondHandlePos - firstHandlePos - (firstsep+secondsep));
-  _height = _contentsItem.setWidth(width - secondHandlePos - secondsep);
+  _height = _contentsItem.setGeometry(width - secondHandlePos - secondsep);
+  _timestampItem.setGeometry(firstHandlePos - firstsep, _height);
+  _senderItem.setGeometry(secondHandlePos - firstHandlePos - (firstsep+secondsep), _height);
 
   _senderItem.setPos(firstHandlePos + firstsep, 0);
   _contentsItem.setPos(secondHandlePos + secondsep, 0);
@@ -113,5 +118,24 @@ void ChatLine::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     qreal left = item((ChatLineModel::ColumnType)(_selection & 0x3f)).x();
     QRectF selectRect(left, 0, width() - left, height());
     painter->fillRect(selectRect, QApplication::palette().brush(QPalette::Highlight));
+  }
+
+  // new line marker
+  const QAbstractItemModel *model_ = model();
+  if(model_ && row() > 0) {
+    QModelIndex prevRowIdx = model_->index(row() - 1, 0);
+    MsgId msgId = model_->data(prevRowIdx, MessageModel::MsgIdRole).value<MsgId>();
+    Message::Flags flags = (Message::Flags)model_->data(model_->index(row(), 0), MessageModel::FlagsRole).toInt();
+    // don't show the marker if we wrote that new line
+    if(!(flags & Message::Self)) {
+      BufferId bufferId = model_->data(prevRowIdx, MessageModel::BufferIdRole).value<BufferId>();
+      if(msgId == Client::networkModel()->lastSeenMsgId(bufferId) && chatScene()->isSingleBufferScene()) {
+	QtUiSettings s("QtUiStyle/Colors");
+	QLinearGradient gradient(0, 0, 0, height());
+	gradient.setColorAt(0, s.value("newMsgMarkerFG", QColor(Qt::red)).value<QColor>());
+	gradient.setColorAt(0.1, Qt::transparent);
+	painter->fillRect(boundingRect(), gradient);
+      }
+    }
   }
 }

@@ -18,45 +18,28 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef CHATLINE_H_
-#define CHATLINE_H_
+#ifndef CHATMONITORVIEW_H
+#define CHATMONITORVIEW_H
 
-#include <QGraphicsItem>
+#include "chatview.h"
 
-#include "chatlinemodel.h"
-#include "chatitem.h"
+class ChatMonitorFilter;
 
-class ChatLine : public QGraphicsItem {
+class ChatMonitorView : public ChatView {
+  Q_OBJECT
 
-  public:
-  ChatLine(int row, QAbstractItemModel *model, QGraphicsItem *parent = 0);
+public:
+  ChatMonitorView(ChatMonitorFilter *filter, QWidget *parent);
 
-    virtual QRectF boundingRect () const;
+protected:
+  virtual void contextMenuEvent(QContextMenuEvent *event);
+  virtual void mouseDoubleClickEvent(QMouseEvent *event);
 
-  inline int row() { return _row; }
-  inline void setRow(int row) { _row = row; }
-  inline const QAbstractItemModel *model() const { return chatScene() ? chatScene()->model() : 0; }
-  inline ChatScene *chatScene() const { return qobject_cast<ChatScene *>(scene()); }
-    inline qreal width() const { return _width; }
-    inline qreal height() const { return _height; }
-    ChatItem &item(ChatLineModel::ColumnType);
-
-    virtual void paint (QPainter * painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-
-    // returns height
-    qreal setGeometry(qreal width, qreal firstColPos, qreal secondColPos);
-    void setSelected(bool selected, ChatLineModel::ColumnType minColumn = ChatLineModel::ContentsColumn);
-    void setHighlighted(bool highlighted);
-
-  protected:
-
-  private:
-  int _row;
-    ChatItem _timestampItem, _senderItem, _contentsItem;
-    qreal _width, _height;
-
-    enum { Selected = 0x40, Highlighted = 0x80 };
-    quint8 _selection;  // save space, so we put both the col and the flags into one byte
+private slots:
+  void showFieldsChanged(bool checked);
+    
+private:
+  ChatMonitorFilter *_filter;
 };
 
-#endif
+#endif //CHATMONITORVIEW_H

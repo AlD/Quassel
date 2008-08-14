@@ -25,21 +25,16 @@
 
 #include "qtui.h"
 #include "titlesetter.h"
+#include "sessionsettings.h" 
 
 #include <QSystemTrayIcon>
 #include <QTimer>
 
-class ServerListDlg;
-class ChannelListDlg;
-class CoreConnectDlg;
 class Buffer;
 class BufferViewConfig;
 class MsgProcessorStatusWidget;
-class SettingsDlg;
-class QtUi;
 class Message;
 class NickListWidget;
-class DebugConsole;
 
 #ifdef HAVE_DBUS
 #  include "desktopnotifications.h"
@@ -50,7 +45,7 @@ class MainWin : public QMainWindow {
   Q_OBJECT
 
   public:
-    MainWin(QtUi *gui, QWidget *parent = 0);
+    MainWin(QWidget *parent = 0);
     virtual ~MainWin();
 
     void init();
@@ -63,9 +58,10 @@ class MainWin : public QMainWindow {
 #endif
 
     virtual bool event(QEvent *event);
-
   public slots:
     void setTrayIconActivity(bool active = false);
+    void saveStateToSession(const QString &sessionId);
+    void saveStateToSessionSettings(SessionSettings &s);
 
   protected:
     void closeEvent(QCloseEvent *event);
@@ -91,18 +87,15 @@ class MainWin : public QMainWindow {
     void on_actionManageViews_triggered();
     void on_actionLockDockPositions_toggled(bool lock);
     void showAboutDlg();
-    void showDebugConsole();
     void on_actionDebugNetworkModel_triggered(bool);
 
     void showCoreConnectionDlg(bool autoConnect = false);
-    void coreConnectionDlgFinished(int result);
 
     void clientNetworkCreated(NetworkId);
     void clientNetworkRemoved(NetworkId);
     void clientNetworkUpdated();
     void connectOrDisconnectFromNet();
 
-    void changeTopic(const QString &topic);
     void makeTrayIconBlink();
     void saveStatusBarStatus(bool enabled);
 
@@ -121,7 +114,6 @@ class MainWin : public QMainWindow {
 
   private:
     Ui::MainWin ui;
-    QtUi *gui;
 
     QMenu *systrayMenu;
     QLabel *coreLagLabel;
@@ -139,10 +131,7 @@ class MainWin : public QMainWindow {
     void setupStatusBar();
     void setupSystray();
 
-    void setupSettingsDlg();
-
     void toggleVisibility();
-
     void enableMenus();
 
     QSystemTrayIcon *systray;
@@ -151,11 +140,6 @@ class MainWin : public QMainWindow {
     QIcon offlineTrayIcon;
     bool trayIconActive;
     QTimer *timer;
-
-    CoreConnectDlg *coreConnectDlg;
-    ChannelListDlg *channelListDlg;
-    SettingsDlg *settingsDlg;
-    DebugConsole *debugConsole;
 
     BufferId currentBuffer;
     QString currentProfile;
