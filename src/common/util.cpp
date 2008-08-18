@@ -199,7 +199,7 @@ QString secondsToString(int timeInSeconds) {
     for(int i=0; i < timeUnit.size(); i++) {
       int n = timeInSeconds / timeUnit[i].first;
       if(n > 0) {
-        returnString += QString("%1 %2 ").arg(QString::number(n), timeUnit[i].second);
+        returnString += QString("%1 %2").arg(QString::number(n), timeUnit[i].second);
       }
       timeInSeconds = timeInSeconds % timeUnit[i].first;
     }

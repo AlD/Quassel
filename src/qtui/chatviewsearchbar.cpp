@@ -18,40 +18,31 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "messagefilter.h"
+#include "chatviewsearchbar.h"
 
-MessageFilter::MessageFilter(QAbstractItemModel *source, QObject *parent)
-  : QSortFilterProxyModel(parent)
+#include <QAction>
+
+ChatViewSearchBar::ChatViewSearchBar(QWidget *parent)
+  : QWidget(parent)
 {
-  setSourceModel(source);
+  ui.setupUi(this);
+  layout()->setContentsMargins(0, 0, 0, 0);
+
+  ui.searchUpButton->setEnabled(false);
+  ui.searchDownButton->setEnabled(false);
+
+  _toggleViewAction = new QAction(tr("Show search bar"), this);
+  _toggleViewAction->setCheckable(true);
+  _toggleViewAction->setChecked(false);
+  connect(_toggleViewAction, SIGNAL(toggled(bool)),
+	  this, SLOT(setVisible(bool)));
+  setVisible(false);
+
+  connect(ui.hideButton, SIGNAL(clicked()),
+	  _toggleViewAction, SLOT(toggle()));
 }
 
-MessageFilter::MessageFilter(MessageModel *source, const QList<BufferId> &buffers, QObject *parent)
-  : QSortFilterProxyModel(parent),
-    _validBuffers(buffers.toSet())
-{
-  setSourceModel(source);
-}
-
-QString MessageFilter::idString() const {
-  if(_validBuffers.isEmpty())
-    return "*";
-
-  QList<BufferId> bufferIds = _validBuffers.toList();;
-  qSort(bufferIds);
-  
-  QStringList bufferIdStrings;
-  foreach(BufferId id, bufferIds)
-    bufferIdStrings << QString::number(id.toInt());
-
-  return bufferIdStrings.join("|");
-}
-
-bool MessageFilter::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const {
-  Q_UNUSED(sourceParent);
-  if(_validBuffers.isEmpty())
-    return true;
-
-  BufferId id = sourceModel()->data(sourceModel()->index(sourceRow, 0), MessageModel::BufferIdRole).value<BufferId>();
-  return _validBuffers.contains(id);
+void ChatViewSearchBar::setVisible(bool visible) {
+  QWidget::setVisible(visible);
+  ui.searchEditLine->clear();
 }

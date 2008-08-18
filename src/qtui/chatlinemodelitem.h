@@ -31,7 +31,7 @@ public:
   ChatLineModelItem(const Message &);
 
   virtual QVariant data(int column, int role) const;
-  virtual inline bool setData(int column, const QVariant &value, int role) { return false; }
+  virtual inline bool setData(int column, const QVariant &value, int role) { Q_UNUSED(column); Q_UNUSED(value); Q_UNUSED(role); return false; }
 
 private:
   void computeWrapList();

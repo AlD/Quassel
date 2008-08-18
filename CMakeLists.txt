@@ -38,6 +38,10 @@ if(STATIC)
   set(CMAKE_BUILD_TYPE Release)
 endif(STATIC)
 
+# RPATH needs to be set correctly
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH 1) 
+set(CMAKE_BUILD_WITH_INSTALL_RPATH 1)
+
 # Enable various flags on gcc
 if(CMAKE_COMPILER_IS_GNUCXX)
   include(CheckCXXCompilerFlag)
@@ -61,6 +65,7 @@ if(APPLE AND DEPLOY)
   set(CMAKE_OSX_ARCHITECTURES "i386;ppc")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mmacosx-version-min=10.4")
   set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX10.4u.sdk/")
+  add_definitions(-DMAC_10_4_SDK)
 endif(APPLE AND DEPLOY)
 
 # Enable mostly b0rked stuff (new ChatView), do not enable this unless you know what you do...

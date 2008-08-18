@@ -56,7 +56,7 @@ CoreSession::CoreSession(UserId uid, bool restoreState, QObject *parent)
 
   SignalProxy *p = signalProxy();
   connect(p, SIGNAL(peerRemoved(QIODevice *)), this, SLOT(removeClient(QIODevice *)));
-  
+
   //p->attachSlot(SIGNAL(disconnectFromNetwork(NetworkId)), this, SLOT(disconnectFromNetwork(NetworkId))); // FIXME
   p->attachSlot(SIGNAL(sendInput(BufferInfo, QString)), this, SLOT(msgFromClient(BufferInfo, QString)));
   p->attachSignal(this, SIGNAL(displayMsg(Message)));
@@ -66,13 +66,11 @@ CoreSession::CoreSession(UserId uid, bool restoreState, QObject *parent)
   p->attachSignal(this, SIGNAL(identityCreated(const Identity &)));
   p->attachSignal(this, SIGNAL(identityRemoved(IdentityId)));
   p->attachSlot(SIGNAL(createIdentity(const Identity &)), this, SLOT(createIdentity(const Identity &)));
-  p->attachSlot(SIGNAL(updateIdentity(const Identity &)), this, SLOT(updateIdentity(const Identity &)));
   p->attachSlot(SIGNAL(removeIdentity(IdentityId)), this, SLOT(removeIdentity(IdentityId)));
 
   p->attachSignal(this, SIGNAL(networkCreated(NetworkId)));
   p->attachSignal(this, SIGNAL(networkRemoved(NetworkId)));
   p->attachSlot(SIGNAL(createNetwork(const NetworkInfo &)), this, SLOT(createNetwork(const NetworkInfo &)));
-  p->attachSlot(SIGNAL(updateNetwork(const NetworkInfo &)), this, SLOT(updateNetwork(const NetworkInfo &)));
   p->attachSlot(SIGNAL(removeNetwork(NetworkId)), this, SLOT(removeNetwork(NetworkId)));
 
   loadSettings();
@@ -82,7 +80,7 @@ CoreSession::CoreSession(UserId uid, bool restoreState, QObject *parent)
   QHash<BufferId, MsgId> lastSeenHash = Core::bufferLastSeenMsgIds(user());
   foreach(BufferId id, lastSeenHash.keys())
     _bufferSyncer->requestSetLastSeenMsg(id, lastSeenHash[id]);
-  
+
   connect(_bufferSyncer, SIGNAL(lastSeenMsgSet(BufferId, MsgId)), this, SLOT(storeBufferLastSeenMsg(BufferId, MsgId)));
   connect(_bufferSyncer, SIGNAL(removeBufferRequested(BufferId)), this, SLOT(removeBufferRequested(BufferId)));
   connect(this, SIGNAL(bufferRemoved(BufferId)), _bufferSyncer, SLOT(removeBuffer(BufferId)));
@@ -92,16 +90,16 @@ CoreSession::CoreSession(UserId uid, bool restoreState, QObject *parent)
 
   // init alias manager
   p->synchronize(&aliasManager());
-  
+
   // init BacklogManager
   p->synchronize(_backlogManager);
 
   // init IrcListHelper
   p->synchronize(ircListHelper());
-  
+
   // init CoreInfo
   p->synchronize(&_coreInfo);
-  
+
   // Restore session state
   if(restoreState) restoreSessionState();
 
@@ -153,6 +151,7 @@ void CoreSession::loadSettings() {
       delete i;
       continue;
     }
+    connect(i, SIGNAL(updated(const QVariantMap &)), this, SLOT(identityUpdated(const QVariantMap &)));
     _identities[i->id()] = i;
     signalProxy()->synchronize(i);
   }
@@ -222,7 +221,7 @@ void CoreSession::attachNetworkConnection(NetworkConnection *conn) {
 void CoreSession::disconnectFromNetwork(NetworkId id) {
   if(!_connections.contains(id))
     return;
-  
+
   //_connections[id]->disconnectFromIrc();
   _connections[id]->userInputHandler()->handleQuit(BufferInfo(), QString());
 }
@@ -382,18 +381,8 @@ void CoreSession::createIdentity(const Identity &id) {
   signalProxy()->synchronize(newId);
   CoreUserSettings s(user());
   s.storeIdentity(*newId);
+  connect(newId, SIGNAL(updated(const QVariantMap &)), this, SLOT(identityUpdated(const QVariantMap &)));
   emit identityCreated(*newId);
-}
-
-void CoreSession::updateIdentity(const Identity &id) {
-  if(!_identities.contains(id.id())) {
-    quWarning() << "Update request for unknown identity received!";
-    return;
-  }
-  _identities[id.id()]->update(id);
-
-  CoreUserSettings s(user());
-  s.storeIdentity(id);
 }
 
 void CoreSession::removeIdentity(IdentityId id) {
@@ -404,6 +393,16 @@ void CoreSession::removeIdentity(IdentityId id) {
     s.removeIdentity(id);
     i->deleteLater();
   }
+}
+
+void CoreSession::identityUpdated(const QVariantMap &data) {
+  IdentityId id = data.value("identityId", 0).value<IdentityId>();
+  if(!id.isValid() || !_identities.contains(id)) {
+    quWarning() << "Update request for unknown identity received!";
+    return;
+  }
+  CoreUserSettings s(user());
+  s.storeIdentity(*_identities.value(id));
 }
 
 /*** Network Handling ***/
@@ -432,18 +431,8 @@ void CoreSession::createNetwork(const NetworkInfo &info_) {
     emit networkCreated(id);
   } else {
     quWarning() << qPrintable(tr("CoreSession::createNetwork(): Trying to create a network that already exists, updating instead!"));
-    updateNetwork(info);
+    _networks[info.networkId]->requestSetNetworkInfo(info);
   }
-}
-
-// FIXME: move to CoreNetwork
-void CoreSession::updateNetwork(const NetworkInfo &info) {
-  if(!_networks.contains(info.networkId)) {
-    quWarning() << "Update request for unknown network received!";
-    return;
-  }
-  _networks[info.networkId]->setNetworkInfo(info);
-  Core::updateNetwork(user(), info);
 }
 
 void CoreSession::removeNetwork(NetworkId id) {
@@ -484,12 +473,12 @@ void CoreSession::removeBufferRequested(BufferId bufferId) {
     quWarning() << "CoreSession::removeBufferRequested(): invalid BufferId:" << bufferId << "for User:" << user();
     return;
   }
-  
+
   if(bufferInfo.type() == BufferInfo::StatusBuffer) {
     quWarning() << "CoreSession::removeBufferRequested(): Status Buffers cannot be removed!";
     return;
   }
-  
+
   if(bufferInfo.type() == BufferInfo::ChannelBuffer) {
     CoreNetwork *net = network(bufferInfo.networkId());
     if(!net) {
