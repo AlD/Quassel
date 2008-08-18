@@ -36,7 +36,7 @@ ChatItem::ChatItem(int col, QAbstractItemModel *model, QGraphicsItem *parent)
     _fontMetrics(0),
     _col(col),
     _lines(0),
-    _layout(0),
+    _layoutData(0),
     _selectionMode(NoSelection),
     _selectionStart(-1)
 {
@@ -48,7 +48,7 @@ ChatItem::ChatItem(int col, QAbstractItemModel *model, QGraphicsItem *parent)
 }
 
 ChatItem::~ChatItem() {
-  delete _layout;
+  delete _layoutData;
 }
 
 QVariant ChatItem::data(int role) const {
@@ -94,25 +94,31 @@ QTextLayout *ChatItem::createLayout(QTextOption::WrapMode wrapMode, Qt::Alignmen
   return layout;
 }
 
+void ChatItem::setLayout(QTextLayout *layout) {
+  if(!_layoutData)
+    _layoutData = new LayoutData;
+  _layoutData->layout = layout;
+}
+
 void ChatItem::updateLayout() {
   switch(data(ChatLineModel::ColumnTypeRole).toUInt()) {
     case ChatLineModel::TimestampColumn:
-      if(!haveLayout()) _layout = createLayout(QTextOption::WrapAnywhere, Qt::AlignLeft);
+      if(!haveLayout()) setLayout(createLayout(QTextOption::WrapAnywhere, Qt::AlignLeft));
       // fallthrough
     case ChatLineModel::SenderColumn:
-      if(!haveLayout()) _layout = createLayout(QTextOption::WrapAnywhere, Qt::AlignRight);
-      _layout->beginLayout();
+      if(!haveLayout()) setLayout(createLayout(QTextOption::WrapAnywhere, Qt::AlignRight));
+      layout()->beginLayout();
       {
-        QTextLine line = _layout->createLine();
+        QTextLine line = layout()->createLine();
         if(line.isValid()) {
           line.setLineWidth(width());
           line.setPosition(QPointF(0,0));
         }
-        _layout->endLayout();
+        layout()->endLayout();
       }
       break;
     case ChatLineModel::ContentsColumn: {
-      if(!haveLayout()) _layout = createLayout(QTextOption::WrapAnywhere);
+      if(!haveLayout()) setLayout(createLayout(QTextOption::WrapAnywhere));
 
       // Now layout
       ChatLineModel::WrapList wrapList = data(ChatLineModel::WrapListRole).value<ChatLineModel::WrapList>();
@@ -120,26 +126,26 @@ void ChatItem::updateLayout() {
 
       qreal h = 0;
       WrapColumnFinder finder(this);
-      _layout->beginLayout();
+      layout()->beginLayout();
       forever {
-        QTextLine line = _layout->createLine();
+        QTextLine line = layout()->createLine();
         if(!line.isValid())
           break;
 
         int col = finder.nextWrapColumn();
-        line.setNumColumns(col >= 0 ? col - line.textStart() : _layout->text().length());
+        line.setNumColumns(col >= 0 ? col - line.textStart() : layout()->text().length());
         line.setPosition(QPointF(0, h));
         h += line.height() + fontMetrics()->leading();
       }
-      _layout->endLayout();
+      layout()->endLayout();
     }
     break;
   }
 }
 
-void ChatItem::clearLayout() {
-  delete _layout;
-  _layout = 0;
+void ChatItem::clearLayoutData() {
+  delete _layoutData;
+  _layoutData = 0;
 }
 
 // NOTE: This is not the most time-efficient implementation, but it saves space by not caching unnecessary data
@@ -167,15 +173,15 @@ void ChatItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     }
     formats.append(selectFmt);
   }
-  _layout->draw(painter, QPointF(0,0), formats, boundingRect());
+  layout()->draw(painter, QPointF(0,0), formats, boundingRect());
 }
 
 qint16 ChatItem::posToCursor(const QPointF &pos) {
   if(pos.y() > height()) return data(MessageModel::DisplayRole).toString().length();
   if(pos.y() < 0) return 0;
   if(!haveLayout()) updateLayout();
-  for(int l = _layout->lineCount() - 1; l >= 0; l--) {
-    QTextLine line = _layout->lineAt(l);
+  for(int l = layout()->lineCount() - 1; l >= 0; l--) {
+    QTextLine line = layout()->lineAt(l);
     if(pos.y() >= line.y()) {
       return line.xToCursor(pos.x(), QTextLine::CursorOnCharacter);
     }
@@ -203,12 +209,41 @@ void ChatItem::continueSelecting(const QPointF &pos) {
   update();
 }
 
+QList<QRectF> ChatItem::findWords(const QString &searchWord, Qt::CaseSensitivity caseSensitive) {
+  QList<QRectF> resultList;
+  const QAbstractItemModel *model_ = model();
+  if(!model_)
+    return resultList;
+
+  QString plainText = model_->data(model_->index(row(), column()), MessageModel::DisplayRole).toString();
+  QList<int> indexList;
+  int searchIdx = plainText.indexOf(searchWord, 0, caseSensitive);
+  while(searchIdx != -1) {
+    indexList << searchIdx;
+    searchIdx = plainText.indexOf(searchWord, searchIdx + 1, caseSensitive);
+  }
+
+  if(!haveLayout())
+    updateLayout();
+
+  foreach(int idx, indexList) {
+    QTextLine line = layout()->lineForTextPosition(idx);
+    qreal x = line.cursorToX(idx);
+    qreal width = line.cursorToX(idx + searchWord.count()) - x;
+    qreal height = fontMetrics()->lineSpacing();
+    qreal y = height * line.lineNumber();
+    resultList << QRectF(x, y, width, height);
+  }
+  return resultList;
+}
+
+
 void ChatItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
   if(event->buttons() == Qt::LeftButton) {
     if(_selectionMode == NoSelection) {
       chatScene()->setSelectingItem(this);  // removes earlier selection if exists
       _selectionStart = _selectionEnd = posToCursor(event->pos());
-      _selectionMode = PartialSelection;
+      //_selectionMode = PartialSelection;
     } else {
       chatScene()->setSelectingItem(0);
       _selectionMode = NoSelection;
@@ -226,6 +261,8 @@ void ChatItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
       qint16 end = posToCursor(event->pos());
       if(end != _selectionEnd) {
         _selectionEnd = end;
+        if(_selectionStart != _selectionEnd) _selectionMode = PartialSelection;
+        else _selectionMode = NoSelection;
         update();
       }
     } else {
@@ -243,7 +280,7 @@ void ChatItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     _selectionEnd = posToCursor(event->pos());
     QString selection
         = data(MessageModel::DisplayRole).toString().mid(qMin(_selectionStart, _selectionEnd), qAbs(_selectionStart - _selectionEnd));
-    QApplication::clipboard()->setText(selection, QClipboard::Clipboard);  // TODO configure where selections should go
+    chatScene()->putToClipboard(selection);
     event->accept();
   } else {
     event->ignore();

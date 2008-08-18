@@ -18,40 +18,35 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "messagefilter.h"
+#ifndef CHATVIEWSEARCHBAR_H
+#define CHATVIEWSEARCHBAR_H
 
-MessageFilter::MessageFilter(QAbstractItemModel *source, QObject *parent)
-  : QSortFilterProxyModel(parent)
-{
-  setSourceModel(source);
-}
+#include "ui_chatviewsearchbar.h"
 
-MessageFilter::MessageFilter(MessageModel *source, const QList<BufferId> &buffers, QObject *parent)
-  : QSortFilterProxyModel(parent),
-    _validBuffers(buffers.toSet())
-{
-  setSourceModel(source);
-}
+#include <QWidget>
 
-QString MessageFilter::idString() const {
-  if(_validBuffers.isEmpty())
-    return "*";
+class QAction;
 
-  QList<BufferId> bufferIds = _validBuffers.toList();;
-  qSort(bufferIds);
-  
-  QStringList bufferIdStrings;
-  foreach(BufferId id, bufferIds)
-    bufferIdStrings << QString::number(id.toInt());
+class ChatViewSearchBar : public QWidget {
+  Q_OBJECT
 
-  return bufferIdStrings.join("|");
-}
+public:
+  ChatViewSearchBar(QWidget *parent = 0);
 
-bool MessageFilter::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const {
-  Q_UNUSED(sourceParent);
-  if(_validBuffers.isEmpty())
-    return true;
+  inline QLineEdit *searchEditLine() const { return ui.searchEditLine; }
+  inline QCheckBox *caseSensitiveBox() const { return ui.caseSensitiveBox; }
+  inline QCheckBox *searchSendersBox() const { return ui.searchSendersBox; }
+  inline QCheckBox *searchMsgsBox() const { return ui.searchMsgsBox; }
+  inline QCheckBox *searchOnlyRegularMsgsBox() const { return ui.searchOnlyRegularMsgsBox; }
 
-  BufferId id = sourceModel()->data(sourceModel()->index(sourceRow, 0), MessageModel::BufferIdRole).value<BufferId>();
-  return _validBuffers.contains(id);
-}
+  inline QAction *toggleViewAction() const { return _toggleViewAction; }
+
+public slots:
+  void setVisible(bool visible);
+
+private:
+  Ui::ChatViewSearchBar ui;
+  QAction *_toggleViewAction;
+};
+
+#endif //CHATVIEWSEARCHBAR_H

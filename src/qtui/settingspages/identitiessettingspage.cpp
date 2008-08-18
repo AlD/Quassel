@@ -45,14 +45,13 @@ IdentitiesSettingsPage::IdentitiesSettingsPage(QWidget *parent)
   connect(ui.awayNickEnabled, SIGNAL(clicked(bool)), this, SLOT(widgetHasChanged()));
   connect(ui.awayReason, SIGNAL(textEdited(const QString &)), this, SLOT(widgetHasChanged()));
   connect(ui.awayReasonEnabled, SIGNAL(clicked(bool)), this, SLOT(widgetHasChanged()));
-  connect(ui.returnMessage, SIGNAL(textEdited(const QString &)), this, SLOT(widgetHasChanged()));
-  connect(ui.returnMessageEnabled, SIGNAL(clicked(bool)), this, SLOT(widgetHasChanged()));
   connect(ui.autoAwayEnabled, SIGNAL(clicked(bool)), this, SLOT(widgetHasChanged()));
   connect(ui.autoAwayTime, SIGNAL(valueChanged(int)), this, SLOT(widgetHasChanged()));
   connect(ui.autoAwayReason, SIGNAL(textEdited(const QString &)), this, SLOT(widgetHasChanged()));
   connect(ui.autoAwayReasonEnabled, SIGNAL(clicked(bool)), this, SLOT(widgetHasChanged()));
-  connect(ui.autoReturnMessage, SIGNAL(textEdited(const QString &)), this, SLOT(widgetHasChanged()));
-  connect(ui.autoReturnMessageEnabled, SIGNAL(clicked(bool)), this, SLOT(widgetHasChanged()));
+  connect(ui.detachAwayEnabled, SIGNAL(clicked(bool)), this, SLOT(widgetHasChanged()));
+  connect(ui.detachAwayReason, SIGNAL(textEdited(const QString &)), this, SLOT(widgetHasChanged()));
+  connect(ui.detachAwayReasonEnabled, SIGNAL(clicked(bool)), this, SLOT(widgetHasChanged()));
   connect(ui.ident, SIGNAL(textEdited(const QString &)), this, SLOT(widgetHasChanged()));
   connect(ui.kickReason, SIGNAL(textEdited(const QString &)), this, SLOT(widgetHasChanged()));
   connect(ui.partReason, SIGNAL(textEdited(const QString &)), this, SLOT(widgetHasChanged()));
@@ -78,6 +77,8 @@ void IdentitiesSettingsPage::setWidgetStates() {
   }
   ui.deleteNick->setEnabled(ui.nicknameList->count() > 1);
 
+  // FIXME this is until stuff has been implemented
+  ui.detachAwayEnabled->setEnabled(false);
 }
 
 void IdentitiesSettingsPage::coreConnectionStateChanged(bool state) {
@@ -274,14 +275,13 @@ void IdentitiesSettingsPage::displayIdentity(Identity *id, bool dontsave) {
     ui.awayNickEnabled->setChecked(id->awayNickEnabled());
     ui.awayReason->setText(id->awayReason());
     ui.awayReasonEnabled->setChecked(id->awayReasonEnabled());
-    ui.returnMessage->setText(id->returnMessage());
-    ui.returnMessageEnabled->setChecked(id->returnMessageEnabled());
     ui.autoAwayEnabled->setChecked(id->autoAwayEnabled());
     ui.autoAwayTime->setValue(id->autoAwayTime());
     ui.autoAwayReason->setText(id->autoAwayReason());
     ui.autoAwayReasonEnabled->setChecked(id->autoAwayReasonEnabled());
-    ui.autoReturnMessage->setText(id->autoReturnMessage());
-    ui.autoReturnMessageEnabled->setChecked(id->autoReturnMessageEnabled());
+    ui.detachAwayEnabled->setChecked(id->detachAwayEnabled());
+    ui.detachAwayReason->setText(id->detachAwayReason());
+    ui.detachAwayReasonEnabled->setChecked(id->detachAwayReasonEnabled());
     ui.ident->setText(id->ident());
     ui.kickReason->setText(id->kickReason());
     ui.partReason->setText(id->partReason());
@@ -300,14 +300,13 @@ void IdentitiesSettingsPage::saveToIdentity(Identity *id) {
   id->setAwayNickEnabled(ui.awayNickEnabled->isChecked());
   id->setAwayReason(ui.awayReason->text());
   id->setAwayReasonEnabled(ui.awayReasonEnabled->isChecked());
-  id->setReturnMessage(ui.returnMessage->text());
-  id->setReturnMessageEnabled(ui.returnMessageEnabled->isChecked());
   id->setAutoAwayEnabled(ui.autoAwayEnabled->isChecked());
   id->setAutoAwayTime(ui.autoAwayTime->value());
   id->setAutoAwayReason(ui.autoAwayReason->text());
   id->setAutoAwayReasonEnabled(ui.autoAwayReasonEnabled->isChecked());
-  id->setAutoReturnMessage(ui.autoReturnMessage->text());
-  id->setAutoReturnMessageEnabled(ui.autoReturnMessageEnabled->isChecked());
+  id->setDetachAwayEnabled(ui.detachAwayEnabled->isChecked());
+  id->setDetachAwayReason(ui.detachAwayReason->text());
+  id->setDetachAwayReasonEnabled(ui.detachAwayReasonEnabled->isChecked());
   id->setIdent(ui.ident->text());
   id->setKickReason(ui.kickReason->text());
   id->setPartReason(ui.partReason->text());
@@ -466,9 +465,8 @@ SaveIdentitiesDlg::SaveIdentitiesDlg(const QList<Identity *> &toCreate, const QL
         numevents--;
         continue;
       }
-      // FIXME this only checks for one changed item rather than all!
       connect(cid, SIGNAL(updatedRemotely()), this, SLOT(clientEvent()));
-      Client::updateIdentity(*id);
+      Client::updateIdentity(id->id(), id->toVariantMap());
     }
     foreach(IdentityId id, toRemove) {
       Client::removeIdentity(id);
