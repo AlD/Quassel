@@ -25,7 +25,7 @@
          <string/>
         </property>
         <property name="styleSheet" >
-         <string/>
+         <string notr="true" />
         </property>
         <column>
          <property name="text" >
@@ -68,7 +68,7 @@
         <property name="orientation" >
          <enum>Qt::Vertical</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>20</width>
           <height>40</height>
@@ -106,6 +106,25 @@
        <widget class="QRadioButton" name="highlightNoNick" >
         <property name="text" >
          <string>None</string>
+        </property>
+        <property name="checkable" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="highlightCS" >
+        <property name="enabled" >
+         <bool>true</bool>
+        </property>
+        <property name="text" >
+         <string>Case Sensitive</string>
+        </property>
+        <property name="checkable" >
+         <bool>true</bool>
+        </property>
+        <property name="checked" >
+         <bool>false</bool>
         </property>
        </widget>
       </item>

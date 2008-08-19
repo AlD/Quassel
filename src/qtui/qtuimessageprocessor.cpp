@@ -108,15 +108,18 @@ void QtUiMessageProcessor::checkForHighlight(Message &msg) {
   const Network *net = Client::network(msg.bufferInfo().networkId());
   if(net && !net->myNick().isEmpty()) {
     QStringList nickList;
-    if(notificationSettings.highlightNick() == NotificationSettings::CurrentNick) {
+    if(notificationSettings.highlightNick() & NotificationSettings::CurrentNick) {
       nickList << net->myNick();
-    } else if(notificationSettings.highlightNick() == NotificationSettings::AllNicks) {
+    } else if(notificationSettings.highlightNick() & NotificationSettings::AllNicks) {
       const Identity *myIdentity = Client::identity(net->identity());
       if(myIdentity)
         nickList = myIdentity->nicks();
     }
     foreach(QString nickname, nickList) {
       QRegExp nickRegExp("^(.*\\W)?" + QRegExp::escape(nickname) + "(\\W.*)?$");
+      (notificationSettings.highlightNick() & NotificationSettings::CS) ?
+        nickRegExp.setCaseSensitivity(Qt::CaseSensitive)
+      : nickRegExp.setCaseSensitivity(Qt::CaseInsensitive);
       if(nickRegExp.exactMatch(msg.contents())) {
         msg.setFlags(msg.flags() | Message::Highlight);
         return;
