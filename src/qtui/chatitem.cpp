@@ -31,14 +31,12 @@
 #include "chatlinemodel.h"
 #include "qtui.h"
 
-ChatItem::ChatItem(int col, QAbstractItemModel *model, QGraphicsItem *parent)
+ChatItem::ChatItem(ChatLineModel::ColumnType col, QAbstractItemModel *model, QGraphicsItem *parent)
   : QGraphicsItem(parent),
     _fontMetrics(0),
-    _col(col),
-    _lines(0),
-    _layoutData(0),
     _selectionMode(NoSelection),
-    _selectionStart(-1)
+    _selectionStart(-1),
+    _layout(0)
 {
   Q_ASSERT(model);
   QModelIndex index = model->index(row(), col);
@@ -48,7 +46,7 @@ ChatItem::ChatItem(int col, QAbstractItemModel *model, QGraphicsItem *parent)
 }
 
 ChatItem::~ChatItem() {
-  delete _layoutData;
+  delete _layout;
 }
 
 QVariant ChatItem::data(int role) const {
@@ -71,13 +69,7 @@ qreal ChatItem::setGeometry(qreal w, qreal h) {
 }
 
 qreal ChatItem::computeHeight() {
-  if(data(ChatLineModel::ColumnTypeRole).toUInt() != ChatLineModel::ContentsColumn)
-    return fontMetrics()->lineSpacing(); // only contents can be multi-line
-
-  _lines = 1;
-  WrapColumnFinder finder(this);
-  while(finder.nextWrapColumn() > 0) _lines++;
-  return _lines * fontMetrics()->lineSpacing();
+  return fontMetrics()->lineSpacing(); // only contents can be multi-line
 }
 
 QTextLayout *ChatItem::createLayout(QTextOption::WrapMode wrapMode, Qt::Alignment alignment) {
@@ -94,58 +86,22 @@ QTextLayout *ChatItem::createLayout(QTextOption::WrapMode wrapMode, Qt::Alignmen
   return layout;
 }
 
-void ChatItem::setLayout(QTextLayout *layout) {
-  if(!_layoutData)
-    _layoutData = new LayoutData;
-  _layoutData->layout = layout;
-}
-
 void ChatItem::updateLayout() {
-  switch(data(ChatLineModel::ColumnTypeRole).toUInt()) {
-    case ChatLineModel::TimestampColumn:
-      if(!haveLayout()) setLayout(createLayout(QTextOption::WrapAnywhere, Qt::AlignLeft));
-      // fallthrough
-    case ChatLineModel::SenderColumn:
-      if(!haveLayout()) setLayout(createLayout(QTextOption::WrapAnywhere, Qt::AlignRight));
-      layout()->beginLayout();
-      {
-        QTextLine line = layout()->createLine();
-        if(line.isValid()) {
-          line.setLineWidth(width());
-          line.setPosition(QPointF(0,0));
-        }
-        layout()->endLayout();
-      }
-      break;
-    case ChatLineModel::ContentsColumn: {
-      if(!haveLayout()) setLayout(createLayout(QTextOption::WrapAnywhere));
+  if(!haveLayout())
+    setLayout(createLayout(QTextOption::WrapAnywhere, Qt::AlignLeft));
 
-      // Now layout
-      ChatLineModel::WrapList wrapList = data(ChatLineModel::WrapListRole).value<ChatLineModel::WrapList>();
-      if(!wrapList.count()) return; // empty chatitem
-
-      qreal h = 0;
-      WrapColumnFinder finder(this);
-      layout()->beginLayout();
-      forever {
-        QTextLine line = layout()->createLine();
-        if(!line.isValid())
-          break;
-
-        int col = finder.nextWrapColumn();
-        line.setNumColumns(col >= 0 ? col - line.textStart() : layout()->text().length());
-        line.setPosition(QPointF(0, h));
-        h += line.height() + fontMetrics()->leading();
-      }
-      layout()->endLayout();
-    }
-    break;
+  layout()->beginLayout();
+  QTextLine line = layout()->createLine();
+  if(line.isValid()) {
+    line.setLineWidth(width());
+    line.setPosition(QPointF(0,0));
   }
+  layout()->endLayout();
 }
 
-void ChatItem::clearLayoutData() {
-  delete _layoutData;
-  _layoutData = 0;
+void ChatItem::clearLayout() {
+  delete _layout;
+  _layout = 0;
 }
 
 // NOTE: This is not the most time-efficient implementation, but it saves space by not caching unnecessary data
@@ -237,7 +193,6 @@ QList<QRectF> ChatItem::findWords(const QString &searchWord, Qt::CaseSensitivity
   return resultList;
 }
 
-
 void ChatItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
   if(event->buttons() == Qt::LeftButton) {
     if(_selectionMode == NoSelection) {
@@ -287,7 +242,69 @@ void ChatItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
   }
 }
 
-void ChatItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
+/*************************************************************************************************/
+
+/*************************************************************************************************/
+
+void SenderChatItem::updateLayout() {
+  if(!haveLayout()) setLayout(createLayout(QTextOption::WrapAnywhere, Qt::AlignRight));
+  ChatItem::updateLayout();
+}
+
+/*************************************************************************************************/
+
+ContentsChatItem::ContentsChatItem(QAbstractItemModel *model, QGraphicsItem *parent) : ChatItem(column(), model, parent),
+  _layoutData(0)
+{
+
+}
+
+ContentsChatItem::~ContentsChatItem() {
+  delete _layoutData;
+}
+
+qreal ContentsChatItem::computeHeight() {
+  int lines = 1;
+  WrapColumnFinder finder(this);
+  while(finder.nextWrapColumn() > 0) lines++;
+  return lines * fontMetrics()->lineSpacing();
+}
+
+void ContentsChatItem::setLayout(QTextLayout *layout) {
+  if(!_layoutData)
+    _layoutData = new LayoutData;
+  _layoutData->layout = layout;
+}
+
+void ContentsChatItem::clearLayout() {
+  delete _layoutData;
+  _layoutData = 0;
+}
+
+void ContentsChatItem::updateLayout() {
+  if(!haveLayout()) setLayout(createLayout(QTextOption::WrapAnywhere));
+
+  // Now layout
+  ChatLineModel::WrapList wrapList = data(ChatLineModel::WrapListRole).value<ChatLineModel::WrapList>();
+  if(!wrapList.count()) return; // empty chatitem
+
+  qreal h = 0;
+  WrapColumnFinder finder(this);
+  layout()->beginLayout();
+  forever {
+    QTextLine line = layout()->createLine();
+    if(!line.isValid())
+      break;
+
+    int col = finder.nextWrapColumn();
+    line.setNumColumns(col >= 0 ? col - line.textStart() : layout()->text().length());
+    line.setPosition(QPointF(0, h));
+    h += line.height() + fontMetrics()->leading();
+  }
+  layout()->endLayout();
+}
+
+void ContentsChatItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
   // FIXME dirty and fast hack to make http:// urls klickable
 
   QRegExp regex("\\b([hf]t{1,2}ps?://[^\\s]+)\\b");
@@ -306,25 +323,24 @@ void ChatItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
   event->accept();
 }
 
-void ChatItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
+void ContentsChatItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
   //qDebug() << (void*)this << "entering";
   event->ignore();
 }
 
-void ChatItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
+void ContentsChatItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
   //qDebug() << (void*)this << "leaving";
   event->ignore();
 }
 
-void ChatItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event) {
+void ContentsChatItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event) {
   //qDebug() << (void*)this << event->pos();
   event->ignore();
 }
 
-
 /*************************************************************************************************/
 
-ChatItem::WrapColumnFinder::WrapColumnFinder(ChatItem *_item) : item(_item) {
+ContentsChatItem::WrapColumnFinder::WrapColumnFinder(ChatItem *_item) : item(_item) {
   wrapList = item->data(ChatLineModel::WrapListRole).value<ChatLineModel::WrapList>();
   wordidx = 0;
   layout = 0;
@@ -333,11 +349,11 @@ ChatItem::WrapColumnFinder::WrapColumnFinder(ChatItem *_item) : item(_item) {
   w = 0;
 }
 
-ChatItem::WrapColumnFinder::~WrapColumnFinder() {
+ContentsChatItem::WrapColumnFinder::~WrapColumnFinder() {
   delete layout;
 }
 
-qint16 ChatItem::WrapColumnFinder::nextWrapColumn() {
+qint16 ContentsChatItem::WrapColumnFinder::nextWrapColumn() {
   while(wordidx < wrapList.count()) {
     w += wrapList.at(wordidx).width;
     if(w >= item->width()) {
