@@ -35,9 +35,9 @@
 ChatLine::ChatLine(int row, QAbstractItemModel *model, QGraphicsItem *parent)
   : QGraphicsItem(parent),
     _row(row), // needs to be set before the items
-    _timestampItem(ChatLineModel::TimestampColumn, model, this),
-    _senderItem(ChatLineModel::SenderColumn, model, this),
-    _contentsItem(ChatLineModel::ContentsColumn, model, this),
+    _timestampItem(model, this),
+    _senderItem(model, this),
+    _contentsItem(model, this),
     _width(0),
     _height(0),
     _selection(0)
@@ -68,15 +68,15 @@ ChatItem &ChatLine::item(ChatLineModel::ColumnType column) {
 qreal ChatLine::setGeometry(qreal width, qreal firstHandlePos, qreal secondHandlePos) {
   if(width != _width)
     prepareGeometryChange();
-  qreal firstsep = QtUi::style()->firstColumnSeparator()/2;
-  qreal secondsep = QtUi::style()->secondColumnSeparator()/2;
+  qreal firstSepWidth = QtUi::style()->firstColumnSeparator();
+  qreal secondSepWidth = QtUi::style()->secondColumnSeparator();
 
-  _height = _contentsItem.setGeometry(width - secondHandlePos - secondsep);
-  _timestampItem.setGeometry(firstHandlePos - firstsep, _height);
-  _senderItem.setGeometry(secondHandlePos - firstHandlePos - (firstsep+secondsep), _height);
+  _height = _contentsItem.setGeometry(width - secondHandlePos - secondSepWidth);
+  _timestampItem.setGeometry(firstHandlePos, _height);
+  _senderItem.setGeometry(secondHandlePos - firstHandlePos - firstSepWidth, _height);
 
-  _senderItem.setPos(firstHandlePos + firstsep, 0);
-  _contentsItem.setPos(secondHandlePos + secondsep, 0);
+  _senderItem.setPos(firstHandlePos + firstSepWidth, 0);
+  _contentsItem.setPos(secondHandlePos + secondSepWidth, 0);
 
   _width = width;
   return _height;
@@ -111,6 +111,8 @@ void ChatLine::setHighlighted(bool highlighted) {
 }
 
 void ChatLine::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+  Q_UNUSED(option);
+  Q_UNUSED(widget);
   if(_selection & Highlighted) {
     painter->fillRect(boundingRect(), QBrush(QtUi::style()->highlightColor()));
   }

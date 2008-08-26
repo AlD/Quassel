@@ -33,99 +33,151 @@ class QTextLayout;
 
 class ChatItem : public QGraphicsItem {
 
-  public:
-    ChatItem(int col, QAbstractItemModel *, QGraphicsItem *parent);
-    virtual ~ChatItem();
+protected:
+  ChatItem(ChatLineModel::ColumnType column, QAbstractItemModel *, QGraphicsItem *parent);
+  virtual ~ChatItem();
 
-    inline const QAbstractItemModel *model() const { return chatScene() ? chatScene()->model() : 0; }
-    int row() const;
-    inline int column() const { return _col; }
-    inline ChatScene *chatScene() const { return qobject_cast<ChatScene *>(scene()); }
+public:
+  inline const QAbstractItemModel *model() const { return chatScene() ? chatScene()->model() : 0; }
+  inline int row() const;
+  virtual ChatLineModel::ColumnType column() const = 0;
+  inline ChatScene *chatScene() const { return qobject_cast<ChatScene *>(scene()); }
 
-    inline QFontMetricsF *fontMetrics() const { return _fontMetrics; }
-    inline virtual QRectF boundingRect() const { return _boundingRect; }
-    inline qreal width() const { return _boundingRect.width(); }
-    inline qreal height() const { return _boundingRect.height(); }
+  inline QFontMetricsF *fontMetrics() const { return _fontMetrics; }
+  inline QRectF boundingRect() const { return _boundingRect; }
+  inline qreal width() const { return _boundingRect.width(); }
+  inline qreal height() const { return _boundingRect.height(); }
 
-    inline bool haveLayout() const { return _layoutData != 0 && layout() != 0; }
-    void clearLayoutData();
-    void updateLayout();
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+  virtual inline bool haveLayout() const { return layout() != 0; }
+  virtual void clearLayout();
+  virtual QTextLayout *createLayout(QTextOption::WrapMode, Qt::Alignment = Qt::AlignLeft);
+  virtual void updateLayout();
+  virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 
-    virtual QVariant data(int role) const;
+  virtual QVariant data(int role) const;
 
-    // returns height
-    qreal setGeometry(qreal width, qreal height = -1);
+  // returns height
+  qreal setGeometry(qreal width, qreal height = -1);
 
-    // selection stuff, to be called by the scene
-    void clearSelection();
-    void setFullSelection();
-    void continueSelecting(const QPointF &pos);
+  // selection stuff, to be called by the scene
+  void clearSelection();
+  void setFullSelection();
+  void continueSelecting(const QPointF &pos);
 
   QList<QRectF> findWords(const QString &searchWord, Qt::CaseSensitivity caseSensitive);
 
-  protected:
-    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-    virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
+protected:
+  virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+  virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
+  virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
-    virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
-    virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
-    virtual void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
+  virtual inline QTextLayout *layout() const { return _layout; }
+  virtual inline void setLayout(QTextLayout *l) { _layout = l; }
+  qint16 posToCursor(const QPointF &pos);
 
-  private:
-    struct LayoutData;
-    class WrapColumnFinder;
+  virtual qreal computeHeight();
 
-    inline QTextLayout *layout() const;
-    void setLayout(QTextLayout *);
-    qint16 posToCursor(const QPointF &pos);
-    qreal computeHeight();
-    QTextLayout *createLayout(QTextOption::WrapMode, Qt::Alignment = Qt::AlignLeft);
+  QRectF _boundingRect;
 
-    // internal selection stuff
-    void setSelection(int start, int length);
+private:
+  // internal selection stuff
+  void setSelection(int start, int length);
 
-    QRectF _boundingRect;
-    QFontMetricsF *_fontMetrics;
-    int _col;
-    quint8 _lines;
+  QFontMetricsF *_fontMetrics;
 
-    enum SelectionMode { NoSelection, PartialSelection, FullSelection };
-    SelectionMode _selectionMode;
-    qint16 _selectionStart, _selectionEnd;
+  enum SelectionMode { NoSelection, PartialSelection, FullSelection };
+  SelectionMode _selectionMode;
+  qint16 _selectionStart, _selectionEnd;
 
-    LayoutData *_layoutData;
+  QTextLayout *_layout;
 };
 
-struct ChatItem::LayoutData {
+/*************************************************************************************************/
+
+//! A ChatItem for the timestamp column
+class TimestampChatItem : public ChatItem {
+
+public:
+  TimestampChatItem(QAbstractItemModel *model, QGraphicsItem *parent) : ChatItem(column(), model, parent) {}
+  inline ChatLineModel::ColumnType column() const { return ChatLineModel::TimestampColumn; }
+
+};
+
+/*************************************************************************************************/
+
+//! A ChatItem for the sender column
+class SenderChatItem : public ChatItem {
+
+public:
+  SenderChatItem(QAbstractItemModel *model, QGraphicsItem *parent) : ChatItem(column(), model, parent) {}
+  inline ChatLineModel::ColumnType column() const { return ChatLineModel::SenderColumn; }
+
+  virtual void updateLayout();
+};
+
+/*************************************************************************************************/
+
+//! A ChatItem for the contents column
+class ContentsChatItem : public ChatItem {
+
+public:
+  ContentsChatItem(QAbstractItemModel *model, QGraphicsItem *parent);
+  virtual ~ContentsChatItem();
+
+  inline ChatLineModel::ColumnType column() const { return ChatLineModel::ContentsColumn; }
+
+  virtual void clearLayout();
+  virtual void updateLayout();
+  virtual inline bool haveLayout() const { return _layoutData != 0 && layout() != 0; }
+
+protected:
+  virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
+  virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+  virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+  virtual void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
+
+  virtual inline QTextLayout *layout() const;
+  virtual void setLayout(QTextLayout *l);
+
+private:
+  struct LayoutData;
+  class WrapColumnFinder;
+
+  qreal computeHeight();
+
+  LayoutData *_layoutData;
+};
+
+struct ContentsChatItem::LayoutData {
   QTextLayout *layout;
 
   LayoutData() { layout = 0; }
   ~LayoutData() { delete layout; }
 };
 
-class ChatItem::WrapColumnFinder {
-  public:
-    WrapColumnFinder(ChatItem *parent);
-    ~WrapColumnFinder();
+class ContentsChatItem::WrapColumnFinder {
+public:
+  WrapColumnFinder(ChatItem *parent);
+  ~WrapColumnFinder();
 
-    qint16 nextWrapColumn();
+  qint16 nextWrapColumn();
 
-  private:
-    ChatItem *item;
-    QTextLayout *layout;
-    QTextLine line;
-    ChatLineModel::WrapList wrapList;
-    qint16 wordidx;
-    qint16 lastwrapcol;
-    qreal lastwrappos;
-    qreal w;
+private:
+  ChatItem *item;
+  QTextLayout *layout;
+  QTextLine line;
+  ChatLineModel::WrapList wrapList;
+  qint16 wordidx;
+  qint16 lastwrapcol;
+  qreal lastwrappos;
+  qreal w;
 };
 
+/*************************************************************************************************/
+
+// Avoid circular include deps
 #include "chatline.h"
-inline int ChatItem::row() const { return static_cast<ChatLine *>(parentItem())->row(); }
-inline QTextLayout *ChatItem::layout() const { return _layoutData->layout; }
+int ChatItem::row() const { return static_cast<ChatLine *>(parentItem())->row(); }
+QTextLayout *ContentsChatItem::layout() const { return _layoutData->layout; }
 
 #endif

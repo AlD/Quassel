@@ -75,8 +75,11 @@ ChatScene::ChatScene(QAbstractItemModel *model, const QString &idString, QObject
   secondColHandlePos = s.value(QString("ChatView/%1/SecondColumnHandlePos").arg(_idString),
                                 defaultSecondColHandlePos).toInt();
 
-  firstColHandle = new ColumnHandleItem(QtUi::style()->firstColumnSeparator()); addItem(firstColHandle);
-  secondColHandle = new ColumnHandleItem(QtUi::style()->secondColumnSeparator()); addItem(secondColHandle);
+  firstColHandle = new ColumnHandleItem(QtUi::style()->firstColumnSeparator());
+  addItem(firstColHandle);
+
+  secondColHandle = new ColumnHandleItem(QtUi::style()->secondColumnSeparator());
+  addItem(secondColHandle);
 
   connect(firstColHandle, SIGNAL(positionChanged(qreal)), this, SLOT(handlePositionChanged(qreal)));
   connect(secondColHandle, SIGNAL(positionChanged(qreal)), this, SLOT(handlePositionChanged(qreal)));
@@ -298,7 +301,7 @@ void ChatScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
       _lines[l]->setSelected(false);
     }
     _selectionStart = -1;
-    event->accept();
+    QGraphicsScene::mousePressEvent(event);  // so we can start a new local selection
   } else {
     QGraphicsScene::mousePressEvent(event);
   }
