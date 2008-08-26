@@ -74,7 +74,10 @@ class NotificationSettings : public ClientSettings {
     enum HighlightNickType {
       NoNick = 0x00,
       CurrentNick= 0x01,
-      AllNicks = 0x02
+      AllNicks = 0x02,
+      CS = 0x04,
+      CurrentNickCS = 0x05,
+      AllNicksCS = 0x06
     };
 
     NotificationSettings();
