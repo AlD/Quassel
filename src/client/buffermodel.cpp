@@ -20,10 +20,10 @@
 
 #include "buffermodel.h"
 
-#include "networkmodel.h"
-#include "mappedselectionmodel.h"
-#include "buffer.h"
+#include "client.h"
 #include "global.h"
+#include "mappedselectionmodel.h"
+#include "networkmodel.h"
 
 #include <QAbstractItemView>
 
@@ -64,6 +64,26 @@ void BufferModel::synchronizeView(QAbstractItemView *view) {
 void BufferModel::setCurrentIndex(const QModelIndex &newCurrent) {
   _selectionModelSynchronizer.selectionModel()->setCurrentIndex(newCurrent, QItemSelectionModel::Current);
   _selectionModelSynchronizer.selectionModel()->select(newCurrent, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+}
+
+void BufferModel::switchToBuffer(const BufferId &bufferId) {
+  QModelIndex source_index = Client::networkModel()->bufferIndex(bufferId);
+  setCurrentIndex(mapFromSource(source_index));
+}
+
+void BufferModel::switchToBufferIndex(const QModelIndex &bufferIdx) {
+  // we accept indexes that directly belong to us or our parent - nothing else
+  if(bufferIdx.model() == this) {
+    setCurrentIndex(bufferIdx);
+    return;
+  }
+
+  if(bufferIdx.model() == sourceModel()) {
+    setCurrentIndex(mapFromSource(bufferIdx));
+    return;
+  }
+
+  qWarning() << "BufferModel::switchToBufferIndex(const QModelIndex &):" << bufferIdx << "does not belong to BufferModel or NetworkModel";
 }
 
 void BufferModel::debug_currentChanged(QModelIndex current, QModelIndex previous) {
