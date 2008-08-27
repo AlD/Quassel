@@ -65,18 +65,18 @@ ChatItem &ChatLine::item(ChatLineModel::ColumnType column) {
   }
 }
 
-qreal ChatLine::setGeometry(qreal width, qreal firstHandlePos, qreal secondHandlePos) {
+qreal ChatLine::setGeometry(qreal width) {
   if(width != _width)
     prepareGeometryChange();
-  qreal firstsep = QtUi::style()->firstColumnSeparator()/2;
-  qreal secondsep = QtUi::style()->secondColumnSeparator()/2;
+  QRectF firstColHandleRect = chatScene()->firstColumnHandleRect();
+  QRectF secondColHandleRect = chatScene()->secondColumnHandleRect();
 
-  _height = _contentsItem.setGeometry(width - secondHandlePos - secondsep);
-  _timestampItem.setGeometry(firstHandlePos - firstsep, _height);
-  _senderItem.setGeometry(secondHandlePos - firstHandlePos - (firstsep+secondsep), _height);
+  _height = _contentsItem.setGeometry(width - secondColHandleRect.right());
+  _timestampItem.setGeometry(firstColHandleRect.left(), _height);
+  _senderItem.setGeometry(secondColHandleRect.left() - firstColHandleRect.right(), _height);
 
-  _senderItem.setPos(firstHandlePos + firstsep, 0);
-  _contentsItem.setPos(secondHandlePos + secondsep, 0);
+  _senderItem.setPos(firstColHandleRect.right(), 0);
+  _contentsItem.setPos(secondColHandleRect.right(), 0);
 
   _width = width;
   return _height;
