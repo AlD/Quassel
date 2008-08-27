@@ -59,7 +59,7 @@ ChatScene::ChatScene(QAbstractItemModel *model, const QString &idString, QObject
 	  this, SLOT(rowsInserted(const QModelIndex &, int, int)));
   connect(model, SIGNAL(rowsAboutToBeRemoved(const QModelIndex &, int, int)),
 	  this, SLOT(rowsAboutToBeRemoved(const QModelIndex &, int, int)));
-  
+
   for(int i = 0; i < model->rowCount(); i++) {
     ChatLine *line = new ChatLine(i, model);
     _lines.append(line);
@@ -85,11 +85,11 @@ ChatScene::ChatScene(QAbstractItemModel *model, const QString &idString, QObject
   connect(secondColHandle, SIGNAL(positionChanged(qreal)), this, SLOT(handlePositionChanged(qreal)));
 
   firstColHandle->setXPos(firstColHandlePos);
-  firstColHandle->setXLimits(0, secondColHandlePos);
   secondColHandle->setXPos(secondColHandlePos);
-  secondColHandle->setXLimits(firstColHandlePos, width() - minContentsWidth);
+  setHandleXLimits();
 
   emit heightChanged(height());
+  emit heightChangedAt(0, height());
 }
 
 ChatScene::~ChatScene() {
@@ -111,7 +111,7 @@ void ChatScene::rowsInserted(const QModelIndex &index, int start, int end) {
     addItem(line);
     if(_width > 0) {
       line->setPos(0, y+h);
-      h += line->setGeometry(_width, firstColHandlePos, secondColHandlePos);
+      h += line->setGeometry(_width);
     }
   }
   // update existing items
@@ -135,6 +135,7 @@ void ChatScene::rowsInserted(const QModelIndex &index, int start, int end) {
     }
     setSceneRect(QRectF(0, 0, _width, _height));
     emit heightChanged(_height);
+    emit heightChangedAt(_lines.at(start)->y(), h);
   }
 }
 
@@ -180,19 +181,23 @@ void ChatScene::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int e
     }
     setSceneRect(QRectF(0, 0, _width, _height));
     emit heightChanged(_height);
+    emit heightChangedAt(_lines.at(start)->y(), -h);
   }
 }
 
 void ChatScene::setWidth(qreal w) {
+  qreal oldh = _height;
   _width = w;
   _height = 0;
   foreach(ChatLine *line, _lines) {
     line->setPos(0, _height);
-    _height += line->setGeometry(_width, firstColHandlePos, secondColHandlePos);
+    _height += line->setGeometry(_width);
   }
   setSceneRect(QRectF(0, 0, w, _height));
-  secondColHandle->setXLimits(firstColHandlePos, width() - minContentsWidth);
+  setHandleXLimits();
   emit heightChanged(_height);
+  emit heightChangedAt(0, _height - oldh);
+
 }
 
 void ChatScene::rectChanged(const QRectF &rect) {
@@ -219,7 +224,12 @@ void ChatScene::handlePositionChanged(qreal xpos) {
   setWidth(width());  // readjust all chatlines
   // we get ugly redraw errors if we don't update this explicitly... :(
   // width() should be the same for both handles, so just use firstColHandle regardless
-  update(qMin(oldx, xpos) - firstColHandle->width()/2, 0, qMax(oldx, xpos) + firstColHandle->width()/2, height());
+  //update(qMin(oldx, xpos), 0, qMax(oldx, xpos) + firstColHandle->width(), height());
+}
+
+void ChatScene::setHandleXLimits() {
+  firstColHandle->setXLimits(0, secondColumnHandleRect().left());
+  secondColHandle->setXLimits(firstColumnHandleRect().right(), width() - minContentsWidth);
 }
 
 void ChatScene::setSelectingItem(ChatItem *item) {
@@ -238,12 +248,12 @@ void ChatScene::startGlobalSelection(ChatItem *item, const QPointF &itemPos) {
 void ChatScene::updateSelection(const QPointF &pos) {
   // This is somewhat hacky... we look at the contents item that is at the cursor's y position (ignoring x), since
   // it has the full height. From this item, we can then determine the row index and hence the ChatLine.
-  ChatItem *contentItem = static_cast<ChatItem *>(itemAt(QPointF(secondColHandlePos + secondColHandle->width()/2, pos.y())));
+  ChatItem *contentItem = static_cast<ChatItem *>(itemAt(QPointF(secondColumnHandleRect().right() + 1, pos.y())));
   if(!contentItem) return;
 
   int curRow = contentItem->row();
   int curColumn;
-  if(pos.x() > secondColHandlePos + secondColHandle->width()/2) curColumn = ChatLineModel::ContentsColumn;
+  if(pos.x() > secondColumnHandleRect().right()) curColumn = ChatLineModel::ContentsColumn;
   else if(pos.x() > firstColHandlePos) curColumn = ChatLineModel::SenderColumn;
   else curColumn = ChatLineModel::TimestampColumn;
 
@@ -278,10 +288,12 @@ void ChatScene::updateSelection(const QPointF &pos) {
   _lastSelectionRow = curRow;
 
   if(newstart == newend && minColumn == ChatLineModel::ContentsColumn) {
+    if(!_selectingItem) {
+      qWarning() << "WARNING: ChatScene::updateSelection() has a null _selectingItem, this should never happen! Please report.";
+      return;
+    }
     _lines[curRow]->setSelected(false);
     _isSelecting = false;
-    Q_ASSERT(_selectingItem); // this seems to not always be true, but I have no idea why
-                              // adding this assert to make sure the occasional segfault is caused by this
     _selectingItem->continueSelecting(_selectingItem->mapFromScene(pos));
   }
 }
@@ -361,9 +373,9 @@ void ChatScene::requestBacklog() {
 }
 
 int ChatScene::sectionByScenePos(int x) {
-  if(x < firstColHandlePos)
+  if(x < firstColHandle->x())
     return ChatLineModel::TimestampColumn;
-  if(x < secondColHandlePos)
+  if(x < secondColHandle->x())
     return ChatLineModel::SenderColumn;
 
   return ChatLineModel::ContentsColumn;

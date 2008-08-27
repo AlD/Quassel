@@ -25,12 +25,12 @@
 #include <QGraphicsScene>
 #include <QSet>
 
-#include "types.h"
+#include "columnhandleitem.h"
+
 
 class AbstractUiMsg;
 class ChatItem;
 class ChatLine;
-class ColumnHandleItem;
 
 class QGraphicsSceneMouseEvent;
 
@@ -49,6 +49,9 @@ class ChatScene : public QGraphicsScene {
     inline bool isSingleBufferScene() const { return _singleBufferScene; }
     inline ChatLine *chatLine(int row) { return (row < _lines.count()) ? _lines[row] : 0; }
 
+    inline QRectF firstColumnHandleRect() const { return firstColHandle->boundingRect().translated(firstColHandle->x(), 0); }
+    inline QRectF secondColumnHandleRect() const { return secondColHandle->boundingRect().translated(secondColHandle->x(), 0); }
+
   public slots:
     void setWidth(qreal);
 
@@ -62,6 +65,7 @@ class ChatScene : public QGraphicsScene {
 
   signals:
     void heightChanged(qreal height);
+    void heightChangedAt(qreal ypos, qreal hdiff);
 
   protected:
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent);
@@ -77,6 +81,7 @@ class ChatScene : public QGraphicsScene {
     void handlePositionChanged(qreal xpos);
 
   private:
+    void setHandleXLimits();
     void updateSelection(const QPointF &pos);
     QString selectionToString() const;
 
