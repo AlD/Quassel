@@ -59,6 +59,10 @@ ChatLineModelItem::ChatLineModelItem(const Message &msg)
   _contents.formatList = m.contents.formatList;
 }
 
+ChatLineModelItem::~ChatLineModelItem() {
+  delete _data;
+}
+
 QVariant ChatLineModelItem::data(int column, int role) const {
   const ChatLinePart *part = 0;
 
@@ -107,7 +111,7 @@ void ChatLineModelItem::computeWrapList() const {
   Mode mode = SearchEnd;
   ChatLineModel::Word word;
   word.start = 0;
-  int wordstartx = 0;
+  qreal wordstartx = 0;
 
   QTextLayout layout(_contents.plainText);
   QTextOption option;
@@ -140,8 +144,8 @@ void ChatLineModelItem::computeWrapList() const {
       mode = SearchStart;
       continue;
     }
-    int wordendx = line.cursorToX(oldidx);
-    int trailingendx = line.cursorToX(idx);
+    qreal wordendx = line.cursorToX(oldidx);
+    qreal trailingendx = line.cursorToX(idx);
     word.width = wordendx - wordstartx;
     word.trailing = trailingendx - wordendx;
     wordstartx = trailingendx;
