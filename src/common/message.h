@@ -18,8 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef _MESSAGE_H_
-#define _MESSAGE_H_
+#ifndef MESSAGE_H_
+#define MESSAGE_H_
 
 #include <QString>
 #include <QDateTime>
@@ -28,7 +28,7 @@
 #include "types.h"
 
 class Message {
-  Q_DECLARE_TR_FUNCTIONS(Message);
+  Q_DECLARE_TR_FUNCTIONS(Message)
 
 public:
   /** The different types a message can have for display */
@@ -75,6 +75,8 @@ public:
 
   void setFlags(Flags flags);
 
+  inline bool operator<(const Message &other) const { return _msgId < other._msgId; }
+
 private:
   QDateTime _timestamp;
   MsgId _msgId;
@@ -93,7 +95,7 @@ private:
 QDataStream &operator<<(QDataStream &out, const Message &msg);
 QDataStream &operator>>(QDataStream &in, Message &msg);
 
-Q_DECLARE_METATYPE(Message);
+Q_DECLARE_METATYPE(Message)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Message::Flags)
 
 #endif
