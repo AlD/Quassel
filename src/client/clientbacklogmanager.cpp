@@ -25,6 +25,7 @@
 #include "client.h"
 
 #include <QDebug>
+#include <ctime>
 
 ClientBacklogManager::ClientBacklogManager(QObject *parent)
   : BacklogManager(parent),
@@ -75,4 +76,10 @@ QVariantList ClientBacklogManager::requestBacklog(BufferId bufferId, int lastMsg
 void ClientBacklogManager::requestInitialBacklog() {
   FixedBacklogRequester backlogRequester(this);
   backlogRequester.requestBacklog();
+}
+
+void ClientBacklogManager::reset() {
+  _buffer = true;
+  _messageBuffer.clear();
+  _buffersWaiting.clear();
 }
