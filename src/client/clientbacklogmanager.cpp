@@ -25,6 +25,7 @@
 #include "client.h"
 
 #include <QDebug>
+#include <ctime>
 
 ClientBacklogManager::ClientBacklogManager(QObject *parent)
   : BacklogManager(parent),
@@ -52,8 +53,11 @@ void ClientBacklogManager::receiveBacklog(BufferId bufferId, int lastMsgs, int o
     _buffersWaiting.remove(bufferId);
     if(_buffersWaiting.isEmpty()) {
       _buffer = false;
+      clock_t start_t = clock();
       qSort(_messageBuffer);
       Client::messageProcessor()->process(_messageBuffer);
+      clock_t end_t = clock();
+      qDebug() << "Processed" << _messageBuffer.count() << "Messages in" << (float)(end_t - start_t) / CLOCKS_PER_SEC << "seconds ==" << end_t - start_t << "clocks.";
       _messageBuffer.clear();
     }
   } else {
@@ -72,4 +76,10 @@ QVariantList ClientBacklogManager::requestBacklog(BufferId bufferId, int lastMsg
 void ClientBacklogManager::requestInitialBacklog() {
   FixedBacklogRequester backlogRequester(this);
   backlogRequester.requestBacklog();
+}
+
+void ClientBacklogManager::reset() {
+  _buffer = true;
+  _messageBuffer.clear();
+  _buffersWaiting.clear();
 }

@@ -18,28 +18,25 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef _QTUISETTINGS_H_
-#define _QTUISETTINGS_H_
+#ifndef QTUISETTINGS_H_
+#define QTUISETTINGS_H_
 
 #include <QColor>
 
 #include "uisettings.h"
 
 class QtUiSettings : public UiSettings {
-
-  public: 
-    QtUiSettings(const QString &group = "QtUi");
-
+public: 
+  QtUiSettings(const QString &subGroup);
+  QtUiSettings();
 }; 
 
 class QtUiStyleSettings : public UiStyleSettings {
+public:
+  QtUiStyleSettings(const QString &group = "QtUiStyle");
 
-  public:
-    QtUiStyleSettings(const QString &group = "QtUiStyle");
-
-    void setHighlightColor(const QColor &);
-    QColor highlightColor();
-
+  void setHighlightColor(const QColor &);
+  QColor highlightColor();
 };
 
 #endif

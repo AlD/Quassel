@@ -18,25 +18,22 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef CHATLINEMODELITEM_H_
-#define CHATLINEMODELITEM_H_
+#include "chatviewsettings.h"
 
-#include <QVector>
+#include "chatscene.h"
+#include "chatview.h"
 
-#include "chatlinemodel.h"
-#include "uistyle.h"
+ChatViewSettings::ChatViewSettings(const QString &id)
+  : QtUiSettings(QString("ChatView/%1").arg(id))
+{
+}
 
-class ChatLineModelItemPrivate;
+ChatViewSettings::ChatViewSettings(ChatScene *scene)
+  : QtUiSettings(QString("ChatView/%1").arg(scene->idString()))
+{
+}
 
-class ChatLineModelItem : public MessageModelItem {
-public:
-  ChatLineModelItem(const Message &);
-  ~ChatLineModelItem();
-  virtual QVariant data(int column, int role) const;
-  virtual inline bool setData(int column, const QVariant &value, int role) { Q_UNUSED(column); Q_UNUSED(value); Q_UNUSED(role); return false; }
-
-private:
-  ChatLineModelItemPrivate *_data;
-};
-
-#endif
+ChatViewSettings::ChatViewSettings(ChatView *view)
+  : QtUiSettings(QString("ChatView/%1").arg(view->scene()->idString()))
+{
+}
