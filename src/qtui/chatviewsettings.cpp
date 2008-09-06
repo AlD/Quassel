@@ -18,35 +18,22 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef UISETTINGS_H
-#define UISETTINGS_H
+#include "chatviewsettings.h"
 
-#include "clientsettings.h"
-#include "uistyle.h"
+#include "chatscene.h"
+#include "chatview.h"
 
-class UiSettings : public ClientSettings {
-public:
-  UiSettings(const QString &group = "Ui");
+ChatViewSettings::ChatViewSettings(const QString &id)
+  : QtUiSettings(QString("ChatView/%1").arg(id))
+{
+}
 
-  inline void setValue(const QString &key, const QVariant &data) { setLocalValue(key, data); }
-  inline QVariant value(const QString &key, const QVariant &def = QVariant()) { return localValue(key, def); }
-  inline void remove(const QString &key) { removeLocalKey(key); }
-};
+ChatViewSettings::ChatViewSettings(ChatScene *scene)
+  : QtUiSettings(QString("ChatView/%1").arg(scene->idString()))
+{
+}
 
-
-class UiStyleSettings : public ClientSettings {
-public:
-  UiStyleSettings(const QString &group = "UiStyle");
-
-  inline void setValue(const QString &key, const QVariant &data) { setLocalValue(key, data); }
-  inline QVariant value(const QString &key, const QVariant &def = QVariant()) { return localValue(key, def); }
-  inline void remove(const QString &key) { removeLocalKey(key); }
-
-  void setCustomFormat(UiStyle::FormatType, QTextCharFormat);
-  QTextCharFormat customFormat(UiStyle::FormatType);
-
-  void removeCustomFormat(UiStyle::FormatType);
-  QList<UiStyle::FormatType> availableFormats();
-};
-
-#endif
+ChatViewSettings::ChatViewSettings(ChatView *view)
+  : QtUiSettings(QString("ChatView/%1").arg(view->scene()->idString()))
+{
+}

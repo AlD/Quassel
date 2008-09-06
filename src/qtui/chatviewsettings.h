@@ -18,35 +18,19 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef UISETTINGS_H
-#define UISETTINGS_H
+#ifndef CHATVIEWSETTINGS_H
+#define CHATVIEWSETTINGS_H
 
-#include "clientsettings.h"
-#include "uistyle.h"
+#include "qtuisettings.h"
 
-class UiSettings : public ClientSettings {
+class ChatScene;
+class ChatView;
+
+class ChatViewSettings : public QtUiSettings {
 public:
-  UiSettings(const QString &group = "Ui");
-
-  inline void setValue(const QString &key, const QVariant &data) { setLocalValue(key, data); }
-  inline QVariant value(const QString &key, const QVariant &def = QVariant()) { return localValue(key, def); }
-  inline void remove(const QString &key) { removeLocalKey(key); }
+  ChatViewSettings(const QString &id = "__default__");
+  ChatViewSettings(ChatScene *scene);
+  ChatViewSettings(ChatView *view);
 };
 
-
-class UiStyleSettings : public ClientSettings {
-public:
-  UiStyleSettings(const QString &group = "UiStyle");
-
-  inline void setValue(const QString &key, const QVariant &data) { setLocalValue(key, data); }
-  inline QVariant value(const QString &key, const QVariant &def = QVariant()) { return localValue(key, def); }
-  inline void remove(const QString &key) { removeLocalKey(key); }
-
-  void setCustomFormat(UiStyle::FormatType, QTextCharFormat);
-  QTextCharFormat customFormat(UiStyle::FormatType);
-
-  void removeCustomFormat(UiStyle::FormatType);
-  QList<UiStyle::FormatType> availableFormats();
-};
-
-#endif
+#endif //CHATVIEWSETTINGS_H
