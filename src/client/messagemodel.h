@@ -70,11 +70,15 @@ public:
 
 protected:
   virtual MessageModelItem *createMessageModelItem(const Message &) = 0;
+  virtual void customEvent(QEvent *event);
 
 private:
-  QList<MessageModelItem *> _messageList;
-
+  void insertMessageGroup(const QList<Message> &);
+  int insertMessagesGracefully(const QList<Message> &); // inserts as many contiguous msgs as possible. returns numer of inserted msgs.
   int indexForId(MsgId);
+
+  QList<MessageModelItem *> _messageList;
+  QList<Message> _messageBuffer;
 };
 
 class MessageModelItem {
@@ -96,6 +100,12 @@ public:
   inline Message::Type msgType() const { return _type; }
   inline Message::Flags msgFlags() const { return _flags; }
   
+  // For sorting
+  bool operator<(const MessageModelItem &) const;
+  bool operator==(const MessageModelItem &) const;
+  bool operator>(const MessageModelItem &) const;
+  static bool lessThan(const MessageModelItem *m1, const MessageModelItem *m2);
+
 private:
   QDateTime _timestamp;
   MsgId _msgId;

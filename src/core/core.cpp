@@ -85,7 +85,8 @@ void Core::init() {
     }
   }
 
-  connect(&server, SIGNAL(newConnection()), this, SLOT(incomingConnection()));
+  connect(&_server, SIGNAL(newConnection()), this, SLOT(incomingConnection()));
+  connect(&_v6server, SIGNAL(newConnection()), this, SLOT(incomingConnection()));
   if(!startListening(cs.port())) exit(1); // TODO make this less brutal
 }
 
@@ -343,31 +344,33 @@ QHash<BufferId, MsgId> Core::bufferLastSeenMsgIds(UserId user) {
 bool Core::startListening(uint port) {
   bool success = false;
 
-  // let's see if ipv6 is available
-  success = server.listen(QHostAddress::AnyIPv6, port);
-
-  if(!success && server.serverError() == QAbstractSocket::UnsupportedSocketOperationError) {
-    // fall back to v4
-    success = server.listen(QHostAddress::Any, port);
+  if(_server.listen(QHostAddress::Any, port)) {
+    quInfo() << "Listening for GUI clients on IPv6 port" << _server.serverPort() << "using protocol version" << Global::protocolVersion;
+    success = true;
+  }
+  if(_v6server.listen(QHostAddress::AnyIPv6, port)) {
+    quInfo() << "Listening for GUI clients on IPv4 port" << _v6server.serverPort() << "using protocol version" << Global::protocolVersion;
+    success = true;
   }
 
   if(!success) {
-    quError() << qPrintable(QString("Could not open GUI client port %1: %2").arg(port).arg(server.errorString()));
-  } else {
-    quInfo() << "Listening for GUI clients on port" << server.serverPort() << "using protocol version" << Global::protocolVersion;
+    quError() << qPrintable(QString("Could not open GUI client port %1: %2").arg(port).arg(_server.errorString()));
   }
   
   return success;
 }
 
 void Core::stopListening() {
-  server.close();
+  _server.close();
+  _v6server.close();
   quInfo() << "No longer listening for GUI clients.";
 }
 
 void Core::incomingConnection() {
-  while(server.hasPendingConnections()) {
-    QTcpSocket *socket = server.nextPendingConnection();
+  QTcpServer *server = qobject_cast<QTcpServer *>(sender());
+  Q_ASSERT(server);
+  while(server->hasPendingConnections()) {
+    QTcpSocket *socket = server->nextPendingConnection();
     connect(socket, SIGNAL(disconnected()), this, SLOT(clientDisconnected()));
     connect(socket, SIGNAL(readyRead()), this, SLOT(clientHasData()));
     connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(socketError(QAbstractSocket::SocketError)));
@@ -376,8 +379,9 @@ void Core::incomingConnection() {
     blocksizes.insert(socket, (quint32)0);
     quInfo() << qPrintable(tr("Client connected from"))  << qPrintable(socket->peerAddress().toString());
 
-    if (!configured) {
-      server.close();
+    if(!configured) {
+      _server.close();
+      _v6server.close();
       quDebug() << "Closing server for basic setup.";
     }
   }
@@ -433,8 +437,8 @@ void Core::processClientMessage(QTcpSocket *socket, const QVariantMap &msg) {
 			   "Up %3d%4h%5m (since %6)").arg(Global::quasselVersion).arg(Global::quasselBuildDate)
       .arg(updays).arg(uphours,2,10,QChar('0')).arg(upmins,2,10,QChar('0')).arg(startTime().toString(Qt::TextDate));
 
-#ifndef QT_NO_OPENSSL
-    SslServer *sslServer = qobject_cast<SslServer *>(&server);
+#ifdef HAVE_SSL
+    SslServer *sslServer = qobject_cast<SslServer *>(&_server);
     QSslSocket *sslSocket = qobject_cast<QSslSocket *>(socket);
     bool supportSsl = (bool)sslServer && (bool)sslSocket && sslServer->certIsValid();
 #else
@@ -472,7 +476,7 @@ void Core::processClientMessage(QTcpSocket *socket, const QVariantMap &msg) {
     reply["MsgType"] = "ClientInitAck";
     SignalProxy::writeDataToDevice(socket, reply);
 
-#ifndef QT_NO_OPENSSL
+#ifdef HAVE_SSL
     // after we told the client that we are ssl capable we switch to ssl mode
     if(supportSsl && msg["UseSsl"].toBool()) {
       quDebug() << qPrintable(tr("Starting TLS for Client:"))  << qPrintable(socket->peerAddress().toString());
@@ -597,7 +601,7 @@ SessionThread *Core::createSession(UserId uid, bool restore) {
   return sess;
 }
 
-#ifndef QT_NO_OPENSSL
+#ifdef HAVE_SSL
 void Core::sslErrors(const QList<QSslError> &errors) {
   Q_UNUSED(errors);
   QSslSocket *socket = qobject_cast<QSslSocket *>(sender());

@@ -27,22 +27,26 @@
 class UiSettings : public ClientSettings {
 public:
   UiSettings(const QString &group = "Ui");
-  
-  void setValue(const QString &key, const QVariant &data);
-  QVariant value(const QString &key, const QVariant &def = QVariant());
-  void remove(const QString &key);
+
+  inline void setValue(const QString &key, const QVariant &data) { setLocalValue(key, data); }
+  inline QVariant value(const QString &key, const QVariant &def = QVariant()) { return localValue(key, def); }
+  inline void remove(const QString &key) { removeLocalKey(key); }
 };
 
+
 class UiStyleSettings : public ClientSettings {
+public:
+  UiStyleSettings(const QString &group = "UiStyle");
 
-  public:
-    UiStyleSettings(const QString &group = "UiStyle");
+  inline void setValue(const QString &key, const QVariant &data) { setLocalValue(key, data); }
+  inline QVariant value(const QString &key, const QVariant &def = QVariant()) { return localValue(key, def); }
+  inline void remove(const QString &key) { removeLocalKey(key); }
 
-    void setCustomFormat(UiStyle::FormatType, QTextCharFormat);
-    QTextCharFormat customFormat(UiStyle::FormatType);
+  void setCustomFormat(UiStyle::FormatType, QTextCharFormat);
+  QTextCharFormat customFormat(UiStyle::FormatType);
 
-    void removeCustomFormat(UiStyle::FormatType);
-    QList<UiStyle::FormatType> availableFormats();
+  void removeCustomFormat(UiStyle::FormatType);
+  QList<UiStyle::FormatType> availableFormats();
 };
 
 #endif

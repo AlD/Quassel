@@ -20,14 +20,25 @@
 
 #include "qtuisettings.h"
 
-QtUiSettings::QtUiSettings(const QString &group) : UiSettings(group) {
+QtUiSettings::QtUiSettings(const QString &subGroup)
+  : UiSettings(QString("QtUi/%1").arg(subGroup))
+{
+}
 
+QtUiSettings::QtUiSettings()
+  : UiSettings("QtUi")
+{
 }
 
 /***********************************************************************/
+QtUiStyleSettings::QtUiStyleSettings(const QString &subGroup)
+  : UiStyleSettings(QString("QtUiStyle/%1").arg(subGroup))
+{
+}
 
-QtUiStyleSettings::QtUiStyleSettings(const QString &group) : UiStyleSettings(group) {
-
+QtUiStyleSettings::QtUiStyleSettings()
+  : UiStyleSettings("QtUiStyle")
+{
 }
 
 void QtUiStyleSettings::setHighlightColor(const QColor &col) {

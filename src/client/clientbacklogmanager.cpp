@@ -25,14 +25,15 @@
 #include "client.h"
 
 #include <QDebug>
+#include <ctime>
 
 ClientBacklogManager::ClientBacklogManager(QObject *parent)
-  : BacklogManager(parent)
+  : BacklogManager(parent),
+    _buffer(true)
 {
 }
 
 void ClientBacklogManager::receiveBacklog(BufferId bufferId, int lastMsgs, int offset, QVariantList msgs) {
-  Q_UNUSED(bufferId)
   Q_UNUSED(lastMsgs)
   Q_UNUSED(offset)
 
@@ -46,11 +47,39 @@ void ClientBacklogManager::receiveBacklog(BufferId bufferId, int lastMsgs, int o
     msg.setFlags(msg.flags() | Message::Backlog);
     msglist << msg;
   }
-  Client::messageProcessor()->process(msglist);
+
+  if(_buffer) {
+    _messageBuffer << msglist;
+    _buffersWaiting.remove(bufferId);
+    if(_buffersWaiting.isEmpty()) {
+      _buffer = false;
+      clock_t start_t = clock();
+      qSort(_messageBuffer);
+      Client::messageProcessor()->process(_messageBuffer);
+      clock_t end_t = clock();
+      qDebug() << "Processed" << _messageBuffer.count() << "Messages in" << (float)(end_t - start_t) / CLOCKS_PER_SEC << "seconds ==" << end_t - start_t << "clocks.";
+      _messageBuffer.clear();
+    }
+  } else {
+    Client::messageProcessor()->process(msglist);
+  }
   //qDebug() << "processed" << msgs.count() << "backlog lines in" << start.msecsTo(QTime::currentTime());
+}
+
+QVariantList ClientBacklogManager::requestBacklog(BufferId bufferId, int lastMsgs, int offset) {
+  if(_buffer)
+    _buffersWaiting << bufferId;
+
+  return BacklogManager::requestBacklog(bufferId, lastMsgs, offset);
 }
 
 void ClientBacklogManager::requestInitialBacklog() {
   FixedBacklogRequester backlogRequester(this);
   backlogRequester.requestBacklog();
+}
+
+void ClientBacklogManager::reset() {
+  _buffer = true;
+  _messageBuffer.clear();
+  _buffersWaiting.clear();
 }

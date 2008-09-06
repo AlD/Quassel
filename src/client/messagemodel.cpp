@@ -22,6 +22,13 @@
 
 #include "message.h"
 
+#include <QEvent>
+
+class ProcessBufferEvent : public QEvent {
+public:
+  inline ProcessBufferEvent() : QEvent(QEvent::User) {}
+};
+
 MessageModel::MessageModel(QObject *parent)
   : QAbstractItemModel(parent)
 {
@@ -51,6 +58,8 @@ bool MessageModel::setData(const QModelIndex &index, const QVariant &value, int 
   return false;
 }
 
+
+
 bool MessageModel::insertMessage(const Message &msg, bool fakeMsg) {
   MsgId id = msg.msgId();
   int idx = indexForId(id);
@@ -67,10 +76,123 @@ bool MessageModel::insertMessage(const Message &msg, bool fakeMsg) {
 }
 
 void MessageModel::insertMessages(const QList<Message> &msglist) {
-  if(msglist.isEmpty()) return;
-  // FIXME make this more efficient by grouping msgs
-  foreach(Message msg, msglist)
-    insertMessage(msg);
+  if(msglist.isEmpty())
+    return;
+
+  if(_messageList.isEmpty()) {
+    insertMessageGroup(msglist);
+  } else {
+    int processedMsgs = insertMessagesGracefully(msglist);
+    int remainingMsgs = msglist.count() - processedMsgs;
+    if(remainingMsgs > 0) {
+      if(msglist.first().msgId() < msglist.last().msgId()) {
+	// in Order
+	_messageBuffer << msglist.mid(0, remainingMsgs);
+      } else {
+	_messageBuffer << msglist.mid(processedMsgs);
+      }
+      qSort(_messageBuffer);
+      QCoreApplication::postEvent(this, new ProcessBufferEvent());
+    }
+  }
+}
+
+void MessageModel::insertMessageGroup(const QList<Message> &msglist) {
+  int idx = indexForId(msglist.first().msgId());
+  beginInsertRows(QModelIndex(), idx, idx+msglist.count()-1);
+
+  foreach(Message msg, msglist) {
+    _messageList.insert(idx, createMessageModelItem(msg));
+    idx++;
+  }
+
+  endInsertRows();
+}
+
+int MessageModel::insertMessagesGracefully(const QList<Message> &msglist) {
+  bool inOrder = (msglist.first().msgId() < msglist.last().msgId());
+  // depending on the order we have to traverse from the front to the back or vice versa
+
+  QList<Message> grouplist;
+  MsgId id;
+  MsgId dupeId;
+  int dupeCount = 0;
+  bool fastForward = false;
+  QList<Message>::const_iterator iter;
+  if(inOrder) {
+    iter = msglist.constEnd();
+    iter--; // this op is safe as we've allready passed an empty check
+  } else {
+    iter = msglist.constBegin();
+  }
+
+  int idx = indexForId((*iter).msgId());
+  if(idx >= 0)
+    dupeId = _messageList[idx]->msgId();
+
+  // we always compare to the previous entry...
+  // if there isn't, we can fastforward to the top
+  if(idx - 1 >= 0)
+    id = _messageList[idx - 1]->msgId();
+  else
+    fastForward = true;
+
+  if((*iter).msgId() != dupeId)
+    grouplist << *iter;
+  else
+    dupeCount++;
+
+  if(!inOrder)
+    iter++;
+
+  if(inOrder) {
+    while(iter != msglist.constBegin()) {
+      iter--;
+
+      if(!fastForward && (*iter).msgId() < id)
+	break;
+
+      if((*iter).msgId() != dupeId)
+	grouplist.prepend(*iter);
+      else
+	dupeCount++;
+    }
+  } else {
+    while(iter != msglist.constEnd()) {
+      if(!fastForward && (*iter).msgId() < id)
+	break;
+
+      if((*iter).msgId() != dupeId)
+	grouplist.prepend(*iter);
+      else
+	dupeCount++;
+
+      iter++;
+    }
+  }
+
+  insertMessageGroup(grouplist);
+  return grouplist.count() + dupeCount;
+}
+
+void MessageModel::customEvent(QEvent *event) {
+  if(event->type() != QEvent::User)
+    return;
+
+  event->accept();
+
+  if(_messageBuffer.isEmpty())
+    return;
+
+  int processedMsgs = insertMessagesGracefully(_messageBuffer);
+  int remainingMsgs = _messageBuffer.count() - processedMsgs;
+
+  QList<Message>::iterator removeStart = _messageBuffer.begin() + remainingMsgs;
+  QList<Message>::iterator removeEnd = _messageBuffer.end();
+  _messageBuffer.erase(removeStart, removeEnd);
+
+  if(!_messageBuffer.isEmpty())
+    QCoreApplication::postEvent(this, new ProcessBufferEvent());
 }
 
 void MessageModel::clear() {
@@ -79,6 +201,8 @@ void MessageModel::clear() {
   _messageList.clear();
   endRemoveRows();
 }
+
+
 
 // returns index of msg with given Id or of the next message after that (i.e., the index where we'd insert this msg)
 int MessageModel::indexForId(MsgId id) {
@@ -119,3 +243,20 @@ QVariant MessageModelItem::data(int column, int role) const {
   }
 }
 
+
+// Stuff for later
+bool MessageModelItem::lessThan(const MessageModelItem *m1, const MessageModelItem *m2){
+  return (*m1) < (*m2);
+}
+
+bool MessageModelItem::operator<(const MessageModelItem &other) const {
+  return _msgId < other._msgId;
+}
+
+bool MessageModelItem::operator==(const MessageModelItem &other) const {
+  return _msgId == other._msgId;
+}
+
+bool MessageModelItem::operator>(const MessageModelItem &other) const {
+  return _msgId > other._msgId;
+}

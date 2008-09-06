@@ -18,39 +18,19 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef SSLSERVER_H
-#define SSLSERVER_H
+#ifndef CHATVIEWSETTINGS_H
+#define CHATVIEWSETTINGS_H
 
-#ifdef HAVE_SSL
+#include "qtuisettings.h"
 
-#include <QSslCertificate>
-#include <QSslKey>
-#include <QTcpServer>
-#include <QLinkedList>
+class ChatScene;
+class ChatView;
 
-class SslServer : public QTcpServer {
-  Q_OBJECT
-
+class ChatViewSettings : public QtUiSettings {
 public:
-  SslServer(QObject *parent = 0);
-
-  virtual inline bool hasPendingConnections() const { return !_pendingConnections.isEmpty(); }
-  virtual QTcpSocket *nextPendingConnection();
-
-  virtual inline const QSslCertificate &certificate() const { return _cert; }
-  virtual inline const QSslKey &key() const { return _key; }
-  virtual inline bool certIsValid() const { return _certIsValid; }
-
-protected:
-  virtual void incomingConnection(int socketDescriptor);
-
-private:
-  QLinkedList<QTcpSocket *> _pendingConnections;
-  QSslCertificate _cert;
-  QSslKey _key;
-  bool _certIsValid;
+  ChatViewSettings(const QString &id = "__default__");
+  ChatViewSettings(ChatScene *scene);
+  ChatViewSettings(ChatView *view);
 };
 
-#endif //HAVE_SSL
-
-#endif //SSLSERVER_H
+#endif //CHATVIEWSETTINGS_H

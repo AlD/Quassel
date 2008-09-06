@@ -1142,20 +1142,10 @@ IF (QT4_QMAKE_FOUND)
 
   ENDMACRO(QT4_GET_MOC_INC_DIRS)
 
-  # Added by Sput to provide definitions to moc calls
-  MACRO (QT4_GET_MOC_DEFINES _moc_DEFINES)
-     SET(${_moc_DEFINES})
-     GET_DIRECTORY_PROPERTY(_defines COMPILE_DEFINITIONS)
-     FOREACH(_current ${_defines})
-        SET(${_moc_DEFINES} ${${_moc_DEFINES}} -D${_current})
-     ENDFOREACH(_current ${_defines})
-
-  ENDMACRO(QT4_GET_MOC_DEFINES)
-
   MACRO (QT4_GENERATE_MOC infile outfile )
   # get include dirs
      # QT4_GET_MOC_INC_DIRS(moc_includes) # Not needed...
-     QT4_GET_MOC_DEFINES(moc_defines)
+     # QT4_GET_MOC_DEFINES(moc_defines)   # Now supplied via ${MOC_DEFINES}
 
      GET_FILENAME_COMPONENT(abs_infile ${infile} ABSOLUTE)
 
@@ -1171,7 +1161,7 @@ IF (QT4_QMAKE_FOUND)
      ELSE (MSVC_IDE)
         ADD_CUSTOM_COMMAND(OUTPUT ${outfile}
            COMMAND ${QT_MOC_EXECUTABLE}
-           ARGS ${moc_includes} ${moc_defines} -o ${outfile} ${abs_infile}
+           ARGS ${moc_includes} ${MOC_DEFINES} -o ${outfile} ${abs_infile}
            DEPENDS ${abs_infile})
      ENDIF (MSVC_IDE)
 
@@ -1186,7 +1176,7 @@ IF (QT4_QMAKE_FOUND)
   MACRO (QT4_WRAP_CPP outfiles )
     # get include dirs
     # QT4_GET_MOC_INC_DIRS(moc_includes) # Not needed
-    QT4_GET_MOC_DEFINES(moc_defines)
+    # QT4_GET_MOC_DEFINES(moc_defines)   # Now supplied via ${MOC_DEFINES}
     QT4_EXTRACT_OPTIONS(moc_files moc_options ${ARGN})
 
     FOREACH (it ${moc_files})
@@ -1196,7 +1186,7 @@ IF (QT4_QMAKE_FOUND)
       SET(outfile ${CMAKE_CURRENT_BINARY_DIR}/moc_${outfile}.cxx)
       ADD_CUSTOM_COMMAND(OUTPUT ${outfile}
         COMMAND ${QT_MOC_EXECUTABLE}
-        ARGS ${moc_includes} ${moc_defines} ${moc_options} -o ${outfile} ${it}
+        ARGS ${moc_includes} ${MOC_DEFINES} ${moc_options} -o ${outfile} ${it}
         DEPENDS ${it})
       SET(${outfiles} ${${outfiles}} ${outfile})
     ENDFOREACH(it)

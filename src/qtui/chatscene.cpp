@@ -32,15 +32,13 @@
 #include "columnhandleitem.h"
 #include "messagefilter.h"
 #include "qtui.h"
-#include "qtuisettings.h"
+#include "chatviewsettings.h"
 
 const qreal minContentsWidth = 200;
 
-ChatScene::ChatScene(QAbstractItemModel *model, const QString &idString, QObject *parent)
-  : QGraphicsScene(parent),
+ChatScene::ChatScene(QAbstractItemModel *model, const QString &idString, qreal width, QObject *parent)
+  : QGraphicsScene(0, 0, width, 0, parent),
     _idString(idString),
-    _width(0),
-    _height(0),
     _model(model),
     _singleBufferScene(false),
     _selectingItem(0),
@@ -53,43 +51,35 @@ ChatScene::ChatScene(QAbstractItemModel *model, const QString &idString, QObject
     _singleBufferScene = filter->isSingleBufferFilter();
   }
 
-  connect(this, SIGNAL(sceneRectChanged(const QRectF &)), this, SLOT(rectChanged(const QRectF &)));
+  ChatViewSettings defaultSettings;
+  int defaultFirstColHandlePos = defaultSettings.value("FirstColumnHandlePos", 80).toInt();
+  int defaultSecondColHandlePos = defaultSettings.value("SecondColumnHandlePos", 200).toInt();
+
+  ChatViewSettings viewSettings(this);
+  firstColHandlePos = viewSettings.value("FirstColumnHandlePos", defaultFirstColHandlePos).toInt();
+  secondColHandlePos = viewSettings.value("SecondColumnHandlePos", defaultSecondColHandlePos).toInt();
+
+  firstColHandle = new ColumnHandleItem(QtUi::style()->firstColumnSeparator());
+  addItem(firstColHandle);
+  firstColHandle->setXPos(firstColHandlePos);
+  connect(firstColHandle, SIGNAL(positionChanged(qreal)), this, SLOT(handlePositionChanged(qreal)));
+  connect(this, SIGNAL(sceneRectChanged(const QRectF &)), firstColHandle, SLOT(sceneRectChanged(const QRectF &)));
+
+  secondColHandle = new ColumnHandleItem(QtUi::style()->secondColumnSeparator());
+  addItem(secondColHandle);
+  secondColHandle->setXPos(secondColHandlePos);
+  connect(secondColHandle, SIGNAL(positionChanged(qreal)), this, SLOT(handlePositionChanged(qreal)));
+  connect(this, SIGNAL(sceneRectChanged(const QRectF &)), secondColHandle, SLOT(sceneRectChanged(const QRectF &)));
+
+  setHandleXLimits();
 
   connect(model, SIGNAL(rowsInserted(const QModelIndex &, int, int)),
 	  this, SLOT(rowsInserted(const QModelIndex &, int, int)));
   connect(model, SIGNAL(rowsAboutToBeRemoved(const QModelIndex &, int, int)),
 	  this, SLOT(rowsAboutToBeRemoved(const QModelIndex &, int, int)));
 
-  for(int i = 0; i < model->rowCount(); i++) {
-    ChatLine *line = new ChatLine(i, model);
-    _lines.append(line);
-    addItem(line);
-  }
-
-  QtUiSettings s;
-  int defaultFirstColHandlePos = s.value("ChatView/DefaultFirstColumnHandlePos", 80).toInt();
-  int defaultSecondColHandlePos = s.value("ChatView/DefaultSecondColumnHandlePos", 200).toInt();
-
-  firstColHandlePos = s.value(QString("ChatView/%1/FirstColumnHandlePos").arg(_idString),
-                               defaultFirstColHandlePos).toInt();
-  secondColHandlePos = s.value(QString("ChatView/%1/SecondColumnHandlePos").arg(_idString),
-                                defaultSecondColHandlePos).toInt();
-
-  firstColHandle = new ColumnHandleItem(QtUi::style()->firstColumnSeparator());
-  addItem(firstColHandle);
-
-  secondColHandle = new ColumnHandleItem(QtUi::style()->secondColumnSeparator());
-  addItem(secondColHandle);
-
-  connect(firstColHandle, SIGNAL(positionChanged(qreal)), this, SLOT(handlePositionChanged(qreal)));
-  connect(secondColHandle, SIGNAL(positionChanged(qreal)), this, SLOT(handlePositionChanged(qreal)));
-
-  firstColHandle->setXPos(firstColHandlePos);
-  secondColHandle->setXPos(secondColHandlePos);
-  setHandleXLimits();
-
-  emit heightChanged(height());
-  emit heightChangedAt(0, height());
+  if(model->rowCount() > 0)
+    rowsInserted(QModelIndex(), 0, model->rowCount() - 1);
 }
 
 ChatScene::~ChatScene() {
@@ -97,23 +87,36 @@ ChatScene::~ChatScene() {
 
 void ChatScene::rowsInserted(const QModelIndex &index, int start, int end) {
   Q_UNUSED(index);
-  // maybe make this more efficient by prepending stuff with negative yval
-  // dunno if that's worth not guranteeing that 0 is on the top...
-  // TODO bulk inserts, iterators
   qreal h = 0;
-  qreal y = 0;
-  if(_width && start > 0)
-    y = _lines.value(start - 1)->y() + _lines.value(start - 1)->height();
+  qreal y = sceneRect().y();
+  qreal width = sceneRect().width();
+  bool atTop = true;
+  bool atBottom = false;
+  bool moveTop = false;
+  bool hasWidth = (width != 0);
 
-  for(int i = start; i <= end; i++) {
+  if(start > 0) {
+    y = _lines.value(start - 1)->y() + _lines.value(start - 1)->height();
+    atTop = false;
+  }
+  if(start == _lines.count())
+    atBottom = true;
+
+  for(int i = end; i >= start; i--) {
     ChatLine *line = new ChatLine(i, model());
-    _lines.insert(i, line);
+    _lines.insert(start, line);
     addItem(line);
-    if(_width > 0) {
-      line->setPos(0, y+h);
-      h += line->setGeometry(_width);
+    if(hasWidth) {
+      if(atTop) {
+	h -= line->setGeometry(width);
+	line->setPos(0, y+h);
+      } else {
+	line->setPos(0, y+h);
+	h += line->setGeometry(width);
+      }
     }
   }
+
   // update existing items
   for(int i = end+1; i < _lines.count(); i++) {
     _lines[i]->setRow(i);
@@ -128,21 +131,45 @@ void ChatScene::rowsInserted(const QModelIndex &index, int start, int end) {
     if(_lastSelectionRow >= start) _lastSelectionRow += offset;
   }
 
-  if(h > 0) {
-    _height += h;
-    for(int i = end+1; i < _lines.count(); i++) {
-      _lines.at(i)->moveBy(0, h);
+  // neither pre- or append means we have to do dirty work: move items...
+  if(!(atTop || atBottom)) {
+    qreal offset = h;
+    int moveStart = 0;
+    int moveEnd = _lines.count() - 1;
+    ChatLine *line = 0;
+    if(end > _lines.count() - end) {
+      // move top part
+      moveTop = true;
+      offset = -offset;
+      moveEnd = end;
+    } else {
+      // move bottom part
+      moveStart = start;
     }
-    setSceneRect(QRectF(0, 0, _width, _height));
-    emit heightChanged(_height);
-    emit heightChangedAt(_lines.at(start)->y(), h);
+    for(int i = moveStart; i <= moveEnd; i++) {
+      line = _lines.at(i);
+      line->setPos(0, line->pos().y() + offset);
+    }
   }
+  
+  // update sceneRect
+  if(atTop || moveTop) {
+    setSceneRect(sceneRect().adjusted(0, h, 0, 0));
+  } else {
+    setSceneRect(sceneRect().adjusted(0, 0, 0, h));
+    emit sceneHeightChanged(h);
+  }
+
 }
 
 void ChatScene::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end) {
   Q_UNUSED(parent);
 
   qreal h = 0; // total height of removed items;
+
+  bool atTop = (start == 0);
+  bool atBottom = (end == _lines.count() - 1);
+  bool moveTop = false;
 
   // remove items from scene
   QList<ChatLine *>::iterator lineIter = _lines.begin() + start;
@@ -172,37 +199,57 @@ void ChatScene::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int e
       _lastSelectionRow -= offset;
   }
 
-  // reposition remaining chatlines
-  if(h > 0) {
-    Q_ASSERT(_height >= h);
-    _height -= h;
-    for(int i = start; i < _lines.count(); i++) {
-      _lines.at(i)->moveBy(0, -h);
+  // neither removing at bottom or top means we have to move items...
+  if(!(atTop || atBottom)) {
+    qreal offset = h;
+    int moveStart = 0;
+    int moveEnd = _lines.count() - 1;
+    ChatLine *line = 0;
+    if(start > _lines.count() - end) {
+      // move top part
+      moveTop = true;
+      moveEnd = start - 1;
+    } else {
+      // move bottom part
+      moveStart = start;
+      offset = -offset;
     }
-    setSceneRect(QRectF(0, 0, _width, _height));
-    emit heightChanged(_height);
-    emit heightChangedAt(_lines.at(start)->y(), -h);
+    for(int i = moveStart; i <= moveEnd; i++) {
+      line = _lines.at(i);
+      line->setPos(0, line->pos().y() + offset);
+    }
   }
+
+  // update sceneRect
+  if(atTop || moveTop) {
+    setSceneRect(sceneRect().adjusted(0, h, 0, 0));
+  } else {
+    setSceneRect(sceneRect().adjusted(0, 0, 0, -h));
+  }
+
 }
 
-void ChatScene::setWidth(qreal w) {
-  qreal oldh = _height;
-  _width = w;
-  _height = 0;
+void ChatScene::setWidth(qreal width, bool forceReposition) {
+  if(width == sceneRect().width() && !forceReposition)
+    return;
+
+  qreal oldHeight = sceneRect().height();
+  qreal y = sceneRect().y();
+  qreal linePos = y;
+
   foreach(ChatLine *line, _lines) {
-    line->setPos(0, _height);
-    _height += line->setGeometry(_width);
+    line->setPos(0, linePos);
+    linePos += line->setGeometry(width);
   }
-  setSceneRect(QRectF(0, 0, w, _height));
+
+  qreal height = linePos - y;
+
+  setSceneRect(QRectF(0, y, width, height));
   setHandleXLimits();
-  emit heightChanged(_height);
-  emit heightChangedAt(0, _height - oldh);
 
-}
-
-void ChatScene::rectChanged(const QRectF &rect) {
-  firstColHandle->sceneRectChanged(rect);
-  secondColHandle->sceneRectChanged(rect);
+  qreal dh = height - oldHeight;
+  if(dh > 0)
+    emit sceneHeightChanged(dh);
 }
 
 void ChatScene::handlePositionChanged(qreal xpos) {
@@ -215,13 +262,16 @@ void ChatScene::handlePositionChanged(qreal xpos) {
     oldx = secondColHandlePos;
     secondColHandlePos = xpos;
   }
-  QtUiSettings s;
-  s.setValue(QString("ChatView/%1/FirstColumnHandlePos").arg(_idString), firstColHandlePos);
-  s.setValue(QString("ChatView/%1/SecondColumnHandlePos").arg(_idString), secondColHandlePos);
-  s.setValue(QString("ChatView/DefaultFirstColumnHandlePos"), firstColHandlePos);
-  s.setValue(QString("ChatView/DefaultSecondColumnHandlePos"), secondColHandlePos);
 
-  setWidth(width());  // readjust all chatlines
+  ChatViewSettings viewSettings(this);
+  viewSettings.setValue("FirstColumnHandlePos", firstColHandlePos);
+  viewSettings.setValue("SecondColumnHandlePos", secondColHandlePos);
+
+  ChatViewSettings defaultSettings;
+  defaultSettings.setValue("FirstColumnHandlePos", firstColHandlePos);
+  defaultSettings.setValue("SecondColumnHandlePos", secondColHandlePos);
+
+  setWidth(width(), true);  // readjust all chatlines
   // we get ugly redraw errors if we don't update this explicitly... :(
   // width() should be the same for both handles, so just use firstColHandle regardless
   //update(qMin(oldx, xpos), 0, qMax(oldx, xpos) + firstColHandle->width(), height());
@@ -361,7 +411,7 @@ QString ChatScene::selectionToString() const {
 }
 
 void ChatScene::requestBacklog() {
-  static const int REQUEST_COUNT = 50;
+  static const int REQUEST_COUNT = 100;
   int backlogSize = model()->rowCount();
   if(isSingleBufferScene() && backlogSize != 0 && _lastBacklogSize + REQUEST_COUNT <= backlogSize) {
     QModelIndex msgIdx = model()->index(0, 0);
