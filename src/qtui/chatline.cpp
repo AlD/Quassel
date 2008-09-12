@@ -27,6 +27,7 @@
 #include "client.h"
 #include "chatitem.h"
 #include "chatline.h"
+#include "columnhandleitem.h"
 #include "messagemodel.h"
 #include "networkmodel.h"
 #include "qtui.h"
@@ -68,15 +69,15 @@ ChatItem &ChatLine::item(ChatLineModel::ColumnType column) {
 qreal ChatLine::setGeometry(qreal width) {
   if(width != _width)
     prepareGeometryChange();
-  QRectF firstColHandleRect = chatScene()->firstColumnHandleRect();
-  QRectF secondColHandleRect = chatScene()->secondColumnHandleRect();
 
-  _height = _contentsItem.setGeometry(width - secondColHandleRect.right());
-  _timestampItem.setGeometry(firstColHandleRect.left(), _height);
-  _senderItem.setGeometry(secondColHandleRect.left() - firstColHandleRect.right(), _height);
+  ColumnHandleItem *firstColumnHandle = chatScene()->firstColumnHandle();
+  ColumnHandleItem *secondColumnHandle = chatScene()->secondColumnHandle();
+  _height = _contentsItem.setGeometry(width - secondColumnHandle->sceneRight());
+  _timestampItem.setGeometry(firstColumnHandle->sceneLeft(), _height);
+  _senderItem.setGeometry(secondColumnHandle->sceneLeft() - firstColumnHandle->sceneRight(), _height);
 
-  _senderItem.setPos(firstColHandleRect.right(), 0);
-  _contentsItem.setPos(secondColHandleRect.right(), 0);
+  _senderItem.setPos(firstColumnHandle->sceneRight(), 0);
+  _contentsItem.setPos(secondColumnHandle->sceneRight(), 0);
 
   _width = width;
   return _height;
@@ -132,7 +133,7 @@ void ChatLine::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     if(!(flags & Message::Self)) {
       BufferId bufferId = model_->data(prevRowIdx, MessageModel::BufferIdRole).value<BufferId>();
       if(msgId == Client::networkModel()->lastSeenMsgId(bufferId) && chatScene()->isSingleBufferScene()) {
-	QtUiSettings s("QtUiStyle/Colors");
+	QtUiStyleSettings s("Colors");
 	QLinearGradient gradient(0, 0, 0, height());
 	gradient.setColorAt(0, s.value("newMsgMarkerFG", QColor(Qt::red)).value<QColor>());
 	gradient.setColorAt(0.1, Qt::transparent);
