@@ -41,6 +41,7 @@ ChatScene::ChatScene(QAbstractItemModel *model, const QString &idString, qreal w
     _idString(idString),
     _model(model),
     _singleBufferScene(false),
+    _sceneRect(0, 0, width, 0),
     _selectingItem(0),
     _selectionStart(-1),
     _isSelecting(false),
@@ -88,8 +89,8 @@ ChatScene::~ChatScene() {
 void ChatScene::rowsInserted(const QModelIndex &index, int start, int end) {
   Q_UNUSED(index);
   qreal h = 0;
-  qreal y = sceneRect().y();
-  qreal width = sceneRect().width();
+  qreal y = _sceneRect.y();
+  qreal width = _sceneRect.width();
   bool atTop = true;
   bool atBottom = false;
   bool moveTop = false;
@@ -154,9 +155,9 @@ void ChatScene::rowsInserted(const QModelIndex &index, int start, int end) {
   
   // update sceneRect
   if(atTop || moveTop) {
-    setSceneRect(sceneRect().adjusted(0, h, 0, 0));
+    updateSceneRect(_sceneRect.adjusted(0, h, 0, 0));
   } else {
-    setSceneRect(sceneRect().adjusted(0, 0, 0, h));
+    updateSceneRect(_sceneRect.adjusted(0, 0, 0, h));
     emit sceneHeightChanged(h);
   }
 
@@ -222,19 +223,19 @@ void ChatScene::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int e
 
   // update sceneRect
   if(atTop || moveTop) {
-    setSceneRect(sceneRect().adjusted(0, h, 0, 0));
+    updateSceneRect(_sceneRect.adjusted(0, h, 0, 0));
   } else {
-    setSceneRect(sceneRect().adjusted(0, 0, 0, -h));
+    updateSceneRect(_sceneRect.adjusted(0, 0, 0, -h));
   }
-
 }
 
 void ChatScene::setWidth(qreal width, bool forceReposition) {
-  if(width == sceneRect().width() && !forceReposition)
+  if(width == _sceneRect.width() && !forceReposition)
     return;
 
-  qreal oldHeight = sceneRect().height();
-  qreal y = sceneRect().y();
+  // clock_t startT = clock();
+  qreal oldHeight = _sceneRect.height();
+  qreal y = _sceneRect.y();
   qreal linePos = y;
 
   foreach(ChatLine *line, _lines) {
@@ -244,12 +245,15 @@ void ChatScene::setWidth(qreal width, bool forceReposition) {
 
   qreal height = linePos - y;
 
-  setSceneRect(QRectF(0, y, width, height));
+  updateSceneRect(QRectF(0, y, width, height));
   setHandleXLimits();
 
   qreal dh = height - oldHeight;
   if(dh > 0)
     emit sceneHeightChanged(dh);
+
+  // clock_t endT = clock();
+  // qDebug() << "resized" << _lines.count() << "in" << (float)(endT - startT) / CLOCKS_PER_SEC << "sec";
 }
 
 void ChatScene::handlePositionChanged(qreal xpos) {
@@ -278,8 +282,8 @@ void ChatScene::handlePositionChanged(qreal xpos) {
 }
 
 void ChatScene::setHandleXLimits() {
-  firstColHandle->setXLimits(0, secondColumnHandleRect().left());
-  secondColHandle->setXLimits(firstColumnHandleRect().right(), width() - minContentsWidth);
+  firstColHandle->setXLimits(0, secondColHandle->sceneLeft());
+  secondColHandle->setXLimits(firstColHandle->sceneRight(), width() - minContentsWidth);
 }
 
 void ChatScene::setSelectingItem(ChatItem *item) {
@@ -298,12 +302,12 @@ void ChatScene::startGlobalSelection(ChatItem *item, const QPointF &itemPos) {
 void ChatScene::updateSelection(const QPointF &pos) {
   // This is somewhat hacky... we look at the contents item that is at the cursor's y position (ignoring x), since
   // it has the full height. From this item, we can then determine the row index and hence the ChatLine.
-  ChatItem *contentItem = static_cast<ChatItem *>(itemAt(QPointF(secondColumnHandleRect().right() + 1, pos.y())));
+  ChatItem *contentItem = static_cast<ChatItem *>(itemAt(QPointF(secondColHandle->sceneRight() + 1, pos.y())));
   if(!contentItem) return;
 
   int curRow = contentItem->row();
   int curColumn;
-  if(pos.x() > secondColumnHandleRect().right()) curColumn = ChatLineModel::ContentsColumn;
+  if(pos.x() > secondColHandle->sceneRight()) curColumn = ChatLineModel::ContentsColumn;
   else if(pos.x() > firstColHandlePos) curColumn = ChatLineModel::SenderColumn;
   else curColumn = ChatLineModel::TimestampColumn;
 
@@ -411,7 +415,7 @@ QString ChatScene::selectionToString() const {
 }
 
 void ChatScene::requestBacklog() {
-  static const int REQUEST_COUNT = 50;
+  static const int REQUEST_COUNT = 100;
   int backlogSize = model()->rowCount();
   if(isSingleBufferScene() && backlogSize != 0 && _lastBacklogSize + REQUEST_COUNT <= backlogSize) {
     QModelIndex msgIdx = model()->index(0, 0);
@@ -429,4 +433,9 @@ int ChatScene::sectionByScenePos(int x) {
     return ChatLineModel::SenderColumn;
 
   return ChatLineModel::ContentsColumn;
+}
+
+void ChatScene::updateSceneRect(const QRectF &rect) {
+  _sceneRect = rect;
+  setSceneRect(rect);
 }
