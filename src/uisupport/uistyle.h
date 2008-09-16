@@ -61,6 +61,7 @@ class UiStyle {
       RenameMsg       = 0x00000009,
       ModeMsg         = 0x0000000a,
       ActionMsg       = 0x0000000b,
+      RawMsg          = 0x0000000c,
       // Standard Formats
       Bold            = 0x00000010,
       Italic          = 0x00000020,

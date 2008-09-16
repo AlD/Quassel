@@ -87,6 +87,7 @@ UiStyle::UiStyle(const QString &settingsKey) : _settingsKey(settingsKey) {
   _formatCodes["%Dr"] = RenameMsg;
   _formatCodes["%Dm"] = ModeMsg;
   _formatCodes["%Da"] = ActionMsg;
+  _formatCodes["%Dz"] = RawMsg;
 
   _formatCodes["%DT"] = Timestamp;
   _formatCodes["%DS"] = Sender;
@@ -365,6 +366,10 @@ UiStyle::StyledMessage UiStyle::styleMessage(const Message &msg) {
     case Message::Action:
       s = tr("%Da-*-");
       t = tr("%Da%DN%1%DN %2").arg(nick).arg(txt);
+      break;
+    case Message::Raw:
+      s = tr("%Dz>");
+      t = tr("%Dz%1").arg(txt);
       break;
     default:
       s = tr("%De%1").arg(msg.sender());

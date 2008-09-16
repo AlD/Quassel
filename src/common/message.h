@@ -45,7 +45,8 @@ public:
     Kill   = 0x0200,
     Server = 0x0400,
     Info   = 0x0800,
-    Error  = 0x1000
+    Error  = 0x1000,
+    Raw    = 0x2000
   };
 
   // DO NOT CHANGE without knowing what you do, some of these flags are stored in the database
