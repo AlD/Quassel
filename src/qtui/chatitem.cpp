@@ -116,7 +116,7 @@ void ChatItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     //painter->fillRect(boundingRect(), QApplication::palette().brush(QPalette::Highlight));
     //painter->restore();
   //}
-  QVector<QTextLayout::FormatRange> formats;
+  QVector<QTextLayout::FormatRange> formats = additionalFormats();
   if(_selectionMode != NoSelection) {
     QTextLayout::FormatRange selectFmt;
     selectFmt.format.setForeground(QApplication::palette().brush(QPalette::HighlightedText));
@@ -264,8 +264,12 @@ qreal ContentsChatItem::computeHeight() {
 }
 
 void ContentsChatItem::setLayout(QTextLayout *layout) {
-  if(!_layoutData)
+  if(!_layoutData) {
     _layoutData = new LayoutData;
+    _layoutData->clickables = findClickables();
+  } else {
+    delete _layoutData->layout;
+  }
   _layoutData->layout = layout;
 }
 
@@ -297,38 +301,150 @@ void ContentsChatItem::updateLayout() {
   layout()->endLayout();
 }
 
-void ContentsChatItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
-  // FIXME dirty and fast hack to make http:// urls klickable
+// NOTE: This method is not threadsafe and not reentrant!
+//       (RegExps are not constant while matching, and they are static here for efficiency)
+QList<ContentsChatItem::Clickable> ContentsChatItem::findClickables() {
+  // For matching URLs
+  static QString urlEnd("(?:>|[,.;:]?\\s|\\b)");
+  static QString urlChars("(?:[\\w\\-~@/?&=+$()!%#]|[,.;:]\\w)");
 
-  QRegExp regex("\\b([hf]t{1,2}ps?://[^\\s]+)\\b");
+  static QRegExp regExp[] = {
+    // URL
+    QRegExp(QString("((?:(?:https?://|s?ftp://|irc://|mailto:)|www)%1+)%2").arg(urlChars, urlEnd)),
+
+    // Channel name
+    // We don't match for channel names starting with + or &, because that gives us a lot of false positives.
+    QRegExp("((?:#|![A-Z0-9]{5})[^,:\\s]+(?::[^,:\\s]+)?)\\b")
+
+    // TODO: Nicks, we'll need a filtering for only matching known nicknames further down if we do this
+  };
+
+  static const int regExpCount = 2;  // number of regexps in the array above
+
+  qint16 matches[] = { 0, 0, 0 };
+  qint16 matchEnd[] = { 0, 0, 0 };
+
   QString str = data(ChatLineModel::DisplayRole).toString();
-  int idx = posToCursor(event->pos());
-  int mi = 0;
+
+  QList<Clickable> result;
+  qint16 idx = 0;
+  qint16 minidx;
+  int type = -1;
+
   do {
-    mi = regex.indexIn(str, mi);
-    if(mi < 0) break;
-    if(idx >= mi && idx < mi + regex.matchedLength()) {
-      QDesktopServices::openUrl(QUrl(regex.capturedTexts()[1]));
-      break;
+    type = -1;
+    minidx = str.length();
+    for(int i = 0; i < regExpCount; i++) {
+      if(matches[i] < 0 || idx < matchEnd[i] || matchEnd[i] >= str.length()) continue;
+      matches[i] = str.indexOf(regExp[i], qMax(matchEnd[i], idx));
+      if(matches[i] >= 0) {
+        matchEnd[i] = matches[i] + regExp[i].cap(1).length();
+        if(matches[i] < minidx) {
+          minidx = matches[i];
+          type = i;
+        }
+      }
     }
-    mi += regex.matchedLength();
-  } while(mi >= 0);
-  event->accept();
+    if(type >= 0) {
+      idx = matchEnd[type];
+      result.append(Clickable((Clickable::Type)type, matches[type], matchEnd[type] - matches[type]));
+    }
+  } while(type >= 0);
+
+  /* testing
+  if(!result.isEmpty()) qDebug() << str;
+  foreach(Clickable click, result) {
+    qDebug() << str.mid(click.start, click.length);
+  }
+  */
+  return result;
 }
 
-void ContentsChatItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
-  //qDebug() << (void*)this << "entering";
-  event->ignore();
+QVector<QTextLayout::FormatRange> ContentsChatItem::additionalFormats() const {
+  // mark a clickable if hovered upon
+  QVector<QTextLayout::FormatRange> fmt;
+  if(layoutData()->currentClickable.isValid()) {
+    Clickable click = layoutData()->currentClickable;
+    QTextLayout::FormatRange f;
+    f.start = click.start;
+    f.length = click.length;
+    f.format.setFontUnderline(true);
+    fmt.append(f);
+  }
+  return fmt;
+}
+
+void ContentsChatItem::endHoverMode() {
+  if(layoutData()->currentClickable.isValid()) {
+    setCursor(Qt::ArrowCursor);
+    layoutData()->currentClickable = Clickable();
+    update();
+  }
+}
+
+void ContentsChatItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+  layoutData()->hasDragged = false;
+  ChatItem::mousePressEvent(event);
+}
+
+void ContentsChatItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+  if(!event->buttons() && !layoutData()->hasDragged) {
+    // got a click
+    Clickable click = layoutData()->currentClickable;
+    if(click.isValid()) {
+      QString str = data(ChatLineModel::DisplayRole).toString().mid(click.start, click.length);
+      switch(click.type) {
+        case Clickable::Url:
+          QDesktopServices::openUrl(str);
+          break;
+        case Clickable::Channel:
+          // TODO join or whatever...
+          break;
+        default:
+          break;
+      }
+    }
+  }
+  ChatItem::mouseReleaseEvent(event);
+}
+
+void ContentsChatItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
+  // mouse move events always mean we're not hovering anymore...
+  endHoverMode();
+  // also, check if we have dragged the mouse
+  if(!layoutData()->hasDragged && event->buttons() & Qt::LeftButton
+    && (event->buttonDownScreenPos(Qt::LeftButton) - event->screenPos()).manhattanLength() >= QApplication::startDragDistance())
+    layoutData()->hasDragged = true;
+  ChatItem::mouseMoveEvent(event);
 }
 
 void ContentsChatItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
-  //qDebug() << (void*)this << "leaving";
-  event->ignore();
+  endHoverMode();
+  event->accept();
 }
 
 void ContentsChatItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event) {
-  //qDebug() << (void*)this << event->pos();
-  event->ignore();
+  bool onClickable = false;
+  qint16 idx = posToCursor(event->pos());
+  for(int i = 0; i < layoutData()->clickables.count(); i++) {
+    Clickable click = layoutData()->clickables.at(i);
+    if(idx >= click.start && idx < click.start + click.length) {
+      if(click.type == Clickable::Url)
+        onClickable = true;
+      else if(click.type == Clickable::Channel) {
+        // TODO: don't make clickable if it's our own name
+        //onClickable = true; FIXME disabled for now
+      }
+      if(onClickable) {
+        setCursor(Qt::PointingHandCursor);
+        layoutData()->currentClickable = click;
+        update();
+        break;
+      }
+    }
+  }
+  if(!onClickable) endHoverMode();
+  event->accept();
 }
 
 /*************************************************************************************************/
