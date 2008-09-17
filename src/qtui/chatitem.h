@@ -73,6 +73,7 @@ protected:
 
   virtual inline QTextLayout *layout() const { return _layout; }
   virtual inline void setLayout(QTextLayout *l) { _layout = l; }
+  virtual inline QVector<QTextLayout::FormatRange> additionalFormats() const { return QVector<QTextLayout::FormatRange>(); }
   qint16 posToCursor(const QPointF &pos);
 
   virtual qreal computeHeight();
@@ -131,27 +132,55 @@ public:
   virtual inline bool haveLayout() const { return _layoutData != 0 && layout() != 0; }
 
 protected:
-  virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
-  virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+  virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+  virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
+  virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
   virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
   virtual void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
 
   virtual inline QTextLayout *layout() const;
   virtual void setLayout(QTextLayout *l);
+  virtual QVector<QTextLayout::FormatRange> additionalFormats() const;
 
 private:
   struct LayoutData;
+  struct Clickable;
   class WrapColumnFinder;
 
+  inline LayoutData *layoutData() const;
+
   qreal computeHeight();
+  QList<Clickable> findClickables();
+  void endHoverMode();
 
   LayoutData *_layoutData;
 };
 
+struct ContentsChatItem::Clickable {
+  // Don't change these enums without also changing the regexps in analyze()!
+  enum Type {
+    Invalid = -1,
+    Url = 0,
+    Channel = 1,
+    Nick = 2
+  };
+
+  Type type;
+  quint16 start;
+  quint16 length;
+
+  inline Clickable() : type(Invalid) {};
+  inline Clickable(Type type_, quint16 start_, quint16 length_) : type(type_), start(start_), length(length_) {};
+  inline bool isValid() const { return type != Invalid; }
+};
+
 struct ContentsChatItem::LayoutData {
   QTextLayout *layout;
+  QList<Clickable> clickables;
+  Clickable currentClickable;
+  bool hasDragged;
 
-  LayoutData() { layout = 0; }
+  LayoutData() { layout = 0; hasDragged = false; }
   ~LayoutData() { delete layout; }
 };
 
@@ -178,6 +207,8 @@ private:
 // Avoid circular include deps
 #include "chatline.h"
 int ChatItem::row() const { return static_cast<ChatLine *>(parentItem())->row(); }
+
 QTextLayout *ContentsChatItem::layout() const { return _layoutData->layout; }
+ContentsChatItem::LayoutData *ContentsChatItem::layoutData() const { Q_ASSERT(_layoutData); return _layoutData; }
 
 #endif
