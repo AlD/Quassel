@@ -364,7 +364,8 @@ void UserInputHandler::defaultHandler(QString cmd, const BufferInfo &bufferInfo,
       return;
     }
   }
-  emit displayMsg(Message::Error, BufferInfo::StatusBuffer, "", QString("Error: %1 %2").arg(cmd).arg(msg));
+  emit displayMsg(Message::Raw, BufferInfo::StatusBuffer, "", QString("%1 %2").arg(cmd.toUpper()).arg(msg));
+  emit putCmd(serverEncode(cmd), serverEncode(msg));
 }
 
 void UserInputHandler::expand(const QString &alias, const BufferInfo &bufferInfo, const QString &msg) {
