@@ -30,6 +30,7 @@
 #include "chatitem.h"
 #include "chatlinemodel.h"
 #include "qtui.h"
+#include "qtuistyle.h"
 
 ChatItem::ChatItem(ChatLineModel::ColumnType col, QAbstractItemModel *model, QGraphicsItem *parent)
   : QGraphicsItem(parent),
@@ -63,7 +64,6 @@ qreal ChatItem::setGeometry(qreal w, qreal h) {
   prepareGeometryChange();
   _boundingRect.setWidth(w);
   if(h < 0) h = computeHeight();
-  //if(h < 0) h = fontMetrics()->lineSpacing(); // only contents can be multi-line
   _boundingRect.setHeight(h);
   if(haveLayout()) updateLayout();
   return h;
@@ -296,7 +296,7 @@ void ContentsChatItem::updateLayout() {
     int col = finder.nextWrapColumn();
     line.setNumColumns(col >= 0 ? col - line.textStart() : layout()->text().length());
     line.setPosition(QPointF(0, h));
-    h += line.height() + fontMetrics()->leading();
+    h += fontMetrics()->lineSpacing();
   }
   layout()->endLayout();
 }
@@ -305,11 +305,12 @@ void ContentsChatItem::updateLayout() {
 //       (RegExps are not constant while matching, and they are static here for efficiency)
 QList<ContentsChatItem::Clickable> ContentsChatItem::findClickables() {
   // For matching URLs
-  static QString urlEnd("(?:>|[,.;:]?\\s|\\b)");
+  static QString urlEnd("(?:>|[,.;:\"]*\\s|\\b|$)");
   static QString urlChars("(?:[\\w\\-~@/?&=+$()!%#]|[,.;:]\\w)");
 
   static QRegExp regExp[] = {
     // URL
+    // QRegExp(QString("((?:https?://|s?ftp://|irc://|mailto:|www\\.)%1+|%1+\\.[a-z]{2,4}(?:?=/%1+|\\b))%2").arg(urlChars, urlEnd)),
     QRegExp(QString("((?:(?:https?://|s?ftp://|irc://|mailto:)|www)%1+)%2").arg(urlChars, urlEnd)),
 
     // Channel name
@@ -335,18 +336,21 @@ QList<ContentsChatItem::Clickable> ContentsChatItem::findClickables() {
     type = -1;
     minidx = str.length();
     for(int i = 0; i < regExpCount; i++) {
-      if(matches[i] < 0 || idx < matchEnd[i] || matchEnd[i] >= str.length()) continue;
-      matches[i] = str.indexOf(regExp[i], qMax(matchEnd[i], idx));
-      if(matches[i] >= 0) {
-        matchEnd[i] = matches[i] + regExp[i].cap(1).length();
-        if(matches[i] < minidx) {
-          minidx = matches[i];
-          type = i;
-        }
+      if(matches[i] < 0 || matchEnd[i] > str.length()) continue;
+      if(idx >= matchEnd[i]) {
+        matches[i] = str.indexOf(regExp[i], qMax(matchEnd[i], idx));
+        if(matches[i] >= 0) matchEnd[i] = matches[i] + regExp[i].cap(1).length();
+      }
+      if(matches[i] >= 0 && matches[i] < minidx) {
+        minidx = matches[i];
+        type = i;
       }
     }
     if(type >= 0) {
       idx = matchEnd[type];
+      if(type == Clickable::Url && str.at(idx-1) == ')') {  // special case: closing paren only matches if we had an open one
+        if(!str.mid(matches[type], matchEnd[type]-matches[type]).contains('(')) matchEnd[type]--;
+      }
       result.append(Clickable((Clickable::Type)type, matches[type], matchEnd[type] - matches[type]));
     }
   } while(type >= 0);
@@ -433,7 +437,7 @@ void ContentsChatItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event) {
         onClickable = true;
       else if(click.type == Clickable::Channel) {
         // TODO: don't make clickable if it's our own name
-        //onClickable = true; FIXME disabled for now
+        //onClickable = true; //FIXME disabled for now
       }
       if(onClickable) {
         setCursor(Qt::PointingHandCursor);

@@ -7,6 +7,8 @@ include(${QT_USE_FILE})
 set(SOURCES
     abstractbuffercontainer.cpp
     abstractitemview.cpp
+    action.cpp
+    actioncollection.cpp
     bufferview.cpp
     bufferviewfilter.cpp
     clearablelineedit.cpp
@@ -23,6 +25,8 @@ set(SOURCES
 set(MOC_HDRS
     abstractbuffercontainer.h
     abstractitemview.h
+    action.h
+    actioncollection.h
     bufferview.h
     bufferviewfilter.h
     clearablelineedit.h

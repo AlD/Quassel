@@ -20,6 +20,8 @@
 #include "mainwin.h"
 
 #include "aboutdlg.h"
+#include "action.h"
+#include "actioncollection.h"
 #include "bufferview.h"
 #include "bufferviewconfig.h"
 #include "bufferviewfilter.h"
@@ -66,7 +68,6 @@
 #include "settingspages/networkssettingspage.h"
 #include "settingspages/notificationssettingspage.h"
 
-#include "global.h"
 #include "qtuistyle.h"
 
 MainWin::MainWin(QWidget *parent)
@@ -83,7 +84,8 @@ MainWin::MainWin(QWidget *parent)
     offlineTrayIcon(":/icons/quassel-icon-offline.png"),
     trayIconActive(false),
 
-    timer(new QTimer(this))
+    timer(new QTimer(this)),
+    _actionCollection(new ActionCollection(this))
 {
   UiSettings uiSettings;
   QString style = uiSettings.value("Style", QString("")).toString();
@@ -98,6 +100,8 @@ MainWin::MainWin(QWidget *parent)
   systray->setIcon(offlineTrayIcon);
   setWindowIconText("Quassel IRC");
 
+  QtUi::actionCollection()->addAssociatedWidget(this);
+
   statusBar()->showMessage(tr("Waiting for core..."));
 
   installEventFilter(new JumpKeyHandler(this));
@@ -111,7 +115,7 @@ MainWin::MainWin(QWidget *parent)
   connect(desktopNotifications, SIGNAL(NotificationClosed(uint, uint)), this, SLOT(desktopNotificationClosed(uint, uint)));
   connect(desktopNotifications, SIGNAL(ActionInvoked(uint, const QString&)), this, SLOT(desktopNotificationInvoked(uint, const QString&)));
 #endif
-  QtUiApplication* app = dynamic_cast<QtUiApplication*> qApp;
+  QtUiApplication* app = qobject_cast<QtUiApplication*> qApp;
   connect(app, SIGNAL(saveStateToSession(const QString&)), this, SLOT(saveStateToSession(const QString&)));
   connect(app, SIGNAL(saveStateToSessionSettings(SessionSettings&)), this, SLOT(saveStateToSessionSettings(SessionSettings&)));
 }
@@ -141,6 +145,7 @@ void MainWin::init() {
   setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
 
   // setup stuff...
+  setupActions();
   setupMenus();
   setupViews();
   setupNickWidget();
@@ -162,7 +167,7 @@ void MainWin::init() {
   // attach the BufferWidget to the BufferModel and the default selection
   ui.bufferWidget->setModel(Client::bufferModel());
   ui.bufferWidget->setSelectionModel(Client::bufferModel()->standardSelectionModel());
-  ui.menuViews->addAction(ui.bufferWidget->searchBar()->toggleViewAction());
+  ui.menuViews->addAction(QtUi::actionCollection()->action("toggleSearchBar"));
 
   _titleSetter.setModel(Client::bufferModel());
   _titleSetter.setSelectionModel(Client::bufferModel()->standardSelectionModel());
@@ -173,6 +178,11 @@ MainWin::~MainWin() {
   s.setValue("MainWinSize", size());
   s.setValue("MainWinPos", pos());
   s.setValue("MainWinState", saveState());
+}
+
+void MainWin::setupActions() {
+
+
 }
 
 void MainWin::setupMenus() {
@@ -770,7 +780,7 @@ void MainWin::on_actionDebugNetworkModel_triggered(bool) {
 void MainWin::saveStateToSession(const QString &sessionId) {
   return;
   SessionSettings s(sessionId);
-  
+
   s.setValue("MainWinSize", size());
   s.setValue("MainWinPos", pos());
   s.setValue("MainWinState", saveState());

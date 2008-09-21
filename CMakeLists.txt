@@ -49,19 +49,8 @@ set(CMAKE_BUILD_WITH_INSTALL_RPATH 1)
 
 # Enable various flags on gcc
 if(CMAKE_COMPILER_IS_GNUCXX)
-  include(CheckCXXCompilerFlag)
-  check_cxx_compiler_flag(-Wall HAVE_WALL)
-  if(HAVE_WALL)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
-  endif(HAVE_WALL)
-  check_cxx_compiler_flag(-Wextra HAVE_WEXTRA)
-  if(HAVE_WEXTRA)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wextra")
-  endif(HAVE_WEXTRA)
-  check_cxx_compiler_flag(-ansi HAVE_ANSI)
-  if(HAVE_ANSI)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ansi")
-  endif(HAVE_ANSI)
+  # Let's just hope that all gccs support these options and skip the tests...
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ansi -Wall -Wextra -Wnon-virtual-dtor")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 set(QT_MIN_VERSION "4.4.0")
@@ -239,7 +228,7 @@ endmacro(setup_qt4_variables)
 # Now we have everything, so just glue the right pieces together :)
 if(WANT_CORE)
   setup_qt4_variables(NETWORK SCRIPT SQL)
-  add_executable(quasselcore ${CMAKE_SOURCE_DIR}/src/common/main.cpp
+  add_executable(quasselcore src/common/main.cpp
                              ${RC_SQL} ${RC_I18N} ${WIN32_RC})
   set_target_properties(quasselcore PROPERTIES 
                                     COMPILE_FLAGS "-DQT_NETWORK_LIB -DQT_SCRIPT_LIB -DQT_SQL_LIB -DBUILD_CORE")
@@ -249,7 +238,7 @@ endif(WANT_CORE)
 
 if(WANT_QTCLIENT)
   setup_qt4_variables(${LINK_DBUS} GUI NETWORK)
-  add_executable(quasselclient WIN32 ${CMAKE_SOURCE_DIR}/src/common/main.cpp
+  add_executable(quasselclient WIN32 src/common/main.cpp
                                      ${RC_ICONS} ${RC_QUASSEL_ICONS} ${RC_I18N} ${WIN32_RC})
   set_target_properties(quasselclient PROPERTIES
                                       COMPILE_FLAGS "-DQT_GUI_LIB -DQT_NETWORK_LIB -DBUILD_QTUI")
@@ -259,7 +248,7 @@ endif(WANT_QTCLIENT)
 
 if(WANT_MONO)
   setup_qt4_variables(${LINK_DBUS} GUI NETWORK SCRIPT SQL)
-  add_executable(quassel WIN32 ${CMAKE_SOURCE_DIR}/src/common/main.cpp
+  add_executable(quassel WIN32 src/common/main.cpp src/qtui/monoapplication.cpp
                                ${RC_ICONS} ${RC_QUASSEL_ICONS} ${RC_SQL} ${RC_I18N} ${WIN32_RC})
   set_target_properties(quassel PROPERTIES 
                                 COMPILE_FLAGS "-DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SCRIPT_LIB -DQT_SQL_LIB -DBUILD_MONO")
