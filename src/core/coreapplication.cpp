@@ -22,7 +22,11 @@
 
 #include "core.h"
 
-CoreApplicationInternal::CoreApplicationInternal() {
+CoreApplicationInternal::CoreApplicationInternal()
+  : _coreCreated(false)
+{
+  Q_INIT_RESOURCE(sql);
+
   // put core-only arguments here
   CliParser *parser = Quassel::cliParser();
   parser->addOption("port",'p', tr("The port quasselcore will listen at"), QString("4242"));
@@ -33,8 +37,10 @@ CoreApplicationInternal::CoreApplicationInternal() {
 }
 
 CoreApplicationInternal::~CoreApplicationInternal() {
-  Core::saveState();
-  Core::destroy();
+  if(_coreCreated) {
+    Core::saveState();
+    Core::destroy();
+  }
 }
 
 bool CoreApplicationInternal::init() {
@@ -51,6 +57,7 @@ bool CoreApplicationInternal::init() {
   }
 
   Core::instance();  // create and init the core
+  _coreCreated = true;
 
   if(!Quassel::isOptionSet("norestore")) {
     Core::restoreState();

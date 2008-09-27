@@ -45,6 +45,7 @@ bool QtUiApplication::init() {
     // QTimer::singleShot(0, gui, SLOT(init()));
     gui->init();
     resumeSessionIfPossible();
+
     return true;
   }
   return false;

@@ -36,6 +36,7 @@
 #include "clientbacklogmanager.h"
 #include "coreinfodlg.h"
 #include "coreconnectdlg.h"
+#include "iconloader.h"
 #include "msgprocessorstatuswidget.h"
 #include "qtuimessageprocessor.h"
 #include "qtuiapplication.h"
@@ -79,9 +80,9 @@ MainWin::MainWin(QWidget *parent)
     _titleSetter(this),
     systray(new QSystemTrayIcon(this)),
 
-    activeTrayIcon(":/icons/quassel-icon-active.png"),
-    onlineTrayIcon(":/icons/quassel-icon.png"),
-    offlineTrayIcon(":/icons/quassel-icon-offline.png"),
+    activeTrayIcon(DesktopIcon("quassel_newmessage", IconLoader::SizeEnormous)),
+    onlineTrayIcon(DesktopIcon("quassel", IconLoader::SizeEnormous)),
+    offlineTrayIcon(DesktopIcon("quassel_disconnected", IconLoader::SizeEnormous)),
     trayIconActive(false),
 
     timer(new QTimer(this)),
@@ -92,7 +93,6 @@ MainWin::MainWin(QWidget *parent)
   if(style != "") {
     QApplication::setStyle(style);
   }
-
   ui.setupUi(this);
   setWindowTitle("Quassel IRC");
   setWindowIcon(offlineTrayIcon);
@@ -181,8 +181,16 @@ MainWin::~MainWin() {
 }
 
 void MainWin::setupActions() {
-
-
+  // TODO don't get these from *.ui anymore... we shouldn't need one
+  ui.actionQuit->setIcon(SmallIcon("application-exit"));
+  ui.actionSettingsDlg->setIcon(SmallIcon("configure"));
+  ui.actionManageViews->setIcon(SmallIcon("view-tree"));
+  ui.actionManageViews2->setIcon(SmallIcon("view-tree"));
+  ui.actionAboutQt->setIcon(SmallIcon("qt"));
+  ui.actionAboutQuassel->setIcon(SmallIcon("quassel"));
+  ui.actionConnectCore->setIcon(SmallIcon("network-connect"));
+  ui.actionDisconnectCore->setIcon(SmallIcon("network-disconnect"));
+  ui.actionCoreInfo->setIcon(SmallIcon("help-about"));
 }
 
 void MainWin::setupMenus() {
@@ -422,7 +430,7 @@ void MainWin::setConnectedState() {
   qApp->setWindowIcon(onlineTrayIcon);
   systray->setIcon(onlineTrayIcon);
   if(sslLabel->width() == 0)
-    sslLabel->setPixmap(QPixmap::fromImage(QImage(":/16x16/status/no-ssl")));
+    sslLabel->setPixmap(SmallIcon("security-low"));
 }
 
 void MainWin::loadLayout() {
@@ -444,7 +452,7 @@ void MainWin::updateLagIndicator(int lag) {
 
 void MainWin::securedConnection() {
   // todo: make status bar entry
-  sslLabel->setPixmap(QPixmap::fromImage(QImage(":/16x16/status/ssl")));
+  sslLabel->setPixmap(SmallIcon("security-high"));
 }
 
 void MainWin::disconnectedFromCore() {
@@ -736,13 +744,13 @@ void MainWin::clientNetworkUpdated() {
 
   switch(net->connectionState()) {
   case Network::Initialized:
-    action->setIcon(QIcon(":/16x16/actions/network-connect"));
+    action->setIcon(SmallIcon("network-connect"));
     break;
   case Network::Disconnected:
-    action->setIcon(QIcon(":/16x16/actions/network-disconnect"));
+    action->setIcon(SmallIcon("network-disconnect"));
     break;
   default:
-    action->setIcon(QIcon(":/16x16/actions/gear"));
+    action->setIcon(SmallIcon("network-wired"));
   }
 }
 

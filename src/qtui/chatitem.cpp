@@ -26,28 +26,30 @@
 #include <QPainter>
 #include <QPalette>
 #include <QTextLayout>
+#ifdef HAVE_WEBKIT
+#include <QWebView>
+#endif
+#include <QGraphicsProxyWidget>
 
 #include "chatitem.h"
 #include "chatlinemodel.h"
 #include "qtui.h"
 #include "qtuistyle.h"
 
-ChatItem::ChatItem(ChatLineModel::ColumnType col, QAbstractItemModel *model, QGraphicsItem *parent)
+ChatItem::ChatItem(const qreal &width, const qreal &height, const QPointF &pos, QGraphicsItem *parent)
   : QGraphicsItem(parent),
-    _fontMetrics(0),
+    _data(0),
+    _boundingRect(0, 0, width, height),
     _selectionMode(NoSelection),
-    _selectionStart(-1),
-    _layout(0)
+    _selectionStart(-1)
 {
-  Q_ASSERT(model);
-  QModelIndex index = model->index(row(), col);
-  _fontMetrics = QtUi::style()->fontMetrics(model->data(index, ChatLineModel::FormatRole).value<UiStyle::FormatList>().at(0).second);
   setAcceptHoverEvents(true);
   setZValue(20);
+  setPos(pos);
 }
 
 ChatItem::~ChatItem() {
-  delete _layout;
+  delete _data;
 }
 
 QVariant ChatItem::data(int role) const {
@@ -57,20 +59,6 @@ QVariant ChatItem::data(int role) const {
     return QVariant();
   }
   return model()->data(index, role);
-}
-
-qreal ChatItem::setGeometry(qreal w, qreal h) {
-  if(w == _boundingRect.width()) return _boundingRect.height();
-  prepareGeometryChange();
-  _boundingRect.setWidth(w);
-  if(h < 0) h = computeHeight();
-  _boundingRect.setHeight(h);
-  if(haveLayout()) updateLayout();
-  return h;
-}
-
-qreal ChatItem::computeHeight() {
-  return fontMetrics()->lineSpacing(); // only contents can be multi-line
 }
 
 QTextLayout *ChatItem::createLayout(QTextOption::WrapMode wrapMode, Qt::Alignment alignment) {
@@ -88,28 +76,30 @@ QTextLayout *ChatItem::createLayout(QTextOption::WrapMode wrapMode, Qt::Alignmen
 }
 
 void ChatItem::updateLayout() {
-  if(!haveLayout())
-    setLayout(createLayout(QTextOption::WrapAnywhere, Qt::AlignLeft));
-
-  layout()->beginLayout();
-  QTextLine line = layout()->createLine();
+  if(!privateData()) {
+    setPrivateData(new ChatItemPrivate(createLayout()));
+  }
+  QTextLayout *layout_ = layout();
+  layout_->beginLayout();
+  QTextLine line = layout_->createLine();
   if(line.isValid()) {
     line.setLineWidth(width());
     line.setPosition(QPointF(0,0));
   }
-  layout()->endLayout();
+  layout_->endLayout();
 }
 
 void ChatItem::clearLayout() {
-  delete _layout;
-  _layout = 0;
+  delete _data;
+  _data = 0;
 }
 
 // NOTE: This is not the most time-efficient implementation, but it saves space by not caching unnecessary data
 //       This is a deliberate trade-off. (-> selectFmt creation, data() call)
 void ChatItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
   Q_UNUSED(option); Q_UNUSED(widget);
-  if(!haveLayout()) updateLayout();
+  if(!hasLayout())
+    updateLayout();
   painter->setClipRect(boundingRect()); // no idea why QGraphicsItem clipping won't work
   //if(_selectionMode == FullSelection) {
     //painter->save();
@@ -131,12 +121,29 @@ void ChatItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     formats.append(selectFmt);
   }
   layout()->draw(painter, QPointF(0,0), formats, boundingRect());
+
+  // Debuging Stuff
+  // uncomment the following lines to draw the bounding rect and the row number in alternating colors
+//   if(row() % 2)
+//     painter->setPen(Qt::red);
+//   else
+//     painter->setPen(Qt::blue);
+//   QString rowString = QString::number(row());
+//   QRect rowRect = painter->fontMetrics().boundingRect(rowString);
+//   QPointF topPoint = _boundingRect.topLeft();
+//   topPoint.ry() += rowRect.height();
+//   painter->drawText(topPoint, rowString);
+//   QPointF bottomPoint = _boundingRect.bottomRight();
+//   bottomPoint.rx() -= rowRect.width();
+//   painter->drawText(bottomPoint, rowString);
+//   painter->drawRect(_boundingRect.adjusted(0, 0, -1, -1));
 }
 
 qint16 ChatItem::posToCursor(const QPointF &pos) {
   if(pos.y() > height()) return data(MessageModel::DisplayRole).toString().length();
   if(pos.y() < 0) return 0;
-  if(!haveLayout()) updateLayout();
+  if(!hasLayout())
+    updateLayout();
   for(int l = layout()->lineCount() - 1; l >= 0; l--) {
     QTextLine line = layout()->lineAt(l);
     if(pos.y() >= line.y()) {
@@ -178,17 +185,21 @@ QList<QRectF> ChatItem::findWords(const QString &searchWord, Qt::CaseSensitivity
     searchIdx = plainText.indexOf(searchWord, searchIdx + 1, caseSensitive);
   }
 
-  if(!haveLayout())
+  bool hadLayout = hasLayout();
+  if(!hadLayout)
     updateLayout();
 
   foreach(int idx, indexList) {
     QTextLine line = layout()->lineForTextPosition(idx);
     qreal x = line.cursorToX(idx);
     qreal width = line.cursorToX(idx + searchWord.count()) - x;
-    qreal height = fontMetrics()->lineSpacing();
+    qreal height = line.height();
     qreal y = height * line.lineNumber();
     resultList << QRectF(x, y, width, height);
   }
+
+  if(!hadLayout)
+    clearLayout();
   return resultList;
 }
 
@@ -235,51 +246,41 @@ void ChatItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
   }
 }
 
-/*************************************************************************************************/
+// ************************************************************
+// SenderChatItem
+// ************************************************************
 
-/*************************************************************************************************/
-
-void SenderChatItem::updateLayout() {
-  if(!haveLayout()) setLayout(createLayout(QTextOption::WrapAnywhere, Qt::AlignRight));
-  ChatItem::updateLayout();
-}
-
-/*************************************************************************************************/
-
-ContentsChatItem::ContentsChatItem(QAbstractItemModel *model, QGraphicsItem *parent) : ChatItem(column(), model, parent),
-  _layoutData(0)
+// ************************************************************
+// ContentsChatItem
+// ************************************************************
+ContentsChatItem::ContentsChatItem(const qreal &width, const QPointF &pos, QGraphicsItem *parent)
+  : ChatItem(0, 0, pos, parent)
 {
+  const QAbstractItemModel *model_ = model();
+  QModelIndex index = model_->index(row(), column());
+  _fontMetrics = QtUi::style()->fontMetrics(model_->data(index, ChatLineModel::FormatRole).value<UiStyle::FormatList>().at(0).second);
 
+  setGeometryByWidth(width);
 }
 
-ContentsChatItem::~ContentsChatItem() {
-  delete _layoutData;
-}
-
-qreal ContentsChatItem::computeHeight() {
-  int lines = 1;
-  WrapColumnFinder finder(this);
-  while(finder.nextWrapColumn() > 0) lines++;
-  return lines * fontMetrics()->lineSpacing();
-}
-
-void ContentsChatItem::setLayout(QTextLayout *layout) {
-  if(!_layoutData) {
-    _layoutData = new LayoutData;
-    _layoutData->clickables = findClickables();
-  } else {
-    delete _layoutData->layout;
+qreal ContentsChatItem::setGeometryByWidth(qreal w) {
+  if(w != width()) {
+    setWidth(w);
+    // compute height
+    int lines = 1;
+    WrapColumnFinder finder(this);
+    while(finder.nextWrapColumn() > 0)
+      lines++;
+    setHeight(lines * fontMetrics()->lineSpacing());
   }
-  _layoutData->layout = layout;
-}
-
-void ContentsChatItem::clearLayout() {
-  delete _layoutData;
-  _layoutData = 0;
+  return height();
 }
 
 void ContentsChatItem::updateLayout() {
-  if(!haveLayout()) setLayout(createLayout(QTextOption::WrapAnywhere));
+  if(!privateData()) {
+    ContentsChatItemPrivate *data = new ContentsChatItemPrivate(createLayout(QTextOption::WrapAnywhere), findClickables(), this);
+    setPrivateData(data);
+  }
 
   // Now layout
   ChatLineModel::WrapList wrapList = data(ChatLineModel::WrapListRole).value<ChatLineModel::WrapList>();
@@ -367,8 +368,8 @@ QList<ContentsChatItem::Clickable> ContentsChatItem::findClickables() {
 QVector<QTextLayout::FormatRange> ContentsChatItem::additionalFormats() const {
   // mark a clickable if hovered upon
   QVector<QTextLayout::FormatRange> fmt;
-  if(layoutData()->currentClickable.isValid()) {
-    Clickable click = layoutData()->currentClickable;
+  if(privateData()->currentClickable.isValid()) {
+    Clickable click = privateData()->currentClickable;
     QTextLayout::FormatRange f;
     f.start = click.start;
     f.length = click.length;
@@ -379,26 +380,31 @@ QVector<QTextLayout::FormatRange> ContentsChatItem::additionalFormats() const {
 }
 
 void ContentsChatItem::endHoverMode() {
-  if(layoutData()->currentClickable.isValid()) {
+  if(hasLayout() && privateData()->currentClickable.isValid()) {
     setCursor(Qt::ArrowCursor);
-    layoutData()->currentClickable = Clickable();
+    privateData()->currentClickable = Clickable();
+#ifdef HAVE_WEBKIT
+    privateData()->clearPreview();
+#endif
     update();
   }
 }
 
 void ContentsChatItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-  layoutData()->hasDragged = false;
+  privateData()->hasDragged = false;
   ChatItem::mousePressEvent(event);
 }
 
 void ContentsChatItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-  if(!event->buttons() && !layoutData()->hasDragged) {
+  if(!event->buttons() && !privateData()->hasDragged) {
     // got a click
-    Clickable click = layoutData()->currentClickable;
+    Clickable click = privateData()->currentClickable;
     if(click.isValid()) {
       QString str = data(ChatLineModel::DisplayRole).toString().mid(click.start, click.length);
       switch(click.type) {
         case Clickable::Url:
+	  if(!str.contains("://"))
+	    str = "http://" + str;
           QDesktopServices::openUrl(str);
           break;
         case Clickable::Channel:
@@ -416,9 +422,9 @@ void ContentsChatItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
   // mouse move events always mean we're not hovering anymore...
   endHoverMode();
   // also, check if we have dragged the mouse
-  if(!layoutData()->hasDragged && event->buttons() & Qt::LeftButton
+  if(hasLayout() && !privateData()->hasDragged && event->buttons() & Qt::LeftButton
     && (event->buttonDownScreenPos(Qt::LeftButton) - event->screenPos()).manhattanLength() >= QApplication::startDragDistance())
-    layoutData()->hasDragged = true;
+    privateData()->hasDragged = true;
   ChatItem::mouseMoveEvent(event);
 }
 
@@ -430,18 +436,34 @@ void ContentsChatItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
 void ContentsChatItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event) {
   bool onClickable = false;
   qint16 idx = posToCursor(event->pos());
-  for(int i = 0; i < layoutData()->clickables.count(); i++) {
-    Clickable click = layoutData()->clickables.at(i);
+  for(int i = 0; i < privateData()->clickables.count(); i++) {
+    Clickable click = privateData()->clickables.at(i);
     if(idx >= click.start && idx < click.start + click.length) {
-      if(click.type == Clickable::Url)
+      if(click.type == Clickable::Url) {
         onClickable = true;
-      else if(click.type == Clickable::Channel) {
+
+	if(!hasLayout())
+	  updateLayout();
+
+#ifdef HAVE_WEBKIT
+	QTextLine line = layout()->lineForTextPosition(click.start);
+	qreal x = line.cursorToX(click.start);
+	qreal width = line.cursorToX(click.start + click.length) - x;
+	qreal height = line.height();
+	qreal y = height * line.lineNumber();
+	QRectF urlRect(x, y, width, height);
+	QString url = data(ChatLineModel::DisplayRole).toString().mid(click.start, click.length);
+	if(!url.contains("://"))
+	  url = "http://" + url;
+	privateData()->loadWebPreview(url, urlRect);
+#endif
+      } else if(click.type == Clickable::Channel) {
         // TODO: don't make clickable if it's our own name
         //onClickable = true; //FIXME disabled for now
       }
       if(onClickable) {
         setCursor(Qt::PointingHandCursor);
-        layoutData()->currentClickable = click;
+        privateData()->currentClickable = click;
         update();
         break;
       }
@@ -451,6 +473,93 @@ void ContentsChatItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event) {
   event->accept();
 }
 
+// ****************************************
+// ContentsChatItemPrivate
+// ****************************************
+ContentsChatItemPrivate::~ContentsChatItemPrivate() {
+#ifdef HAVE_WEBKIT
+  clearPreview();
+#endif
+}
+
+#ifdef HAVE_WEBKIT
+void ContentsChatItemPrivate::loadWebPreview(const QString &url, const QRectF &urlRect) {
+  if(!controller)
+    controller = new PreviewController(contentsItem);
+  controller->loadPage(url, urlRect);
+}
+
+void ContentsChatItemPrivate::clearPreview() {
+  delete controller;
+  controller = 0;
+}
+
+ContentsChatItemPrivate::PreviewController::~PreviewController() {
+  if(previewItem) {
+    contentsItem->scene()->removeItem(previewItem);
+    delete previewItem;
+  }
+}
+
+void ContentsChatItemPrivate::PreviewController::loadPage(const QString &newUrl, const QRectF &urlRect) {
+  if(newUrl.isEmpty() || newUrl == url)
+    return;
+
+  url = newUrl;
+  QWebView *view = new QWebView;
+  connect(view, SIGNAL(loadFinished(bool)), this, SLOT(pageLoaded(bool)));
+  view->load(url);
+  previewItem = new ContentsChatItemPrivate::PreviewItem(view);
+
+  QPointF sPos = contentsItem->scenePos();
+  qreal previewY = sPos.y() + urlRect.y() + urlRect.height(); // bottom of url;
+  qreal previewX = sPos.x() + urlRect.x();
+  if(previewY + previewItem->boundingRect().height() > contentsItem->scene()->sceneRect().bottom())
+    previewY = sPos.y() + urlRect.y() - previewItem->boundingRect().height();
+
+  if(previewX + previewItem->boundingRect().width() > contentsItem->scene()->sceneRect().width())
+    previewX = contentsItem->scene()->sceneRect().right() - previewItem->boundingRect().width();
+
+  previewItem->setPos(previewX, previewY);
+  contentsItem->scene()->addItem(previewItem);
+}
+
+void ContentsChatItemPrivate::PreviewController::pageLoaded(bool success) {
+  Q_UNUSED(success)
+}
+
+ContentsChatItemPrivate::PreviewItem::PreviewItem(QWebView *webView)
+  : QGraphicsItem(0), // needs to be a top level item as we otherwise cannot guarantee that it's on top of other chatlines
+    _boundingRect(0, 0, 400, 300)
+{
+  qreal frameWidth = 5;
+  webView->resize(1000, 750);
+  QGraphicsProxyWidget *proxyItem = new QGraphicsProxyWidget(this);
+  proxyItem->setWidget(webView);
+  proxyItem->setAcceptHoverEvents(false);
+
+  qreal xScale = (_boundingRect.width() - 2 * frameWidth) / webView->width();
+  qreal yScale = (_boundingRect.height() - 2 * frameWidth) / webView->height();
+  proxyItem->scale(xScale, yScale);
+  proxyItem->setPos(frameWidth, frameWidth);
+
+  setZValue(30);
+}
+
+void ContentsChatItemPrivate::PreviewItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+  Q_UNUSED(option); Q_UNUSED(widget);
+  painter->setClipRect(boundingRect());
+  painter->setPen(QPen(Qt::black, 5));
+  painter->setBrush(Qt::black);
+  painter->setRenderHints(QPainter::Antialiasing);
+  painter->drawRoundedRect(boundingRect(), 10, 10);
+
+  painter->setPen(QPen(Qt::green));
+  QString text = QString::number(zValue());
+  painter->drawText(_boundingRect.center(), text);
+}
+#endif // #ifdef HAVE_WEBKIT
+
 /*************************************************************************************************/
 
 ContentsChatItem::WrapColumnFinder::WrapColumnFinder(ChatItem *_item)
@@ -458,9 +567,8 @@ ContentsChatItem::WrapColumnFinder::WrapColumnFinder(ChatItem *_item)
     layout(0),
     wrapList(item->data(ChatLineModel::WrapListRole).value<ChatLineModel::WrapList>()),
     wordidx(0),
-    lastwrapcol(0),
-    lastwrappos(0),
-    w(0)
+    lineCount(0),
+    choppedTrailing(0)
 {
 }
 
@@ -469,33 +577,51 @@ ContentsChatItem::WrapColumnFinder::~WrapColumnFinder() {
 }
 
 qint16 ContentsChatItem::WrapColumnFinder::nextWrapColumn() {
-  while(wordidx < wrapList.count()) {
-    w += wrapList.at(wordidx).width;
-    if(w >= item->width()) {
-      if(lastwrapcol >= wrapList.at(wordidx).start) {
-        // first word, and it doesn't fit
-        if(!line.isValid()) {
-          layout = item->createLayout(QTextOption::NoWrap);
-          layout->beginLayout();
-          line = layout->createLine();
-          line.setLineWidth(item->width());
-          layout->endLayout();
-        }
-        int idx = line.xToCursor(lastwrappos + item->width(), QTextLine::CursorOnCharacter);
-        qreal x = line.cursorToX(idx, QTextLine::Trailing);
-        w = w - wrapList.at(wordidx).width - (x - lastwrappos);
-        lastwrappos = x;
-        lastwrapcol = idx;
-        return idx;
-      }
-      // not the first word, so just wrap before this
-      lastwrapcol = wrapList.at(wordidx).start;
-      lastwrappos = lastwrappos + w - wrapList.at(wordidx).width;
-      w = 0;
-      return lastwrapcol;
+  if(wordidx >= wrapList.count())
+    return -1;
+
+  lineCount++;
+  qreal targetWidth = lineCount * item->width() + choppedTrailing;
+
+  qint16 start = wordidx;
+  qint16 end = wrapList.count() - 1;
+
+  // check if the whole line fits
+  if(wrapList.at(end).endX <= targetWidth) //  || start == end)
+    return -1;
+
+  // check if we have a very long word that needs inter word wrap
+  if(wrapList.at(start).endX > targetWidth) {
+    if(!line.isValid()) {
+      layout = item->createLayout(QTextOption::NoWrap);
+      layout->beginLayout();
+      line = layout->createLine();
+      layout->endLayout();
     }
-    w += wrapList.at(wordidx).trailing;
-    wordidx++;
+    return line.xToCursor(targetWidth, QTextLine::CursorOnCharacter);
   }
+
+  while(true) {
+    if(start + 1 == end) {
+      wordidx = end;
+      const ChatLineModel::Word &lastWord = wrapList.at(start); // the last word we were able to squeeze in
+
+      // both cases should be cought preliminary
+      Q_ASSERT(lastWord.endX <= targetWidth); // ensure that "start" really fits in
+      Q_ASSERT(end < wrapList.count()); // ensure that start isn't the last word
+
+      choppedTrailing += lastWord.trailing - (targetWidth - lastWord.endX);
+      return wrapList.at(wordidx).start;
+    }
+
+    qint16 pivot = (end + start) / 2;
+    if(wrapList.at(pivot).endX > targetWidth) {
+      end = pivot;
+    } else {
+      start = pivot;
+    }
+  }
+  Q_ASSERT(false);
   return -1;
 }
+

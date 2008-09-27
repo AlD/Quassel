@@ -35,6 +35,7 @@
 #include "syncableobject.h"
 
 #if defined(HAVE_EXECINFO) and not defined(Q_OS_MAC)
+#  define BUILD_CRASHHANDLER
 #  include <execinfo.h>
 #  include <dlfcn.h>
 #  include <cxxabi.h>
@@ -47,11 +48,13 @@ bool Quassel::_initialized = false;
 bool Quassel::DEBUG = false;
 
 Quassel::Quassel() {
+  Q_INIT_RESOURCE(i18n);
+
   // We catch SIGTERM and SIGINT (caused by Ctrl+C) to graceful shutdown Quassel.
   signal(SIGTERM, handleSignal);
   signal(SIGINT, handleSignal);
 
-#if defined(HAVE_EXECINFO) and not defined(Q_OS_MAC)
+#ifdef BUILD_CRASHHANDLER
   signal(SIGABRT, handleSignal);
   signal(SIGBUS, handleSignal);
   signal(SIGSEGV, handleSignal);
@@ -179,10 +182,12 @@ void Quassel::handleSignal(int sig) {
       QCoreApplication::quit();
       break;
 
+#ifdef BUILD_CRASHHANDLER
     case SIGABRT:
     case SIGBUS:
     case SIGSEGV:
       handleCrash();
+#endif
       break;
     default:
       break;
@@ -190,7 +195,7 @@ void Quassel::handleSignal(int sig) {
 }
 
 void Quassel::handleCrash() {
-#if defined(HAVE_EXECINFO) and not defined(Q_OS_MAC)
+#ifdef BUILD_CRASHHANDLER
   void* callstack[128];
   int i, frames = backtrace(callstack, 128);
 
@@ -250,7 +255,7 @@ void Quassel::handleCrash() {
   }
   dumpFile.close();
   exit(27);
-#endif // #if defined(HAVE_EXECINFO) and not defined(Q_OS_MAC)
+#endif /* BUILD_CRASHHANDLER */
 }
 
 // FIXME temporary

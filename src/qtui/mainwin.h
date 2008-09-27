@@ -27,6 +27,7 @@
 #include "titlesetter.h"
 #include "sessionsettings.h"
 
+#include <QPixmap>
 #include <QSystemTrayIcon>
 #include <QTimer>
 
@@ -137,9 +138,9 @@ class MainWin : public QMainWindow {
     void enableMenus();
 
     QSystemTrayIcon *systray;
-    QIcon activeTrayIcon;
-    QIcon onlineTrayIcon;
-    QIcon offlineTrayIcon;
+    QPixmap activeTrayIcon;
+    QPixmap onlineTrayIcon;
+    QPixmap offlineTrayIcon;
     bool trayIconActive;
     QTimer *timer;
 

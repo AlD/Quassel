@@ -22,16 +22,18 @@
 
 #include "action.h"
 #include "actioncollection.h"
+#include "iconloader.h"
 #include "qtui.h"
 
 ChatViewSearchBar::ChatViewSearchBar(QWidget *parent)
   : QWidget(parent)
 {
   ui.setupUi(this);
-  layout()->setContentsMargins(0, 0, 0, 0);
+  ui.hideButton->setIcon(BarIcon("dialog-close"));
+  ui.searchUpButton->setIcon(SmallIcon("go-up"));
+  ui.searchDownButton->setIcon(SmallIcon("go-down"));
 
-  ui.searchUpButton->setEnabled(false);
-  ui.searchDownButton->setEnabled(false);
+  layout()->setContentsMargins(0, 0, 0, 0);
 
   hide();
 
