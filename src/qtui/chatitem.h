@@ -166,6 +166,9 @@ private:
 
   QList<Clickable> findClickables();
   void endHoverMode();
+  void showWebPreview(const Clickable &click);
+  void clearWebPreview();
+
 
   // WARNING: setGeometry and setHeight should not be used without either:
   //  a) calling prepareGeometryChange() immediately before setColumns()
@@ -202,54 +205,9 @@ struct ContentsChatItemPrivate : ChatItemPrivate {
   ContentsChatItem::Clickable currentClickable;
   bool hasDragged;
 
-#ifdef HAVE_WEBKIT
-  ContentsChatItemPrivate(QTextLayout *l, const QList<ContentsChatItem::Clickable> &c, ContentsChatItem *parent) : ChatItemPrivate(l), contentsItem(parent), clickables(c), hasDragged(false), controller(0) {}
-#else
   ContentsChatItemPrivate(QTextLayout *l, const QList<ContentsChatItem::Clickable> &c, ContentsChatItem *parent) : ChatItemPrivate(l), contentsItem(parent), clickables(c), hasDragged(false) {}
-#endif
-  ~ContentsChatItemPrivate();
-
-#ifdef HAVE_WEBKIT
-  void loadWebPreview(const QString &url, const QRectF &urlRect);
-  void clearPreview();
-
-private:
-  class PreviewController;
-  class PreviewItem;
-  PreviewController *controller;
-#endif //#ifdef HAVE_WEBKIT
 };
 
-#ifdef HAVE_WEBKIT
-class ContentsChatItemPrivate::PreviewController : public QObject {
-  Q_OBJECT
-public:
-  PreviewController(ContentsChatItem *contentsItem) : contentsItem(contentsItem), previewItem(0) {}
-  ~PreviewController();
-
-  void loadPage(const QString &url, const QRectF &urlRect);
-
-private slots:
-  void pageLoaded(bool success);
-
-private:
-  ContentsChatItem *contentsItem;
-  ContentsChatItemPrivate::PreviewItem *previewItem;
-
-  QString url;
-};
-
-class QWebView;
-class ContentsChatItemPrivate::PreviewItem : public QGraphicsItem {
-public:
-  PreviewItem(QWebView *webView);
-  virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-  virtual inline QRectF boundingRect() const { return _boundingRect; }
-
-private:
-  QRectF _boundingRect;
-};
-#endif //#ifdef HAVE_WEBKIT
 
 //inlines regarding ContentsChatItemPrivate
 ContentsChatItemPrivate *ContentsChatItem::privateData() const { return (ContentsChatItemPrivate *)ChatItem::privateData(); }

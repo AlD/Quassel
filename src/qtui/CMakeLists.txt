@@ -41,7 +41,8 @@ set(SOURCES
     titlesetter.cpp
     topiclabel.cpp
     topicwidget.cpp
-    verticaldock.cpp)
+    verticaldock.cpp
+    webpreviewitem.cpp)
 
 set(MOC_HDRS
     aboutdlg.h
@@ -74,20 +75,14 @@ set(MOC_HDRS
     topicwidget.h
     verticaldock.h)
 
-if(HAVE_WEBKIT)
-  set(MOC_HDRS ${MOC_HDRS} chatitem.h)
-endif(HAVE_WEBKIT)
-
 set(HEADERS
+    chatitem.h
     chatline.h
     chatlinemodelitem.h
     chatviewsettings.h
     qtuisettings.h
-    qtuistyle.h)
-
-if(NOT HAVE_WEBKIT)
-  set(HEADERS ${HEADERS} chatitem.h)
-endif(NOT HAVE_WEBKIT)
+    qtuistyle.h
+    webpreviewitem.h)
 
 set(FORMS
     aboutdlg.ui

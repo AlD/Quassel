@@ -26,10 +26,6 @@
 #include <QPainter>
 #include <QPalette>
 #include <QTextLayout>
-#ifdef HAVE_WEBKIT
-#include <QWebView>
-#endif
-#include <QGraphicsProxyWidget>
 
 #include "chatitem.h"
 #include "chatlinemodel.h"
@@ -380,12 +376,12 @@ QVector<QTextLayout::FormatRange> ContentsChatItem::additionalFormats() const {
 }
 
 void ContentsChatItem::endHoverMode() {
-  if(hasLayout() && privateData()->currentClickable.isValid()) {
-    setCursor(Qt::ArrowCursor);
-    privateData()->currentClickable = Clickable();
-#ifdef HAVE_WEBKIT
-    privateData()->clearPreview();
-#endif
+  if(hasLayout()) {
+    if(privateData()->currentClickable.isValid()) {
+      setCursor(Qt::ArrowCursor);
+      privateData()->currentClickable = Clickable();
+    }
+    clearWebPreview();
     update();
   }
 }
@@ -441,22 +437,7 @@ void ContentsChatItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event) {
     if(idx >= click.start && idx < click.start + click.length) {
       if(click.type == Clickable::Url) {
         onClickable = true;
-
-	if(!hasLayout())
-	  updateLayout();
-
-#ifdef HAVE_WEBKIT
-	QTextLine line = layout()->lineForTextPosition(click.start);
-	qreal x = line.cursorToX(click.start);
-	qreal width = line.cursorToX(click.start + click.length) - x;
-	qreal height = line.height();
-	qreal y = height * line.lineNumber();
-	QRectF urlRect(x, y, width, height);
-	QString url = data(ChatLineModel::DisplayRole).toString().mid(click.start, click.length);
-	if(!url.contains("://"))
-	  url = "http://" + url;
-	privateData()->loadWebPreview(url, urlRect);
-#endif
+	showWebPreview(click);
       } else if(click.type == Clickable::Channel) {
         // TODO: don't make clickable if it's our own name
         //onClickable = true; //FIXME disabled for now
@@ -473,92 +454,32 @@ void ContentsChatItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event) {
   event->accept();
 }
 
-// ****************************************
-// ContentsChatItemPrivate
-// ****************************************
-ContentsChatItemPrivate::~ContentsChatItemPrivate() {
+void ContentsChatItem::showWebPreview(const Clickable &click) {
 #ifdef HAVE_WEBKIT
-  clearPreview();
+  if(!hasLayout())
+    updateLayout();
+
+  QTextLine line = layout()->lineForTextPosition(click.start);
+  qreal x = line.cursorToX(click.start);
+  qreal width = line.cursorToX(click.start + click.length) - x;
+  qreal height = line.height();
+  qreal y = height * line.lineNumber();
+
+  QPointF topLeft = scenePos() + QPointF(x, y);
+  QRectF urlRect = QRectF(topLeft.x(), topLeft.y(), width, height);
+
+  QString url = data(ChatLineModel::DisplayRole).toString().mid(click.start, click.length);
+  if(!url.contains("://"))
+    url = "http://" + url;
+  chatScene()->loadWebPreview(this, url, urlRect);
 #endif
 }
 
+void ContentsChatItem::clearWebPreview() {
 #ifdef HAVE_WEBKIT
-void ContentsChatItemPrivate::loadWebPreview(const QString &url, const QRectF &urlRect) {
-  if(!controller)
-    controller = new PreviewController(contentsItem);
-  controller->loadPage(url, urlRect);
+  chatScene()->clearWebPreview(this);
+#endif
 }
-
-void ContentsChatItemPrivate::clearPreview() {
-  delete controller;
-  controller = 0;
-}
-
-ContentsChatItemPrivate::PreviewController::~PreviewController() {
-  if(previewItem) {
-    contentsItem->scene()->removeItem(previewItem);
-    delete previewItem;
-  }
-}
-
-void ContentsChatItemPrivate::PreviewController::loadPage(const QString &newUrl, const QRectF &urlRect) {
-  if(newUrl.isEmpty() || newUrl == url)
-    return;
-
-  url = newUrl;
-  QWebView *view = new QWebView;
-  connect(view, SIGNAL(loadFinished(bool)), this, SLOT(pageLoaded(bool)));
-  view->load(url);
-  previewItem = new ContentsChatItemPrivate::PreviewItem(view);
-
-  QPointF sPos = contentsItem->scenePos();
-  qreal previewY = sPos.y() + urlRect.y() + urlRect.height(); // bottom of url;
-  qreal previewX = sPos.x() + urlRect.x();
-  if(previewY + previewItem->boundingRect().height() > contentsItem->scene()->sceneRect().bottom())
-    previewY = sPos.y() + urlRect.y() - previewItem->boundingRect().height();
-
-  if(previewX + previewItem->boundingRect().width() > contentsItem->scene()->sceneRect().width())
-    previewX = contentsItem->scene()->sceneRect().right() - previewItem->boundingRect().width();
-
-  previewItem->setPos(previewX, previewY);
-  contentsItem->scene()->addItem(previewItem);
-}
-
-void ContentsChatItemPrivate::PreviewController::pageLoaded(bool success) {
-  Q_UNUSED(success)
-}
-
-ContentsChatItemPrivate::PreviewItem::PreviewItem(QWebView *webView)
-  : QGraphicsItem(0), // needs to be a top level item as we otherwise cannot guarantee that it's on top of other chatlines
-    _boundingRect(0, 0, 400, 300)
-{
-  qreal frameWidth = 5;
-  webView->resize(1000, 750);
-  QGraphicsProxyWidget *proxyItem = new QGraphicsProxyWidget(this);
-  proxyItem->setWidget(webView);
-  proxyItem->setAcceptHoverEvents(false);
-
-  qreal xScale = (_boundingRect.width() - 2 * frameWidth) / webView->width();
-  qreal yScale = (_boundingRect.height() - 2 * frameWidth) / webView->height();
-  proxyItem->scale(xScale, yScale);
-  proxyItem->setPos(frameWidth, frameWidth);
-
-  setZValue(30);
-}
-
-void ContentsChatItemPrivate::PreviewItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
-  Q_UNUSED(option); Q_UNUSED(widget);
-  painter->setClipRect(boundingRect());
-  painter->setPen(QPen(Qt::black, 5));
-  painter->setBrush(Qt::black);
-  painter->setRenderHints(QPainter::Antialiasing);
-  painter->drawRoundedRect(boundingRect(), 10, 10);
-
-  painter->setPen(QPen(Qt::green));
-  QString text = QString::number(zValue());
-  painter->drawText(_boundingRect.center(), text);
-}
-#endif // #ifdef HAVE_WEBKIT
 
 /*************************************************************************************************/
 
