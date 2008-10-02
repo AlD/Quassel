@@ -32,6 +32,14 @@ public:
 MessageModel::MessageModel(QObject *parent)
   : QAbstractItemModel(parent)
 {
+  QDateTime now = QDateTime::currentDateTime();
+  now.setTimeSpec(Qt::UTC);
+  _nextDayChange.setTimeSpec(Qt::UTC);
+  _nextDayChange.setTime_t(((now.toTime_t() / 86400) + 1) * 86400);
+  _nextDayChange.setTimeSpec(Qt::LocalTime);
+  _dayChangeTimer.setInterval(QDateTime::currentDateTime().secsTo(_nextDayChange) * 1000);
+  _dayChangeTimer.start();
+  connect(&_dayChangeTimer, SIGNAL(timeout()), this, SLOT(changeOfDay()));
 }
 
 QVariant MessageModel::data(const QModelIndex &index, int role) const {
@@ -79,33 +87,62 @@ void MessageModel::insertMessages(const QList<Message> &msglist) {
   if(msglist.isEmpty())
     return;
 
-  if(_messageList.isEmpty()) {
-    insertMessageGroup(msglist);
-  } else {
-    int processedMsgs = insertMessagesGracefully(msglist);
-    int remainingMsgs = msglist.count() - processedMsgs;
-    if(remainingMsgs > 0) {
-      if(msglist.first().msgId() < msglist.last().msgId()) {
-	// in Order
-	_messageBuffer << msglist.mid(0, remainingMsgs);
-      } else {
-	_messageBuffer << msglist.mid(processedMsgs);
-      }
-      qSort(_messageBuffer);
-      QCoreApplication::postEvent(this, new ProcessBufferEvent());
+  int processedMsgs = insertMessagesGracefully(msglist);
+  int remainingMsgs = msglist.count() - processedMsgs;
+  if(remainingMsgs > 0) {
+    if(msglist.first().msgId() < msglist.last().msgId()) {
+      // in Order
+      _messageBuffer << msglist.mid(0, remainingMsgs);
+    } else {
+      _messageBuffer << msglist.mid(processedMsgs);
     }
+    qSort(_messageBuffer);
+    QCoreApplication::postEvent(this, new ProcessBufferEvent());
   }
 }
 
 void MessageModel::insertMessageGroup(const QList<Message> &msglist) {
   int idx = indexForId(msglist.first().msgId());
-  beginInsertRows(QModelIndex(), idx, idx+msglist.count()-1);
+  if(idx > 0) {
+    int prevIdx = idx - 1;
+    if(_messageList[prevIdx]->msgType() == Message::DayChange
+       && _messageList[prevIdx]->timeStamp() > msglist.value(0).timestamp()) {
+      beginRemoveRows(QModelIndex(), prevIdx, prevIdx);
+      MessageModelItem *oldItem = _messageList.takeAt(prevIdx);
+      delete oldItem;
+      endRemoveRows();
+      idx--;
+    }
+  }
+  int start = idx;
+  int end = idx + msglist.count() - 1;
 
+  Message dayChangeMsg;
+  bool needsDayChangeMsg = false;
+  if(idx < _messageList.count() && _messageList[idx]->msgType() != Message::DayChange) {
+    QDateTime nextTs = _messageList[idx]->timeStamp();
+    QDateTime prevTs = msglist.last().timestamp();
+    nextTs.setTimeSpec(Qt::UTC);
+    prevTs.setTimeSpec(Qt::UTC);
+    uint nextDay = nextTs.toTime_t() / 86400;
+    uint prevDay = prevTs.toTime_t() / 86400;
+    if(nextDay != prevDay) {
+      nextTs.setTime_t(nextDay * 86400);
+      nextTs.setTimeSpec(Qt::LocalTime);
+      dayChangeMsg = Message::ChangeOfDay(nextTs);
+      dayChangeMsg.setMsgId(msglist.last().msgId());
+      needsDayChangeMsg = true;
+      end++;
+    }
+  }
+  beginInsertRows(QModelIndex(), start, end);
   foreach(Message msg, msglist) {
     _messageList.insert(idx, createMessageModelItem(msg));
     idx++;
   }
-
+  if(needsDayChangeMsg) {
+    _messageList.insert(idx, createMessageModelItem(dayChangeMsg));
+  }
   endInsertRows();
 }
 
@@ -127,7 +164,7 @@ int MessageModel::insertMessagesGracefully(const QList<Message> &msglist) {
   }
 
   int idx = indexForId((*iter).msgId());
-  if(idx >= 0)
+  if(idx >= 0 && !_messageList.isEmpty())
     dupeId = _messageList[idx]->msgId();
 
   // we always compare to the previous entry...
@@ -152,20 +189,54 @@ int MessageModel::insertMessagesGracefully(const QList<Message> &msglist) {
       if(!fastForward && (*iter).msgId() < id)
 	break;
 
-      if((*iter).msgId() != dupeId)
+      if((*iter).msgId() != dupeId) {
+	if(!grouplist.isEmpty()) {
+	  QDateTime nextTs = grouplist.value(0).timestamp();
+	  QDateTime prevTs = (*iter).timestamp();
+	  nextTs.setTimeSpec(Qt::UTC);
+	  prevTs.setTimeSpec(Qt::UTC);
+	  uint nextDay = nextTs.toTime_t() / 86400;
+	  uint prevDay = prevTs.toTime_t() / 86400;
+	  if(nextDay != prevDay) {
+	    nextTs.setTime_t(nextDay * 86400);
+	    nextTs.setTimeSpec(Qt::LocalTime);
+	    Message dayChangeMsg = Message::ChangeOfDay(nextTs);
+	    dayChangeMsg.setMsgId((*iter).msgId());
+	    grouplist.prepend(dayChangeMsg);
+	    dupeCount--;
+	  }
+	}
 	grouplist.prepend(*iter);
-      else
+      } else {
 	dupeCount++;
+      }
     }
   } else {
     while(iter != msglist.constEnd()) {
       if(!fastForward && (*iter).msgId() < id)
 	break;
 
-      if((*iter).msgId() != dupeId)
+      if((*iter).msgId() != dupeId) {
+	if(!grouplist.isEmpty()) {
+	  QDateTime nextTs = grouplist.value(0).timestamp();
+	  QDateTime prevTs = (*iter).timestamp();
+	  nextTs.setTimeSpec(Qt::UTC);
+	  prevTs.setTimeSpec(Qt::UTC);
+	  uint nextDay = nextTs.toTime_t() / 86400;
+	  uint prevDay = prevTs.toTime_t() / 86400;
+	  if(nextDay != prevDay) {
+	    nextTs.setTime_t(nextDay * 86400);
+	    nextTs.setTimeSpec(Qt::LocalTime);
+	    Message dayChangeMsg = Message::ChangeOfDay(nextTs);
+	    dayChangeMsg.setMsgId((*iter).msgId());
+	    grouplist.prepend(dayChangeMsg);
+	    dupeCount--;
+	  }
+	}
 	grouplist.prepend(*iter);
-      else
+      } else {
 	dupeCount++;
+      }
 
       iter++;
     }
@@ -206,16 +277,37 @@ void MessageModel::clear() {
 
 // returns index of msg with given Id or of the next message after that (i.e., the index where we'd insert this msg)
 int MessageModel::indexForId(MsgId id) {
-  if(_messageList.isEmpty() || id <= _messageList.value(0)->data(0, MsgIdRole).value<MsgId>()) return 0;
-  if(id > _messageList.last()->data(0, MsgIdRole).value<MsgId>()) return _messageList.count();
+  if(_messageList.isEmpty() || id <= _messageList.value(0)->msgId())
+    return 0;
+  if(id > _messageList.last()->msgId())
+    return _messageList.count();
+
   // binary search
   int start = 0; int end = _messageList.count()-1;
   while(1) {
-    if(end - start == 1) return end;
+    if(end - start == 1)
+      return end;
     int pivot = (end + start) / 2;
-    if(id <= _messageList.value(pivot)->data(0, MsgIdRole).value<MsgId>()) end = pivot;
+    if(id <= _messageList.value(pivot)->msgId()) end = pivot;
     else start = pivot;
   }
+}
+
+void MessageModel::changeOfDay() {
+  _dayChangeTimer.setInterval(86400000);
+  qDebug() << _nextDayChange;
+  if(!_messageList.isEmpty()) {
+    int idx = _messageList.count();
+    while(idx > 0 && _messageList[idx - 1]->timeStamp() > _nextDayChange) {
+      idx--;
+    }
+    beginInsertRows(QModelIndex(), idx, idx);
+    Message dayChangeMsg = Message::ChangeOfDay(_nextDayChange);
+    dayChangeMsg.setMsgId(_messageList[idx - 1]->msgId());
+    _messageList.insert(idx, createMessageModelItem(dayChangeMsg));
+    endInsertRows();
+  }
+  _nextDayChange = _nextDayChange.addSecs(86400);
 }
 
 /**********************************************************************************/

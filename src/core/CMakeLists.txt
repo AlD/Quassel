@@ -11,6 +11,7 @@ set(SOURCES
     basichandler.cpp
     core.cpp
     corealiasmanager.cpp
+    coreapplication.cpp
     corebacklogmanager.cpp
     corebufferviewconfig.cpp
     corebufferviewmanager.cpp
@@ -33,6 +34,7 @@ set(MOC_HDRS
     basichandler.h
     core.h
     corealiasmanager.h
+    coreapplication.h
     corebacklogmanager.h
     corebufferviewconfig.h
     corebufferviewmanager.h
@@ -58,9 +60,10 @@ if(HAVE_SSL)
   include_directories(${OPENSSL_INCLUDE_DIR})
 endif(HAVE_SSL)
 
-QT4_WRAP_CPP(MOC ${MOC_HDRS})
+qt4_wrap_cpp(MOC ${MOC_HDRS})
+qt4_add_resources(RC_SQL sql.qrc)
 
 include_directories(${CMAKE_SOURCE_DIR}/src/common)
 
-add_library(mod_core STATIC ${SOURCES} ${MOC} ${HEADERS})
+add_library(mod_core STATIC ${SOURCES} ${MOC} ${HEADERS} ${RC_SQL})
 add_dependencies(mod_core mod_common)

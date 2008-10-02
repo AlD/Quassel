@@ -32,25 +32,27 @@
 #include "networkmodel.h"
 #include "qtui.h"
 #include "qtuisettings.h"
+#include "qtuistyle.h"
 
-ChatLine::ChatLine(int row, QAbstractItemModel *model, QGraphicsItem *parent)
+ChatLine::ChatLine(int row, QAbstractItemModel *model,
+		   const qreal &width,
+		   const qreal &timestampWidth, const qreal &senderWidth, const qreal &contentsWidth,
+		   const QPointF &senderPos, const QPointF &contentsPos,
+		   QGraphicsItem *parent)
   : QGraphicsItem(parent),
     _row(row), // needs to be set before the items
-    _timestampItem(model, this),
-    _senderItem(model, this),
-    _contentsItem(model, this),
-    _width(0),
-    _height(0),
+    _model(model),
+    _contentsItem(contentsWidth, contentsPos, this),
+    _senderItem(senderWidth, _contentsItem.height(), senderPos, this),
+    _timestampItem(timestampWidth, _contentsItem.height(), this),
+    _width(width),
+    _height(_contentsItem.height()),
     _selection(0)
 {
   Q_ASSERT(model);
   QModelIndex index = model->index(row, ChatLineModel::ContentsColumn);
+  setZValue(0);
   setHighlighted(model->data(index, MessageModel::FlagsRole).toInt() & Message::Highlight);
-}
-
-QRectF ChatLine::boundingRect () const {
-  //return childrenBoundingRect();
-  return QRectF(0, 0, _width, _height);
 }
 
 ChatItem &ChatLine::item(ChatLineModel::ColumnType column) {
@@ -66,26 +68,42 @@ ChatItem &ChatLine::item(ChatLineModel::ColumnType column) {
   }
 }
 
-qreal ChatLine::setGeometry(qreal width) {
-  if(width != _width)
-    prepareGeometryChange();
+// WARNING: setColumns should not be used without either:
+//  a) calling prepareGeometryChange() immediately before setColumns()
+//  b) calling Chatline::setPos() immediately afterwards
+//
+// NOTE: senderPos and contentsPos are in ChatLines coordinate system!
+qreal ChatLine::setColumns(const qreal &timestampWidth, const qreal &senderWidth, const qreal &contentsWidth,
+			   const QPointF &senderPos, const QPointF &contentsPos) {
+  _height = _contentsItem.setGeometryByWidth(contentsWidth);
+  _senderItem.setGeometry(senderWidth, _height);
+  _timestampItem.setGeometry(timestampWidth, _height);
 
-  ColumnHandleItem *firstColumnHandle = chatScene()->firstColumnHandle();
-  ColumnHandleItem *secondColumnHandle = chatScene()->secondColumnHandle();
-  _height = _contentsItem.setGeometry(width - secondColumnHandle->sceneRight());
-  _timestampItem.setGeometry(firstColumnHandle->sceneLeft(), _height);
-  _senderItem.setGeometry(secondColumnHandle->sceneLeft() - firstColumnHandle->sceneRight(), _height);
+  _senderItem.setPos(senderPos);
+  _contentsItem.setPos(contentsPos);
 
-  _senderItem.setPos(firstColumnHandle->sceneRight(), 0);
-  _contentsItem.setPos(secondColumnHandle->sceneRight(), 0);
+  _contentsItem.clearLayout();
+  _senderItem.clearLayout();
+  _timestampItem.clearLayout();
 
+  return _height;
+}
+
+// WARNING: setGeometryByWidth should not be used without either:
+//  a) calling prepareGeometryChange() immediately before setColumns()
+//  b) calling Chatline::setPos() immediately afterwards
+qreal ChatLine::setGeometryByWidth(const qreal &width, const qreal &contentsWidth) {
   _width = width;
+  _height = _contentsItem.setGeometryByWidth(contentsWidth);
+  _timestampItem.setHeight(_height);
+  _senderItem.setHeight(_height);
+  _contentsItem.clearLayout();
   return _height;
 }
 
 void ChatLine::setSelected(bool selected, ChatLineModel::ColumnType minColumn) {
   if(selected) {
-    quint8 sel = (_selection & 0x80) | 0x40 | minColumn;
+    quint8 sel = (_selection & Highlighted) | Selected | minColumn;
     if(sel != _selection) {
       _selection = sel;
       for(int i = 0; i < minColumn; i++)
@@ -95,7 +113,7 @@ void ChatLine::setSelected(bool selected, ChatLineModel::ColumnType minColumn) {
       update();
     }
   } else {
-    quint8 sel = _selection & 0x80;
+    quint8 sel = _selection & Highlighted;
     if(sel != _selection) {
       _selection = sel;
       for(int i = 0; i <= ChatLineModel::ContentsColumn; i++)
@@ -106,8 +124,8 @@ void ChatLine::setSelected(bool selected, ChatLineModel::ColumnType minColumn) {
 }
 
 void ChatLine::setHighlighted(bool highlighted) {
-  if(highlighted) _selection |= 0x80;
-  else _selection &= 0x7f;
+  if(highlighted) _selection |= Highlighted;
+  else _selection &= ~Highlighted;
   update();
 }
 
@@ -118,7 +136,7 @@ void ChatLine::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     painter->fillRect(boundingRect(), QBrush(QtUi::style()->highlightColor()));
   }
   if(_selection & Selected) {
-    qreal left = item((ChatLineModel::ColumnType)(_selection & 0x3f)).x();
+    qreal left = item((ChatLineModel::ColumnType)(_selection & ItemMask)).x();
     QRectF selectRect(left, 0, width() - left, height());
     painter->fillRect(selectRect, QApplication::palette().brush(QPalette::Highlight));
   }
@@ -134,7 +152,7 @@ void ChatLine::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
       BufferId bufferId = model_->data(prevRowIdx, MessageModel::BufferIdRole).value<BufferId>();
       if(msgId == Client::networkModel()->lastSeenMsgId(bufferId) && chatScene()->isSingleBufferScene()) {
 	QtUiStyleSettings s("Colors");
-	QLinearGradient gradient(0, 0, 0, height());
+	QLinearGradient gradient(0, 0, 0, contentsItem().fontMetrics()->lineSpacing());
 	gradient.setColorAt(0, s.value("newMsgMarkerFG", QColor(Qt::red)).value<QColor>());
 	gradient.setColorAt(0.1, Qt::transparent);
 	painter->fillRect(boundingRect(), gradient);

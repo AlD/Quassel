@@ -32,7 +32,9 @@
 #include "columnhandleitem.h"
 #include "messagefilter.h"
 #include "qtui.h"
+#include "qtuistyle.h"
 #include "chatviewsettings.h"
+#include "webpreviewitem.h"
 
 const qreal minContentsWidth = 200;
 
@@ -42,6 +44,8 @@ ChatScene::ChatScene(QAbstractItemModel *model, const QString &idString, qreal w
     _model(model),
     _singleBufferScene(false),
     _sceneRect(0, 0, width, 0),
+    _firstLineRow(-1),
+    _viewportHeight(0),
     _selectingItem(0),
     _selectionStart(-1),
     _isSelecting(false),
@@ -88,34 +92,50 @@ ChatScene::~ChatScene() {
 
 void ChatScene::rowsInserted(const QModelIndex &index, int start, int end) {
   Q_UNUSED(index);
+
+  clearWebPreview();
+
+//   QModelIndex sidx = model()->index(start, 0);
+//   QModelIndex eidx = model()->index(end, 0);
+//   qDebug() << "rowsInserted" << start << end << "-" << sidx.data(MessageModel::MsgIdRole).value<MsgId>() << eidx.data(MessageModel::MsgIdRole).value<MsgId>();
+
   qreal h = 0;
   qreal y = _sceneRect.y();
   qreal width = _sceneRect.width();
   bool atTop = true;
   bool atBottom = false;
   bool moveTop = false;
-  bool hasWidth = (width != 0);
 
-  if(start > 0) {
-    y = _lines.value(start - 1)->y() + _lines.value(start - 1)->height();
+  if(start > 0 && start < _lines.count()) {
+    y = _lines.value(start)->y();
     atTop = false;
   }
-  if(start == _lines.count())
+  if(start == _lines.count()) {
+    y = _sceneRect.bottom();
+    atTop = false;
     atBottom = true;
+  }
 
-  for(int i = end; i >= start; i--) {
-    ChatLine *line = new ChatLine(i, model());
-    _lines.insert(start, line);
-    addItem(line);
-    if(hasWidth) {
-      if(atTop) {
-	h -= line->setGeometry(width);
-	line->setPos(0, y+h);
-      } else {
-	line->setPos(0, y+h);
-	h += line->setGeometry(width);
-      }
+  qreal contentsWidth = width - secondColumnHandle()->sceneRight();
+  qreal senderWidth = secondColumnHandle()->sceneLeft() - firstColumnHandle()->sceneRight();
+  qreal timestampWidth = firstColumnHandle()->sceneLeft();
+  QPointF contentsPos(secondColumnHandle()->sceneRight(), 0);
+  QPointF senderPos(firstColumnHandle()->sceneRight(), 0);
+
+  for(int i = start; i <= end; i++) {
+    ChatLine *line = new ChatLine(i, model(),
+				  width,
+				  timestampWidth, senderWidth, contentsWidth,
+				  senderPos, contentsPos);
+    if(atTop) {
+      h += line->height();
+      line->setPos(0, y-h);
+    } else {
+      line->setPos(0, y+h);
+      h += line->height();
     }
+    _lines.insert(i, line);
+    addItem(line);
   }
 
   // update existing items
@@ -137,8 +157,9 @@ void ChatScene::rowsInserted(const QModelIndex &index, int start, int end) {
     qreal offset = h;
     int moveStart = 0;
     int moveEnd = _lines.count() - 1;
-    ChatLine *line = 0;
-    if(end > _lines.count() - end) {
+    // move top means: moving 0 to end (aka: end + 1)
+    // move top means: moving end + 1 to _lines.count() - 1 (aka: _lines.count() - (end + 1)
+    if(end + 1 < _lines.count() - end - 1) {
       // move top part
       moveTop = true;
       offset = -offset;
@@ -147,24 +168,34 @@ void ChatScene::rowsInserted(const QModelIndex &index, int start, int end) {
       // move bottom part
       moveStart = start;
     }
+    ChatLine *line = 0;
     for(int i = moveStart; i <= moveEnd; i++) {
       line = _lines.at(i);
       line->setPos(0, line->pos().y() + offset);
     }
   }
-  
-  // update sceneRect
-  if(atTop || moveTop) {
-    updateSceneRect(_sceneRect.adjusted(0, h, 0, 0));
-  } else {
-    updateSceneRect(_sceneRect.adjusted(0, 0, 0, h));
-    emit sceneHeightChanged(h);
+
+  if(!atBottom) {
+    if(start < _firstLineRow) {
+      int prevFirstLineRow = _firstLineRow + (end - start + 1);
+      for(int i = end + 1; i < prevFirstLineRow; i++) {
+	_lines.at(i)->show();
+      }
+    }
+    // force new search for first proper line
+    _firstLineRow = -1;
+  }
+  updateSceneRect();
+  if(atBottom) {
+    emit lastLineChanged(_lines.last());
   }
 
 }
 
 void ChatScene::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end) {
   Q_UNUSED(parent);
+
+  clearWebPreview();
 
   qreal h = 0; // total height of removed items;
 
@@ -205,8 +236,7 @@ void ChatScene::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int e
     qreal offset = h;
     int moveStart = 0;
     int moveEnd = _lines.count() - 1;
-    ChatLine *line = 0;
-    if(start > _lines.count() - end) {
+    if(start < _lines.count() - start) {
       // move top part
       moveTop = true;
       moveEnd = start - 1;
@@ -215,45 +245,85 @@ void ChatScene::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int e
       moveStart = start;
       offset = -offset;
     }
+    ChatLine *line = 0;
     for(int i = moveStart; i <= moveEnd; i++) {
       line = _lines.at(i);
       line->setPos(0, line->pos().y() + offset);
     }
   }
 
+
   // update sceneRect
-  if(atTop || moveTop) {
-    updateSceneRect(_sceneRect.adjusted(0, h, 0, 0));
-  } else {
-    updateSceneRect(_sceneRect.adjusted(0, 0, 0, -h));
-  }
+  // when searching for the first non-date-line we have to take into account that our
+  // model still contains the just removed lines so we cannot simply call updateSceneRect()
+  int numRows = model()->rowCount();
+  QModelIndex firstLineIdx;
+  _firstLineRow = -1;
+  bool needOffset = false;
+  do {
+    _firstLineRow++;
+    if(_firstLineRow >= start && _firstLineRow <= end) {
+      _firstLineRow = end + 1;
+      needOffset = true;
+    }
+    firstLineIdx = model()->index(_firstLineRow, 0);
+  } while((Message::Type)(model()->data(firstLineIdx, MessageModel::TypeRole).toInt()) == Message::DayChange && _firstLineRow < numRows);
+
+  if(needOffset)
+    _firstLineRow -= end - start + 1;
+  updateSceneRect();
 }
 
+void ChatScene::updateForViewport(qreal width, qreal height) {
+  _viewportHeight = height;
+  setWidth(width);
+}
+
+// setWidth is used for 2 things:
+//  a) updating the scene to fit the width of the corresponding view
+//  b) to update the positions of the items if a columhandle has changed it's position
+// forceReposition is true in the second case
+// this method features some codeduplication for the sake of performance
 void ChatScene::setWidth(qreal width, bool forceReposition) {
   if(width == _sceneRect.width() && !forceReposition)
     return;
 
-  // clock_t startT = clock();
-  qreal oldHeight = _sceneRect.height();
-  qreal y = _sceneRect.y();
-  qreal linePos = y;
+//   clock_t startT = clock();
 
-  foreach(ChatLine *line, _lines) {
-    line->setPos(0, linePos);
-    linePos += line->setGeometry(width);
+  qreal linePos = _sceneRect.y() + _sceneRect.height();
+  QList<ChatLine *>::iterator lineIter = _lines.end();
+  QList<ChatLine *>::iterator lineIterBegin = _lines.begin();
+  ChatLine *line = 0;
+  qreal lineHeight = 0;
+  qreal contentsWidth = width - secondColumnHandle()->sceneRight();
+
+  if(forceReposition) {
+    qreal timestampWidth = firstColumnHandle()->sceneLeft();
+    qreal senderWidth = secondColumnHandle()->sceneLeft() - firstColumnHandle()->sceneRight();
+    QPointF senderPos(firstColumnHandle()->sceneRight(), 0);
+    QPointF contentsPos(secondColumnHandle()->sceneRight(), 0);
+    while(lineIter != lineIterBegin) {
+      lineIter--;
+      line = *lineIter;
+      lineHeight = line->setColumns(timestampWidth, senderWidth, contentsWidth, senderPos, contentsPos);
+      linePos -= lineHeight;
+      line->setPos(0, linePos);
+    }
+  } else {
+    while(lineIter != lineIterBegin) {
+      lineIter--;
+      line = *lineIter;
+      lineHeight = line->setGeometryByWidth(width, contentsWidth);
+      linePos -= lineHeight;
+      line->setPos(0, linePos);
+    }
   }
 
-  qreal height = linePos - y;
-
-  updateSceneRect(QRectF(0, y, width, height));
+  updateSceneRect(width);
   setHandleXLimits();
 
-  qreal dh = height - oldHeight;
-  if(dh > 0)
-    emit sceneHeightChanged(dh);
-
-  // clock_t endT = clock();
-  // qDebug() << "resized" << _lines.count() << "in" << (float)(endT - startT) / CLOCKS_PER_SEC << "sec";
+//   clock_t endT = clock();
+//   qDebug() << "resized" << _lines.count() << "in" << (float)(endT - startT) / CLOCKS_PER_SEC << "sec";
 }
 
 void ChatScene::handlePositionChanged(qreal xpos) {
@@ -415,10 +485,13 @@ QString ChatScene::selectionToString() const {
 }
 
 void ChatScene::requestBacklog() {
-  static const int REQUEST_COUNT = 100;
+  static const int REQUEST_COUNT = 500;
   int backlogSize = model()->rowCount();
   if(isSingleBufferScene() && backlogSize != 0 && _lastBacklogSize + REQUEST_COUNT <= backlogSize) {
     QModelIndex msgIdx = model()->index(0, 0);
+    while((Message::Type)(model()->data(msgIdx, ChatLineModel::TypeRole).toInt()) == Message::DayChange) {
+      msgIdx = msgIdx.sibling(msgIdx.row() + 1, 0);
+    }
     MsgId msgId = model()->data(msgIdx, ChatLineModel::MsgIdRole).value<MsgId>();
     BufferId bufferId = model()->data(msgIdx, ChatLineModel::BufferIdRole).value<BufferId>();
     _lastBacklogSize = backlogSize;
@@ -435,7 +508,94 @@ int ChatScene::sectionByScenePos(int x) {
   return ChatLineModel::ContentsColumn;
 }
 
+void ChatScene::updateSceneRect() {
+  if(_lines.isEmpty()) {
+    updateSceneRect(QRectF(0, 0, _sceneRect.width(), 0));
+    return;
+  }
+
+  // we hide day change messages at the top by making the scene rect smaller
+  // and by calling QGraphicsItem::hide() on all leading day change messages
+  // the first one is needed to ensure proper scrollbar ranges
+  // the second for cases where the viewport is larger then the set scenerect
+  //  (in this case the items are shown anyways)
+  if(_firstLineRow == -1) {
+    int numRows = model()->rowCount();
+    _firstLineRow = 0;
+    QModelIndex firstLineIdx;
+    while(_firstLineRow < numRows) {
+      firstLineIdx = model()->index(_firstLineRow, 0);
+      if((Message::Type)(model()->data(firstLineIdx, MessageModel::TypeRole).toInt()) != Message::DayChange)
+	break;
+      _lines.at(_firstLineRow)->hide();
+      _firstLineRow++;
+    }
+  }
+
+  // the following call should be safe. If it crashes something went wrong during insert/remove
+  ChatLine *firstLine = _lines.at(_firstLineRow);
+  ChatLine *lastLine = _lines.last();
+  updateSceneRect(QRectF(0, firstLine->pos().y(), _sceneRect.width(), lastLine->pos().y() + lastLine->height() - firstLine->pos().y()));
+}
+
+void ChatScene::updateSceneRect(qreal width) {
+  _sceneRect.setWidth(width);
+  updateSceneRect();
+}
+
 void ChatScene::updateSceneRect(const QRectF &rect) {
   _sceneRect = rect;
   setSceneRect(rect);
+}
+
+
+void ChatScene::loadWebPreview(ChatItem *parentItem, const QString &url, const QRectF &urlRect) {
+#ifndef HAVE_WEBKIT
+  Q_UNUSED(parentItem)
+  Q_UNUSED(url)
+  Q_UNUSED(urlRect)
+#else
+  if(webPreview.parentItem != parentItem)
+    webPreview.parentItem = parentItem;
+
+  if(webPreview.url != url) {
+    webPreview.url = url;
+    // load a new web view and delete the old one (if exists)
+    if(webPreview.previewItem) {
+      removeItem(webPreview.previewItem);
+      delete webPreview.previewItem;
+    }
+    webPreview.previewItem = new WebPreviewItem(url);
+    addItem(webPreview.previewItem);
+  }
+  if(webPreview.urlRect != urlRect) {
+    webPreview.urlRect = urlRect;
+    qreal previewY = urlRect.bottom();
+    qreal previewX = urlRect.x();
+    if(previewY + webPreview.previewItem->boundingRect().height() > sceneRect().bottom())
+      previewY = urlRect.y() - webPreview.previewItem->boundingRect().height();
+
+    if(previewX + webPreview.previewItem->boundingRect().width() > sceneRect().width())
+      previewX = sceneRect().right() - webPreview.previewItem->boundingRect().width();
+
+    webPreview.previewItem->setPos(previewX, previewY);
+  }
+#endif
+}
+
+void ChatScene::clearWebPreview(ChatItem *parentItem) {
+#ifndef HAVE_WEBKIT
+  Q_UNUSED(parentItem)
+#else
+  if(parentItem == 0 || webPreview.parentItem == parentItem) {
+    if(webPreview.previewItem) {
+      removeItem(webPreview.previewItem);
+      delete webPreview.previewItem;
+      webPreview.previewItem = 0;
+    }
+    webPreview.parentItem = 0;
+    webPreview.url = QString();
+    webPreview.urlRect = QRectF();
+  }
+#endif
 }

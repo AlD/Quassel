@@ -11,18 +11,18 @@ set(SOURCES
     buffersyncer.cpp
     bufferviewconfig.cpp
     bufferviewmanager.cpp
-    global.cpp
+    cliparser.cpp
     identity.cpp
+    ircchannel.cpp
+    ircuser.cpp
     logger.cpp
     message.cpp
+    network.cpp
+    quassel.cpp
     settings.cpp
     signalproxy.cpp
     syncableobject.cpp
-    util.cpp
-    network.cpp
-    ircuser.cpp
-    ircchannel.cpp
-    cliparser.cpp)
+    util.cpp)
 
 set(MOC_HDRS
     aliasmanager.h
@@ -42,17 +42,20 @@ set(MOC_HDRS
 
 set(HEADERS ${MOC_HDRS}
     bufferinfo.h
-    global.h
+    cliparser.h
     logger.h
     message.h
     types.h
-    util.h
-    cliparser.h)
+    util.h)
 
 qt4_wrap_cpp(MOC ${MOC_HDRS})
+
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR})  # for version.inc and version.gen
 add_definitions(-DHAVE_VERSION_GEN)  # we ensure that by deps in the main CMakeLists.txt
 set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES version.gen)
 
-add_library(mod_common STATIC ${SOURCES} ${MOC})
+add_library(mod_common STATIC ${SOURCES} ${MOC} ${CMAKE_BINARY_DIR}/i18n/qrc_i18n.cxx)
+set_source_files_properties(${CMAKE_BINARY_DIR}/i18n/qrc_i18n.cxx PROPERTIES GENERATED true)
+add_dependencies(mod_common i18n)
+
