@@ -25,8 +25,6 @@
 #include "settings.h"
 #include "client.h"
 
-#include "global.h"
-
 #include <QLayout>
 
 BufferWidget::BufferWidget(QWidget *parent)
@@ -42,7 +40,7 @@ BufferWidget::BufferWidget(QWidget *parent)
   _chatViewSearchController->setSearchSenders(ui.searchBar->searchSendersBox()->isChecked());
   _chatViewSearchController->setSearchMsgs(ui.searchBar->searchMsgsBox()->isChecked());
   _chatViewSearchController->setSearchOnlyRegularMsgs(ui.searchBar->searchOnlyRegularMsgsBox()->isChecked());
-  
+
   connect(ui.searchBar->searchEditLine(), SIGNAL(textChanged(const QString &)),
 	  _chatViewSearchController, SLOT(setSearchString(const QString &)));
   connect(ui.searchBar->caseSensitiveBox(), SIGNAL(toggled(bool)),
@@ -53,6 +51,13 @@ BufferWidget::BufferWidget(QWidget *parent)
 	  _chatViewSearchController, SLOT(setSearchMsgs(bool)));
   connect(ui.searchBar->searchOnlyRegularMsgsBox(), SIGNAL(toggled(bool)),
 	  _chatViewSearchController, SLOT(setSearchOnlyRegularMsgs(bool)));
+  connect(ui.searchBar->searchUpButton(), SIGNAL(clicked()),
+	  _chatViewSearchController, SLOT(highlightPrev()));
+  connect(ui.searchBar->searchDownButton(), SIGNAL(clicked()),
+	  _chatViewSearchController, SLOT(highlightNext()));
+
+  connect(_chatViewSearchController, SIGNAL(newCurrentHighlight(QGraphicsItem *)),
+	  this, SLOT(scrollToHighlight(QGraphicsItem *)));
 }
 
 BufferWidget::~BufferWidget() {
@@ -88,3 +93,9 @@ void BufferWidget::showChatView(BufferId id) {
   }
 }
 
+void BufferWidget::scrollToHighlight(QGraphicsItem *highlightItem) {
+  ChatView *view = qobject_cast<ChatView *>(ui.stackedWidget->currentWidget());
+  if(view) {
+    view->centerOn(highlightItem);
+  }
+}

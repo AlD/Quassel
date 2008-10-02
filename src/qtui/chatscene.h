@@ -31,6 +31,7 @@
 class AbstractUiMsg;
 class ChatItem;
 class ChatLine;
+class WebPreviewItem;
 
 class QGraphicsSceneMouseEvent;
 
@@ -54,6 +55,7 @@ public:
   inline ColumnHandleItem *secondColumnHandle() const { return secondColHandle; }
 
 public slots:
+  void updateForViewport(qreal width, qreal height);
   void setWidth(qreal, bool forceReposition = false);
 
   // these are used by the chatitems to notify the scene and manage selections
@@ -64,8 +66,11 @@ public slots:
 
   void requestBacklog();
 
+  void loadWebPreview(ChatItem *parentItem, const QString &url, const QRectF &urlRect);
+  void clearWebPreview(ChatItem *parentItem = 0);
+
 signals:
-  void sceneHeightChanged(qreal dh);
+  void lastLineChanged(QGraphicsItem *);
 
 protected:
   virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent);
@@ -92,7 +97,11 @@ private:
   // calls to QChatScene::sceneRect() are very expensive. As we manage the scenerect ourselves
   // we store the size in a member variable.
   QRectF _sceneRect;
+  int _firstLineRow; // the first row to display (aka: not a daychange msg)
+  void updateSceneRect();
+  void updateSceneRect(qreal width);
   void updateSceneRect(const QRectF &rect);
+  qreal _viewportHeight;
 
   ColumnHandleItem *firstColHandle, *secondColHandle;
   qreal firstColHandlePos, secondColHandlePos;
@@ -105,10 +114,23 @@ private:
   bool _isSelecting;
 
   int _lastBacklogSize;
+
+  struct WebPreview {
+    ChatItem *parentItem;
+    WebPreviewItem *previewItem;
+    QString url;
+    QRectF urlRect;
+    WebPreview() : parentItem(0), previewItem(0) {}
+  };
+  WebPreview webPreview;
 };
 
 bool ChatScene::containsBuffer(const BufferId &id) const {
-  return qobject_cast<MessageFilter*>(model()) ? qobject_cast<MessageFilter*>(model())->containsBuffer(id) : false;
+  MessageFilter *filter = qobject_cast<MessageFilter*>(model());
+  if(filter)
+    return filter->containsBuffer(id);
+  else
+    return false;
 }
 
 #endif

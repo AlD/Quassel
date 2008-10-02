@@ -21,7 +21,6 @@
 #ifndef _CORESETTINGS_H_
 #define _CORESETTINGS_H_
 
-#include "global.h"
 #include "settings.h"
 
 class CoreSettings : public Settings {
@@ -34,9 +33,6 @@ class CoreSettings : public Settings {
     QVariant storageSettings(const QVariant &def = QVariant());
 
     QVariant oldDbSettings();  // FIXME remove
-
-    void setPort(const uint &port);
-    uint port(const uint &def = Global::parser.value("port").toUInt());
 
     void setCoreState(const QVariant &data);
     QVariant coreState(const QVariant &def = QVariant());

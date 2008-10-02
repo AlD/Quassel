@@ -20,6 +20,8 @@
 #include "mainwin.h"
 
 #include "aboutdlg.h"
+#include "action.h"
+#include "actioncollection.h"
 #include "bufferview.h"
 #include "bufferviewconfig.h"
 #include "bufferviewfilter.h"
@@ -34,6 +36,7 @@
 #include "clientbacklogmanager.h"
 #include "coreinfodlg.h"
 #include "coreconnectdlg.h"
+#include "iconloader.h"
 #include "msgprocessorstatuswidget.h"
 #include "qtuimessageprocessor.h"
 #include "qtuiapplication.h"
@@ -66,7 +69,6 @@
 #include "settingspages/networkssettingspage.h"
 #include "settingspages/notificationssettingspage.h"
 
-#include "global.h"
 #include "qtuistyle.h"
 
 MainWin::MainWin(QWidget *parent)
@@ -78,25 +80,27 @@ MainWin::MainWin(QWidget *parent)
     _titleSetter(this),
     systray(new QSystemTrayIcon(this)),
 
-    activeTrayIcon(":/icons/quassel-icon-active.png"),
-    onlineTrayIcon(":/icons/quassel-icon.png"),
-    offlineTrayIcon(":/icons/quassel-icon-offline.png"),
+    activeTrayIcon(DesktopIcon("quassel_newmessage", IconLoader::SizeEnormous)),
+    onlineTrayIcon(DesktopIcon("quassel", IconLoader::SizeEnormous)),
+    offlineTrayIcon(DesktopIcon("quassel_disconnected", IconLoader::SizeEnormous)),
     trayIconActive(false),
 
-    timer(new QTimer(this))
+    timer(new QTimer(this)),
+    _actionCollection(new ActionCollection(this))
 {
   UiSettings uiSettings;
   QString style = uiSettings.value("Style", QString("")).toString();
   if(style != "") {
     QApplication::setStyle(style);
   }
-
   ui.setupUi(this);
   setWindowTitle("Quassel IRC");
   setWindowIcon(offlineTrayIcon);
   qApp->setWindowIcon(offlineTrayIcon);
   systray->setIcon(offlineTrayIcon);
   setWindowIconText("Quassel IRC");
+
+  QtUi::actionCollection()->addAssociatedWidget(this);
 
   statusBar()->showMessage(tr("Waiting for core..."));
 
@@ -111,7 +115,7 @@ MainWin::MainWin(QWidget *parent)
   connect(desktopNotifications, SIGNAL(NotificationClosed(uint, uint)), this, SLOT(desktopNotificationClosed(uint, uint)));
   connect(desktopNotifications, SIGNAL(ActionInvoked(uint, const QString&)), this, SLOT(desktopNotificationInvoked(uint, const QString&)));
 #endif
-  QtUiApplication* app = dynamic_cast<QtUiApplication*> qApp;
+  QtUiApplication* app = qobject_cast<QtUiApplication*> qApp;
   connect(app, SIGNAL(saveStateToSession(const QString&)), this, SLOT(saveStateToSession(const QString&)));
   connect(app, SIGNAL(saveStateToSessionSettings(SessionSettings&)), this, SLOT(saveStateToSessionSettings(SessionSettings&)));
 }
@@ -141,6 +145,7 @@ void MainWin::init() {
   setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
 
   // setup stuff...
+  setupActions();
   setupMenus();
   setupViews();
   setupNickWidget();
@@ -162,7 +167,7 @@ void MainWin::init() {
   // attach the BufferWidget to the BufferModel and the default selection
   ui.bufferWidget->setModel(Client::bufferModel());
   ui.bufferWidget->setSelectionModel(Client::bufferModel()->standardSelectionModel());
-  ui.menuViews->addAction(ui.bufferWidget->searchBar()->toggleViewAction());
+  ui.menuViews->addAction(QtUi::actionCollection()->action("toggleSearchBar"));
 
   _titleSetter.setModel(Client::bufferModel());
   _titleSetter.setSelectionModel(Client::bufferModel()->standardSelectionModel());
@@ -173,6 +178,19 @@ MainWin::~MainWin() {
   s.setValue("MainWinSize", size());
   s.setValue("MainWinPos", pos());
   s.setValue("MainWinState", saveState());
+}
+
+void MainWin::setupActions() {
+  // TODO don't get these from *.ui anymore... we shouldn't need one
+  ui.actionQuit->setIcon(SmallIcon("application-exit"));
+  ui.actionSettingsDlg->setIcon(SmallIcon("configure"));
+  ui.actionManageViews->setIcon(SmallIcon("view-tree"));
+  ui.actionManageViews2->setIcon(SmallIcon("view-tree"));
+  ui.actionAboutQt->setIcon(SmallIcon("qt"));
+  ui.actionAboutQuassel->setIcon(SmallIcon("quassel"));
+  ui.actionConnectCore->setIcon(SmallIcon("network-connect"));
+  ui.actionDisconnectCore->setIcon(SmallIcon("network-disconnect"));
+  ui.actionCoreInfo->setIcon(SmallIcon("help-about"));
 }
 
 void MainWin::setupMenus() {
@@ -412,7 +430,7 @@ void MainWin::setConnectedState() {
   qApp->setWindowIcon(onlineTrayIcon);
   systray->setIcon(onlineTrayIcon);
   if(sslLabel->width() == 0)
-    sslLabel->setPixmap(QPixmap::fromImage(QImage(":/16x16/status/no-ssl")));
+    sslLabel->setPixmap(SmallIcon("security-low"));
 }
 
 void MainWin::loadLayout() {
@@ -434,7 +452,7 @@ void MainWin::updateLagIndicator(int lag) {
 
 void MainWin::securedConnection() {
   // todo: make status bar entry
-  sslLabel->setPixmap(QPixmap::fromImage(QImage(":/16x16/status/ssl")));
+  sslLabel->setPixmap(SmallIcon("security-high"));
 }
 
 void MainWin::disconnectedFromCore() {
@@ -726,13 +744,13 @@ void MainWin::clientNetworkUpdated() {
 
   switch(net->connectionState()) {
   case Network::Initialized:
-    action->setIcon(QIcon(":/16x16/actions/network-connect"));
+    action->setIcon(SmallIcon("network-connect"));
     break;
   case Network::Disconnected:
-    action->setIcon(QIcon(":/16x16/actions/network-disconnect"));
+    action->setIcon(SmallIcon("network-disconnect"));
     break;
   default:
-    action->setIcon(QIcon(":/16x16/actions/gear"));
+    action->setIcon(SmallIcon("network-wired"));
   }
 }
 
@@ -770,7 +788,7 @@ void MainWin::on_actionDebugNetworkModel_triggered(bool) {
 void MainWin::saveStateToSession(const QString &sessionId) {
   return;
   SessionSettings s(sessionId);
-  
+
   s.setValue("MainWinSize", size());
   s.setValue("MainWinPos", pos());
   s.setValue("MainWinState", saveState());

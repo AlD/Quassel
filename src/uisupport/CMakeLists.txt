@@ -7,14 +7,18 @@ include(${QT_USE_FILE})
 set(SOURCES
     abstractbuffercontainer.cpp
     abstractitemview.cpp
+    action.cpp
+    actioncollection.cpp
     bufferview.cpp
     bufferviewfilter.cpp
     clearablelineedit.cpp
     clickablelabel.cpp
     colorbutton.cpp
-    nickviewfilter.cpp
+    icon.cpp
+    iconloader.cpp
     inputline.cpp
     nickview.cpp
+    nickviewfilter.cpp
     settingspage.cpp
     tabcompleter.cpp
     uisettings.cpp
@@ -23,18 +27,22 @@ set(SOURCES
 set(MOC_HDRS
     abstractbuffercontainer.h
     abstractitemview.h
+    action.h
+    actioncollection.h
     bufferview.h
     bufferviewfilter.h
     clearablelineedit.h
     clickablelabel.h
     colorbutton.h
-    nickviewfilter.h
+    iconloader.h
     inputline.h
     nickview.h
+    nickviewfilter.h
     settingspage.h
     tabcompleter.h)
 
 set(HEADERS
+    icon.h
     uisettings.h
     uistyle.h)
 

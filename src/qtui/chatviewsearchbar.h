@@ -38,15 +38,14 @@ public:
   inline QCheckBox *searchSendersBox() const { return ui.searchSendersBox; }
   inline QCheckBox *searchMsgsBox() const { return ui.searchMsgsBox; }
   inline QCheckBox *searchOnlyRegularMsgsBox() const { return ui.searchOnlyRegularMsgsBox; }
-
-  inline QAction *toggleViewAction() const { return _toggleViewAction; }
+  inline QToolButton *searchUpButton() const { return  ui.searchUpButton; }
+  inline QToolButton *searchDownButton() const { return ui.searchDownButton; }
 
 public slots:
-  void setVisible(bool visible);
+  void setVisible(bool);
 
 private:
   Ui::ChatViewSearchBar ui;
-  QAction *_toggleViewAction;
 };
 
 #endif //CHATVIEWSEARCHBAR_H
