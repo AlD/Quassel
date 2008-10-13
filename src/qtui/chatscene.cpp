@@ -22,6 +22,7 @@
 #include <QClipboard>
 #include <QGraphicsSceneMouseEvent>
 #include <QPersistentModelIndex>
+#include <QWebView>
 
 #include "chatitem.h"
 #include "chatline.h"
@@ -38,9 +39,9 @@
 
 const qreal minContentsWidth = 200;
 
-class ClearWebPreviewEvent : public QEvent {
+class ChatScene::ClearWebPreviewEvent : public QEvent {
 public:
-  inline ClearWebPreviewEvent() : QEvent(QEvent::User) {}
+  inline ClearWebPreviewEvent() : QEvent((QEvent::Type)ChatScene::ClearWebPreviewEventType) {}
 };
 
 ChatScene::ChatScene(QAbstractItemModel *model, const QString &idString, qreal width, QObject *parent)
@@ -93,6 +94,9 @@ ChatScene::ChatScene(QAbstractItemModel *model, const QString &idString, qreal w
 
   webPreview.delayTimer.setSingleShot(true);
   connect(&webPreview.delayTimer, SIGNAL(timeout()), this, SLOT(showWebPreview()));
+
+  // installEventFilter(this);
+  setItemIndexMethod(QGraphicsScene::NoIndex);
 }
 
 ChatScene::~ChatScene() {
@@ -188,6 +192,10 @@ void ChatScene::rowsInserted(const QModelIndex &index, int start, int end) {
     }
   }
 
+  // check if all went right
+  Q_ASSERT(start == 0 || _lines.at(start - 1)->pos().y() + _lines.at(start - 1)->height() == _lines.at(start)->pos().y());
+  Q_ASSERT(end + 1 == _lines.count() || _lines.at(end)->pos().y() + _lines.at(end)->height() == _lines.at(end + 1)->pos().y());
+
   if(!atBottom) {
     if(start < _firstLineRow) {
       int prevFirstLineRow = _firstLineRow + (end - start + 1);
@@ -202,7 +210,6 @@ void ChatScene::rowsInserted(const QModelIndex &index, int start, int end) {
   if(atBottom || (!atTop && !moveTop)) {
     emit lastLineChanged(_lines.last(), h);
   }
-
 }
 
 void ChatScene::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end) {
@@ -557,14 +564,17 @@ void ChatScene::updateSceneRect(qreal width) {
 void ChatScene::updateSceneRect(const QRectF &rect) {
   _sceneRect = rect;
   setSceneRect(rect);
+  update();
 }
 
 void ChatScene::customEvent(QEvent *event) {
-  if(event->type() != QEvent::User)
+  switch(event->type()) {
+  case ClearWebPreviewEventType:
+    clearWebPreviewEvent((ClearWebPreviewEvent *)event);
+    break;
+  default:
     return;
-
-  event->accept();
-  clearWebPreviewEvent();
+  }
 }
 
 void ChatScene::loadWebPreview(ChatItem *parentItem, const QString &url, const QRectF &urlRect) {
@@ -620,8 +630,9 @@ void ChatScene::showWebPreview() {
 #endif
 }
 
-void ChatScene::clearWebPreviewEvent() {
+void ChatScene::clearWebPreviewEvent(ClearWebPreviewEvent *event) {
 #ifdef HAVE_WEBKIT
+  event->accept();
   if(webPreview.previewItem) {
     if(webPreview.previewItem->scene()) {
       removeItem(webPreview.previewItem);
@@ -634,3 +645,9 @@ void ChatScene::clearWebPreviewEvent() {
   webPreview.urlRect = QRectF();
 #endif
 }
+
+bool ChatScene::eventFilter(QObject *watched, QEvent *event) {
+  qDebug() << watched << event;
+  return false;
+}
+

@@ -38,6 +38,8 @@ set(SOURCES
     sessionsettings.cpp
     settingsdlg.cpp
     settingspagedlg.cpp
+    systraynotificationbackend.cpp
+    taskbarnotificationbackend.cpp
     titlesetter.cpp
     topiclabel.cpp
     topicwidget.cpp
@@ -70,6 +72,8 @@ set(MOC_HDRS
     qtuimessageprocessor.h
     settingsdlg.h
     settingspagedlg.h
+    systraynotificationbackend.h
+    taskbarnotificationbackend.h
     titlesetter.h
     topiclabel.h
     topicwidget.h
@@ -106,6 +110,13 @@ set(FORMS
     settingspagedlg.ui
     topicwidget.ui)
 
+IF(HAVE_DBUS)
+  set(SOURCES ${SOURCES} desktopnotificationbackend.cpp)
+  set(MOC_HDRS ${MOC_HDRS} desktopnotificationbackend.h)
+  set(FORMS ${FORMS} desktopnotificationconfigwidget.ui)
+  qt4_add_dbus_interface(DBUS ../../interfaces/org.freedesktop.Notifications.xml desktopnotificationinterface)
+ENDIF(HAVE_DBUS)
+
 foreach(FORM ${FORMS})
   set(FORMPATH ${FORMPATH} ui/${FORM})
 endforeach(FORM ${FORMS})
@@ -127,13 +138,8 @@ foreach(FRM ${SP_FORMS})
   set(SPFRM ${SPFRM} settingspages/${FRM})
 endforeach(FRM ${SP_FORMS})
 
-
 qt4_wrap_cpp(MOC ${MOC_HDRS} ${SPHDR})
 qt4_wrap_ui(UI ${FORMPATH} ${SPFRM})
-
-IF(HAVE_DBUS)
-  qt4_add_dbus_interface(DBUS ../../interfaces/org.freedesktop.Notifications.xml desktopnotifications)
-ENDIF(HAVE_DBUS)
 
 include_directories(${CMAKE_SOURCE_DIR}/src/common
                     ${CMAKE_SOURCE_DIR}/src/client

@@ -23,6 +23,8 @@
 
 #include "quasselui.h"
 
+#include "abstractnotificationbackend.h"
+
 class ActionCollection;
 class MainWin;
 class MessageModel;
@@ -44,6 +46,7 @@ public:
   AbstractMessageProcessor *createMessageProcessor(QObject *parent);
 
   inline static QtUiStyle *style();
+  inline static MainWin *mainWindow();
 
   //! Access the global ActionCollection.
   /** This ActionCollection is associated with the main window, i.e. it contains global
@@ -51,6 +54,17 @@ public:
    *  create appropriate Action objects using QtUi::actionCollection()->add\<Action\>().
    */
   inline static ActionCollection *actionCollection();
+
+  /* Notifications */
+
+  static void registerNotificationBackend(AbstractNotificationBackend *);
+  static void unregisterNotificationBackend(AbstractNotificationBackend *);
+  static void unregisterAllNotificationBackends();
+  static const QList<AbstractNotificationBackend *> &notificationBackends();
+  static uint invokeNotification(BufferId bufId, const QString &sender, const QString &text);
+  static void closeNotification(uint notificationId);
+  static void closeNotifications(BufferId bufferId = BufferId());
+  static const QList<AbstractNotificationBackend::Notification> &activeNotifications();
 
 public slots:
   void init();
@@ -60,12 +74,15 @@ protected slots:
   void disconnectedFromCore();
 
 private:
-  MainWin *mainWin;
+  static MainWin *_mainWin;
   static ActionCollection *_actionCollection;
   static QtUiStyle *_style;
+  static QList<AbstractNotificationBackend *> _notificationBackends;
+  static QList<AbstractNotificationBackend::Notification> _notifications;
 };
 
 ActionCollection *QtUi::actionCollection() { return _actionCollection; }
 QtUiStyle *QtUi::style() { return _style; }
+MainWin *QtUi::mainWindow() { return _mainWin; }
 
 #endif

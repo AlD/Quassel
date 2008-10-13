@@ -88,7 +88,7 @@ void MessageModel::insertMessages(const QList<Message> &msglist) {
   int remainingMsgs = msglist.count() - processedMsgs;
   if(remainingMsgs > 0) {
     if(msglist.first().msgId() < msglist.last().msgId()) {
-      // in Order
+      // in Order - we have just successfully processed "processedMsg" messages from the end of the list
       _messageBuffer << msglist.mid(0, remainingMsgs);
     } else {
       _messageBuffer << msglist.mid(processedMsgs);
@@ -103,7 +103,7 @@ void MessageModel::insertMessageGroup(const QList<Message> &msglist) {
   int start = indexForId(msglist.first().msgId());
   int end = start + msglist.count() - 1;
   MessageModelItem *dayChangeItem = 0;
-
+  bool relocatedMsg = false;
   if(start > 0) {
     // check if the preceeding msg is a daychange message and if so if
     // we have to drop or relocate it at the end of this chunk
@@ -121,6 +121,8 @@ void MessageModel::insertMessageGroup(const QList<Message> &msglist) {
       delete oldItem;
       endRemoveRows();
       start--;
+      end--;
+      relocatedMsg = true;
     }
   }
 
@@ -148,27 +150,40 @@ void MessageModel::insertMessageGroup(const QList<Message> &msglist) {
   if(dayChangeItem)
     end++;
 
+  Q_ASSERT(start == 0 || _messageList[start - 1]->msgId() < msglist.first().msgId());
+  Q_ASSERT(start == _messageList.count() || _messageList[start]->msgId() > msglist.last().msgId());
   beginInsertRows(QModelIndex(), start, end);
+  int pos = start;
   foreach(Message msg, msglist) {
-    _messageList.insert(start, createMessageModelItem(msg));
-    start++;
+    _messageList.insert(pos, createMessageModelItem(msg));
+    pos++;
   }
   if(dayChangeItem) {
-    _messageList.insert(start, dayChangeItem);
-    start++; // needed for the following assert
+    _messageList.insert(pos, dayChangeItem);
+    pos++; // needed for the following assert
   }
   endInsertRows();
-  Q_ASSERT(start - 1 == end);
+  Q_ASSERT(start == 0 || _messageList[start - 1]->msgId() < _messageList[start]->msgId());
+  Q_ASSERT(end + 1 == _messageList.count() || _messageList[end]->msgId() < _messageList[end + 1]->msgId());
+  Q_ASSERT(pos - 1 == end);
 }
 
 int MessageModel::insertMessagesGracefully(const QList<Message> &msglist) {
+  /* short description:
+   * 1) first we check where the message with the highest msgId from msglist would be inserted
+   * 2) check that position for dupe
+   * 3) determine the messageId of the preceeding msg
+   * 4) insert as many msgs from msglist with with msgId larger then the just determined id
+   *    those messages are automatically less then the msg of the position we just determined in 1)
+   */
   bool inOrder = (msglist.first().msgId() < msglist.last().msgId());
   // depending on the order we have to traverse from the front to the back or vice versa
 
   QList<Message> grouplist;
   MsgId id;
   MsgId dupeId;
-  int dupeCount = 0;
+  int processedMsgs = 1; // we know the list isn't empty, so we at least process one message
+  int idx;
   bool fastForward = false;
   QList<Message>::const_iterator iter;
   if(inOrder) {
@@ -178,7 +193,7 @@ int MessageModel::insertMessagesGracefully(const QList<Message> &msglist) {
     iter = msglist.constBegin();
   }
 
-  int idx = indexForId((*iter).msgId());
+  idx = indexForId((*iter).msgId());
   if(idx >= 0 && !_messageList.isEmpty())
     dupeId = _messageList[idx]->msgId();
 
@@ -191,8 +206,6 @@ int MessageModel::insertMessagesGracefully(const QList<Message> &msglist) {
 
   if((*iter).msgId() != dupeId)
     grouplist << *iter;
-  else
-    dupeCount++;
 
   if(!inOrder)
     iter++;
@@ -203,7 +216,13 @@ int MessageModel::insertMessagesGracefully(const QList<Message> &msglist) {
 
       if(!fastForward && (*iter).msgId() < id)
 	break;
+      processedMsgs++;
 
+      if(grouplist.isEmpty()) { // as long as we don't have a starting point, we have to update the dupeId
+	idx = indexForId((*iter).msgId());
+	if(idx >= 0 && !_messageList.isEmpty())
+	  dupeId = _messageList[idx]->msgId();
+      }
       if((*iter).msgId() != dupeId) {
 	if(!grouplist.isEmpty()) {
 	  QDateTime nextTs = grouplist.value(0).timestamp();
@@ -218,19 +237,23 @@ int MessageModel::insertMessagesGracefully(const QList<Message> &msglist) {
 	    Message dayChangeMsg = Message::ChangeOfDay(nextTs);
 	    dayChangeMsg.setMsgId((*iter).msgId());
 	    grouplist.prepend(dayChangeMsg);
-	    dupeCount--;
 	  }
 	}
+	dupeId = (*iter).msgId();
 	grouplist.prepend(*iter);
-      } else {
-	dupeCount++;
       }
     }
   } else {
     while(iter != msglist.constEnd()) {
       if(!fastForward && (*iter).msgId() < id)
 	break;
+      processedMsgs++;
 
+      if(grouplist.isEmpty()) { // as long as we don't have a starting point, we have to update the dupeId
+	idx = indexForId((*iter).msgId());
+	if(idx >= 0 && !_messageList.isEmpty())
+	  dupeId = _messageList[idx]->msgId();
+      }
       if((*iter).msgId() != dupeId) {
 	if(!grouplist.isEmpty()) {
 	  QDateTime nextTs = grouplist.value(0).timestamp();
@@ -245,20 +268,18 @@ int MessageModel::insertMessagesGracefully(const QList<Message> &msglist) {
 	    Message dayChangeMsg = Message::ChangeOfDay(nextTs);
 	    dayChangeMsg.setMsgId((*iter).msgId());
 	    grouplist.prepend(dayChangeMsg);
-	    dupeCount--;
 	  }
 	}
+	dupeId = (*iter).msgId();
 	grouplist.prepend(*iter);
-      } else {
-	dupeCount++;
       }
-
       iter++;
     }
   }
 
-  insertMessageGroup(grouplist);
-  return grouplist.count() + dupeCount;
+  if(!grouplist.isEmpty())
+    insertMessageGroup(grouplist);
+  return processedMsgs;
 }
 
 void MessageModel::customEvent(QEvent *event) {
@@ -310,7 +331,6 @@ int MessageModel::indexForId(MsgId id) {
 
 void MessageModel::changeOfDay() {
   _dayChangeTimer.setInterval(86400000);
-  qDebug() << _nextDayChange;
   if(!_messageList.isEmpty()) {
     int idx = _messageList.count();
     while(idx > 0 && _messageList[idx - 1]->timeStamp() > _nextDayChange) {
@@ -366,4 +386,13 @@ bool MessageModelItem::operator==(const MessageModelItem &other) const {
 
 bool MessageModelItem::operator>(const MessageModelItem &other) const {
   return _msgId > other._msgId;
+}
+
+QDebug operator<<(QDebug dbg, const MessageModelItem &msgItem) {
+  dbg.nospace() << qPrintable(QString("MessageModelItem(MsgId:")) << msgItem.msgId()
+		<< qPrintable(QString(",")) << msgItem.timeStamp()
+		<< qPrintable(QString(", Type:")) << msgItem.msgType()
+		<< qPrintable(QString(", Flags:")) << msgItem.msgFlags() << qPrintable(QString(")"))
+		<< msgItem.data(1, Qt::DisplayRole).toString() << ":" << msgItem.data(2, Qt::DisplayRole).toString();
+  return dbg;
 }

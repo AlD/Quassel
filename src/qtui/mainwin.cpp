@@ -22,41 +22,37 @@
 #include "aboutdlg.h"
 #include "action.h"
 #include "actioncollection.h"
-#include "bufferview.h"
-#include "bufferviewconfig.h"
-#include "bufferviewfilter.h"
+#include "buffermodel.h"
 #include "bufferviewmanager.h"
 #include "channellistdlg.h"
 #include "chatlinemodel.h"
 #include "chatmonitorfilter.h"
 #include "chatmonitorview.h"
 #include "chatview.h"
-#include "chatviewsearchbar.h"
 #include "client.h"
 #include "clientbacklogmanager.h"
 #include "coreinfodlg.h"
 #include "coreconnectdlg.h"
 #include "iconloader.h"
-#include "msgprocessorstatuswidget.h"
-#include "qtuimessageprocessor.h"
-#include "qtuiapplication.h"
-#include "networkmodel.h"
-#include "buffermodel.h"
-#include "nicklistwidget.h"
-#include "settingsdlg.h"
-#include "settingspagedlg.h"
-#include "signalproxy.h"
-#include "topicwidget.h"
 #include "inputwidget.h"
 #include "irclistmodel.h"
-#include "verticaldock.h"
-#include "uisettings.h"
-#include "qtuisettings.h"
 #include "jumpkeyhandler.h"
+#include "msgprocessorstatuswidget.h"
+#include "nicklistwidget.h"
+#include "qtuiapplication.h"
+#include "qtuimessageprocessor.h"
+#include "qtuisettings.h"
 #include "sessionsettings.h"
+#include "settingsdlg.h"
+#include "settingspagedlg.h"
+#include "topicwidget.h"
+#include "verticaldock.h"
 
-#include "selectionmodelsynchronizer.h"
-#include "mappedselectionmodel.h"
+#ifdef HAVE_DBUS
+#  include "desktopnotificationbackend.h"
+#endif
+#include "systraynotificationbackend.h"
+#include "taskbarnotificationbackend.h"
 
 #include "settingspages/aliasessettingspage.h"
 #include "settingspages/appearancesettingspage.h"
@@ -69,36 +65,24 @@
 #include "settingspages/networkssettingspage.h"
 #include "settingspages/notificationssettingspage.h"
 
-#include "qtuistyle.h"
-
 MainWin::MainWin(QWidget *parent)
   : QMainWindow(parent),
     coreLagLabel(new QLabel()),
     sslLabel(new QLabel()),
     msgProcessorStatusWidget(new MsgProcessorStatusWidget()),
-
     _titleSetter(this),
-    systray(new QSystemTrayIcon(this)),
-
-    activeTrayIcon(DesktopIcon("quassel_newmessage", IconLoader::SizeEnormous)),
-    onlineTrayIcon(DesktopIcon("quassel", IconLoader::SizeEnormous)),
-    offlineTrayIcon(DesktopIcon("quassel_disconnected", IconLoader::SizeEnormous)),
-    trayIconActive(false),
-
-    timer(new QTimer(this)),
+    _trayIcon(new QSystemTrayIcon(this)),
     _actionCollection(new ActionCollection(this))
 {
-  UiSettings uiSettings;
+  QtUiSettings uiSettings;
   QString style = uiSettings.value("Style", QString("")).toString();
   if(style != "") {
     QApplication::setStyle(style);
   }
   ui.setupUi(this);
   setWindowTitle("Quassel IRC");
-  setWindowIcon(offlineTrayIcon);
-  qApp->setWindowIcon(offlineTrayIcon);
-  systray->setIcon(offlineTrayIcon);
   setWindowIconText("Quassel IRC");
+  updateIcon();
 
   QtUi::actionCollection()->addAssociatedWidget(this);
 
@@ -106,15 +90,12 @@ MainWin::MainWin(QWidget *parent)
 
   installEventFilter(new JumpKeyHandler(this));
 
+  QtUi::registerNotificationBackend(new TaskbarNotificationBackend(this));
+  QtUi::registerNotificationBackend(new SystrayNotificationBackend(this));
 #ifdef HAVE_DBUS
-  desktopNotifications = new org::freedesktop::Notifications(
-                            "org.freedesktop.Notifications",
-                            "/org/freedesktop/Notifications",
-                            QDBusConnection::sessionBus(), this);
-  notificationId = 0;
-  connect(desktopNotifications, SIGNAL(NotificationClosed(uint, uint)), this, SLOT(desktopNotificationClosed(uint, uint)));
-  connect(desktopNotifications, SIGNAL(ActionInvoked(uint, const QString&)), this, SLOT(desktopNotificationInvoked(uint, const QString&)));
+  QtUi::registerNotificationBackend(new DesktopNotificationBackend(this));
 #endif
+
   QtUiApplication* app = qobject_cast<QtUiApplication*> qApp;
   connect(app, SIGNAL(saveStateToSession(const QString&)), this, SLOT(saveStateToSession(const QString&)));
   connect(app, SIGNAL(saveStateToSessionSettings(SessionSettings&)), this, SLOT(saveStateToSessionSettings(SessionSettings&)));
@@ -178,6 +159,17 @@ MainWin::~MainWin() {
   s.setValue("MainWinSize", size());
   s.setValue("MainWinPos", pos());
   s.setValue("MainWinState", saveState());
+}
+
+void MainWin::updateIcon() {
+  QPixmap icon;
+  if(Client::isConnected())
+    icon = DesktopIcon("quassel", IconLoader::SizeEnormous);
+  else
+    icon = DesktopIcon("quassel_disconnected", IconLoader::SizeEnormous);
+  setWindowIcon(icon);
+  qApp->setWindowIcon(icon);
+  systemTrayIcon()->setIcon(icon);
 }
 
 void MainWin::setupActions() {
@@ -370,9 +362,8 @@ void MainWin::saveStatusBarStatus(bool enabled) {
 }
 
 void MainWin::setupSystray() {
-  connect(timer, SIGNAL(timeout()), this, SLOT(makeTrayIconBlink()));
   connect(Client::messageModel(), SIGNAL(rowsInserted(const QModelIndex &, int, int)),
-                            this, SLOT(messagesInserted(const QModelIndex &, int, int)));
+                                  SLOT(messagesInserted(const QModelIndex &, int, int)));
 
   systrayMenu = new QMenu(this);
   systrayMenu->addAction(ui.actionAboutQuassel);
@@ -382,15 +373,15 @@ void MainWin::setupSystray() {
   systrayMenu->addSeparator();
   systrayMenu->addAction(ui.actionQuit);
 
-  systray->setContextMenu(systrayMenu);
+  systemTrayIcon()->setContextMenu(systrayMenu);
 
   UiSettings s;
   if(s.value("UseSystemTrayIcon", QVariant(true)).toBool()) {
-    systray->show();
+    systemTrayIcon()->show();
   }
 
 #ifndef Q_WS_MAC
-  connect(systray, SIGNAL(activated( QSystemTrayIcon::ActivationReason )),
+  connect(systemTrayIcon(), SIGNAL(activated( QSystemTrayIcon::ActivationReason )),
           this, SLOT(systrayActivated( QSystemTrayIcon::ActivationReason )));
 #endif
 
@@ -426,11 +417,9 @@ void MainWin::setConnectedState() {
   ui.menuViews->setEnabled(true);
   ui.bufferWidget->show();
   statusBar()->showMessage(tr("Connected to core."));
-  setWindowIcon(onlineTrayIcon);
-  qApp->setWindowIcon(onlineTrayIcon);
-  systray->setIcon(onlineTrayIcon);
   if(sslLabel->width() == 0)
     sslLabel->setPixmap(SmallIcon("security-low"));
+  updateIcon();
 }
 
 void MainWin::loadLayout() {
@@ -484,10 +473,8 @@ void MainWin::setDisconnectedState() {
   ui.menuViews->setEnabled(false);
   ui.bufferWidget->hide();
   statusBar()->showMessage(tr("Not connected to core."));
-  setWindowIcon(offlineTrayIcon);
-  qApp->setWindowIcon(offlineTrayIcon);
-  systray->setIcon(offlineTrayIcon);
   sslLabel->setPixmap(QPixmap());
+  updateIcon();
 }
 
 void MainWin::showCoreConnectionDlg(bool autoConnect) {
@@ -567,11 +554,11 @@ void MainWin::toggleVisibility() {
     // setFocus(); //Qt::ActiveWindowFocusReason
 
   } else {
-    if(systray->isSystemTrayAvailable ()) {
+    if(systemTrayIcon()->isSystemTrayAvailable ()) {
       clearFocus();
       hide();
-      if(!systray->isVisible()) {
-        systray->show();
+      if(!systemTrayIcon()->isVisible()) {
+        systemTrayIcon()->show();
       }
     } else {
       lower();
@@ -600,112 +587,18 @@ void MainWin::messagesInserted(const QModelIndex &parent, int start, int end) {
     BufferInfo::Type bufType = Client::networkModel()->bufferType(bufId);
 
     if(flags & Message::Highlight || bufType == BufferInfo::QueryBuffer) {
-      QString title = Client::networkModel()->networkName(bufId) + " - " + Client::networkModel()->bufferName(bufId);
-
-      // FIXME Don't instantiate this for every highlight...
-      UiSettings uiSettings;
-
-      bool displayBubble = uiSettings.value("NotificationBubble", QVariant(true)).toBool();
-      bool displayDesktop = uiSettings.value("NotificationDesktop", QVariant(true)).toBool();
-      if(displayBubble || displayDesktop) {
-        if(uiSettings.value("DisplayPopupMessages", QVariant(true)).toBool()) {
-          QString text = idx.data(ChatLineModel::DisplayRole).toString();
-          if(displayBubble) displayTrayIconMessage(title, text);
-#   ifdef HAVE_DBUS
-          if(displayDesktop) sendDesktopNotification(title, text);
-#   endif
-        }
-        if(uiSettings.value("AnimateTrayIcon", QVariant(true)).toBool()) {
-          QApplication::alert(this);
-          setTrayIconActivity(true);
-        }
-      }
+      QModelIndex senderIdx = Client::messageModel()->index(i, ChatLineModel::SenderColumn);
+      QString sender = senderIdx.data(ChatLineModel::EditRole).toString();
+      QString contents = idx.data(ChatLineModel::DisplayRole).toString();
+      QtUi::invokeNotification(bufId, sender, contents);
     }
   }
 }
 
 bool MainWin::event(QEvent *event) {
   if(event->type() == QEvent::WindowActivate)
-    setTrayIconActivity(false);
+    QtUi::closeNotifications();
   return QMainWindow::event(event);
-}
-
-#ifdef HAVE_DBUS
-
-/*
-Using the notification-daemon from Freedesktop's Galago project
-http://www.galago-project.org/specs/notification/0.9/x408.html#command-notify
-*/
-void MainWin::sendDesktopNotification(const QString &title, const QString &message) {
-  QStringList actions;
-  QMap<QString, QVariant> hints;
-  UiSettings uiSettings;
-
-  hints["x"] = uiSettings.value("NotificationDesktopHintX", QVariant(0)).toInt(); // Standard hint: x location for the popup to show up
-  hints["y"] = uiSettings.value("NotificationDesktopHintY", QVariant(0)).toInt(); // Standard hint: y location for the popup to show up
-
-  actions << "click" << "Click Me!";
-
-  QDBusReply<uint> reply = desktopNotifications->Notify(
-                "Quassel", // Application name
-                notificationId, // ID of previous notification to replace
-                "", // Icon to display
-                title, // Summary / Header of the message to display
-                QString("%1: %2:\n%3").arg(QTime::currentTime().toString()).arg(title).arg(message), // Body of the message to display
-                actions, // Actions from which the user may choose
-                hints, // Hints to the server displaying the message
-                uiSettings.value("NotificationDesktopTimeout", QVariant(5000)).toInt() // Timeout in milliseconds
-        );
-
-  if(!reply.isValid()) {
-    /* ERROR */
-    // could also happen if no notification service runs, so... whatever :)
-    //qDebug() << "Error on sending notification..." << reply.error();
-    return;
-  }
-
-  notificationId = reply.value();
-
-  // qDebug() << "ID: " << notificationId << " Time: " << QTime::currentTime().toString();
-}
-
-
-void MainWin::desktopNotificationClosed(uint id, uint reason) {
-  Q_UNUSED(id); Q_UNUSED(reason);
-  // qDebug() << "OID: " << notificationId << " ID: " << id << " Reason: " << reason << " Time: " << QTime::currentTime().toString();
-  notificationId = 0;
-}
-
-
-void MainWin::desktopNotificationInvoked(uint id, const QString & action) {
-  Q_UNUSED(id); Q_UNUSED(action);
-  // qDebug() << "OID: " << notificationId << " ID: " << id << " Action: " << action << " Time: " << QTime::currentTime().toString();
-}
-
-#endif /* HAVE_DBUS */
-
-void MainWin::displayTrayIconMessage(const QString &title, const QString &message) {
-  systray->showMessage(title, message);
-}
-
-void MainWin::setTrayIconActivity(bool active) {
-  if(active) {
-    if(!timer->isActive())
-      timer->start(500);
-  } else {
-    timer->stop();
-    systray->setIcon(onlineTrayIcon);
-  }
-}
-
-void MainWin::makeTrayIconBlink() {
-  if(trayIconActive) {
-    systray->setIcon(onlineTrayIcon);
-    trayIconActive = false;
-  } else {
-    systray->setIcon(activeTrayIcon);
-    trayIconActive = true;
-  }
 }
 
 void MainWin::clientNetworkCreated(NetworkId id) {
@@ -770,8 +663,6 @@ void MainWin::connectOrDisconnectFromNet() {
   if(net->connectionState() == Network::Disconnected) net->requestConnect();
   else net->requestDisconnect();
 }
-
-
 
 void MainWin::on_actionDebugNetworkModel_triggered(bool) {
   QTreeView *view = new QTreeView;
