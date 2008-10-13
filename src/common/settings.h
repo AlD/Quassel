@@ -25,6 +25,7 @@
 #include <QHash>
 #include <QString>
 #include <QVariant>
+#include <QSettings>
 
 class SettingsChangeNotifier : public QObject {
   Q_OBJECT
@@ -61,6 +62,7 @@ protected:
   QString group;
   QString appName;
 
+
 private:
   inline QString org() {
 #ifdef Q_WS_MAC
@@ -69,6 +71,12 @@ private:
     return QCoreApplication::organizationName();
 #endif
   }
+
+#ifdef CFG_INI
+  static const QSettings::Format cfgformat = QSettings::IniFormat;
+#else
+  static const QSettings::Format cfgformat = QSettings::NativeFormat;
+#endif
 
   static QHash<QString, QHash<QString, QVariant> > settingsCache;
   static QHash<QString, QHash<QString, SettingsChangeNotifier *> > settingsChangeNotifier;

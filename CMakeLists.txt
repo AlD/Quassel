@@ -32,6 +32,8 @@ option(WANT_CORE     "Build the core (server) binary"           ON)
 option(WANT_QTCLIENT "Build the Qt4 GUI client binary"          ON)
 option(WANT_MONO     "Build the monolithic (all-in-one) binary" OFF)
 
+option(ENABLE_INI    "Use .ini files for settings. Useful on windows"	OFF)
+
 option(WITH_OPENSSL  "Enable OpenSSL support if present on the system"	ON)
 option(WITH_DBUS     "Enable D-Bus support if present on the system"	ON)
 option(WITH_WEBKIT   "Enable WebKit support if present on the system"	ON)
@@ -204,6 +206,10 @@ if(WANT_QTCLIENT OR WANT_MONO)
     message(STATUS "Compile Oxygen icon theme subset into the binary")
   endif(OXYGEN_ICONS MATCHES "External")
 endif(WANT_QTCLIENT OR WANT_MONO)
+
+if(ENABLE_INI)
+  add_definitions(-DCFG_INI)
+endif(ENABLE_INI)
 
 # These variables will be added to the main targets (CORE, QTCLIENT, MONO)
 
