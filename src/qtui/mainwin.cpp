@@ -22,41 +22,38 @@
 #include "aboutdlg.h"
 #include "action.h"
 #include "actioncollection.h"
-#include "bufferview.h"
-#include "bufferviewconfig.h"
-#include "bufferviewfilter.h"
+#include "buffermodel.h"
 #include "bufferviewmanager.h"
+#include "bufferwidget.h"
 #include "channellistdlg.h"
 #include "chatlinemodel.h"
 #include "chatmonitorfilter.h"
 #include "chatmonitorview.h"
 #include "chatview.h"
-#include "chatviewsearchbar.h"
 #include "client.h"
 #include "clientbacklogmanager.h"
 #include "coreinfodlg.h"
 #include "coreconnectdlg.h"
 #include "iconloader.h"
-#include "msgprocessorstatuswidget.h"
-#include "qtuimessageprocessor.h"
-#include "qtuiapplication.h"
-#include "networkmodel.h"
-#include "buffermodel.h"
-#include "nicklistwidget.h"
-#include "settingsdlg.h"
-#include "settingspagedlg.h"
-#include "signalproxy.h"
-#include "topicwidget.h"
 #include "inputwidget.h"
 #include "irclistmodel.h"
-#include "verticaldock.h"
-#include "uisettings.h"
-#include "qtuisettings.h"
 #include "jumpkeyhandler.h"
+#include "msgprocessorstatuswidget.h"
+#include "nicklistwidget.h"
+#include "qtuiapplication.h"
+#include "qtuimessageprocessor.h"
+#include "qtuisettings.h"
 #include "sessionsettings.h"
+#include "settingsdlg.h"
+#include "settingspagedlg.h"
+#include "topicwidget.h"
+#include "verticaldock.h"
 
-#include "selectionmodelsynchronizer.h"
-#include "mappedselectionmodel.h"
+#ifdef HAVE_DBUS
+#  include "desktopnotificationbackend.h"
+#endif
+#include "systraynotificationbackend.h"
+#include "taskbarnotificationbackend.h"
 
 #include "settingspages/aliasessettingspage.h"
 #include "settingspages/appearancesettingspage.h"
@@ -69,55 +66,35 @@
 #include "settingspages/networkssettingspage.h"
 #include "settingspages/notificationssettingspage.h"
 
-#include "qtuistyle.h"
-
 MainWin::MainWin(QWidget *parent)
   : QMainWindow(parent),
     coreLagLabel(new QLabel()),
     sslLabel(new QLabel()),
     msgProcessorStatusWidget(new MsgProcessorStatusWidget()),
-
     _titleSetter(this),
-    systray(new QSystemTrayIcon(this)),
-
-    activeTrayIcon(DesktopIcon("quassel_newmessage", IconLoader::SizeEnormous)),
-    onlineTrayIcon(DesktopIcon("quassel", IconLoader::SizeEnormous)),
-    offlineTrayIcon(DesktopIcon("quassel_disconnected", IconLoader::SizeEnormous)),
-    trayIconActive(false),
-
-    timer(new QTimer(this)),
-    _actionCollection(new ActionCollection(this))
+    _trayIcon(new QSystemTrayIcon(this))
 {
-  UiSettings uiSettings;
+  QtUiSettings uiSettings;
   QString style = uiSettings.value("Style", QString("")).toString();
   if(style != "") {
     QApplication::setStyle(style);
   }
-  ui.setupUi(this);
+
   setWindowTitle("Quassel IRC");
-  setWindowIcon(offlineTrayIcon);
-  qApp->setWindowIcon(offlineTrayIcon);
-  systray->setIcon(offlineTrayIcon);
   setWindowIconText("Quassel IRC");
-
-  QtUi::actionCollection()->addAssociatedWidget(this);
-
-  statusBar()->showMessage(tr("Waiting for core..."));
+  updateIcon();
 
   installEventFilter(new JumpKeyHandler(this));
 
+  QtUi::registerNotificationBackend(new TaskbarNotificationBackend(this));
+  QtUi::registerNotificationBackend(new SystrayNotificationBackend(this));
 #ifdef HAVE_DBUS
-  desktopNotifications = new org::freedesktop::Notifications(
-                            "org.freedesktop.Notifications",
-                            "/org/freedesktop/Notifications",
-                            QDBusConnection::sessionBus(), this);
-  notificationId = 0;
-  connect(desktopNotifications, SIGNAL(NotificationClosed(uint, uint)), this, SLOT(desktopNotificationClosed(uint, uint)));
-  connect(desktopNotifications, SIGNAL(ActionInvoked(uint, const QString&)), this, SLOT(desktopNotificationInvoked(uint, const QString&)));
+  QtUi::registerNotificationBackend(new DesktopNotificationBackend(this));
 #endif
+
   QtUiApplication* app = qobject_cast<QtUiApplication*> qApp;
-  connect(app, SIGNAL(saveStateToSession(const QString&)), this, SLOT(saveStateToSession(const QString&)));
-  connect(app, SIGNAL(saveStateToSessionSettings(SessionSettings&)), this, SLOT(saveStateToSessionSettings(SessionSettings&)));
+  connect(app, SIGNAL(saveStateToSession(const QString&)), SLOT(saveStateToSession(const QString&)));
+  connect(app, SIGNAL(saveStateToSessionSettings(SessionSettings&)), SLOT(saveStateToSessionSettings(SessionSettings&)));
 }
 
 void MainWin::init() {
@@ -127,50 +104,41 @@ void MainWin::init() {
   else
     resize(QSize(800, 500));
 
-  connect(QApplication::instance(), SIGNAL(aboutToQuit()), this, SLOT(saveLayout()));
+  connect(QApplication::instance(), SIGNAL(aboutToQuit()), SLOT(saveLayout()));
+  connect(Client::instance(), SIGNAL(networkCreated(NetworkId)), SLOT(clientNetworkCreated(NetworkId)));
+  connect(Client::instance(), SIGNAL(networkRemoved(NetworkId)), SLOT(clientNetworkRemoved(NetworkId)));
 
-  connect(Client::instance(), SIGNAL(networkCreated(NetworkId)), this, SLOT(clientNetworkCreated(NetworkId)));
-  connect(Client::instance(), SIGNAL(networkRemoved(NetworkId)), this, SLOT(clientNetworkRemoved(NetworkId)));
-
-  show();
-
-  statusBar()->showMessage(tr("Not connected to core."));
-
-  // DOCK OPTIONS
+  // Setup Dock Areas
   setDockNestingEnabled(true);
-
   setCorner(Qt::TopLeftCorner, Qt::LeftDockWidgetArea);
   setCorner(Qt::BottomLeftCorner, Qt::LeftDockWidgetArea);
   setCorner(Qt::TopRightCorner, Qt::RightDockWidgetArea);
   setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
 
-  // setup stuff...
+  // Order is sometimes important
   setupActions();
+  setupBufferWidget();
   setupMenus();
   setupViews();
-  setupNickWidget();
   setupTopicWidget();
   setupChatMonitor();
+  setupNickWidget();
   setupInputWidget();
   setupStatusBar();
   setupSystray();
+  setupTitleSetter();
 
   // restore mainwin state
   restoreState(s.value("MainWinState").toByteArray());
 
   // restore locked state of docks
-  ui.actionLockDockPositions->setChecked(s.value("LockDocks", false).toBool());
+  QtUi::actionCollection("General")->action("LockDockPositions")->setChecked(s.value("LockDocks", false).toBool());
 
   setDisconnectedState();  // Disable menus and stuff
+
+  show();
+
   showCoreConnectionDlg(true); // autoconnect if appropriate
-
-  // attach the BufferWidget to the BufferModel and the default selection
-  ui.bufferWidget->setModel(Client::bufferModel());
-  ui.bufferWidget->setSelectionModel(Client::bufferModel()->standardSelectionModel());
-  ui.menuViews->addAction(QtUi::actionCollection()->action("toggleSearchBar"));
-
-  _titleSetter.setModel(Client::bufferModel());
-  _titleSetter.setSelectionModel(Client::bufferModel()->standardSelectionModel());
 }
 
 MainWin::~MainWin() {
@@ -180,27 +148,95 @@ MainWin::~MainWin() {
   s.setValue("MainWinState", saveState());
 }
 
+void MainWin::updateIcon() {
+  QPixmap icon;
+  if(Client::isConnected())
+    icon = DesktopIcon("quassel", IconLoader::SizeEnormous);
+  else
+    icon = DesktopIcon("quassel_disconnected", IconLoader::SizeEnormous);
+  setWindowIcon(icon);
+  qApp->setWindowIcon(icon);
+  systemTrayIcon()->setIcon(icon);
+}
+
 void MainWin::setupActions() {
-  // TODO don't get these from *.ui anymore... we shouldn't need one
-  ui.actionQuit->setIcon(SmallIcon("application-exit"));
-  ui.actionSettingsDlg->setIcon(SmallIcon("configure"));
-  ui.actionManageViews->setIcon(SmallIcon("view-tree"));
-  ui.actionManageViews2->setIcon(SmallIcon("view-tree"));
-  ui.actionAboutQt->setIcon(SmallIcon("qt"));
-  ui.actionAboutQuassel->setIcon(SmallIcon("quassel"));
-  ui.actionConnectCore->setIcon(SmallIcon("network-connect"));
-  ui.actionDisconnectCore->setIcon(SmallIcon("network-disconnect"));
-  ui.actionCoreInfo->setIcon(SmallIcon("help-about"));
+  ActionCollection *coll = QtUi::actionCollection("General");
+  // File
+  coll->addAction("ConnectCore", new Action(SmallIcon("network-connect"), tr("&Connect to Core..."), coll,
+                                             this, SLOT(showCoreConnectionDlg())));
+  coll->addAction("DisconnectCore", new Action(SmallIcon("network-disconnect"), tr("&Disconnect from Core"), coll,
+                                                Client::instance(), SLOT(disconnectFromCore())));
+  coll->addAction("CoreInfo", new Action(SmallIcon("help-about"), tr("Core &Info..."), coll,
+                                          this, SLOT(showCoreInfoDlg())));
+  coll->addAction("EditNetworks", new Action(SmallIcon("configure"), tr("Edit &Networks..."), coll,
+                                              this, SLOT(on_actionEditNetworks_triggered())));
+  coll->addAction("Quit", new Action(SmallIcon("application-exit"), tr("&Quit"), coll,
+                                      qApp, SLOT(quit()), tr("Ctrl+Q")));
+
+  // View
+  coll->addAction("ManageBufferViews", new Action(SmallIcon("view-tree"), tr("&Manage Buffer Views..."), coll,
+                                             this, SLOT(on_actionManageViews_triggered())));
+  Action *lockAct = coll->addAction("LockDockPositions", new Action(tr("&Lock Dock Positions"), coll));
+  lockAct->setCheckable(true);
+  connect(lockAct, SIGNAL(toggled(bool)), SLOT(on_actionLockDockPositions_toggled(bool)));
+
+  coll->addAction("ToggleSearchBar", new Action(SmallIcon("edit-find"), tr("Show &Search Bar"), coll,
+                                                 0, 0, tr("Ctrl+F")))->setCheckable(true);
+  coll->addAction("ToggleStatusBar", new Action(tr("Show Status &Bar"), coll,
+                                                 0, 0))->setCheckable(true);
+
+  // Settings
+  coll->addAction("ConfigureQuassel", new Action(SmallIcon("configure"), tr("&Configure Quassel..."), coll,
+                                                  this, SLOT(showSettingsDlg()), tr("F7")));
+
+  // Help
+  coll->addAction("AboutQuassel", new Action(SmallIcon("quassel"), tr("&About Quassel..."), coll,
+                                              this, SLOT(showAboutDlg())));
+  coll->addAction("AboutQt", new Action(tr("About &Qt..."), coll,
+                                         qApp, SLOT(aboutQt())));
+  coll->addAction("DebugNetworkModel", new Action(SmallIcon("tools-report-bug"), tr("Debug &NetworkModel"), coll,
+                                       this, SLOT(on_actionDebugNetworkModel_triggered())));
 }
 
 void MainWin::setupMenus() {
-  connect(ui.actionConnectCore, SIGNAL(triggered()), this, SLOT(showCoreConnectionDlg()));
-  connect(ui.actionDisconnectCore, SIGNAL(triggered()), Client::instance(), SLOT(disconnectFromCore()));
-  connect(ui.actionCoreInfo, SIGNAL(triggered()), this, SLOT(showCoreInfoDlg()));
-  connect(ui.actionQuit, SIGNAL(triggered()), QCoreApplication::instance(), SLOT(quit()));
-  connect(ui.actionSettingsDlg, SIGNAL(triggered()), this, SLOT(showSettingsDlg()));
-  connect(ui.actionAboutQuassel, SIGNAL(triggered()), this, SLOT(showAboutDlg()));
-  connect(ui.actionAboutQt, SIGNAL(triggered()), QApplication::instance(), SLOT(aboutQt()));
+  ActionCollection *coll = QtUi::actionCollection("General");
+
+  _fileMenu = menuBar()->addMenu(tr("&File"));
+  _fileMenu->addAction(coll->action("ConnectCore"));
+  _fileMenu->addAction(coll->action("DisconnectCore"));
+  _fileMenu->addAction(coll->action("CoreInfo"));
+  _fileMenu->addSeparator();
+  _networksMenu = _fileMenu->addMenu(tr("&Networks"));
+  _networksMenu->addAction(coll->action("EditNetworks"));
+  _networksMenu->addSeparator();
+  _fileMenu->addSeparator();
+  _fileMenu->addAction(coll->action("Quit"));
+
+  _viewMenu = menuBar()->addMenu(tr("&View"));
+  _bufferViewsMenu = _viewMenu->addMenu(tr("&Buffer Views"));
+  _bufferViewsMenu->addAction(coll->action("ManageBufferViews"));
+  _viewMenu->addSeparator();
+  _viewMenu->addAction(coll->action("ToggleSearchBar"));
+  _viewMenu->addAction(coll->action("ToggleStatusBar"));
+  _viewMenu->addSeparator();
+  _viewMenu->addAction(coll->action("LockDockPositions"));
+
+  _settingsMenu = menuBar()->addMenu(tr("&Settings"));
+  _settingsMenu->addAction(coll->action("ConfigureQuassel"));
+
+  _helpMenu = menuBar()->addMenu(tr("&Help"));
+  _helpMenu->addAction(coll->action("AboutQuassel"));
+  _helpMenu->addAction(coll->action("AboutQt"));
+  _helpMenu->addSeparator();
+  _helpDebugMenu = _helpMenu->addMenu(SmallIcon("tools-report-bug"), tr("Debug"));
+  _helpDebugMenu->addAction(coll->action("DebugNetworkModel"));
+}
+
+void MainWin::setupBufferWidget() {
+  _bufferWidget = new BufferWidget(this);
+  _bufferWidget->setModel(Client::bufferModel());
+  _bufferWidget->setSelectionModel(Client::bufferModel()->standardSelectionModel());
+  setCentralWidget(_bufferWidget);
 }
 
 void MainWin::setupViews() {
@@ -231,7 +267,7 @@ void MainWin::addBufferView(BufferViewConfig *config) {
   dock->show();
 
   addDockWidget(Qt::LeftDockWidgetArea, dock);
-  ui.menuBufferViews->addAction(dock->toggleViewAction());
+  _bufferViewsMenu->addAction(dock->toggleViewAction());
 
   _netViews.append(dock);
 }
@@ -239,7 +275,7 @@ void MainWin::addBufferView(BufferViewConfig *config) {
 void MainWin::removeBufferView(int bufferViewConfigId) {
   QVariant actionData;
   BufferViewDock *dock;
-  foreach(QAction *action, ui.menuBufferViews->actions()) {
+  foreach(QAction *action, _bufferViewsMenu->actions()) {
     actionData = action->data();
     if(!actionData.isValid())
       continue;
@@ -276,17 +312,19 @@ void MainWin::setupNickWidget() {
   nickDock->setObjectName("NickDock");
   nickDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
-  nickListWidget = new NickListWidget(nickDock);
-  nickDock->setWidget(nickListWidget);
+  _nickListWidget = new NickListWidget(nickDock);
+  nickDock->setWidget(_nickListWidget);
 
   addDockWidget(Qt::RightDockWidgetArea, nickDock);
-  ui.menuViews->addAction(nickDock->toggleViewAction());
+  _viewMenu->addAction(nickDock->toggleViewAction());
+  nickDock->toggleViewAction()->setText(tr("Show Nick List"));
+  nickDock->toggleViewAction()->setIcon(SmallIcon("view-sidetree"));
   // See NickListDock::NickListDock();
   // connect(nickDock->toggleViewAction(), SIGNAL(triggered(bool)), nickListWidget, SLOT(showWidget(bool)));
 
   // attach the NickListWidget to the BufferModel and the default selection
-  nickListWidget->setModel(Client::bufferModel());
-  nickListWidget->setSelectionModel(Client::bufferModel()->standardSelectionModel());
+  _nickListWidget->setModel(Client::bufferModel());
+  _nickListWidget->setSelectionModel(Client::bufferModel()->standardSelectionModel());
 }
 
 void MainWin::setupChatMonitor() {
@@ -300,7 +338,8 @@ void MainWin::setupChatMonitor() {
   dock->show();
 
   addDockWidget(Qt::TopDockWidgetArea, dock, Qt::Vertical);
-  ui.menuViews->addAction(dock->toggleViewAction());
+  _viewMenu->addAction(dock->toggleViewAction());
+  dock->toggleViewAction()->setText(tr("Show Chat Monitor"));
 }
 
 void MainWin::setupInputWidget() {
@@ -312,12 +351,13 @@ void MainWin::setupInputWidget() {
 
   addDockWidget(Qt::BottomDockWidgetArea, dock);
 
-  ui.menuViews->addAction(dock->toggleViewAction());
+  _viewMenu->addAction(dock->toggleViewAction());
+  dock->toggleViewAction()->setText(tr("Show Input Line"));
 
   inputWidget->setModel(Client::bufferModel());
   inputWidget->setSelectionModel(Client::bufferModel()->standardSelectionModel());
 
-  ui.bufferWidget->setFocusProxy(inputWidget);
+  _bufferWidget->setFocusProxy(inputWidget);
 }
 
 void MainWin::setupTopicWidget() {
@@ -330,9 +370,15 @@ void MainWin::setupTopicWidget() {
   topicwidget->setModel(Client::bufferModel());
   topicwidget->setSelectionModel(Client::bufferModel()->standardSelectionModel());
 
-  addDockWidget(Qt::TopDockWidgetArea, dock);
+  addDockWidget(Qt::TopDockWidgetArea, dock, Qt::Vertical);
 
-  ui.menuViews->addAction(dock->toggleViewAction());
+  _viewMenu->addAction(dock->toggleViewAction());
+  dock->toggleViewAction()->setText(tr("Show Topic Line"));
+}
+
+void MainWin::setupTitleSetter() {
+  _titleSetter.setModel(Client::bufferModel());
+  _titleSetter.setSelectionModel(Client::bufferModel()->standardSelectionModel());
 }
 
 void MainWin::setupStatusBar() {
@@ -350,9 +396,8 @@ void MainWin::setupStatusBar() {
   sslLabel->setPixmap(QPixmap());
   statusBar()->addPermanentWidget(sslLabel);
 
-  ui.menuViews->addSeparator();
-  QAction *showStatusbar = ui.menuViews->addAction(tr("Statusbar"));
-  showStatusbar->setCheckable(true);
+  _viewMenu->addSeparator();
+  QAction *showStatusbar = QtUi::actionCollection("General")->action("ToggleStatusBar");
 
   UiSettings uiSettings;
 
@@ -370,27 +415,27 @@ void MainWin::saveStatusBarStatus(bool enabled) {
 }
 
 void MainWin::setupSystray() {
-  connect(timer, SIGNAL(timeout()), this, SLOT(makeTrayIconBlink()));
   connect(Client::messageModel(), SIGNAL(rowsInserted(const QModelIndex &, int, int)),
-                            this, SLOT(messagesInserted(const QModelIndex &, int, int)));
+                                  SLOT(messagesInserted(const QModelIndex &, int, int)));
 
+  ActionCollection *coll = QtUi::actionCollection("General");
   systrayMenu = new QMenu(this);
-  systrayMenu->addAction(ui.actionAboutQuassel);
+  systrayMenu->addAction(coll->action("AboutQuassel"));
   systrayMenu->addSeparator();
-  systrayMenu->addAction(ui.actionConnectCore);
-  systrayMenu->addAction(ui.actionDisconnectCore);
+  systrayMenu->addAction(coll->action("ConnectCore"));
+  systrayMenu->addAction(coll->action("DisconnectCore"));
   systrayMenu->addSeparator();
-  systrayMenu->addAction(ui.actionQuit);
+  systrayMenu->addAction(coll->action("Quit"));
 
-  systray->setContextMenu(systrayMenu);
+  systemTrayIcon()->setContextMenu(systrayMenu);
 
   UiSettings s;
   if(s.value("UseSystemTrayIcon", QVariant(true)).toBool()) {
-    systray->show();
+    systemTrayIcon()->show();
   }
 
 #ifndef Q_WS_MAC
-  connect(systray, SIGNAL(activated( QSystemTrayIcon::ActivationReason )),
+  connect(systemTrayIcon(), SIGNAL(activated( QSystemTrayIcon::ActivationReason )),
           this, SLOT(systrayActivated( QSystemTrayIcon::ActivationReason )));
 #endif
 
@@ -419,18 +464,16 @@ void MainWin::connectedToCore() {
 }
 
 void MainWin::setConnectedState() {
+  ActionCollection *coll = QtUi::actionCollection("General");
   //ui.menuCore->setEnabled(true);
-  ui.actionConnectCore->setEnabled(false);
-  ui.actionDisconnectCore->setEnabled(true);
-  ui.actionCoreInfo->setEnabled(true);
-  ui.menuViews->setEnabled(true);
-  ui.bufferWidget->show();
+  coll->action("ConnectCore")->setEnabled(false);
+  coll->action("DisconnectCore")->setEnabled(true);
+  coll->action("CoreInfo")->setEnabled(true);
+  // _viewMenu->setEnabled(true);
   statusBar()->showMessage(tr("Connected to core."));
-  setWindowIcon(onlineTrayIcon);
-  qApp->setWindowIcon(onlineTrayIcon);
-  systray->setIcon(onlineTrayIcon);
   if(sslLabel->width() == 0)
     sslLabel->setPixmap(SmallIcon("security-low"));
+  updateIcon();
 }
 
 void MainWin::loadLayout() {
@@ -460,7 +503,7 @@ void MainWin::disconnectedFromCore() {
   saveLayout();
   QVariant actionData;
   BufferViewDock *dock;
-  foreach(QAction *action, ui.menuBufferViews->actions()) {
+  foreach(QAction *action, _bufferViewsMenu->actions()) {
     actionData = action->data();
     if(!actionData.isValid())
       continue;
@@ -477,17 +520,15 @@ void MainWin::disconnectedFromCore() {
 }
 
 void MainWin::setDisconnectedState() {
+  ActionCollection *coll = QtUi::actionCollection("General");
   //ui.menuCore->setEnabled(false);
-  ui.actionConnectCore->setEnabled(true);
-  ui.actionDisconnectCore->setEnabled(false);
-  ui.actionCoreInfo->setEnabled(false);
-  ui.menuViews->setEnabled(false);
-  ui.bufferWidget->hide();
+  coll->action("ConnectCore")->setEnabled(true);
+  coll->action("DisconnectCore")->setEnabled(false);
+  coll->action("CoreInfo")->setEnabled(false);
+  //_viewMenu->setEnabled(false);
   statusBar()->showMessage(tr("Not connected to core."));
-  setWindowIcon(offlineTrayIcon);
-  qApp->setWindowIcon(offlineTrayIcon);
-  systray->setIcon(offlineTrayIcon);
   sslLabel->setPixmap(QPixmap());
+  updateIcon();
 }
 
 void MainWin::showCoreConnectionDlg(bool autoConnect) {
@@ -567,11 +608,11 @@ void MainWin::toggleVisibility() {
     // setFocus(); //Qt::ActiveWindowFocusReason
 
   } else {
-    if(systray->isSystemTrayAvailable ()) {
+    if(systemTrayIcon()->isSystemTrayAvailable ()) {
       clearFocus();
       hide();
-      if(!systray->isVisible()) {
-        systray->show();
+      if(!systemTrayIcon()->isVisible()) {
+        systemTrayIcon()->show();
       }
     } else {
       lower();
@@ -600,112 +641,18 @@ void MainWin::messagesInserted(const QModelIndex &parent, int start, int end) {
     BufferInfo::Type bufType = Client::networkModel()->bufferType(bufId);
 
     if(flags & Message::Highlight || bufType == BufferInfo::QueryBuffer) {
-      QString title = Client::networkModel()->networkName(bufId) + " - " + Client::networkModel()->bufferName(bufId);
-
-      // FIXME Don't instantiate this for every highlight...
-      UiSettings uiSettings;
-
-      bool displayBubble = uiSettings.value("NotificationBubble", QVariant(true)).toBool();
-      bool displayDesktop = uiSettings.value("NotificationDesktop", QVariant(true)).toBool();
-      if(displayBubble || displayDesktop) {
-        if(uiSettings.value("DisplayPopupMessages", QVariant(true)).toBool()) {
-          QString text = idx.data(ChatLineModel::DisplayRole).toString();
-          if(displayBubble) displayTrayIconMessage(title, text);
-#   ifdef HAVE_DBUS
-          if(displayDesktop) sendDesktopNotification(title, text);
-#   endif
-        }
-        if(uiSettings.value("AnimateTrayIcon", QVariant(true)).toBool()) {
-          QApplication::alert(this);
-          setTrayIconActivity(true);
-        }
-      }
+      QModelIndex senderIdx = Client::messageModel()->index(i, ChatLineModel::SenderColumn);
+      QString sender = senderIdx.data(ChatLineModel::EditRole).toString();
+      QString contents = idx.data(ChatLineModel::DisplayRole).toString();
+      QtUi::invokeNotification(bufId, sender, contents);
     }
   }
 }
 
 bool MainWin::event(QEvent *event) {
   if(event->type() == QEvent::WindowActivate)
-    setTrayIconActivity(false);
+    QtUi::closeNotifications();
   return QMainWindow::event(event);
-}
-
-#ifdef HAVE_DBUS
-
-/*
-Using the notification-daemon from Freedesktop's Galago project
-http://www.galago-project.org/specs/notification/0.9/x408.html#command-notify
-*/
-void MainWin::sendDesktopNotification(const QString &title, const QString &message) {
-  QStringList actions;
-  QMap<QString, QVariant> hints;
-  UiSettings uiSettings;
-
-  hints["x"] = uiSettings.value("NotificationDesktopHintX", QVariant(0)).toInt(); // Standard hint: x location for the popup to show up
-  hints["y"] = uiSettings.value("NotificationDesktopHintY", QVariant(0)).toInt(); // Standard hint: y location for the popup to show up
-
-  actions << "click" << "Click Me!";
-
-  QDBusReply<uint> reply = desktopNotifications->Notify(
-                "Quassel", // Application name
-                notificationId, // ID of previous notification to replace
-                "", // Icon to display
-                title, // Summary / Header of the message to display
-                QString("%1: %2:\n%3").arg(QTime::currentTime().toString()).arg(title).arg(message), // Body of the message to display
-                actions, // Actions from which the user may choose
-                hints, // Hints to the server displaying the message
-                uiSettings.value("NotificationDesktopTimeout", QVariant(5000)).toInt() // Timeout in milliseconds
-        );
-
-  if(!reply.isValid()) {
-    /* ERROR */
-    // could also happen if no notification service runs, so... whatever :)
-    //qDebug() << "Error on sending notification..." << reply.error();
-    return;
-  }
-
-  notificationId = reply.value();
-
-  // qDebug() << "ID: " << notificationId << " Time: " << QTime::currentTime().toString();
-}
-
-
-void MainWin::desktopNotificationClosed(uint id, uint reason) {
-  Q_UNUSED(id); Q_UNUSED(reason);
-  // qDebug() << "OID: " << notificationId << " ID: " << id << " Reason: " << reason << " Time: " << QTime::currentTime().toString();
-  notificationId = 0;
-}
-
-
-void MainWin::desktopNotificationInvoked(uint id, const QString & action) {
-  Q_UNUSED(id); Q_UNUSED(action);
-  // qDebug() << "OID: " << notificationId << " ID: " << id << " Action: " << action << " Time: " << QTime::currentTime().toString();
-}
-
-#endif /* HAVE_DBUS */
-
-void MainWin::displayTrayIconMessage(const QString &title, const QString &message) {
-  systray->showMessage(title, message);
-}
-
-void MainWin::setTrayIconActivity(bool active) {
-  if(active) {
-    if(!timer->isActive())
-      timer->start(500);
-  } else {
-    timer->stop();
-    systray->setIcon(onlineTrayIcon);
-  }
-}
-
-void MainWin::makeTrayIconBlink() {
-  if(trayIconActive) {
-    systray->setIcon(onlineTrayIcon);
-    trayIconActive = false;
-  } else {
-    systray->setIcon(activeTrayIcon);
-    trayIconActive = true;
-  }
 }
 
 void MainWin::clientNetworkCreated(NetworkId id) {
@@ -717,18 +664,15 @@ void MainWin::clientNetworkCreated(NetworkId id) {
   connect(act, SIGNAL(triggered()), this, SLOT(connectOrDisconnectFromNet()));
 
   QAction *beforeAction = 0;
-  foreach(QAction *action, ui.menuNetworks->actions()) {
-    if(action->isSeparator()) {
-      beforeAction = action;
-      break;
-    }
+  foreach(QAction *action, _networksMenu->actions()) {
+    if(!action->data().isValid())  // ignore stock actions
+      continue;
     if(net->networkName().localeAwareCompare(action->text()) < 0) {
       beforeAction = action;
       break;
     }
   }
-  Q_CHECK_PTR(beforeAction);
-  ui.menuNetworks->insertAction(beforeAction, act);
+  _networksMenu->insertAction(beforeAction, act);
 }
 
 void MainWin::clientNetworkUpdated() {
@@ -771,9 +715,7 @@ void MainWin::connectOrDisconnectFromNet() {
   else net->requestDisconnect();
 }
 
-
-
-void MainWin::on_actionDebugNetworkModel_triggered(bool) {
+void MainWin::on_actionDebugNetworkModel_triggered() {
   QTreeView *view = new QTreeView;
   view->setAttribute(Qt::WA_DeleteOnClose);
   view->setWindowTitle("Debug NetworkModel View");
