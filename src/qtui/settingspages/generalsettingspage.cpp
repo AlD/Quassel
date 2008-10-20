@@ -21,7 +21,7 @@
 #include "generalsettingspage.h"
 
 #include "qtui.h"
-#include "uisettings.h"
+#include "qtuisettings.h"
 #include "buffersettings.h"
 
 GeneralSettingsPage::GeneralSettingsPage(QWidget *parent)
@@ -76,15 +76,16 @@ void GeneralSettingsPage::defaults() {
 
 void GeneralSettingsPage::load() {
   // uiSettings:
+  QtUiSettings qtuiSettings;
   UiSettings uiSettings;
-  settings["UseSystemTrayIcon"] = uiSettings.value("UseSystemTrayIcon", QVariant(true));
+  settings["UseSystemTrayIcon"] = qtuiSettings.value("UseSystemTrayIcon", QVariant(true));
   ui.useSystemTrayIcon->setChecked(settings["UseSystemTrayIcon"].toBool());
   ui.showSystemTrayIcon->setChecked(settings["UseSystemTrayIcon"].toBool());
 
-  settings["MinimizeOnMinimize"] = uiSettings.value("MinimizeOnMinimize", QVariant(false));
+  settings["MinimizeOnMinimize"] = qtuiSettings.value("MinimizeOnMinimize", QVariant(false));
   ui.minimizeOnMinimize->setChecked(settings["MinimizeOnMinimize"].toBool());
 
-  settings["MinimizeOnClose"] = uiSettings.value("MinimizeOnClose", QVariant(false));
+  settings["MinimizeOnClose"] = qtuiSettings.value("MinimizeOnClose", QVariant(false));
   ui.minimizeOnClose->setChecked(settings["MinimizeOnClose"].toBool());
 
   settings["MouseWheelChangesBuffers"] = uiSettings.value("MouseWheelChangesBuffers", QVariant(true));
@@ -112,10 +113,12 @@ void GeneralSettingsPage::load() {
 }
 
 void GeneralSettingsPage::save() {
+  QtUiSettings qtuiSettings;
+  qtuiSettings.setValue("UseSystemTrayIcon", ui.useSystemTrayIcon->isChecked());
+  qtuiSettings.setValue("MinimizeOnMinimize",  ui.minimizeOnMinimize->isChecked());
+  qtuiSettings.setValue("MinimizeOnClose", ui.minimizeOnClose->isChecked());
+
   UiSettings uiSettings;
-  uiSettings.setValue("UseSystemTrayIcon", ui.useSystemTrayIcon->isChecked());
-  uiSettings.setValue("MinimizeOnMinimize",  ui.minimizeOnMinimize->isChecked());
-  uiSettings.setValue("MinimizeOnClose", ui.minimizeOnClose->isChecked());
   uiSettings.setValue("MouseWheelChangesBuffers", ui.mouseWheelChangesBuffers->isChecked());
 
   BufferSettings bufferSettings;
