@@ -39,11 +39,6 @@
 
 const qreal minContentsWidth = 200;
 
-class ChatScene::ClearWebPreviewEvent : public QEvent {
-public:
-  inline ClearWebPreviewEvent() : QEvent((QEvent::Type)ChatScene::ClearWebPreviewEventType) {}
-};
-
 ChatScene::ChatScene(QAbstractItemModel *model, const QString &idString, qreal width, QObject *parent)
   : QGraphicsScene(0, 0, width, 0, parent),
     _idString(idString),
@@ -67,20 +62,20 @@ ChatScene::ChatScene(QAbstractItemModel *model, const QString &idString, qreal w
   int defaultSecondColHandlePos = defaultSettings.value("SecondColumnHandlePos", 200).toInt();
 
   ChatViewSettings viewSettings(this);
-  firstColHandlePos = viewSettings.value("FirstColumnHandlePos", defaultFirstColHandlePos).toInt();
-  secondColHandlePos = viewSettings.value("SecondColumnHandlePos", defaultSecondColHandlePos).toInt();
+  _firstColHandlePos = viewSettings.value("FirstColumnHandlePos", defaultFirstColHandlePos).toInt();
+  _secondColHandlePos = viewSettings.value("SecondColumnHandlePos", defaultSecondColHandlePos).toInt();
 
-  firstColHandle = new ColumnHandleItem(QtUi::style()->firstColumnSeparator());
-  addItem(firstColHandle);
-  firstColHandle->setXPos(firstColHandlePos);
-  connect(firstColHandle, SIGNAL(positionChanged(qreal)), this, SLOT(handlePositionChanged(qreal)));
-  connect(this, SIGNAL(sceneRectChanged(const QRectF &)), firstColHandle, SLOT(sceneRectChanged(const QRectF &)));
+  _firstColHandle = new ColumnHandleItem(QtUi::style()->firstColumnSeparator());
+  addItem(_firstColHandle);
+  _firstColHandle->setXPos(_firstColHandlePos);
+  connect(_firstColHandle, SIGNAL(positionChanged(qreal)), this, SLOT(firstHandlePositionChanged(qreal)));
+  connect(this, SIGNAL(sceneRectChanged(const QRectF &)), _firstColHandle, SLOT(sceneRectChanged(const QRectF &)));
 
-  secondColHandle = new ColumnHandleItem(QtUi::style()->secondColumnSeparator());
-  addItem(secondColHandle);
-  secondColHandle->setXPos(secondColHandlePos);
-  connect(secondColHandle, SIGNAL(positionChanged(qreal)), this, SLOT(handlePositionChanged(qreal)));
-  connect(this, SIGNAL(sceneRectChanged(const QRectF &)), secondColHandle, SLOT(sceneRectChanged(const QRectF &)));
+  _secondColHandle = new ColumnHandleItem(QtUi::style()->secondColumnSeparator());
+  addItem(_secondColHandle);
+  _secondColHandle->setXPos(_secondColHandlePos);
+  connect(_secondColHandle, SIGNAL(positionChanged(qreal)), this, SLOT(secondHandlePositionChanged(qreal)));
+  connect(this, SIGNAL(sceneRectChanged(const QRectF &)), _secondColHandle, SLOT(sceneRectChanged(const QRectF &)));
 
   setHandleXLimits();
 
@@ -92,11 +87,12 @@ ChatScene::ChatScene(QAbstractItemModel *model, const QString &idString, qreal w
   if(model->rowCount() > 0)
     rowsInserted(QModelIndex(), 0, model->rowCount() - 1);
 
+#ifdef HAVE_WEBKIT
   webPreview.delayTimer.setSingleShot(true);
-  connect(&webPreview.delayTimer, SIGNAL(timeout()), this, SLOT(showWebPreview()));
-
-  // installEventFilter(this);
-  setItemIndexMethod(QGraphicsScene::NoIndex);
+  connect(&webPreview.delayTimer, SIGNAL(timeout()), this, SLOT(showWebPreviewEvent()));
+  webPreview.deleteTimer.setInterval(600000);
+  connect(&webPreview.deleteTimer, SIGNAL(timeout()), this, SLOT(deleteWebPreviewEvent()));
+#endif
 }
 
 ChatScene::~ChatScene() {
@@ -270,6 +266,7 @@ void ChatScene::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int e
     }
   }
 
+  Q_ASSERT(start == 0 || start >= _lines.count() || _lines.at(start - 1)->pos().y() + _lines.at(start - 1)->height() == _lines.at(start)->pos().y());
 
   // update sceneRect
   // when searching for the first non-date-line we have to take into account that our
@@ -297,45 +294,25 @@ void ChatScene::updateForViewport(qreal width, qreal height) {
   setWidth(width);
 }
 
-// setWidth is used for 2 things:
-//  a) updating the scene to fit the width of the corresponding view
-//  b) to update the positions of the items if a columhandle has changed it's position
-// forceReposition is true in the second case
-// this method features some codeduplication for the sake of performance
-void ChatScene::setWidth(qreal width, bool forceReposition) {
-  if(width == _sceneRect.width() && !forceReposition)
+void ChatScene::setWidth(qreal width) {
+  if(width == _sceneRect.width())
     return;
 
-//   clock_t startT = clock();
+  // clock_t startT = clock();
 
-  qreal linePos = _sceneRect.y() + _sceneRect.height();
+  // disabling the index while doing this complex updates is about
+  // 2 to 10 times faster!
+  setItemIndexMethod(QGraphicsScene::NoIndex);
+
   QList<ChatLine *>::iterator lineIter = _lines.end();
   QList<ChatLine *>::iterator lineIterBegin = _lines.begin();
-  ChatLine *line = 0;
-  qreal lineHeight = 0;
+  qreal linePos = _sceneRect.y() + _sceneRect.height();
   qreal contentsWidth = width - secondColumnHandle()->sceneRight();
-
-  if(forceReposition) {
-    qreal timestampWidth = firstColumnHandle()->sceneLeft();
-    qreal senderWidth = secondColumnHandle()->sceneLeft() - firstColumnHandle()->sceneRight();
-    QPointF senderPos(firstColumnHandle()->sceneRight(), 0);
-    QPointF contentsPos(secondColumnHandle()->sceneRight(), 0);
-    while(lineIter != lineIterBegin) {
-      lineIter--;
-      line = *lineIter;
-      lineHeight = line->setColumns(timestampWidth, senderWidth, contentsWidth, senderPos, contentsPos);
-      linePos -= lineHeight;
-      line->setPos(0, linePos);
-    }
-  } else {
-    while(lineIter != lineIterBegin) {
-      lineIter--;
-      line = *lineIter;
-      lineHeight = line->setGeometryByWidth(width, contentsWidth);
-      linePos -= lineHeight;
-      line->setPos(0, linePos);
-    }
+  while(lineIter != lineIterBegin) {
+    lineIter--;
+    (*lineIter)->setGeometryByWidth(width, contentsWidth, linePos);
   }
+  setItemIndexMethod(QGraphicsScene::BspTreeIndex);
 
   updateSceneRect(width);
   setHandleXLimits();
@@ -344,34 +321,77 @@ void ChatScene::setWidth(qreal width, bool forceReposition) {
 //   qDebug() << "resized" << _lines.count() << "in" << (float)(endT - startT) / CLOCKS_PER_SEC << "sec";
 }
 
-void ChatScene::handlePositionChanged(qreal xpos) {
-  bool first = (sender() == firstColHandle);
-  qreal oldx;
-  if(first) {
-    oldx = firstColHandlePos;
-    firstColHandlePos = xpos;
-  } else {
-    oldx = secondColHandlePos;
-    secondColHandlePos = xpos;
-  }
+void ChatScene::firstHandlePositionChanged(qreal xpos) {
+  if(_firstColHandlePos == xpos)
+    return;
 
+  _firstColHandlePos = xpos;
   ChatViewSettings viewSettings(this);
-  viewSettings.setValue("FirstColumnHandlePos", firstColHandlePos);
-  viewSettings.setValue("SecondColumnHandlePos", secondColHandlePos);
-
+  viewSettings.setValue("FirstColumnHandlePos", _firstColHandlePos);
   ChatViewSettings defaultSettings;
-  defaultSettings.setValue("FirstColumnHandlePos", firstColHandlePos);
-  defaultSettings.setValue("SecondColumnHandlePos", secondColHandlePos);
+  defaultSettings.setValue("FirstColumnHandlePos", _firstColHandlePos);
 
-  setWidth(width(), true);  // readjust all chatlines
-  // we get ugly redraw errors if we don't update this explicitly... :(
-  // width() should be the same for both handles, so just use firstColHandle regardless
-  //update(qMin(oldx, xpos), 0, qMax(oldx, xpos) + firstColHandle->width(), height());
+  // clock_t startT = clock();
+
+  // disabling the index while doing this complex updates is about
+  // 2 to 10 times faster!
+  setItemIndexMethod(QGraphicsScene::NoIndex);
+
+  QList<ChatLine *>::iterator lineIter = _lines.end();
+  QList<ChatLine *>::iterator lineIterBegin = _lines.begin();
+  qreal timestampWidth = firstColumnHandle()->sceneLeft();
+  qreal senderWidth = secondColumnHandle()->sceneLeft() - firstColumnHandle()->sceneRight();
+  QPointF senderPos(firstColumnHandle()->sceneRight(), 0);
+
+  while(lineIter != lineIterBegin) {
+    lineIter--;
+    (*lineIter)->setFirstColumn(timestampWidth, senderWidth, senderPos);
+  }
+  setItemIndexMethod(QGraphicsScene::BspTreeIndex);
+
+  setHandleXLimits();
+
+//   clock_t endT = clock();
+//   qDebug() << "resized" << _lines.count() << "in" << (float)(endT - startT) / CLOCKS_PER_SEC << "sec";
+}
+
+void ChatScene::secondHandlePositionChanged(qreal xpos) {
+  if(_secondColHandlePos == xpos)
+    return;
+
+  _secondColHandlePos = xpos;
+  ChatViewSettings viewSettings(this);
+  viewSettings.setValue("SecondColumnHandlePos", _secondColHandlePos);
+  ChatViewSettings defaultSettings;
+  defaultSettings.setValue("SecondColumnHandlePos", _secondColHandlePos);
+
+  // clock_t startT = clock();
+
+  // disabling the index while doing this complex updates is about
+  // 2 to 10 times faster!
+  setItemIndexMethod(QGraphicsScene::NoIndex);
+
+  QList<ChatLine *>::iterator lineIter = _lines.end();
+  QList<ChatLine *>::iterator lineIterBegin = _lines.begin();
+  qreal linePos = _sceneRect.y() + _sceneRect.height();
+  qreal senderWidth = secondColumnHandle()->sceneLeft() - firstColumnHandle()->sceneRight();
+  qreal contentsWidth = _sceneRect.width() - secondColumnHandle()->sceneRight();
+  QPointF contentsPos(secondColumnHandle()->sceneRight(), 0);
+  while(lineIter != lineIterBegin) {
+    lineIter--;
+    (*lineIter)->setSecondColumn(senderWidth, contentsWidth, contentsPos, linePos);
+  }
+  setItemIndexMethod(QGraphicsScene::BspTreeIndex);
+
+  setHandleXLimits();
+
+//   clock_t endT = clock();
+//   qDebug() << "resized" << _lines.count() << "in" << (float)(endT - startT) / CLOCKS_PER_SEC << "sec";
 }
 
 void ChatScene::setHandleXLimits() {
-  firstColHandle->setXLimits(0, secondColHandle->sceneLeft());
-  secondColHandle->setXLimits(firstColHandle->sceneRight(), width() - minContentsWidth);
+  _firstColHandle->setXLimits(0, _secondColHandle->sceneLeft());
+  _secondColHandle->setXLimits(_firstColHandle->sceneRight(), width() - minContentsWidth);
 }
 
 void ChatScene::setSelectingItem(ChatItem *item) {
@@ -390,13 +410,13 @@ void ChatScene::startGlobalSelection(ChatItem *item, const QPointF &itemPos) {
 void ChatScene::updateSelection(const QPointF &pos) {
   // This is somewhat hacky... we look at the contents item that is at the cursor's y position (ignoring x), since
   // it has the full height. From this item, we can then determine the row index and hence the ChatLine.
-  ChatItem *contentItem = static_cast<ChatItem *>(itemAt(QPointF(secondColHandle->sceneRight() + 1, pos.y())));
+  ChatItem *contentItem = static_cast<ChatItem *>(itemAt(QPointF(_secondColHandle->sceneRight() + 1, pos.y())));
   if(!contentItem) return;
 
   int curRow = contentItem->row();
   int curColumn;
-  if(pos.x() > secondColHandle->sceneRight()) curColumn = ChatLineModel::ContentsColumn;
-  else if(pos.x() > firstColHandlePos) curColumn = ChatLineModel::SenderColumn;
+  if(pos.x() > _secondColHandle->sceneRight()) curColumn = ChatLineModel::ContentsColumn;
+  else if(pos.x() > _firstColHandlePos) curColumn = ChatLineModel::SenderColumn;
   else curColumn = ChatLineModel::TimestampColumn;
 
   ChatLineModel::ColumnType minColumn = (ChatLineModel::ColumnType)qMin(curColumn, _selectionStartCol);
@@ -518,17 +538,17 @@ void ChatScene::requestBacklog() {
 }
 
 int ChatScene::sectionByScenePos(int x) {
-  if(x < firstColHandle->x())
+  if(x < _firstColHandle->x())
     return ChatLineModel::TimestampColumn;
-  if(x < secondColHandle->x())
+  if(x < _secondColHandle->x())
     return ChatLineModel::SenderColumn;
 
   return ChatLineModel::ContentsColumn;
 }
 
-void ChatScene::updateSceneRect() {
+void ChatScene::updateSceneRect(qreal width) {
   if(_lines.isEmpty()) {
-    updateSceneRect(QRectF(0, 0, _sceneRect.width(), 0));
+    updateSceneRect(QRectF(0, 0, width, 0));
     return;
   }
 
@@ -553,12 +573,7 @@ void ChatScene::updateSceneRect() {
   // the following call should be safe. If it crashes something went wrong during insert/remove
   ChatLine *firstLine = _lines.at(_firstLineRow);
   ChatLine *lastLine = _lines.last();
-  updateSceneRect(QRectF(0, firstLine->pos().y(), _sceneRect.width(), lastLine->pos().y() + lastLine->height() - firstLine->pos().y()));
-}
-
-void ChatScene::updateSceneRect(qreal width) {
-  _sceneRect.setWidth(width);
-  updateSceneRect();
+  updateSceneRect(QRectF(0, firstLine->pos().y(), width, lastLine->pos().y() + lastLine->height() - firstLine->pos().y()));
 }
 
 void ChatScene::updateSceneRect(const QRectF &rect) {
@@ -569,9 +584,6 @@ void ChatScene::updateSceneRect(const QRectF &rect) {
 
 void ChatScene::customEvent(QEvent *event) {
   switch(event->type()) {
-  case ClearWebPreviewEventType:
-    clearWebPreviewEvent((ClearWebPreviewEvent *)event);
-    break;
   default:
     return;
   }
@@ -589,12 +601,17 @@ void ChatScene::loadWebPreview(ChatItem *parentItem, const QString &url, const Q
   if(webPreview.url != url) {
     webPreview.url = url;
     // load a new web view and delete the old one (if exists)
-    if(webPreview.previewItem) {
+    if(webPreview.previewItem && webPreview.previewItem->scene()) {
       removeItem(webPreview.previewItem);
       delete webPreview.previewItem;
     }
     webPreview.previewItem = new WebPreviewItem(url);
     webPreview.delayTimer.start(2000);
+    webPreview.deleteTimer.stop();
+  } else if(webPreview.previewItem && !webPreview.previewItem->scene()) {
+      // we just have to readd the item to the scene
+      webPreview.delayTimer.start(2000);
+      webPreview.deleteTimer.stop();
   }
   if(webPreview.urlRect != urlRect) {
     webPreview.urlRect = urlRect;
@@ -611,32 +628,30 @@ void ChatScene::loadWebPreview(ChatItem *parentItem, const QString &url, const Q
 #endif
 }
 
-void ChatScene::clearWebPreview(ChatItem *parentItem) {
-#ifndef HAVE_WEBKIT
-  Q_UNUSED(parentItem)
-#else
-  if(parentItem == 0 || webPreview.parentItem == parentItem) {
-    // posting an event ensures that the item will not be removed as
-    // the result of another event. this could result in bad segfaults
-    QCoreApplication::postEvent(this, new ClearWebPreviewEvent());
-  }
-#endif
-}
-
-void ChatScene::showWebPreview() {
+void ChatScene::showWebPreviewEvent() {
 #ifdef HAVE_WEBKIT
   if(webPreview.previewItem)
     addItem(webPreview.previewItem);
 #endif
 }
 
-void ChatScene::clearWebPreviewEvent(ClearWebPreviewEvent *event) {
-#ifdef HAVE_WEBKIT
-  event->accept();
-  if(webPreview.previewItem) {
-    if(webPreview.previewItem->scene()) {
+void ChatScene::clearWebPreview(ChatItem *parentItem) {
+#ifndef HAVE_WEBKIT
+  Q_UNUSED(parentItem)
+#else
+  if(parentItem == 0 || webPreview.parentItem == parentItem) {
+    if(webPreview.previewItem && webPreview.previewItem->scene()) {
       removeItem(webPreview.previewItem);
+      webPreview.deleteTimer.start();
     }
+    webPreview.delayTimer.stop();
+  }
+#endif
+}
+
+void ChatScene::deleteWebPreviewEvent() {
+#ifdef HAVE_WEBKIT
+  if(webPreview.previewItem) {
     delete webPreview.previewItem;
     webPreview.previewItem = 0;
   }
@@ -645,9 +660,3 @@ void ChatScene::clearWebPreviewEvent(ClearWebPreviewEvent *event) {
   webPreview.urlRect = QRectF();
 #endif
 }
-
-bool ChatScene::eventFilter(QObject *watched, QEvent *event) {
-  qDebug() << watched << event;
-  return false;
-}
-

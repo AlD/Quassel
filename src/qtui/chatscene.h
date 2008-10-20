@@ -39,11 +39,6 @@ class ChatScene : public QGraphicsScene {
   Q_OBJECT
 
 public:
-  enum MyEventTypes {
-    ClearWebPreviewEventType = QEvent::User
-  };
-  class ClearWebPreviewEvent;
-
   ChatScene(QAbstractItemModel *model, const QString &idString, qreal width, QObject *parent);
   virtual ~ChatScene();
 
@@ -56,14 +51,13 @@ public:
   inline bool containsBuffer(const BufferId &id) const;
   inline ChatLine *chatLine(int row) { return (row < _lines.count()) ? _lines[row] : 0; }
 
-  inline ColumnHandleItem *firstColumnHandle() const { return firstColHandle; }
-  inline ColumnHandleItem *secondColumnHandle() const { return secondColHandle; }
-
-  virtual bool eventFilter(QObject *watched, QEvent *event);
+  inline ColumnHandleItem *firstColumnHandle() const { return _firstColHandle; }
+  inline ColumnHandleItem *secondColumnHandle() const { return _secondColHandle; }
 
 public slots:
   void updateForViewport(qreal width, qreal height);
-  void setWidth(qreal, bool forceReposition = false);
+  //void setWidth(qreal, bool forceReposition = false);
+  void setWidth(qreal width);
 
   // these are used by the chatitems to notify the scene and manage selections
   void setSelectingItem(ChatItem *item);
@@ -90,9 +84,10 @@ protected slots:
   void rowsAboutToBeRemoved(const QModelIndex &, int, int);
 
 private slots:
-  void handlePositionChanged(qreal xpos);
-  void showWebPreview();
-  void clearWebPreviewEvent(ClearWebPreviewEvent *event);
+  void firstHandlePositionChanged(qreal xpos);
+  void secondHandlePositionChanged(qreal xpos);
+  void showWebPreviewEvent();
+  void deleteWebPreviewEvent();
 
 private:
   void setHandleXLimits();
@@ -108,13 +103,13 @@ private:
   // we store the size in a member variable.
   QRectF _sceneRect;
   int _firstLineRow; // the first row to display (aka: not a daychange msg)
-  void updateSceneRect();
   void updateSceneRect(qreal width);
+  inline void updateSceneRect() { updateSceneRect(_sceneRect.width()); }
   void updateSceneRect(const QRectF &rect);
   qreal _viewportHeight;
 
-  ColumnHandleItem *firstColHandle, *secondColHandle;
-  qreal firstColHandlePos, secondColHandlePos;
+  ColumnHandleItem *_firstColHandle, *_secondColHandle;
+  qreal _firstColHandlePos, _secondColHandlePos;
 
   ChatItem *_selectingItem;
   int _selectionStartCol, _selectionMinCol;
@@ -127,10 +122,11 @@ private:
 
   struct WebPreview {
     ChatItem *parentItem;
-    WebPreviewItem *previewItem;
+    QGraphicsItem *previewItem;
     QString url;
     QRectF urlRect;
     QTimer delayTimer;
+    QTimer deleteTimer;
     WebPreview() : parentItem(0), previewItem(0) {}
   };
   WebPreview webPreview;
