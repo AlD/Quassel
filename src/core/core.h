@@ -42,6 +42,7 @@
 
 class CoreSession;
 class SessionThread;
+class SignalProxy;
 class Storage;
 struct NetworkInfo;
 
@@ -288,14 +289,17 @@ class Core : public QObject {
     /** \note This method is threadsafe.
      */
     void syncStorage();
-
+    void setupInternalClientSession(SignalProxy *proxy);
   signals:
     //! Sent when a BufferInfo is updated in storage.
     void bufferInfoUpdated(UserId user, const BufferInfo &info);
 
+  //! Relay From CoreSession::sessionState(const QVariant &). Used for internal connection only
+  void sessionState(const QVariant &);
+
   private slots:
     bool startListening();
-    void stopListening();
+    void stopListening(const QString &msg = QString());
     void incomingConnection();
     void clientHasData();
     void clientDisconnected();
@@ -317,7 +321,8 @@ class Core : public QObject {
     void setupClientSession(QTcpSocket *socket, UserId uid);
     void processClientMessage(QTcpSocket *socket, const QVariantMap &msg);
     //void processCoreSetup(QTcpSocket *socket, QVariantMap &msg);
-    QString setupCore(const QVariant &setupData);
+    QString setupCoreForInternalUsage();
+    QString setupCore(QVariantMap setupData);
 
     bool registerStorageBackend(Storage *);
     void unregisterStorageBackend(Storage *);

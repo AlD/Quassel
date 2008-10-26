@@ -30,9 +30,9 @@ CtcpHandler::CtcpHandler(NetworkConnection *parent)
 {
 
   QByteArray MQUOTE = QByteArray("\020");
-  ctcpMDequoteHash[MQUOTE + '0'] = QByteArray("\000");
-  ctcpMDequoteHash[MQUOTE + 'n'] = QByteArray("\n");
-  ctcpMDequoteHash[MQUOTE + 'r'] = QByteArray("\r");
+  ctcpMDequoteHash[MQUOTE + '0'] = QByteArray(1, '\000');
+  ctcpMDequoteHash[MQUOTE + 'n'] = QByteArray(1, '\n');
+  ctcpMDequoteHash[MQUOTE + 'r'] = QByteArray(1, '\r');
   ctcpMDequoteHash[MQUOTE + MQUOTE] = MQUOTE;
 
   QByteArray XQUOTE = QByteArray("\134");
@@ -40,7 +40,23 @@ CtcpHandler::CtcpHandler(NetworkConnection *parent)
   ctcpXDelimDequoteHash[XQUOTE + QByteArray("a")] = XDELIM;
 }
 
-QByteArray CtcpHandler::dequote(const QByteArray &message) {
+QByteArray CtcpHandler::lowLevelQuote(const QByteArray &message) {
+  QByteArray quotedMessage = message;
+
+  QHash<QByteArray, QByteArray> quoteHash = ctcpMDequoteHash;
+  QByteArray MQUOTE = QByteArray("\020");
+  quoteHash.remove(MQUOTE + MQUOTE);
+  quotedMessage.replace(MQUOTE, MQUOTE + MQUOTE);
+
+  QHash<QByteArray, QByteArray>::const_iterator quoteIter = quoteHash.constBegin();
+  while(quoteIter != quoteHash.constEnd()) {
+    quotedMessage.replace(quoteIter.value(), quoteIter.key());
+    quoteIter++;
+  }
+  return quotedMessage;
+}
+
+QByteArray CtcpHandler::lowLevelDequote(const QByteArray &message) {
   QByteArray dequotedMessage;
   QByteArray messagepart;
   QHash<QByteArray, QByteArray>::iterator ctcpquote;
@@ -62,6 +78,15 @@ QByteArray CtcpHandler::dequote(const QByteArray &message) {
   return dequotedMessage;
 }
 
+QByteArray CtcpHandler::xdelimQuote(const QByteArray &message) {
+  QByteArray quotedMessage = message;
+  QHash<QByteArray, QByteArray>::const_iterator quoteIter = ctcpXDelimDequoteHash.constBegin();
+  while(quoteIter != ctcpXDelimDequoteHash.constEnd()) {
+    quotedMessage.replace(quoteIter.value(), quoteIter.key());
+    quoteIter++;
+  }
+  return quotedMessage;
+}
 
 QByteArray CtcpHandler::xdelimDequote(const QByteArray &message) {
   QByteArray dequotedMessage;
@@ -88,7 +113,7 @@ void CtcpHandler::parse(Message::Type messageType, const QString &prefix, const 
   QByteArray ctcp;
 
   //lowlevel message dequote
-  QByteArray dequotedMessage = dequote(message);
+  QByteArray dequotedMessage = lowLevelDequote(message);
 
   CtcpType ctcptype = messageType == Message::Notice
     ? CtcpReply
@@ -135,19 +160,18 @@ void CtcpHandler::parse(Message::Type messageType, const QString &prefix, const 
 }
 
 QByteArray CtcpHandler::pack(const QByteArray &ctcpTag, const QByteArray &message) {
-  return XDELIM + ctcpTag + ' ' + message + XDELIM;
+  return XDELIM + ctcpTag + ' ' + xdelimQuote(message) + XDELIM;
 }
 
-// TODO handle encodings correctly!
 void CtcpHandler::query(const QString &bufname, const QString &ctcpTag, const QString &message) {
   QList<QByteArray> params;
-  params << serverEncode(bufname) << pack(serverEncode(ctcpTag), userEncode(bufname, message));
+  params << serverEncode(bufname) << lowLevelQuote(pack(serverEncode(ctcpTag), userEncode(bufname, message)));
   emit putCmd("PRIVMSG", params);
 }
 
 void CtcpHandler::reply(const QString &bufname, const QString &ctcpTag, const QString &message) {
   QList<QByteArray> params;
-  params << serverEncode(bufname) << pack(serverEncode(ctcpTag), userEncode(bufname, message));
+  params << serverEncode(bufname) << lowLevelQuote(pack(serverEncode(ctcpTag), userEncode(bufname, message)));
   emit putCmd("NOTICE", params);
 }
 

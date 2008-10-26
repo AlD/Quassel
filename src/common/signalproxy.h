@@ -18,8 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef _SIGNALPROXY_H_
-#define _SIGNALPROXY_H_
+#ifndef SIGNALPROXY_H
+#define SIGNALPROXY_H
 
 #include <QList>
 #include <QHash>
@@ -37,6 +37,9 @@ struct QMetaObject;
 class SignalProxy : public QObject {
   Q_OBJECT
 
+  class AbstractPeer;
+  class IODevicePeer;
+
 public:
   enum ProxyMode {
     Server,
@@ -52,6 +55,11 @@ public:
     HeartBeatReply
   };
 
+  enum ClientConnectionType {
+    SignalProxyConnection,
+    IODeviceConnection
+  };
+
   SignalProxy(QObject *parent);
   SignalProxy(ProxyMode mode, QObject *parent);
   SignalProxy(ProxyMode mode, QIODevice *device, QObject *parent);
@@ -61,8 +69,10 @@ public:
   inline ProxyMode proxyMode() const { return _proxyMode; }
 
   bool addPeer(QIODevice *iodev);
-  void removePeer(QIODevice *iodev = 0);
-
+  bool addPeer(SignalProxy *proxy);
+  void removePeer(QObject *peer);
+  void removeAllPeers();
+  
   bool attachSignal(QObject *sender, const char *signal, const QByteArray& sigName = QByteArray());
   bool attachSlot(const QByteArray& sigName, QObject *recv, const char *slot);
 
@@ -114,6 +124,9 @@ public:
 
   void dumpProxyStats();
   
+protected:
+  void customEvent(QEvent *event);
+
 private slots:
   void dataAvailable();
   void detachSender();
@@ -121,8 +134,8 @@ private slots:
   void objectRenamed(const QString &newname, const QString &oldname);
   void objectRenamed(const QByteArray &classname, const QString &newname, const QString &oldname);
   void sendHeartBeat();
-  void receiveHeartBeat(QIODevice *dev, const QVariantList &params);
-  void receiveHeartBeatReply(QIODevice *dev, const QVariantList &params);
+  void receiveHeartBeat(AbstractPeer *peer, const QVariantList &params);
+  void receiveHeartBeatReply(AbstractPeer *peer, const QVariantList &params);
   
 signals:
   void peerRemoved(QIODevice *dev);
@@ -150,12 +163,14 @@ private:
 
   void dispatchSignal(QIODevice *receiver, const RequestType &requestType, const QVariantList &params);
   void dispatchSignal(const RequestType &requestType, const QVariantList &params);
-  
-  void receivePeerSignal(QIODevice *sender, const QVariant &packedFunc);
-  void handleSync(QIODevice *sender, QVariantList params);
-  void handleInitRequest(QIODevice *sender, const QVariantList &params);
-  void handleInitData(QIODevice *sender, const QVariantList &params);
-  void handleSignal(const QByteArray &funcName, const QVariantList &params);
+
+  void receivePackedFunc(AbstractPeer *sender, const QVariant &packedFunc);
+  void receivePeerSignal(AbstractPeer *sender, const RequestType &requestType, const QVariantList &params);
+  void receivePeerSignal(SignalProxy *sender, const RequestType &requestType, const QVariantList &params);
+  void handleSync(AbstractPeer *sender, QVariantList params);
+  void handleInitRequest(AbstractPeer *sender, const QVariantList &params);
+  void handleInitData(AbstractPeer *sender, const QVariantList &params);
+  void handleSignal(const QVariantList &data);
 
   bool invokeSlot(QObject *receiver, int methodId, const QVariantList &params, QVariant &returnValue);
   bool invokeSlot(QObject *receiver, int methodId, const QVariantList &params = QVariantList());
@@ -163,23 +178,60 @@ private:
   QVariantMap initData(SyncableObject *obj) const;
   void setInitData(SyncableObject *obj, const QVariantMap &properties);
 
-  void updateLag(QIODevice *dev, int lag);
+  void updateLag(IODevicePeer *peer, int lag);
 
 public:
   void dumpSyncMap(SyncableObject *object);
   inline int peerCount() const { return _peers.size(); }
   
 private:
-  // Hash of used QIODevices
-  struct peerInfo {
+  class AbstractPeer {
+  public:
+    enum PeerType {
+      NotAPeer = 0,
+      IODevicePeer = 1,
+      SignalProxyPeer = 2
+    };
+    AbstractPeer() : _type(NotAPeer) {}
+    AbstractPeer(PeerType type) : _type(type) {}
+    virtual ~AbstractPeer() {}
+    inline PeerType type() const { return _type; }
+    virtual void dispatchSignal(const RequestType &requestType, const QVariantList &params) = 0;
+  private:
+    PeerType _type;
+  };
+
+  class IODevicePeer : public AbstractPeer {
+  public:
+    IODevicePeer(QIODevice *device, bool compress) : AbstractPeer(AbstractPeer::IODevicePeer), _device(device), byteCount(0), usesCompression(compress), sentHeartBeats(0), lag(0) {}
+    virtual void dispatchSignal(const RequestType &requestType, const QVariantList &params);
+    inline void dispatchPackedFunc(const QVariant &packedFunc) { SignalProxy::writeDataToDevice(_device, packedFunc, usesCompression); }
+    QString address() const;
+    inline bool isOpen() const { return _device->isOpen(); }
+    inline void close() const { _device->close(); }
+    inline bool readData(QVariant &item) { return SignalProxy::readDataFromDevice(_device, byteCount, item, usesCompression); }
+  private:
+    QIODevice *_device;
     quint32 byteCount;
     bool usesCompression;
+  public:
     int sentHeartBeats;
     int lag;
-    peerInfo() : byteCount(0), usesCompression(false), sentHeartBeats(0) {}
   };
-  //QHash<QIODevice*, peerInfo> _peerByteCount;
-  QHash<QIODevice*, peerInfo> _peers;
+
+  class SignalProxyPeer : public AbstractPeer {
+  public:
+    SignalProxyPeer(SignalProxy *sender, SignalProxy *receiver) : AbstractPeer(AbstractPeer::SignalProxyPeer), sender(sender), receiver(receiver) {}
+    virtual void dispatchSignal(const RequestType &requestType, const QVariantList &params);
+  private:
+    SignalProxy *sender;
+    SignalProxy *receiver;
+  };
+
+  // a Hash of the actual used communication object to it's corresponding peer
+  // currently a communication object can either be an arbitrary QIODevice or another SignalProxy
+  typedef QHash<QObject *, AbstractPeer *> PeerHash;
+  PeerHash _peers;
 
   // containg a list of argtypes for fast access
   QHash<const QMetaObject *, ClassInfo*> _classInfo;

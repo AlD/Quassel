@@ -39,9 +39,9 @@ HighlightSettingsPage::HighlightSettingsPage(QWidget *parent)
   ui.highlightTable->horizontalHeaderItem(HighlightSettingsPage::CsColumn)->setWhatsThis("<b>CS</b>: This option determines if the highlight rule should be interpreted <b>case sensitive</b>.");
 
   ui.highlightTable->horizontalHeader()->setResizeMode(HighlightSettingsPage::NameColumn, QHeaderView::Stretch);
-  ui.highlightTable->horizontalHeader()->setResizeMode(HighlightSettingsPage::RegExColumn, QHeaderView::ResizeToContents); 
-  ui.highlightTable->horizontalHeader()->setResizeMode(HighlightSettingsPage::CsColumn, QHeaderView::ResizeToContents); 
-  ui.highlightTable->horizontalHeader()->setResizeMode(HighlightSettingsPage::EnableColumn, QHeaderView::ResizeToContents); 
+  ui.highlightTable->horizontalHeader()->setResizeMode(HighlightSettingsPage::RegExColumn, QHeaderView::ResizeToContents);
+  ui.highlightTable->horizontalHeader()->setResizeMode(HighlightSettingsPage::CsColumn, QHeaderView::ResizeToContents);
+  ui.highlightTable->horizontalHeader()->setResizeMode(HighlightSettingsPage::EnableColumn, QHeaderView::ResizeToContents);
 
   connect(ui.add, SIGNAL(clicked(bool)), this, SLOT(addNewRow()));
   connect(ui.remove, SIGNAL(clicked(bool)), this, SLOT(removeSelectedRows()));
@@ -51,6 +51,7 @@ HighlightSettingsPage::HighlightSettingsPage(QWidget *parent)
   connect(ui.highlightAllNicks, SIGNAL(clicked(bool)), this, SLOT(widgetHasChanged()));
   connect(ui.highlightCurrentNick, SIGNAL(clicked(bool)), this, SLOT(widgetHasChanged()));
   connect(ui.highlightNoNick, SIGNAL(clicked(bool)), this, SLOT(widgetHasChanged()));
+  connect(ui.nicksCaseSensitive, SIGNAL(clicked(bool)), this, SLOT(widgetHasChanged()));
   connect(ui.add, SIGNAL(clicked()), this, SLOT(widgetHasChanged()));
   connect(ui.remove, SIGNAL(clicked()), this, SLOT(widgetHasChanged()));
   connect(ui.highlightTable, SIGNAL(itemChanged(QTableWidgetItem *)), this, SLOT(tableChanged(QTableWidgetItem *)));
@@ -62,6 +63,7 @@ bool HighlightSettingsPage::hasDefaults() const {
 
 void HighlightSettingsPage::defaults() {
   ui.highlightCurrentNick->setChecked(true);
+  ui.nicksCaseSensitive->setChecked(false);
   emptyTable();
 
   widgetHasChanged();
@@ -100,10 +102,10 @@ void HighlightSettingsPage::addNewRow(QString name, bool regex, bool cs, bool en
   ui.highlightTable->setItem(lastRow, HighlightSettingsPage::EnableColumn, enableItem);
 
   QVariantMap highlightRule;
-  highlightRule["name"] = name;
-  highlightRule["regex"] = regex;
-  highlightRule["cs"] = cs;
-  highlightRule["enable"] = enable;
+  highlightRule["Name"] = name;
+  highlightRule["RegEx"] = regex;
+  highlightRule["CS"] = cs;
+  highlightRule["Enable"] = enable;
 
   highlightList.append(highlightRule);
 }
@@ -145,7 +147,7 @@ void HighlightSettingsPage::emptyTable() {
 }
 
 void HighlightSettingsPage::tableChanged(QTableWidgetItem *item) {
-  if(item->row()+1 > highlightList.size()) 
+  if(item->row()+1 > highlightList.size())
     return;
 
   QVariantMap highlightRule = highlightList.value(item->row()).toMap();
@@ -155,16 +157,16 @@ void HighlightSettingsPage::tableChanged(QTableWidgetItem *item) {
     case HighlightSettingsPage::NameColumn:
       if(item->text() == "")
         item->setText(tr("this shouldn't be empty"));
-      highlightRule["name"] = item->text();
+      highlightRule["Name"] = item->text();
       break;
     case HighlightSettingsPage::RegExColumn:
-      highlightRule["regex"] = (item->checkState() == Qt::Checked);
+      highlightRule["RegEx"] = (item->checkState() == Qt::Checked);
       break;
     case HighlightSettingsPage::CsColumn:
-      highlightRule["cs"] = (item->checkState() == Qt::Checked);
+      highlightRule["CS"] = (item->checkState() == Qt::Checked);
       break;
     case HighlightSettingsPage::EnableColumn:
-      highlightRule["enable"] = (item->checkState() == Qt::Checked);
+      highlightRule["Enable"] = (item->checkState() == Qt::Checked);
       break;
   }
   highlightList[item->row()] = highlightRule;
@@ -178,10 +180,10 @@ void HighlightSettingsPage::load() {
 
   foreach(QVariant highlight, notificationSettings.highlightList()) {
     QVariantMap highlightRule = highlight.toMap();
-    QString name = highlightRule["name"].toString();
-    bool regex = highlightRule["regex"].toBool();
-    bool cs = highlightRule["cs"].toBool();
-    bool enable = highlightRule["enable"].toBool();
+    QString name = highlightRule["Name"].toString();
+    bool regex = highlightRule["RegEx"].toBool();
+    bool cs = highlightRule["CS"].toBool();
+    bool enable = highlightRule["Enable"].toBool();
 
     addNewRow(name, regex, cs, enable);
   }
@@ -198,6 +200,7 @@ void HighlightSettingsPage::load() {
       ui.highlightAllNicks->setChecked(true);
       break;
   }
+  ui.nicksCaseSensitive->setChecked(notificationSettings.nicksCaseSensitive());
 
   setChangedState(false);
 }
@@ -207,14 +210,15 @@ void HighlightSettingsPage::save() {
   notificationSettings.setHighlightList(highlightList);
 
   NotificationSettings::HighlightNickType highlightNickType;
-  if(ui.highlightNoNick->isChecked()) 
+  if(ui.highlightNoNick->isChecked())
     highlightNickType = NotificationSettings::NoNick;
-  if(ui.highlightCurrentNick->isChecked()) 
+  if(ui.highlightCurrentNick->isChecked())
     highlightNickType = NotificationSettings::CurrentNick;
-  if(ui.highlightAllNicks->isChecked()) 
+  if(ui.highlightAllNicks->isChecked())
     highlightNickType = NotificationSettings::AllNicks;
 
   notificationSettings.setHighlightNick(highlightNickType);
+  notificationSettings.setNicksCaseSensitive(ui.nicksCaseSensitive->isChecked());
 
   load();
   setChangedState(false);
@@ -229,20 +233,17 @@ bool HighlightSettingsPage::testHasChanged() {
   NotificationSettings notificationSettings;
 
   NotificationSettings::HighlightNickType highlightNickType;
-  if(ui.highlightNoNick->isChecked()) 
+  if(ui.highlightNoNick->isChecked())
     highlightNickType = NotificationSettings::NoNick;
-  if(ui.highlightCurrentNick->isChecked()) 
+  if(ui.highlightCurrentNick->isChecked())
     highlightNickType = NotificationSettings::CurrentNick;
-  if(ui.highlightAllNicks->isChecked()) 
+  if(ui.highlightAllNicks->isChecked())
     highlightNickType = NotificationSettings::AllNicks;
 
   if(notificationSettings.highlightNick() != highlightNickType) return true;
+  if(notificationSettings.nicksCaseSensitive() != ui.nicksCaseSensitive->isChecked()) return true;
 
   if(notificationSettings.highlightList() != highlightList) return true;
 
-  return true;
+  return false;
 }
-
-
-
-
