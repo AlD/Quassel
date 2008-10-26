@@ -51,9 +51,6 @@ HighlightSettingsPage::HighlightSettingsPage(QWidget *parent)
   connect(ui.highlightAllNicks, SIGNAL(clicked(bool)), this, SLOT(widgetHasChanged()));
   connect(ui.highlightCurrentNick, SIGNAL(clicked(bool)), this, SLOT(widgetHasChanged()));
   connect(ui.highlightNoNick, SIGNAL(clicked(bool)), this, SLOT(widgetHasChanged()));
-  connect(ui.highlightNoNick, SIGNAL(toggled(bool)), ui.highlightCS, SLOT(setDisabled(bool)));
-  connect(ui.highlightCS, SIGNAL(clicked(bool)), this, SLOT(widgetHasChanged()));
-
   connect(ui.add, SIGNAL(clicked()), this, SLOT(widgetHasChanged()));
   connect(ui.remove, SIGNAL(clicked()), this, SLOT(widgetHasChanged()));
   connect(ui.highlightTable, SIGNAL(itemChanged(QTableWidgetItem *)), this, SLOT(tableChanged(QTableWidgetItem *)));
@@ -65,7 +62,6 @@ bool HighlightSettingsPage::hasDefaults() const {
 
 void HighlightSettingsPage::defaults() {
   ui.highlightCurrentNick->setChecked(true);
-  ui.highlightCS->setChecked(false);
   emptyTable();
 
   widgetHasChanged();
@@ -190,14 +186,7 @@ void HighlightSettingsPage::load() {
     addNewRow(name, regex, cs, enable);
   }
 
-  NotificationSettings::HighlightNickType highlightNick = notificationSettings.highlightNick();
-
-  if (highlightNick & 0x04) {
-    ui.highlightCS->setChecked(true);
-    highlightNick = NotificationSettings::HighlightNickType(highlightNick - 0x04);
-  }
-
-  switch(highlightNick)
+  switch(notificationSettings.highlightNick())
   {
     case NotificationSettings::NoNick:
       ui.highlightNoNick->setChecked(true);
@@ -218,14 +207,12 @@ void HighlightSettingsPage::save() {
   notificationSettings.setHighlightList(highlightList);
 
   NotificationSettings::HighlightNickType highlightNickType;
-  if(ui.highlightNoNick->isChecked())
+  if(ui.highlightNoNick->isChecked()) 
     highlightNickType = NotificationSettings::NoNick;
-  if(ui.highlightCurrentNick->isChecked())
+  if(ui.highlightCurrentNick->isChecked()) 
     highlightNickType = NotificationSettings::CurrentNick;
-  if(ui.highlightAllNicks->isChecked())
+  if(ui.highlightAllNicks->isChecked()) 
     highlightNickType = NotificationSettings::AllNicks;
-  if(ui.highlightCS->isChecked())
-    highlightNickType = NotificationSettings::HighlightNickType(highlightNickType | NotificationSettings::CS);
 
   notificationSettings.setHighlightNick(highlightNickType);
 
@@ -242,14 +229,12 @@ bool HighlightSettingsPage::testHasChanged() {
   NotificationSettings notificationSettings;
 
   NotificationSettings::HighlightNickType highlightNickType;
-  if(ui.highlightNoNick->isChecked())
+  if(ui.highlightNoNick->isChecked()) 
     highlightNickType = NotificationSettings::NoNick;
-  if(ui.highlightCurrentNick->isChecked())
+  if(ui.highlightCurrentNick->isChecked()) 
     highlightNickType = NotificationSettings::CurrentNick;
-  if(ui.highlightAllNicks->isChecked())
+  if(ui.highlightAllNicks->isChecked()) 
     highlightNickType = NotificationSettings::AllNicks;
-  if(ui.highlightCS->isChecked())
-    highlightNickType = NotificationSettings::HighlightNickType(highlightNickType | NotificationSettings::CS);
 
   if(notificationSettings.highlightNick() != highlightNickType) return true;
 
@@ -257,3 +242,7 @@ bool HighlightSettingsPage::testHasChanged() {
 
   return true;
 }
+
+
+
+
