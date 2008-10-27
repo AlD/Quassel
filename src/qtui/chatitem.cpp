@@ -309,16 +309,16 @@ void ContentsChatItem::doLayout() {
 QList<ContentsChatItem::Clickable> ContentsChatItem::findClickables() const {
   // For matching URLs
   static QString urlEnd("(?:>|[,.;:\"]*\\s|\\b|$)");
-  static QString urlChars("(?:[\\w\\-~@/?&=+$()!%#]|[,.;:]\\w)");
+  static QString urlChars("(?:[,.;:]*[\\w\\-~@/?&=+$()!%#])");
 
   static QRegExp regExp[] = {
     // URL
     // QRegExp(QString("((?:https?://|s?ftp://|irc://|mailto:|www\\.)%1+|%1+\\.[a-z]{2,4}(?:?=/%1+|\\b))%2").arg(urlChars, urlEnd)),
-    QRegExp(QString("((?:(?:https?://|s?ftp://|irc://|mailto:)|www)%1+)%2").arg(urlChars, urlEnd)),
+    QRegExp(QString("((?:(?:https?://|s?ftp://|irc://|mailto:)|www)%1+)%2").arg(urlChars, urlEnd), Qt::CaseInsensitive),
 
     // Channel name
     // We don't match for channel names starting with + or &, because that gives us a lot of false positives.
-    QRegExp("((?:#|![A-Z0-9]{5})[^,:\\s]+(?::[^,:\\s]+)?)\\b")
+    QRegExp("((?:#|![A-Z0-9]{5})[^,:\\s]+(?::[^,:\\s]+)?)\\b", Qt::CaseInsensitive)
 
     // TODO: Nicks, we'll need a filtering for only matching known nicknames further down if we do this
   };

@@ -16,7 +16,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox" >
      <property name="title" >
-      <string>Highlight list</string>
+      <string>Custom Highlights</string>
      </property>
      <layout class="QGridLayout" >
       <item rowspan="3" row="0" column="0" >
@@ -82,7 +82,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox_2" >
      <property name="title" >
-      <string>Highlight nicks</string>
+      <string>Highlight Nicks</string>
      </property>
      <layout class="QVBoxLayout" >
       <item>
@@ -107,24 +107,15 @@
         <property name="text" >
          <string>None</string>
         </property>
-        <property name="checkable" >
-         <bool>true</bool>
-        </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="highlightCS" >
-        <property name="enabled" >
-         <bool>true</bool>
-        </property>
+       <widget class="QCheckBox" name="nicksCaseSensitive" >
         <property name="text" >
-         <string>Case Sensitive</string>
-        </property>
-        <property name="checkable" >
-         <bool>true</bool>
+         <string>Case sensitive</string>
         </property>
         <property name="checked" >
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -134,5 +125,22 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>highlightNoNick</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>nicksCaseSensitive</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>64</x>
+     <y>350</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>69</x>
+     <y>381</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

@@ -372,7 +372,6 @@ UiStyle::StyledMessage::StyledMessage(const Message &msg, UiStyle *style) {
       t = tr("%Da%DN%1%DN %2").arg(nick).arg(txt);
       break;
     case Message::Raw:
-      s = tr("%Dz>");
       t = tr("%Dz%1").arg(txt);
       break;
     default:
@@ -424,6 +423,8 @@ QString UiStyle::StyledMessage::decoratedSender() const {
       return tr("***"); break;
     case Message::Action:
       return tr("-*-"); break;
+    case Message::Raw:
+      return tr("%Dz>"); break;
     default:
       return tr("%1").arg(_sender);
   }
@@ -461,6 +462,8 @@ UiStyle::FormatType UiStyle::StyledMessage::senderFormat() const {
       return UiStyle::ModeMsg; break;
     case Message::Action:
       return UiStyle::ActionMsg; break;
+    case Message::Raw:
+      return UiStyle::RawMsg; break;
     default:
       return UiStyle::ErrorMsg;
   }
