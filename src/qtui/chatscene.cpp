@@ -47,10 +47,10 @@ ChatScene::ChatScene(QAbstractItemModel *model, const QString &idString, qreal w
     _sceneRect(0, 0, width, 0),
     _firstLineRow(-1),
     _viewportHeight(0),
+    _cutoffMode(CutoffRight),
     _selectingItem(0),
     _selectionStart(-1),
-    _isSelecting(false),
-    _lastBacklogSize(0)
+    _isSelecting(false)
 {
   MessageFilter *filter = qobject_cast<MessageFilter*>(model);
   if(filter) {
@@ -525,18 +525,10 @@ QString ChatScene::selectionToString() const {
 }
 
 void ChatScene::requestBacklog() {
-  static const int REQUEST_COUNT = 500;
-  int backlogSize = model()->rowCount();
-  if(isSingleBufferScene() && backlogSize != 0 && _lastBacklogSize + REQUEST_COUNT <= backlogSize) {
-    QModelIndex msgIdx = model()->index(0, 0);
-    while((Message::Type)(model()->data(msgIdx, ChatLineModel::TypeRole).toInt()) == Message::DayChange) {
-      msgIdx = msgIdx.sibling(msgIdx.row() + 1, 0);
-    }
-    MsgId msgId = model()->data(msgIdx, ChatLineModel::MsgIdRole).value<MsgId>();
-    BufferId bufferId = model()->data(msgIdx, ChatLineModel::BufferIdRole).value<BufferId>();
-    _lastBacklogSize = backlogSize;
-    Client::backlogManager()->requestBacklog(bufferId, REQUEST_COUNT, msgId.toInt());
-  }
+  MessageFilter *filter = qobject_cast<MessageFilter*>(model());
+  if(filter)
+    return filter->requestBacklog();
+  return;
 }
 
 int ChatScene::sectionByScenePos(int x) {
@@ -573,9 +565,14 @@ void ChatScene::updateSceneRect(qreal width) {
   }
 
   // the following call should be safe. If it crashes something went wrong during insert/remove
-  ChatLine *firstLine = _lines.at(_firstLineRow);
-  ChatLine *lastLine = _lines.last();
-  updateSceneRect(QRectF(0, firstLine->pos().y(), width, lastLine->pos().y() + lastLine->height() - firstLine->pos().y()));
+  if(_firstLineRow < _lines.count()) {
+    ChatLine *firstLine = _lines.at(_firstLineRow);
+    ChatLine *lastLine = _lines.last();
+    updateSceneRect(QRectF(0, firstLine->pos().y(), width, lastLine->pos().y() + lastLine->height() - firstLine->pos().y()));
+  } else {
+    // empty scene rect
+    updateSceneRect(QRectF(0, 0, width, 0));
+  }
 }
 
 void ChatScene::updateSceneRect(const QRectF &rect) {

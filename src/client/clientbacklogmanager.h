@@ -24,6 +24,8 @@
 #include "backlogmanager.h"
 #include "message.h"
 
+class BacklogRequester;
+
 class ClientBacklogManager : public BacklogManager {
   Q_OBJECT
 
@@ -32,17 +34,27 @@ public:
 
   virtual const QMetaObject *syncMetaObject() const { return &BacklogManager::staticMetaObject; }
 
-public slots:
-  virtual void receiveBacklog(BufferId bufferId, int lastMsgs, int offset, QVariantList msgs);
-  virtual QVariantList requestBacklog(BufferId bufferId, int lastMsgs = -1, int offset = -1);
-  void requestInitialBacklog();
+  // helper for the backlogRequester, as it isn't a QObject and can't emit itself
+  inline void emitMessagesRequested(const QString &msg) const { emit messagesRequested(msg); }
 
   void reset();
 
+public slots:
+  virtual void receiveBacklog(BufferId bufferId, int lastMsgs, int offset, QVariantList msgs);
+  void requestInitialBacklog();
+
+signals:
+  void messagesReceived(BufferId bufferId, int count) const;
+  void messagesRequested(const QString &) const;
+  void messagesProcessed(const QString &) const;
+
 private:
-  bool _buffer;
-  QList<Message> _messageBuffer;
-  QSet<BufferId> _buffersWaiting;
+  bool isBuffering();
+  void stopBuffering();
+
+  void dispatchMessages(const MessageList &messages, bool sort = false);
+
+  BacklogRequester *_requester;
 };
 
 #endif // CLIENTBACKLOGMANAGER_H
