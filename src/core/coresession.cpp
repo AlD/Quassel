@@ -229,11 +229,13 @@ void CoreSession::disconnectFromNetwork(NetworkId id) {
 void CoreSession::networkStateRequested() {
 }
 
-void CoreSession::addClient(QObject *dev) { // this is QObject* so we can use it in signal connections
-  QIODevice *device = qobject_cast<QIODevice *>(dev);
+void CoreSession::addClient(QIODevice *device) {
   if(!device) {
     quError() << "Invoking CoreSession::addClient with a QObject that is not a QIODevice!";
   } else {
+    // if the socket is an orphan, the signalProxy adopts it.
+    // -> we don't need to care about it anymore
+    device->setParent(0);
     signalProxy()->addPeer(device);
     QVariantMap reply;
     reply["MsgType"] = "SessionInit";
@@ -242,15 +244,15 @@ void CoreSession::addClient(QObject *dev) { // this is QObject* so we can use it
   }
 }
 
+void CoreSession::addClient(SignalProxy *proxy) {
+  signalProxy()->addPeer(proxy);
+  emit sessionState(sessionState());
+}
+
 void CoreSession::removeClient(QIODevice *iodev) {
-  // no checks for validity check - privateslot...
   QTcpSocket *socket = qobject_cast<QTcpSocket *>(iodev);
   if(socket)
     quInfo() << qPrintable(tr("Client")) << qPrintable(socket->peerAddress().toString()) << qPrintable(tr("disconnected (UserId: %1).").arg(user().toInt()));
-  else
-    quInfo() << "Local client disconnedted.";
-  disconnect(socket, 0, this, 0);
-  socket->deleteLater();
 }
 
 SignalProxy *CoreSession::signalProxy() const {

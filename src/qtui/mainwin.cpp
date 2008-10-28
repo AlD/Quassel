@@ -36,6 +36,7 @@
 #include "coreconnectdlg.h"
 #include "iconloader.h"
 #include "inputwidget.h"
+#include "inputline.h"
 #include "irclistmodel.h"
 #include "jumpkeyhandler.h"
 #include "msgprocessorstatuswidget.h"
@@ -75,8 +76,8 @@ MainWin::MainWin(QWidget *parent)
     _trayIcon(new QSystemTrayIcon(this))
 {
   QtUiSettings uiSettings;
-  QString style = uiSettings.value("Style", QString("")).toString();
-  if(style != "") {
+  QString style = uiSettings.value("Style", QString()).toString();
+  if(!style.isEmpty()) {
     QApplication::setStyle(style);
   }
 
@@ -358,6 +359,8 @@ void MainWin::setupInputWidget() {
   inputWidget->setSelectionModel(Client::bufferModel()->standardSelectionModel());
 
   _bufferWidget->setFocusProxy(inputWidget);
+
+  inputWidget->inputLine()->installEventFilter(_bufferWidget);
 }
 
 void MainWin::setupTopicWidget() {
@@ -399,7 +402,7 @@ void MainWin::setupStatusBar() {
   _viewMenu->addSeparator();
   QAction *showStatusbar = QtUi::actionCollection("General")->action("ToggleStatusBar");
 
-  UiSettings uiSettings;
+  QtUiSettings uiSettings;
 
   bool enabled = uiSettings.value("ShowStatusBar", QVariant(true)).toBool();
   showStatusbar->setChecked(enabled);
@@ -407,10 +410,13 @@ void MainWin::setupStatusBar() {
 
   connect(showStatusbar, SIGNAL(toggled(bool)), statusBar(), SLOT(setVisible(bool)));
   connect(showStatusbar, SIGNAL(toggled(bool)), this, SLOT(saveStatusBarStatus(bool)));
+
+  connect(Client::backlogManager(), SIGNAL(messagesRequested(const QString &)), this, SLOT(showStatusBarMessage(const QString &)));
+  connect(Client::backlogManager(), SIGNAL(messagesProcessed(const QString &)), this, SLOT(showStatusBarMessage(const QString &)));
 }
 
 void MainWin::saveStatusBarStatus(bool enabled) {
-  UiSettings uiSettings;
+  QtUiSettings uiSettings;
   uiSettings.setValue("ShowStatusBar", enabled);
 }
 
@@ -429,7 +435,7 @@ void MainWin::setupSystray() {
 
   systemTrayIcon()->setContextMenu(systrayMenu);
 
-  UiSettings s;
+  QtUiSettings s;
   if(s.value("UseSystemTrayIcon", QVariant(true)).toBool()) {
     systemTrayIcon()->show();
   }
@@ -444,7 +450,7 @@ void MainWin::setupSystray() {
 void MainWin::changeEvent(QEvent *event) {
   if(event->type() == QEvent::WindowStateChange) {
     if(windowState() & Qt::WindowMinimized) {
-      UiSettings s;
+      QtUiSettings s;
       if(s.value("UseSystemTrayIcon").toBool() && s.value("MinimizeOnMinimize").toBool()) {
         toggleVisibility();
         event->ignore();
@@ -459,8 +465,8 @@ void MainWin::connectedToCore() {
   connect(Client::bufferViewManager(), SIGNAL(bufferViewConfigDeleted(int)), this, SLOT(removeBufferView(int)));
   connect(Client::bufferViewManager(), SIGNAL(initDone()), this, SLOT(loadLayout()));
 
-  Client::backlogManager()->requestInitialBacklog();
   setConnectedState();
+  Client::backlogManager()->requestInitialBacklog();
 }
 
 void MainWin::setConnectedState() {
@@ -578,7 +584,7 @@ void MainWin::showAboutDlg() {
 }
 
 void MainWin::closeEvent(QCloseEvent *event) {
-  UiSettings s;
+  QtUiSettings s;
   if(s.value("UseSystemTrayIcon").toBool() && s.value("MinimizeOnClose").toBool()) {
     toggleVisibility();
     event->ignore();
@@ -741,4 +747,8 @@ void MainWin::saveStateToSessionSettings(SessionSettings & s)
   s.setValue("MainWinSize", size());
   s.setValue("MainWinPos", pos());
   s.setValue("MainWinState", saveState());
+}
+
+void MainWin::showStatusBarMessage(const QString &message) {
+  statusBar()->showMessage(message, 10000);
 }

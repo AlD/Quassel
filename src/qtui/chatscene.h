@@ -39,6 +39,11 @@ class ChatScene : public QGraphicsScene {
   Q_OBJECT
 
 public:
+  enum CutoffMode {
+    CutoffLeft,
+    CutoffRight
+  };
+
   ChatScene(QAbstractItemModel *model, const QString &idString, qreal width, QObject *parent);
   virtual ~ChatScene();
 
@@ -54,9 +59,11 @@ public:
   inline ColumnHandleItem *firstColumnHandle() const { return _firstColHandle; }
   inline ColumnHandleItem *secondColumnHandle() const { return _secondColHandle; }
 
+  inline CutoffMode senderCutoffMode() const { return _cutoffMode; }
+  inline void setSenderCutoffMode(CutoffMode mode) { _cutoffMode = mode; }
+
 public slots:
   void updateForViewport(qreal width, qreal height);
-  //void setWidth(qreal, bool forceReposition = false);
   void setWidth(qreal width);
 
   // these are used by the chatitems to notify the scene and manage selections
@@ -110,6 +117,7 @@ private:
 
   ColumnHandleItem *_firstColHandle, *_secondColHandle;
   qreal _firstColHandlePos, _secondColHandlePos;
+  CutoffMode _cutoffMode;
 
   ChatItem *_selectingItem;
   int _selectionStartCol, _selectionMinCol;
@@ -117,8 +125,6 @@ private:
   int _selectionEnd;
   int _firstSelectionRow, _lastSelectionRow;
   bool _isSelecting;
-
-  int _lastBacklogSize;
 
   struct WebPreview {
     ChatItem *parentItem;

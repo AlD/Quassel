@@ -32,8 +32,14 @@ ClientSettings::~ClientSettings() {
 
 /***********************************************************************************************/
 
-CoreAccountSettings::CoreAccountSettings(const QString &subgroup) : ClientSettings("CoreAccounts") {
-  _subgroup = subgroup;
+CoreAccountSettings::CoreAccountSettings(const QString &subgroup)
+  : ClientSettings("CoreAccounts"),
+    _subgroup(subgroup)
+{
+}
+
+void CoreAccountSettings::notify(const QString &key, QObject *receiver, const char *slot) {
+  ClientSettings::notify(QString("%1/%2/%3").arg(Client::currentCoreAccount().toInt()).arg(_subgroup).arg(key), receiver, slot);
 }
 
 QList<AccountId> CoreAccountSettings::knownAccounts() {
@@ -112,17 +118,25 @@ NotificationSettings::NotificationSettings() : ClientSettings("Notification") {
 }
 
 void NotificationSettings::setHighlightList(const QVariantList &highlightList) {
-  setLocalValue("highlightList", highlightList);
+  setLocalValue("Highlights/CustomList", highlightList);
 }
 
 QVariantList NotificationSettings::highlightList() {
-  return localValue("highlightList").toList();
+  return localValue("Highlights/CustomList").toList();
 }
 
 void NotificationSettings::setHighlightNick(NotificationSettings::HighlightNickType highlightNickType) {
-  setLocalValue("highlightNick", highlightNickType);
+  setLocalValue("Highlights/HighlightNick", highlightNickType);
 }
 
 NotificationSettings::HighlightNickType NotificationSettings::highlightNick() {
-  return (NotificationSettings::HighlightNickType) localValue("highlightNick", CurrentNick).toInt();
+  return (NotificationSettings::HighlightNickType) localValue("Highlights/HighlightNick", CurrentNick).toInt();
+}
+
+void NotificationSettings::setNicksCaseSensitive(bool cs) {
+  setLocalValue("Highlights/NicksCaseSensitive", cs);
+}
+
+bool NotificationSettings::nicksCaseSensitive() {
+  return localValue("Highlights/NicksCaseSensitive", false).toBool();
 }

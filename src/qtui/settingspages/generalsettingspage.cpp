@@ -21,7 +21,8 @@
 #include "generalsettingspage.h"
 
 #include "qtui.h"
-#include "uisettings.h"
+#include "qtuisettings.h"
+#include "backlogsettings.h"
 #include "buffersettings.h"
 
 GeneralSettingsPage::GeneralSettingsPage(QWidget *parent)
@@ -50,6 +51,8 @@ GeneralSettingsPage::GeneralSettingsPage(QWidget *parent)
   connect(ui.displayTopicInTooltip, SIGNAL(clicked(bool)), this, SLOT(widgetHasChanged()));
   connect(ui.mouseWheelChangesBuffers, SIGNAL(clicked(bool)), this, SLOT(widgetHasChanged()));
   connect(ui.completionSuffix, SIGNAL(textEdited(const QString&)), this, SLOT(widgetHasChanged()));
+  connect(ui.fixedBacklogAmount, SIGNAL(valueChanged(int)), this, SLOT(widgetHasChanged()));
+  connect(ui.dynamicBacklogAmount, SIGNAL(valueChanged(int)), this, SLOT(widgetHasChanged()));
 }
 
 bool GeneralSettingsPage::hasDefaults() const {
@@ -76,15 +79,16 @@ void GeneralSettingsPage::defaults() {
 
 void GeneralSettingsPage::load() {
   // uiSettings:
+  QtUiSettings qtuiSettings;
   UiSettings uiSettings;
-  settings["UseSystemTrayIcon"] = uiSettings.value("UseSystemTrayIcon", QVariant(true));
+  settings["UseSystemTrayIcon"] = qtuiSettings.value("UseSystemTrayIcon", QVariant(true));
   ui.useSystemTrayIcon->setChecked(settings["UseSystemTrayIcon"].toBool());
   ui.showSystemTrayIcon->setChecked(settings["UseSystemTrayIcon"].toBool());
 
-  settings["MinimizeOnMinimize"] = uiSettings.value("MinimizeOnMinimize", QVariant(false));
+  settings["MinimizeOnMinimize"] = qtuiSettings.value("MinimizeOnMinimize", QVariant(false));
   ui.minimizeOnMinimize->setChecked(settings["MinimizeOnMinimize"].toBool());
 
-  settings["MinimizeOnClose"] = uiSettings.value("MinimizeOnClose", QVariant(false));
+  settings["MinimizeOnClose"] = qtuiSettings.value("MinimizeOnClose", QVariant(false));
   ui.minimizeOnClose->setChecked(settings["MinimizeOnClose"].toBool());
 
   settings["MouseWheelChangesBuffers"] = uiSettings.value("MouseWheelChangesBuffers", QVariant(true));
@@ -108,14 +112,24 @@ void GeneralSettingsPage::load() {
   settings["CompletionSuffix"] = uiSettings.value("CompletionSuffix", QString(": "));
   ui.completionSuffix->setText(settings["CompletionSuffix"].toString());
 
+  // backlogSettings:
+  BacklogSettings backlogSettings;
+  settings["FixedBacklogAmount"] = backlogSettings.fixedBacklogAmount();
+  ui.fixedBacklogAmount->setValue(backlogSettings.fixedBacklogAmount());
+
+  settings["DynamicBacklogAmount"] = backlogSettings.dynamicBacklogAmount();
+  ui.dynamicBacklogAmount->setValue(backlogSettings.dynamicBacklogAmount());
+
   setChangedState(false);
 }
 
 void GeneralSettingsPage::save() {
+  QtUiSettings qtuiSettings;
+  qtuiSettings.setValue("UseSystemTrayIcon", ui.useSystemTrayIcon->isChecked());
+  qtuiSettings.setValue("MinimizeOnMinimize",  ui.minimizeOnMinimize->isChecked());
+  qtuiSettings.setValue("MinimizeOnClose", ui.minimizeOnClose->isChecked());
+
   UiSettings uiSettings;
-  uiSettings.setValue("UseSystemTrayIcon", ui.useSystemTrayIcon->isChecked());
-  uiSettings.setValue("MinimizeOnMinimize",  ui.minimizeOnMinimize->isChecked());
-  uiSettings.setValue("MinimizeOnClose", ui.minimizeOnClose->isChecked());
   uiSettings.setValue("MouseWheelChangesBuffers", ui.mouseWheelChangesBuffers->isChecked());
 
   BufferSettings bufferSettings;
@@ -127,6 +141,11 @@ void GeneralSettingsPage::save() {
 
   uiSettings.setValue("CompletionSuffix", ui.completionSuffix->text());
 
+
+  BacklogSettings backlogSettings;
+  backlogSettings.setFixedBacklogAmount(ui.fixedBacklogAmount->value());
+  backlogSettings.setDynamicBacklogAmount(ui.dynamicBacklogAmount->value());
+  
   load();
   setChangedState(false);
 }
@@ -149,6 +168,9 @@ bool GeneralSettingsPage::testHasChanged() {
   if(settings["MouseWheelChangesBuffers"].toBool() != ui.mouseWheelChangesBuffers->isChecked()) return true;
 
   if(settings["CompletionSuffix"].toString() != ui.completionSuffix->text()) return true;
+
+  if(settings["FixedBacklogAmount"].toInt() != ui.fixedBacklogAmount->value()) return true;
+  if(settings["DynamicBacklogAmount"].toInt() != ui.dynamicBacklogAmount->value()) return true;
 
   return false;
 }

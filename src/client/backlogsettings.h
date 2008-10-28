@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-08 by the Quassel IRC Team                         *
+ *   Copyright (C) 2005-08 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,25 +18,22 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef BACKLOGMANAGER_H
-#define BACKLOGMANAGER_H
+#ifndef BACKLOGSETTINGS_H
+#define BACKLOGSETTINGS_H
 
-#include "syncableobject.h"
-#include "types.h"
+#include "clientsettings.h"
 
-class BacklogManager : public SyncableObject {
-  Q_OBJECT
-
+class BacklogSettings : public ClientSettings {
 public:
-  BacklogManager(QObject *parent = 0) : SyncableObject(parent) {}
+  BacklogSettings() : ClientSettings("Backlog") {}
+  inline int requesterType() { return localValue("RequesterType", 0).toInt(); }
+  inline void setRequesterType(int requesterType) { setLocalValue("RequesterType", requesterType); }
 
-public slots:
-  virtual QVariantList requestBacklog(BufferId bufferId, int lastMsgs = -1, int offset = -1);
-  inline virtual void receiveBacklog(BufferId, int, int, QVariantList) {};
+  inline int dynamicBacklogAmount() { return localValue("DynamicBacklogAmount", 200).toInt(); }
+  inline void setDynamicBacklogAmount(int amount) { return setLocalValue("DynamicBacklogAmount", amount); }
 
-signals:
-  void backlogRequested(BufferId, int, int);
-
+  inline int fixedBacklogAmount() { return localValue("FixedBacklogAmount", 500).toInt(); }
+  inline void setFixedBacklogAmount(int amount) { return setLocalValue("FixedBacklogAmount", amount); }
 };
 
-#endif // BACKLOGMANAGER_H
+#endif //BACKLOGSETTINGS_H

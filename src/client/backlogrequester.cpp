@@ -20,26 +20,39 @@
 
 #include "backlogrequester.h"
 
-#include <QDebug>
+#include <QObject>
 
-#include "backlogmanager.h"
+#include "backlogsettings.h"
+#include "clientbacklogmanager.h"
 
-BacklogRequester::BacklogRequester(BacklogManager *backlogManager)
-  : backlogManager(backlogManager)
+BacklogRequester::BacklogRequester(bool buffering, ClientBacklogManager *backlogManager)
+  : backlogManager(backlogManager),
+    _isBuffering(buffering)
 {
   Q_ASSERT(backlogManager);
 }
 
-// FIXED BACKLOG REQUESTER
-const int FixedBacklogRequester::backlogCount(500);
+bool BacklogRequester::buffer(BufferId bufferId, const MessageList &messages) {
+  _bufferedMessages << messages;
+  _buffersWaiting.remove(bufferId);
+  return !_buffersWaiting.isEmpty();
+}
 
-FixedBacklogRequester::FixedBacklogRequester(BacklogManager *backlogManager)
-  : BacklogRequester(backlogManager)
+// ========================================
+//  FIXED BACKLOG REQUESTER
+// ========================================
+FixedBacklogRequester::FixedBacklogRequester(ClientBacklogManager *backlogManager)
+  : BacklogRequester(true, backlogManager)
 {
+  BacklogSettings backlogSettings;
+  _backlogCount = backlogSettings.fixedBacklogAmount();
 }
 
 void FixedBacklogRequester::requestBacklog() {
-  foreach(BufferId bufferId, allBufferIds()) {
-    backlogManager->requestBacklog(bufferId, backlogCount, -1);
+  QList<BufferId> allBuffers = allBufferIds();
+  setWaitingBuffers(allBuffers);
+  backlogManager->emitMessagesRequested(QObject::tr("Requesting a total of up to %1 backlog messages for %2 buffers").arg(_backlogCount * allBuffers.count()).arg(allBuffers.count()));
+  foreach(BufferId bufferId, allBuffers) {
+    backlogManager->requestBacklog(bufferId, _backlogCount, -1);
   }
 }
