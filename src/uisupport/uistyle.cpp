@@ -424,7 +424,7 @@ QString UiStyle::StyledMessage::decoratedSender() const {
     case Message::Action:
       return tr("-*-"); break;
     case Message::Raw:
-      return tr("%Dz>"); break;
+      return tr(">"); break;
     default:
       return tr("%1").arg(_sender);
   }
