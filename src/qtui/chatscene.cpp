@@ -75,6 +75,7 @@ ChatScene::ChatScene(QAbstractItemModel *model, const QString &idString, qreal w
   addItem(_secondColHandle);
   _secondColHandle->setXPos(_secondColHandlePos);
   connect(_secondColHandle, SIGNAL(positionChanged(qreal)), this, SLOT(secondHandlePositionChanged(qreal)));
+
   connect(this, SIGNAL(sceneRectChanged(const QRectF &)), _secondColHandle, SLOT(sceneRectChanged(const QRectF &)));
 
   setHandleXLimits();
@@ -579,13 +580,6 @@ void ChatScene::updateSceneRect(const QRectF &rect) {
   _sceneRect = rect;
   setSceneRect(rect);
   update();
-}
-
-void ChatScene::customEvent(QEvent *event) {
-  switch(event->type()) {
-  default:
-    return;
-  }
 }
 
 void ChatScene::loadWebPreview(ChatItem *parentItem, const QString &url, const QRectF &urlRect) {
