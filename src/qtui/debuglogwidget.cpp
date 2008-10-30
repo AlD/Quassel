@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-08 by the Quassel IRC Team                         *
+ *   Copyright (C) 2005-08 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,33 +18,21 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef QTUIAPPLICATION_H_
-#define QTUIAPPLICATION_H_
+#include "debuglogwidget.h"
 
-#include <QApplication>
-#include <QSessionManager>
+#include "client.h"
 
-#include "quassel.h"
-#include "sessionsettings.h"
+DebugLogWidget::DebugLogWidget(QWidget *parent)
+  : QWidget(parent)
+{
+  ui.setupUi(this);
+  setAttribute(Qt::WA_DeleteOnClose, true);
+  logUpdated();
+  connect(Client::instance(), SIGNAL(logUpdated()), this, SLOT(logUpdated()));
+  ui.textEdit->setReadOnly(true);
+}
 
-class QtUi;
+void DebugLogWidget::logUpdated() {
+  ui.textEdit->setPlainText(Client::debugLog());
+}
 
-class QtUiApplication : public QApplication, public Quassel {
-  Q_OBJECT
-
- public:
-  QtUiApplication(int &, char **);
-  ~QtUiApplication();
-  virtual bool init();
-
-  void resumeSessionIfPossible();
-  virtual void saveState(QSessionManager & manager);
-
-signals:
-  void saveStateToSession(const QString &sessionId);
-  void saveStateToSessionSettings(SessionSettings &s); // FIXME refs in signals won't probably work
-  void resumeFromSession(const QString sessionId);
-  void resumeFromSessionSettings(SessionSettings &s);
-};
-
-#endif

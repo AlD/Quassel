@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-08 by the Quassel IRC Team                         *
+ *   Copyright (C) 2005-08 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,33 +18,22 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef QTUIAPPLICATION_H_
-#define QTUIAPPLICATION_H_
+#ifndef DEBUGLOGWIDGET_H
+#define DEBUGLOGWIDGET_H
 
-#include <QApplication>
-#include <QSessionManager>
+#include "ui_debuglogwidget.h"
 
-#include "quassel.h"
-#include "sessionsettings.h"
-
-class QtUi;
-
-class QtUiApplication : public QApplication, public Quassel {
+class DebugLogWidget : public QWidget {
   Q_OBJECT
 
- public:
-  QtUiApplication(int &, char **);
-  ~QtUiApplication();
-  virtual bool init();
+public:
+  DebugLogWidget(QWidget *parent = 0);
 
-  void resumeSessionIfPossible();
-  virtual void saveState(QSessionManager & manager);
+private slots:
+  void logUpdated();
 
-signals:
-  void saveStateToSession(const QString &sessionId);
-  void saveStateToSessionSettings(SessionSettings &s); // FIXME refs in signals won't probably work
-  void resumeFromSession(const QString sessionId);
-  void resumeFromSessionSettings(SessionSettings &s);
+private:
+  Ui::DebugLogWidget ui;
 };
 
-#endif
+#endif //DEBUGLOGWIDGET_H
