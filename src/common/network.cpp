@@ -51,7 +51,8 @@ Network::Network(const NetworkId &networkid, QObject *parent)
     _unlimitedReconnectRetries(false),
     _codecForServer(0),
     _codecForEncoding(0),
-    _codecForDecoding(0)
+    _codecForDecoding(0),
+    _autoAwayActive(false)
 {
   setObjectName(QString::number(networkid.toInt()));
 }
@@ -255,7 +256,7 @@ IrcUser *Network::ircUser(QString nickname) const {
 
 IrcChannel *Network::newIrcChannel(const QString &channelname) {
   if(!_ircChannels.contains(channelname.toLower())) {
-    IrcChannel *channel = new IrcChannel(channelname, this);
+    IrcChannel *channel = ircChannelFactory(channelname);
 
     if(proxy())
       proxy()->synchronize(channel);
@@ -586,7 +587,7 @@ void Network::initSetIrcUsersAndChannels(const QVariantMap &usersAndChannels) {
 
   while(channelIter != channelIterEnd) {
     channelName = channelIter.key();
-    ircChannel = new IrcChannel(channelName, this);
+    ircChannel = ircChannelFactory(channelName);
     ircChannel->fromVariantMap(channelIter.value().toMap());
     ircChannel->setInitialized();
     proxy()->synchronize(ircChannel);

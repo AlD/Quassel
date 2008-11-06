@@ -52,6 +52,8 @@ public:
   void clearLayout();
 
   virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+  enum { Type = ChatScene::ChatItemType };
+  virtual inline int type() const { return Type; }
 
   QVariant data(int role) const;
 
@@ -126,6 +128,8 @@ ChatItemPrivate *ChatItem::newPrivateData() { return new ChatItemPrivate(createL
 class TimestampChatItem : public ChatItem {
 public:
   TimestampChatItem(const qreal &width, const qreal &height, QGraphicsItem *parent) : ChatItem(width, height, QPointF(0, 0), parent) {}
+  enum { Type = ChatScene::TimestampChatItemType };
+  virtual inline int type() const { return Type; }
   virtual inline ChatLineModel::ColumnType column() const { return ChatLineModel::TimestampColumn; }
 };
 
@@ -140,6 +144,8 @@ public:
 
 protected:
   virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+  enum { Type = ChatScene::SenderChatItemType };
+  virtual inline int type() const { return Type; }
   virtual inline ChatItemPrivate *newPrivateData() { return new ChatItemPrivate(createLayout(QTextOption::ManualWrap, Qt::AlignRight)); }
 };
 
@@ -153,6 +159,9 @@ class ContentsChatItem : public ChatItem {
 public:
   ContentsChatItem(const qreal &width, const QPointF &pos, QGraphicsItem *parent);
 
+  enum { Type = ChatScene::ContentsChatItemType };
+  virtual inline int type() const { return Type; }
+
   inline ChatLineModel::ColumnType column() const { return ChatLineModel::ContentsColumn; }
   inline QFontMetricsF *fontMetrics() const { return _fontMetrics; }
 
@@ -162,6 +171,9 @@ protected:
   virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
   virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
   virtual void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
+  virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+
+
 
   virtual QVector<QTextLayout::FormatRange> additionalFormats() const;
 

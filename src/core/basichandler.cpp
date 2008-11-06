@@ -78,7 +78,7 @@ void BasicHandler::handle(const QString &member, QGenericArgument val0,
 
   if(!handlerHash().contains(handler)) {
     if(defaultHandler == -1) {
-      quWarning() << QString("No such Handler: %1::handle%2").arg(metaObject()->className(), handler);
+      qWarning() << QString("No such Handler: %1::handle%2").arg(metaObject()->className(), handler);
       return;
     } else {
       void *param[] = {0, Q_ARG(QString, member).data(), val0.data(), val1.data(), val2.data(), val3.data(), val4.data(),
@@ -175,6 +175,9 @@ void BasicHandler::putCmd(const QString &cmd, const QByteArray &param, const QBy
 }
 
 void BasicHandler::displayMsg(Message::Type msgType, QString target, QString text, QString sender, Message::Flags flags) {
+  if(!target.isEmpty() && network()->prefixes().contains(target[0]))
+    target = target.mid(1);
+
   IrcChannel *channel = network()->ircChannel(target);
   if(!channel && (target.startsWith('$') || target.startsWith('#')))
     target = nickFromMask(sender);

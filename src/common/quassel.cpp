@@ -34,7 +34,7 @@
 #include "types.h"
 #include "syncableobject.h"
 
-#if defined(HAVE_EXECINFO) and not defined(Q_OS_MAC)
+#if defined(HAVE_EXECINFO) && !defined(Q_OS_MAC)
 #  define BUILD_CRASHHANDLER
 #  include <execinfo.h>
 #  include <dlfcn.h>
@@ -46,6 +46,7 @@ CliParser *Quassel::_cliParser = 0;
 Quassel::RunMode Quassel::_runMode;
 bool Quassel::_initialized = false;
 bool Quassel::DEBUG = false;
+QString Quassel::_coreDumpFileName;
 
 Quassel::Quassel() {
   Q_INIT_RESOURCE(i18n);
@@ -58,7 +59,7 @@ Quassel::Quassel() {
   signal(SIGABRT, handleSignal);
   signal(SIGBUS, handleSignal);
   signal(SIGSEGV, handleSignal);
-#endif // #if defined(HAVE_EXECINFO) and not defined(Q_OS_MAC)
+#endif // #if defined(HAVE_EXECINFO) && !defined(Q_OS_MAC)
 
   _cliParser = new CliParser();
 
@@ -224,15 +225,33 @@ void Quassel::handleSignal(int sig) {
   }
 }
 
+void Quassel::logFatalMessage(const char *msg) {
+#ifndef Q_OS_MAC
+  QFile dumpFile(coreDumpFileName());
+  dumpFile.open(QIODevice::WriteOnly);
+  QTextStream dumpStream(&dumpFile);
+#else
+  QTextStream dumpStream(stderr);
+#endif
+  
+  dumpStream << "Fatal: " << msg << '\n';
+  dumpStream.flush();
+
+  qInstallMsgHandler(0);
+  abort();
+}
+
 void Quassel::handleCrash() {
 #ifdef BUILD_CRASHHANDLER
   void* callstack[128];
   int i, frames = backtrace(callstack, 128);
 
-  QFile dumpFile(QString("Quassel-Crash-%1").arg(QDateTime::currentDateTime().toString("yyyyMMdd-hhmm.log")));
-  dumpFile.open(QIODevice::WriteOnly);
+  QFile dumpFile(coreDumpFileName());
+  dumpFile.open(QIODevice::Append);
   QTextStream dumpStream(&dumpFile);
 
+  dumpStream << "Quassel IRC: " << _buildInfo.baseVersion << ' ' << _buildInfo.commitHash << '\n';
+    
   for (i = 0; i < frames; ++i) {
     Dl_info info;
     dladdr (callstack[i], &info);
@@ -286,4 +305,11 @@ void Quassel::handleCrash() {
   dumpFile.close();
   exit(27);
 #endif /* BUILD_CRASHHANDLER */
+}
+
+const QString &Quassel::coreDumpFileName() {
+  if(_coreDumpFileName.isEmpty())
+    _coreDumpFileName = QString("Quassel-Crash-%1.log").arg(QDateTime::currentDateTime().toString("yyyyMMdd-hhmm"));
+
+  return _coreDumpFileName;
 }

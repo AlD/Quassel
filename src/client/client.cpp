@@ -35,9 +35,13 @@
 #include "messagemodel.h"
 #include "network.h"
 #include "networkmodel.h"
+#include "quassel.h"
 #include "quasselui.h"
 #include "signalproxy.h"
 #include "util.h"
+
+#include <stdio.h>
+#include <stdlib.h>
 
 QPointer<Client> Client::instanceptr = 0;
 AccountId Client::_currentCoreAccount = 0;
@@ -76,7 +80,8 @@ Client::Client(QObject *parent)
     _messageModel(0),
     _messageProcessor(0),
     _connectedToCore(false),
-    _syncedToCore(false)
+    _syncedToCore(false),
+    _debugLog(&_debugLogBuffer)
 {
   _signalProxy->synchronize(_ircListHelper);
 }
@@ -362,9 +367,9 @@ void Client::recvStatusMsg(QString /*net*/, QString /*msg*/) {
   //recvMessage(net, Message::server("", QString("[STATUS] %1").arg(msg)));
 }
 
-void Client::recvMessage(const Message &msg_) {
-  Message msg = msg_;
-  messageProcessor()->process(msg);
+void Client::recvMessage(const Message &msg) {
+  Message msg_ = msg;
+  messageProcessor()->process(msg_);
 }
 
 void Client::setBufferLastSeenMsg(BufferId id, const MsgId &msgId) {
@@ -402,3 +407,16 @@ void Client::bufferRenamed(BufferId bufferId, const QString &newName) {
     networkModel()->setData(bufferIndex, newName, Qt::DisplayRole);
   }
 }
+
+void Client::logMessage(QtMsgType type, const char *msg) {
+  if(type == QtFatalMsg) {
+    Quassel::logFatalMessage(msg);
+  } else {
+    fprintf(stderr, "%s\n", msg);
+    fflush(stderr);
+    QString msgString = QString("%1\n").arg(msg);
+    instance()->_debugLog << msgString;
+    emit instance()->logUpdated(msgString);
+  }
+}
+

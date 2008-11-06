@@ -34,6 +34,8 @@
 #include "clientbacklogmanager.h"
 #include "coreinfodlg.h"
 #include "coreconnectdlg.h"
+#include "debuglogwidget.h"
+#include "debugmessagemodelfilter.h"
 #include "iconloader.h"
 #include "inputwidget.h"
 #include "inputline.h"
@@ -197,6 +199,10 @@ void MainWin::setupActions() {
                                          qApp, SLOT(aboutQt())));
   coll->addAction("DebugNetworkModel", new Action(SmallIcon("tools-report-bug"), tr("Debug &NetworkModel"), coll,
                                        this, SLOT(on_actionDebugNetworkModel_triggered())));
+  coll->addAction("DebugMessageModel", new Action(SmallIcon("tools-report-bug"), tr("Debug &MessageModel"), coll,
+                                       this, SLOT(on_actionDebugMessageModel_triggered())));
+  coll->addAction("DebugLog", new Action(SmallIcon("tools-report-bug"), tr("Debug &Log"), coll,
+                                       this, SLOT(on_actionDebugLog_triggered())));
 }
 
 void MainWin::setupMenus() {
@@ -231,6 +237,8 @@ void MainWin::setupMenus() {
   _helpMenu->addSeparator();
   _helpDebugMenu = _helpMenu->addMenu(SmallIcon("tools-report-bug"), tr("Debug"));
   _helpDebugMenu->addAction(coll->action("DebugNetworkModel"));
+  _helpDebugMenu->addAction(coll->action("DebugMessageModel"));
+  _helpDebugMenu->addAction(coll->action("DebugLog"));
 }
 
 void MainWin::setupBufferWidget() {
@@ -731,6 +739,22 @@ void MainWin::on_actionDebugNetworkModel_triggered() {
   view->setColumnWidth(2, 80);
   view->resize(610, 300);
   view->show();
+}
+
+void MainWin::on_actionDebugMessageModel_triggered() {
+  QTableView *view = new QTableView(0);
+  DebugMessageModelFilter *filter = new DebugMessageModelFilter(view);
+  filter->setSourceModel(Client::messageModel());
+  view->setModel(filter);
+  view->setAttribute(Qt::WA_DeleteOnClose, true);
+  view->verticalHeader()->hide();
+  view->horizontalHeader()->setStretchLastSection(true);
+  view->show();
+}
+
+void MainWin::on_actionDebugLog_triggered() {
+  DebugLogWidget *logWidget = new DebugLogWidget(0);
+  logWidget->show();
 }
 
 void MainWin::saveStateToSession(const QString &sessionId) {

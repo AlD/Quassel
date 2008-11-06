@@ -18,34 +18,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef CORENETWORK_H
-#define CORENETWORK_H
-
-#include "network.h"
 #include "coreircchannel.h"
 
-class CoreSession;
-
-class CoreNetwork : public Network {
-  Q_OBJECT
-
-public:
-  CoreNetwork(const NetworkId &networkid, CoreSession *session);
-
-  inline virtual const QMetaObject *syncMetaObject() const { return &Network::staticMetaObject; }
-
-  inline CoreSession *coreSession() const { return _coreSession; }
-
-public slots:
-  virtual void requestConnect() const;
-  virtual void requestDisconnect() const;
-  virtual void requestSetNetworkInfo(const NetworkInfo &info);
-
-protected:
-  inline virtual IrcChannel *ircChannelFactory(const QString &channelname) { return new CoreIrcChannel(channelname, this); }
-
-private:
-  CoreSession *_coreSession;
-};
-
-#endif //CORENETWORK_H
+CoreIrcChannel::CoreIrcChannel(const QString &channelname, Network *network)
+  : IrcChannel(channelname, network),
+    _receivedWelcomeMsg(false)
+{
+}

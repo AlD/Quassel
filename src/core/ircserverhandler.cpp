@@ -29,7 +29,7 @@
 #include "ctcphandler.h"
 
 #include "ircuser.h"
-#include "ircchannel.h"
+#include "coreircchannel.h"
 #include "logger.h"
 
 #include <QDebug>
@@ -41,14 +41,13 @@ IrcServerHandler::IrcServerHandler(NetworkConnection *parent)
 }
 
 IrcServerHandler::~IrcServerHandler() {
-
 }
 
 /*! Handle a raw message string sent by the server. We try to find a suitable handler, otherwise we call a default handler. */
 void IrcServerHandler::handleServerMsg(QByteArray msg) {
   try {
     if(msg.isEmpty()) {
-      quWarning() << "Received empty string from server!";
+      qWarning() << "Received empty string from server!";
       return;
     }
 
@@ -68,7 +67,7 @@ void IrcServerHandler::handleServerMsg(QByteArray msg) {
     QList<QByteArray> params = msg.split(' ');
     if(!trailing.isEmpty()) params << trailing;
     if(params.count() < 1) {
-      quWarning() << "Received invalid string from server!";
+      qWarning() << "Received invalid string from server!";
       return;
     }
 
@@ -79,7 +78,7 @@ void IrcServerHandler::handleServerMsg(QByteArray msg) {
       foo.remove(0, 1);
       prefix = foo;
       if(params.count() < 1) {
-        quWarning() << "Received invalid string from server!";
+        qWarning() << "Received invalid string from server!";
         return;
       }
       foo = serverDecode(params.takeFirst());
@@ -92,7 +91,7 @@ void IrcServerHandler::handleServerMsg(QByteArray msg) {
     uint num = cmd.toUInt();
     if(num > 0) {
       if(params.count() == 0) {
-        quWarning() << "Message received from server violates RFC and is ignored!";
+        qWarning() << "Message received from server violates RFC and is ignored!";
         return;
       }
       params.removeFirst();
@@ -244,7 +243,7 @@ void IrcServerHandler::handleMode(const QString &prefix, const QList<QByteArray>
 	  else
 	    channel->removeUserMode(ircUser, QString(modes[c]));
 	} else {
-	  quWarning() << "Received MODE with too few parameters:" << serverDecode(params);
+	  qWarning() << "Received MODE with too few parameters:" << serverDecode(params);
 	}
 	paramOffset++;
       } else {
@@ -255,7 +254,7 @@ void IrcServerHandler::handleMode(const QString &prefix, const QList<QByteArray>
 	    if(paramOffset < params.count()) {
 	      value = params[paramOffset];
 	    } else {
-	      quWarning() << "Received MODE with too few parameters:" << serverDecode(params);
+	      qWarning() << "Received MODE with too few parameters:" << serverDecode(params);
 	    }
 	    paramOffset++;
 	}
@@ -304,7 +303,7 @@ void IrcServerHandler::handleNick(const QString &prefix, const QList<QByteArray>
 
   IrcUser *ircuser = network()->updateNickFromMask(prefix);
   if(!ircuser) {
-    quWarning() << "IrcServerHandler::handleNick(): Unknown IrcUser!";
+    qWarning() << "IrcServerHandler::handleNick(): Unknown IrcUser!";
     return;
   }
   QString newnick = serverDecode(params[0]);
@@ -326,10 +325,32 @@ void IrcServerHandler::handleNotice(const QString &prefix, const QList<QByteArra
     return;
 
   QString target = serverDecode(params[0]);
-  if(prefix.isEmpty() || target == "AUTH")
+
+  // special treatment for welcome messages like:
+  // :ChanServ!ChanServ@services. NOTICE egst :[#apache] Welcome, this is #apache. Please read the in-channel topic message. This channel is being logged by IRSeekBot. If you have any question please see http://blog.freenode.net/?p=68
+  if(!network()->isChannelName(target)) {
+    QString msg = serverDecode(params[1]);
+    QRegExp welcomeRegExp("^\\[([^\\]]+)\\] ");
+    if(welcomeRegExp.indexIn(msg) != -1) {
+      QString channelname = welcomeRegExp.cap(1);
+      msg = msg.mid(welcomeRegExp.matchedLength());
+      CoreIrcChannel *chan = static_cast<CoreIrcChannel *>(network()->ircChannel(channelname)); // we only have CoreIrcChannels in the core, so this cast is safe
+      if(chan && !chan->receivedWelcomeMsg()) {
+	chan->setReceivedWelcomeMsg();
+	emit displayMsg(Message::Notice, BufferInfo::ChannelBuffer, channelname, msg, prefix);
+	return;
+      }
+    }
+  }
+
+  if(prefix.isEmpty() || target == "AUTH") {
     target = "";
-  else if(!network()->isChannelName(target))
-    target = nickFromMask(prefix);
+  } else {
+    if(!target.isEmpty() && network()->prefixes().contains(target[0]))
+      target = target.mid(1);
+    if(!network()->isChannelName(target))
+      target = nickFromMask(prefix);
+  }
 
   networkConnection()->ctcpHandler()->parse(Message::Notice, prefix, target, params[1]);
 }
@@ -341,7 +362,7 @@ void IrcServerHandler::handlePart(const QString &prefix, const QList<QByteArray>
   IrcUser *ircuser = network()->updateNickFromMask(prefix);
   QString channel = serverDecode(params[0]);
   if(!ircuser) {
-    quWarning() << "IrcServerHandler::handlePart(): Unknown IrcUser!";
+    qWarning() << "IrcServerHandler::handlePart(): Unknown IrcUser!";
     return;
   }
 
@@ -383,12 +404,12 @@ void IrcServerHandler::handlePrivmsg(const QString &prefix, const QList<QByteArr
 
   IrcUser *ircuser = network()->updateNickFromMask(prefix);
   if(!ircuser) {
-    quWarning() << "IrcServerHandler::handlePrivmsg(): Unknown IrcUser!";
+    qWarning() << "IrcServerHandler::handlePrivmsg(): Unknown IrcUser!";
     return;
   }
 
   if(params.isEmpty()) {
-    quWarning() << "IrcServerHandler::handlePrivmsg(): received PRIVMSG without target or message from:" << prefix;
+    qWarning() << "IrcServerHandler::handlePrivmsg(): received PRIVMSG without target or message from:" << prefix;
     return;
   }
      
@@ -398,9 +419,8 @@ void IrcServerHandler::handlePrivmsg(const QString &prefix, const QList<QByteArr
     ? QByteArray("")
     : params[1];
 
-  // are we the target?
-  if(network()->isMyNick(target))
-    target = nickFromMask(ircuser->nick());
+  if(!network()->isChannelName(target))
+    target = nickFromMask(prefix);
 
   // it's possible to pack multiple privmsgs into one param using ctcp
   // - > we let the ctcpHandler do the work
@@ -569,8 +589,12 @@ void IrcServerHandler::handle305(const QString &prefix, const QList<QByteArray> 
   if(me)
     me->setAway(false);
 
-  if(!params.isEmpty())
-    emit displayMsg(Message::Server, BufferInfo::StatusBuffer, "", serverDecode(params[0]));
+  if(!network()->autoAwayActive()) {
+    if(!params.isEmpty())
+      emit displayMsg(Message::Server, BufferInfo::StatusBuffer, "", serverDecode(params[0]));
+  } else {
+    network()->setAutoAwayActive(false);
+  }
 }
 
 // 306  RPL_NOWAWAY
@@ -581,7 +605,7 @@ void IrcServerHandler::handle306(const QString &prefix, const QList<QByteArray> 
   if(me)
     me->setAway(true);
 
-  if(!params.isEmpty())
+  if(!params.isEmpty() && !network()->autoAwayActive())
     emit displayMsg(Message::Server, BufferInfo::StatusBuffer, "", serverDecode(params[0]));
 }
 
@@ -879,7 +903,7 @@ void IrcServerHandler::handle353(const QString &prefix, const QList<QByteArray> 
 
   IrcChannel *channel = network()->ircChannel(channelname);
   if(!channel) {
-    quWarning() << "IrcServerHandler::handle353(): received unknown target channel:" << channelname;
+    qWarning() << "IrcServerHandler::handle353(): received unknown target channel:" << channelname;
     return;
   }
 
@@ -963,7 +987,7 @@ void IrcServerHandler::tryNextNick(const QString &errnick) {
 
 bool IrcServerHandler::checkParamCount(const QString &methodName, const QList<QByteArray> &params, int minParams) {
   if(params.count() < minParams) {
-    quWarning() << qPrintable(methodName) << "requires" << minParams << "parameters but received only" << params.count() << serverDecode(params);
+    qWarning() << qPrintable(methodName) << "requires" << minParams << "parameters but received only" << params.count() << serverDecode(params);
     return false;
   } else {
     return true;

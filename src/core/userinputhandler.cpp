@@ -77,6 +77,14 @@ void UserInputHandler::handleAway(const BufferInfo &bufferInfo, const QString &m
 }
 
 void UserInputHandler::handleBan(const BufferInfo &bufferInfo, const QString &msg) {
+  banOrUnban(bufferInfo, msg, true);
+}
+
+void UserInputHandler::handleUnban(const BufferInfo &bufferInfo, const QString &msg) {
+  banOrUnban(bufferInfo, msg, false);
+}
+
+void UserInputHandler::banOrUnban(const BufferInfo &bufferInfo, const QString &msg, bool ban) {
   QString banChannel;
   QString banUser;
 
@@ -109,7 +117,8 @@ void UserInputHandler::handleBan(const BufferInfo &bufferInfo, const QString &ms
     banUser = params.join(" ");
   }
 
-  QString banMsg = QString("MODE %1 +b %2").arg(banChannel, banUser);
+  QString banMode = ban ? "+b" : "-b";
+  QString banMsg = QString("MODE %1 %2 %3").arg(banChannel, banMode, banUser);
   emit putRawLine(serverEncode(banMsg));
 }
 
@@ -242,6 +251,15 @@ void UserInputHandler::handleNick(const BufferInfo &bufferInfo, const QString &m
   emit putCmd("NICK", serverEncode(nick));
 }
 
+void UserInputHandler::handleNotice(const BufferInfo &bufferInfo, const QString &msg) {
+  QString bufferName = msg.section(' ', 0, 0);
+  QString payload = msg.section(' ', 1);
+  QList<QByteArray> params;
+  params << serverEncode(bufferName) << channelEncode(bufferInfo.bufferName(), payload);
+  emit putCmd("NOTICE", params);
+  emit displayMsg(Message::Notice, bufferName, payload, network()->myNick(), Message::Self);
+}
+
 void UserInputHandler::handleOp(const BufferInfo &bufferInfo, const QString &msg) {
   QStringList nicks = msg.split(' ', QString::SkipEmptyParts);
   QString m = "+"; for(int i = 0; i < nicks.count(); i++) m += 'o';
@@ -369,10 +387,30 @@ void UserInputHandler::defaultHandler(QString cmd, const BufferInfo &bufferInfo,
 }
 
 void UserInputHandler::expand(const QString &alias, const BufferInfo &bufferInfo, const QString &msg) {
+  QRegExp paramRangeR("\\$(\\d+)\\.\\.(\\d*)");
   QStringList commands = alias.split(QRegExp("; ?"));
   QStringList params = msg.split(' ');
   for(int i = 0; i < commands.count(); i++) {
     QString command = commands[i];
+
+    // replace ranges like $1..3
+    if(!params.isEmpty()) {
+      int pos;
+      while((pos = paramRangeR.indexIn(command)) != -1) {
+	int start = paramRangeR.cap(1).toInt();
+	bool ok;
+	int end = paramRangeR.cap(2).toInt(&ok);
+	if(!ok) {
+	  end = params.count();
+	}
+	if(end < start)
+	  command = command.replace(pos, paramRangeR.matchedLength(), QString());
+	else {
+	  command = command.replace(pos, paramRangeR.matchedLength(), QStringList(params.mid(start - 1, end - start + 1)).join(" "));
+	}
+      }
+    }
+
     for(int j = params.count(); j > 0; j--) {
       IrcUser *ircUser = network()->ircUser(params[j - 1]);
       command = command.replace(QString("$%1:hostname").arg(j), ircUser ? ircUser->host() : QString("*"));
