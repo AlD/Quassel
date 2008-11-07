@@ -23,6 +23,7 @@
 #include "buffersettings.h"
 #include "client.h"
 #include "messagemodel.h"
+#include "networkmodel.h"
 
 MessageFilter::MessageFilter(QAbstractItemModel *source, QObject *parent)
   : QSortFilterProxyModel(parent),
@@ -63,6 +64,7 @@ void MessageFilter::messageTypeFilterChanged() {
 
   if(_messageTypeFilter != newFilter) {
     _messageTypeFilter = newFilter;
+    _filteredQuitMsgs.clear();
     invalidateFilter();
   }
 }
@@ -83,8 +85,11 @@ QString MessageFilter::idString() const {
 
 bool MessageFilter::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const {
   Q_UNUSED(sourceParent);
-  QModelIndex sourceIdx = sourceModel()->index(sourceRow, 0);
-  if(_messageTypeFilter & sourceModel()->data(sourceIdx, MessageModel::TypeRole).toInt())
+  QModelIndex sourceIdx = sourceModel()->index(sourceRow, 2);
+  Message::Type messageType = (Message::Type)sourceModel()->data(sourceIdx, MessageModel::TypeRole).toInt();
+
+  // apply message type filter
+  if(_messageTypeFilter & messageType)
     return false;
 
   if(_validBuffers.isEmpty())
@@ -94,7 +99,30 @@ bool MessageFilter::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePar
   if(!id.isValid()) {
     return true;
   }
-  return _validBuffers.contains(id);
+
+  if(_validBuffers.contains(id)) {
+    return true;
+  } else {
+    // show Quit messages in Query buffers:
+    if(bufferType() != BufferInfo::QueryBuffer)
+      return false;
+    if(!(messageType & Message::Quit))
+      return false;
+    if(networkId() != Client::networkModel()->networkId(id))
+      return false;
+
+    uint messageTimestamp = sourceModel()->data(sourceIdx, MessageModel::TimestampRole).value<QDateTime>().toTime_t();
+    QString quiter = sourceModel()->data(sourceIdx, Qt::DisplayRole).toString().section(' ', 0, 0, QString::SectionSkipEmpty).toLower();
+    if(quiter != bufferName().toLower())
+      return false;
+
+    if(_filteredQuitMsgs.contains(quiter, messageTimestamp))
+      return false;
+
+    MessageFilter *that = const_cast<MessageFilter *>(this);
+    that->_filteredQuitMsgs.insert(quiter,  messageTimestamp);
+    return true;
+  }
 }
 
 void MessageFilter::requestBacklog() {

@@ -40,6 +40,9 @@
 #include "signalproxy.h"
 #include "util.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+
 QPointer<Client> Client::instanceptr = 0;
 AccountId Client::_currentCoreAccount = 0;
 
@@ -406,22 +409,14 @@ void Client::bufferRenamed(BufferId bufferId, const QString &newName) {
 }
 
 void Client::logMessage(QtMsgType type, const char *msg) {
-  QString prefix;
-  switch (type) {
-  case QtDebugMsg:
-    prefix = "Debug";
-    break;
-  case QtWarningMsg:
-    prefix = "Warning";
-    break;
-  case QtCriticalMsg:
-    prefix = "Critical";
-    break;
-  case QtFatalMsg:
+  fprintf(stderr, "%s\n", msg);
+  fflush(stderr);
+  if(type == QtFatalMsg) {
     Quassel::logFatalMessage(msg);
-    return;
+  } else {
+    QString msgString = QString("%1\n").arg(msg);
+    instance()->_debugLog << msgString;
+    emit instance()->logUpdated(msgString);
   }
-  instance()->_debugLog << prefix << ": " << msg << "\n";
-  emit instance()->logUpdated();
 }
 

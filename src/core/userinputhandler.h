@@ -18,8 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef _USERINPUTHANDLER_H_
-#define _USERINPUTHANDLER_H_
+#ifndef USERINPUTHANDLER_H
+#define USERINPUTHANDLER_H
 
 #include "basichandler.h"
 
@@ -36,6 +36,7 @@ public:
 public slots:
   void handleAway(const BufferInfo &bufferInfo, const QString &text);
   void handleBan(const BufferInfo &bufferInfo, const QString &text);
+  void handleUnban(const BufferInfo &bufferInfo, const QString &text);
   void handleCtcp(const BufferInfo &bufferInfo, const QString &text);
   void handleDeop(const BufferInfo &bufferInfo, const QString &text);
   void handleDevoice(const BufferInfo &bufferInfo, const QString &text);
@@ -48,6 +49,7 @@ public slots:
   void handleMode(const BufferInfo &bufferInfo, const QString &text);
   void handleMsg(const BufferInfo &bufferInfo, const QString &text);
   void handleNick(const BufferInfo &bufferInfo, const QString &text);
+  void handleNotice(const BufferInfo &bufferInfo, const QString &text);
   void handleOper(const BufferInfo &bufferInfo, const QString &text);
   void handleOp(const BufferInfo &bufferInfo, const QString &text);
   void handlePart(const BufferInfo &bufferInfo, const QString &text);
@@ -66,6 +68,7 @@ public slots:
 
 private:
   void expand(const QString &alias, const BufferInfo &bufferInfo, const QString &msg);
+  void banOrUnban(const BufferInfo &bufferInfo, const QString &text, bool ban);
 };
 
 

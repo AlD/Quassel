@@ -26,6 +26,8 @@
 #include <QPainter>
 #include <QPalette>
 #include <QTextLayout>
+#include <QMenu>
+
 
 #include "chatitem.h"
 #include "chatlinemodel.h"
@@ -263,7 +265,7 @@ void ChatItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 void SenderChatItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
   Q_UNUSED(option); Q_UNUSED(widget);
 
-  //painter->setClipRect(boundingRect()); // no idea why QGraphicsItem clipping won't work
+  painter->setClipRect(boundingRect()); // no idea why QGraphicsItem clipping won't work
   qreal layoutWidth = layout()->minimumWidth();
   qreal offset = 0;
   if(chatScene()->senderCutoffMode() == ChatScene::CutoffLeft)
@@ -357,7 +359,7 @@ void ContentsChatItem::doLayout() {
 QList<ContentsChatItem::Clickable> ContentsChatItem::findClickables() const {
   // For matching URLs
   static QString urlEnd("(?:>|[,.;:\"]*\\s|\\b|$)");
-  static QString urlChars("(?:[,.;:]*[\\w\\-~@/?&=+$()!%#])");
+  static QString urlChars("(?:[,.;:]*[\\w\\-~@/?&=+$()!%#*|{}\\[\\]])");
 
   static QRegExp regExp[] = {
     // URL
@@ -455,7 +457,7 @@ void ContentsChatItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
         case Clickable::Url:
 	  if(!str.contains("://"))
 	    str = "http://" + str;
-          QDesktopServices::openUrl(str);
+          QDesktopServices::openUrl(QUrl::fromEncoded(str.toAscii()));
           break;
         case Clickable::Channel:
           // TODO join or whatever...
@@ -508,8 +510,33 @@ void ContentsChatItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event) {
   event->accept();
 }
 
+void ContentsChatItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
+  qint16 idx = posToCursor(event->pos());
+  for(int i = 0; i < privateData()->clickables.count(); i++) {
+    Clickable click = privateData()->clickables.at(i);
+    if(idx >= click.start && idx < click.start + click.length) {
+      if(click.type == Clickable::Url) {
+        QMenu menu;
+        QAction *copyToClipboard = menu.addAction(QObject::tr("Copy to Clipboard"));
+        QAction *selected = menu.exec(event->screenPos());
+        if(selected == copyToClipboard) {
+          QString url = data(ChatLineModel::DisplayRole).toString().mid(click.start, click.length);
+#   ifdef Q_WS_X11
+          QApplication::clipboard()->setText(url, QClipboard::Selection);
+#   endif
+//# else
+          QApplication::clipboard()->setText(url);
+//# endif
+        }
+      }
+    }
+  }
+}
+
 void ContentsChatItem::showWebPreview(const Clickable &click) {
-#ifdef HAVE_WEBKIT
+#ifndef HAVE_WEBKIT
+  Q_UNUSED(click);
+#else
   QTextLine line = layout()->lineForTextPosition(click.start);
   qreal x = line.cursorToX(click.start);
   qreal width = line.cursorToX(click.start + click.length) - x;

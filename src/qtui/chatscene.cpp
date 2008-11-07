@@ -81,9 +81,9 @@ ChatScene::ChatScene(QAbstractItemModel *model, const QString &idString, qreal w
   setHandleXLimits();
 
   connect(model, SIGNAL(rowsInserted(const QModelIndex &, int, int)),
-	  this, SLOT(rowsInserted(const QModelIndex &, int, int)));
+          this, SLOT(rowsInserted(const QModelIndex &, int, int)));
   connect(model, SIGNAL(rowsAboutToBeRemoved(const QModelIndex &, int, int)),
-	  this, SLOT(rowsAboutToBeRemoved(const QModelIndex &, int, int)));
+          this, SLOT(rowsAboutToBeRemoved(const QModelIndex &, int, int)));
 
   if(model->rowCount() > 0)
     rowsInserted(QModelIndex(), 0, model->rowCount() - 1);
@@ -91,7 +91,8 @@ ChatScene::ChatScene(QAbstractItemModel *model, const QString &idString, qreal w
 #ifdef HAVE_WEBKIT
   webPreview.delayTimer.setSingleShot(true);
   connect(&webPreview.delayTimer, SIGNAL(timeout()), this, SLOT(showWebPreviewEvent()));
-  webPreview.deleteTimer.setInterval(600000);
+  //webPreview.deleteTimer.setInterval(600000);
+  webPreview.deleteTimer.setInterval(10000);
   connect(&webPreview.deleteTimer, SIGNAL(timeout()), this, SLOT(deleteWebPreviewEvent()));
 #endif
 
@@ -103,25 +104,37 @@ ChatScene::~ChatScene() {
 
 void ChatScene::rowsInserted(const QModelIndex &index, int start, int end) {
   Q_UNUSED(index);
-//   QModelIndex sidx = model()->index(start, 0);
-//   QModelIndex eidx = model()->index(end, 0);
-//   qDebug() << "rowsInserted" << start << end << "-" << sidx.data(MessageModel::MsgIdRole).value<MsgId>() << eidx.data(MessageModel::MsgIdRole).value<MsgId>();
+
+
+//   QModelIndex sidx = model()->index(start, 2);
+//   QModelIndex eidx = model()->index(end, 2);
+//   qDebug() << "rowsInserted:";
+//   if(start > 0) {
+//     QModelIndex ssidx = model()->index(start - 1, 2);
+//     qDebug() << "Start--:" << start - 1 << ssidx.data(MessageModel::MsgIdRole).value<MsgId>()
+// 	     << ssidx.data(Qt::DisplayRole).toString();
+//   }
+//   qDebug() << "Start:" << start << sidx.data(MessageModel::MsgIdRole).value<MsgId>()
+// 	   << sidx.data(Qt::DisplayRole).toString();
+//   qDebug() << "End:" << end << eidx.data(MessageModel::MsgIdRole).value<MsgId>()
+// 	   << eidx.data(Qt::DisplayRole).toString();
+//   if(end + 1 < model()->rowCount()) {
+//     QModelIndex eeidx = model()->index(end + 1, 2);
+//     qDebug() << "End++:" << end + 1 << eeidx.data(MessageModel::MsgIdRole).value<MsgId>()
+// 	     << eeidx.data(Qt::DisplayRole).toString();
+//   }
 
   qreal h = 0;
-  qreal y = _sceneRect.y();
+  qreal y = 0;
   qreal width = _sceneRect.width();
-  bool atTop = true;
-  bool atBottom = false;
+  bool atBottom = (start == _lines.count());
+  bool atTop = !atBottom && (start == 0);
   bool moveTop = false;
 
-  if(start > 0 && start < _lines.count()) {
+  if(start < _lines.count()) {
     y = _lines.value(start)->y();
-    atTop = false;
-  }
-  if(start == _lines.count()) {
-    y = _sceneRect.bottom();
-    atTop = false;
-    atBottom = true;
+  } else if(atBottom && !_lines.isEmpty()) {
+    y = _lines.last()->y() + _lines.last()->height();
   }
 
   qreal contentsWidth = width - secondColumnHandle()->sceneRight();
@@ -133,9 +146,9 @@ void ChatScene::rowsInserted(const QModelIndex &index, int start, int end) {
   if(atTop) {
     for(int i = end; i >= start; i--) {
       ChatLine *line = new ChatLine(i, model(),
-				    width,
-				    timestampWidth, senderWidth, contentsWidth,
-				    senderPos, contentsPos);
+                                    width,
+                                    timestampWidth, senderWidth, contentsWidth,
+                                    senderPos, contentsPos);
       h += line->height();
       line->setPos(0, y-h);
       _lines.insert(start, line);
@@ -144,9 +157,9 @@ void ChatScene::rowsInserted(const QModelIndex &index, int start, int end) {
   } else {
     for(int i = start; i <= end; i++) {
       ChatLine *line = new ChatLine(i, model(),
-				    width,
-				    timestampWidth, senderWidth, contentsWidth,
-				    senderPos, contentsPos);
+                                    width,
+                                    timestampWidth, senderWidth, contentsWidth,
+                                    senderPos, contentsPos);
       line->setPos(0, y+h);
       h += line->height();
       _lines.insert(i, line);
@@ -162,17 +175,24 @@ void ChatScene::rowsInserted(const QModelIndex &index, int start, int end) {
   // update selection
   if(_selectionStart >= 0) {
     int offset = end - start + 1;
-    if(_selectionStart >= start) _selectionStart += offset;
-    if(_selectionEnd >= start) _selectionEnd += offset;
-    if(_firstSelectionRow >= start) _firstSelectionRow += offset;
-    if(_lastSelectionRow >= start) _lastSelectionRow += offset;
+    int oldStart = _selectionStart;
+    if(_selectionStart >= start)
+      _selectionStart += offset;
+    if(_selectionEnd >= start) {
+      _selectionEnd += offset;
+      if(_selectionStart == oldStart)
+        for(int i = start; i < start + offset; i++)
+          _lines[i]->setSelected(true);
+    }
+    if(_firstSelectionRow >= start)
+      _firstSelectionRow += offset;
   }
 
   // neither pre- or append means we have to do dirty work: move items...
+  int moveStart = 0;
+  int moveEnd = _lines.count() - 1;
+  qreal offset = h;
   if(!(atTop || atBottom)) {
-    qreal offset = h;
-    int moveStart = 0;
-    int moveEnd = _lines.count() - 1;
     // move top means: moving 0 to end (aka: end + 1)
     // move top means: moving end + 1 to _lines.count() - 1 (aka: _lines.count() - (end + 1)
     if(end + 1 < _lines.count() - end - 1) {
@@ -193,13 +213,31 @@ void ChatScene::rowsInserted(const QModelIndex &index, int start, int end) {
 
   // check if all went right
   Q_ASSERT(start == 0 || _lines.at(start - 1)->pos().y() + _lines.at(start - 1)->height() == _lines.at(start)->pos().y());
+//   if(start != 0) {
+//     if(_lines.at(start - 1)->pos().y() + _lines.at(start - 1)->height() != _lines.at(start)->pos().y()) {
+//       qDebug() << "lines:" << _lines.count() << "start:" << start << "end:" << end;
+//       qDebug() << "line[start - 1]:" << _lines.at(start - 1)->pos().y() << "+" << _lines.at(start - 1)->height() << "=" << _lines.at(start - 1)->pos().y() + _lines.at(start - 1)->height();
+//       qDebug() << "line[start]" << _lines.at(start)->pos().y();
+//       qDebug() << "needed moving:" << !(atTop || atBottom) << moveTop << moveStart << moveEnd << offset;
+//       Q_ASSERT(false)
+//     }
+//   }
   Q_ASSERT(end + 1 == _lines.count() || _lines.at(end)->pos().y() + _lines.at(end)->height() == _lines.at(end + 1)->pos().y());
+//   if(end + 1 < _lines.count()) {
+//     if(_lines.at(end)->pos().y() + _lines.at(end)->height() != _lines.at(end + 1)->pos().y()) {
+//       qDebug() << "lines:" << _lines.count() << "start:" << start << "end:" << end;
+//       qDebug() << "line[end]:" << _lines.at(end)->pos().y() << "+" << _lines.at(end)->height() << "=" << _lines.at(end)->pos().y() + _lines.at(end)->height();
+//       qDebug() << "line[end+1]" << _lines.at(end + 1)->pos().y();
+//       qDebug() << "needed moving:" << !(atTop || atBottom) << moveTop << moveStart << moveEnd << offset;
+//       Q_ASSERT(false);
+//     }
+//   }
 
   if(!atBottom) {
     if(start < _firstLineRow) {
       int prevFirstLineRow = _firstLineRow + (end - start + 1);
       for(int i = end + 1; i < prevFirstLineRow; i++) {
-	_lines.at(i)->show();
+        _lines.at(i)->show();
       }
     }
     // force new search for first proper line
@@ -220,6 +258,13 @@ void ChatScene::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int e
   bool atBottom = (end == _lines.count() - 1);
   bool moveTop = false;
 
+  // clear selection
+  if(_selectingItem) {
+    int row = _selectingItem->row();
+    if(row >= start && row <= end)
+      setSelectingItem(0);
+  }
+
   // remove items from scene
   QList<ChatLine *>::iterator lineIter = _lines.begin() + start;
   int lineCount = start;
@@ -239,13 +284,16 @@ void ChatScene::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int e
   if(_selectionStart >= 0) {
     int offset = end - start + 1;
     if(_selectionStart >= start)
-      _selectionStart -= offset;
+      _selectionStart = qMax(_selectionStart -= offset, start);
     if(_selectionEnd >= start)
       _selectionEnd -= offset;
     if(_firstSelectionRow >= start)
       _firstSelectionRow -= offset;
-    if(_lastSelectionRow >= start)
-      _lastSelectionRow -= offset;
+
+    if(_selectionEnd < _selectionStart) {
+      _isSelecting = false;
+      _selectionStart = -1;
+    }
   }
 
   // neither removing at bottom or top means we have to move items...
@@ -319,6 +367,7 @@ void ChatScene::setWidth(qreal width) {
 
   updateSceneRect(width);
   setHandleXLimits();
+  emit layoutChanged();
 
 //   clock_t endT = clock();
 //   qDebug() << "resized" << _lines.count() << "in" << (float)(endT - startT) / CLOCKS_PER_SEC << "sec";
@@ -386,7 +435,9 @@ void ChatScene::secondHandlePositionChanged(qreal xpos) {
   }
   //setItemIndexMethod(QGraphicsScene::BspTreeIndex);
 
+  updateSceneRect();
   setHandleXLimits();
+  emit layoutChanged();
 
 //   clock_t endT = clock();
 //   qDebug() << "resized" << _lines.count() << "in" << (float)(endT - startT) / CLOCKS_PER_SEC << "sec";
@@ -403,7 +454,7 @@ void ChatScene::setSelectingItem(ChatItem *item) {
 }
 
 void ChatScene::startGlobalSelection(ChatItem *item, const QPointF &itemPos) {
-  _selectionStart = _selectionEnd = _lastSelectionRow = _firstSelectionRow = item->row();
+  _selectionStart = _selectionEnd = _firstSelectionRow = item->row();
   _selectionStartCol = _selectionMinCol = item->column();
   _isSelecting = true;
   _lines[_selectionStart]->setSelected(true, (ChatLineModel::ColumnType)_selectionMinCol);
@@ -450,11 +501,10 @@ void ChatScene::updateSelection(const QPointF &pos) {
 
   _selectionStart = newstart;
   _selectionEnd = newend;
-  _lastSelectionRow = curRow;
 
   if(newstart == newend && minColumn == ChatLineModel::ContentsColumn) {
     if(!_selectingItem) {
-      qWarning() << "WARNING: ChatScene::updateSelection() has a null _selectingItem, this should never happen! Please report.";
+      // _selectingItem has been removed already
       return;
     }
     _lines[curRow]->setSelected(false);
@@ -463,9 +513,19 @@ void ChatScene::updateSelection(const QPointF &pos) {
   }
 }
 
+bool ChatScene::isScrollingAllowed() const {
+  if(_isSelecting)
+    return false;
+
+  // TODO: Handle clicks and single-item selections too
+
+  return true;
+}
+
 void ChatScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
   if(_isSelecting && event->buttons() == Qt::LeftButton) {
     updateSelection(event->scenePos());
+    emit mouseMoveWhileSelecting(event->scenePos());
     event->accept();
   } else {
     QGraphicsScene::mouseMoveEvent(event);
@@ -473,10 +533,11 @@ void ChatScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
 }
 
 void ChatScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-  if(event->buttons() == Qt::LeftButton && _selectionStart >= 0) {
+  if(_selectionStart >= 0 && event->buttons() == Qt::LeftButton) {
     for(int l = qMin(_selectionStart, _selectionEnd); l <= qMax(_selectionStart, _selectionEnd); l++) {
       _lines[l]->setSelected(false);
     }
+    _isSelecting = false;
     _selectionStart = -1;
     QGraphicsScene::mousePressEvent(event);  // so we can start a new local selection
   } else {
@@ -559,7 +620,7 @@ void ChatScene::updateSceneRect(qreal width) {
     while(_firstLineRow < numRows) {
       firstLineIdx = model()->index(_firstLineRow, 0);
       if((Message::Type)(model()->data(firstLineIdx, MessageModel::TypeRole).toInt()) != Message::DayChange)
-	break;
+        break;
       _lines.at(_firstLineRow)->hide();
       _firstLineRow++;
     }
@@ -580,6 +641,14 @@ void ChatScene::updateSceneRect(const QRectF &rect) {
   _sceneRect = rect;
   setSceneRect(rect);
   update();
+}
+
+bool ChatScene::event(QEvent *e) {
+  if(e->type() == QEvent::ApplicationPaletteChange) {
+    _firstColHandle->setColor(QApplication::palette().windowText().color());
+    _secondColHandle->setColor(QApplication::palette().windowText().color());
+  }
+  return QGraphicsScene::event(e);
 }
 
 void ChatScene::loadWebPreview(ChatItem *parentItem, const QString &url, const QRectF &urlRect) {

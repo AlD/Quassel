@@ -44,6 +44,16 @@ public:
     CutoffRight
   };
 
+  enum ItemType {
+    ChatLineType = QGraphicsItem::UserType + 1,
+    ChatItemType,
+    TimestampChatItemType,
+    SenderChatItemType,
+    ContentsChatItemType,
+    SearchHighlightType,
+    WebPreviewType
+  };
+
   ChatScene(QAbstractItemModel *model, const QString &idString, qreal width, QObject *parent);
   virtual ~ChatScene();
 
@@ -62,7 +72,11 @@ public:
   inline CutoffMode senderCutoffMode() const { return _cutoffMode; }
   inline void setSenderCutoffMode(CutoffMode mode) { _cutoffMode = mode; }
 
-public slots:
+  bool isScrollingAllowed() const;
+
+  virtual bool event(QEvent *e);
+
+ public slots:
   void updateForViewport(qreal width, qreal height);
   void setWidth(qreal width);
 
@@ -79,6 +93,8 @@ public slots:
 
 signals:
   void lastLineChanged(QGraphicsItem *item, qreal offset);
+  void layoutChanged(); // indicates changes to the scenerect due to resizing of the contentsitems
+  void mouseMoveWhileSelecting(const QPointF &scenePos);
 
 protected:
   virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent);
@@ -122,7 +138,7 @@ private:
   int _selectionStartCol, _selectionMinCol;
   int _selectionStart;
   int _selectionEnd;
-  int _firstSelectionRow, _lastSelectionRow;
+  int _firstSelectionRow;
   bool _isSelecting;
 
   struct WebPreview {

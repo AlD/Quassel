@@ -18,34 +18,20 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef CORENETWORK_H
-#define CORENETWORK_H
+#ifndef PREVIEWBUFFERVIEW_H
+#define PREVIEWBUFFERVIEW_H
 
-#include "network.h"
-#include "coreircchannel.h"
+#include "bufferview.h"
 
-class CoreSession;
-
-class CoreNetwork : public Network {
+class PreviewBufferView : public BufferView {
   Q_OBJECT
 
 public:
-  CoreNetwork(const NetworkId &networkid, CoreSession *session);
-
-  inline virtual const QMetaObject *syncMetaObject() const { return &Network::staticMetaObject; }
-
-  inline CoreSession *coreSession() const { return _coreSession; }
-
-public slots:
-  virtual void requestConnect() const;
-  virtual void requestDisconnect() const;
-  virtual void requestSetNetworkInfo(const NetworkInfo &info);
+  PreviewBufferView(QWidget *parent = 0) : BufferView(parent) {}
 
 protected:
-  inline virtual IrcChannel *ircChannelFactory(const QString &channelname) { return new CoreIrcChannel(channelname, this); }
-
-private:
-  CoreSession *_coreSession;
+  virtual void keyPressEvent(QKeyEvent *event) { QTreeView::keyPressEvent(event); }
+  virtual void contextMenuEvent(QContextMenuEvent *) {}
 };
 
-#endif //CORENETWORK_H
+#endif //PREVIEWBUFFERVIEW_H
