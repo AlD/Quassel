@@ -22,6 +22,7 @@
 
 #include <QCoreApplication>
 #include <QDebug>
+#include <QLibraryInfo>
 #include <QTextCodec>
 #include <QTranslator>
 
@@ -47,6 +48,17 @@ QString hostFromMask(QString mask) {
 
 bool isChannelName(QString str) {
   return QString("#&!+").contains(str[0]);
+}
+
+QString stripFormatCodes(QString str) {
+  str.remove(QRegExp("\x03(\\d\\d?(,\\d\\d?)?)?"));
+  str.remove('\x02');
+  str.remove('\x0f');
+  str.remove('\x12');
+  str.remove('\x16');
+  str.remove('\x1d');
+  str.remove('\x1f');
+  return str;
 }
 
 QString decodeString(const QByteArray &input, QTextCodec *codec) {
@@ -171,22 +183,27 @@ QDir quasselDir() {
 void loadTranslation(const QLocale &locale) {
   QTranslator *qtTranslator = QCoreApplication::instance()->findChild<QTranslator *>("QtTr");
   QTranslator *quasselTranslator = QCoreApplication::instance()->findChild<QTranslator *>("QuasselTr");
-  Q_ASSERT(qtTranslator);
-  Q_ASSERT(quasselTranslator);
+
+  if(!qtTranslator) {
+    qtTranslator = new QTranslator(qApp);
+    qtTranslator->setObjectName("QtTr");
+    qApp->installTranslator(qtTranslator);
+  }
+  if(!quasselTranslator) {
+    quasselTranslator = new QTranslator(qApp);
+    quasselTranslator->setObjectName("QuasselTr");
+    qApp->installTranslator(quasselTranslator);
+  }
 
   QLocale::setDefault(locale);
-
-  QCoreApplication::removeTranslator(qtTranslator);
-  QCoreApplication::removeTranslator(quasselTranslator);
 
   if(locale.language() == QLocale::C)
     return;
 
-  qtTranslator->load(QString(":i18n/qt_%1").arg(locale.name()));
+  bool success = qtTranslator->load(QString(":i18n/qt_%1").arg(locale.name()));
+  if(!success)
+    qtTranslator->load(QString("%2/qt_%1").arg(locale.name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath)));
   quasselTranslator->load(QString(":i18n/quassel_%1").arg(locale.name()));
-
-  QCoreApplication::installTranslator(qtTranslator);
-  QCoreApplication::installTranslator(quasselTranslator);
 }
 
 QString secondsToString(int timeInSeconds) {

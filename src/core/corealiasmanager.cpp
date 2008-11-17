@@ -34,11 +34,9 @@ CoreAliasManager::CoreAliasManager(CoreSession *parent)
   }
 
   QVariantMap aliases = Core::getUserSetting(session->user(), "Aliases").toMap();
-  if(aliases.isEmpty()) {
+  initSetAliases(Core::getUserSetting(session->user(), "Aliases").toMap());
+  if(isEmpty())
     loadDefaults();
-  } else {
-    initSetAliases(aliases);
-  }
 }
 
 
@@ -52,16 +50,9 @@ CoreAliasManager::~CoreAliasManager() {
   Core::setUserSetting(session->user(), "Aliases", initAliases());
 }
 
+
 void CoreAliasManager::loadDefaults() {
-  // Default Aliases:
-  addAlias("j", "/join $0");
-
-  addAlias("ns", "/msg nickserv $0");
-  addAlias("nickserv", "/msg nickserv $0");
-  addAlias("cs", "/msg chanserv $0");
-  addAlias("chanserv",  "/msg chanserv $0");
-  addAlias("hs", "/msg hostserv $0");
-  addAlias("hostserv", "/msg hostserv $0");
-
-  addAlias("back", "/quote away");
+  foreach(Alias alias, AliasManager::defaults()) {
+    addAlias(alias.name, alias.expansion);
+  }
 }

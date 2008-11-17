@@ -18,7 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "mainwin.h"
-
+#include <QDir>
 #include "aboutdlg.h"
 #include "action.h"
 #include "actioncollection.h"
@@ -83,6 +83,8 @@ MainWin::MainWin(QWidget *parent)
     QApplication::setStyle(style);
   }
 
+  QApplication::setQuitOnLastWindowClosed(false);
+
   setWindowTitle("Quassel IRC");
   setWindowIconText("Quassel IRC");
   updateIcon();
@@ -140,7 +142,6 @@ void MainWin::init() {
   setDisconnectedState();  // Disable menus and stuff
 
   show();
-
   showCoreConnectionDlg(true); // autoconnect if appropriate
 }
 
@@ -195,7 +196,7 @@ void MainWin::setupActions() {
   // Help
   coll->addAction("AboutQuassel", new Action(SmallIcon("quassel"), tr("&About Quassel..."), coll,
                                               this, SLOT(showAboutDlg())));
-  coll->addAction("AboutQt", new Action(tr("About &Qt..."), coll,
+  coll->addAction("AboutQt", new Action(QIcon(":/pics/qt-logo.png"), tr("About &Qt..."), coll,
                                          qApp, SLOT(aboutQt())));
   coll->addAction("DebugNetworkModel", new Action(SmallIcon("tools-report-bug"), tr("Debug &NetworkModel"), coll,
                                        this, SLOT(on_actionDebugNetworkModel_triggered())));
@@ -598,6 +599,7 @@ void MainWin::closeEvent(QCloseEvent *event) {
     event->ignore();
   } else {
     event->accept();
+    QApplication::quit();
   }
 }
 
