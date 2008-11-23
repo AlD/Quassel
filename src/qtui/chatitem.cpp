@@ -136,7 +136,7 @@ void ChatItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 //   painter->drawRect(_boundingRect.adjusted(0, 0, -1, -1));
 }
 
-qint16 ChatItem::posToCursor(const QPointF &pos) {
+qint16 ChatItem::posToCursor(const QPointF &pos) const {
   if(pos.y() > height()) return data(MessageModel::DisplayRole).toString().length();
   if(pos.y() < 0) return 0;
   for(int l = layout()->lineCount() - 1; l >= 0; l--) {
@@ -148,6 +148,30 @@ qint16 ChatItem::posToCursor(const QPointF &pos) {
   return 0;
 }
 
+bool ChatItem::hasSelection() const {
+  if(_selectionMode == NoSelection)
+    return false;
+  if(_selectionMode == FullSelection)
+    return true;
+  // partial
+  return _selectionStart != _selectionEnd;
+}
+
+QString ChatItem::selection() const {
+  if(_selectionMode == FullSelection)
+    return data(MessageModel::DisplayRole).toString();
+  if(_selectionMode == PartialSelection)
+    return data(MessageModel::DisplayRole).toString().mid(qMin(_selectionStart, _selectionEnd), qAbs(_selectionStart - _selectionEnd));
+  return QString();
+}
+
+void ChatItem::setSelection(SelectionMode mode, qint16 start, qint16 end) {
+  _selectionMode = mode;
+  _selectionStart = start;
+  _selectionEnd = end;
+  update();
+}
+
 void ChatItem::setFullSelection() {
   if(_selectionMode != FullSelection) {
     _selectionMode = FullSelection;
@@ -156,14 +180,26 @@ void ChatItem::setFullSelection() {
 }
 
 void ChatItem::clearSelection() {
-  _selectionMode = NoSelection;
-  update();
+  if(_selectionMode != NoSelection) {
+    _selectionMode = NoSelection;
+    update();
+  }
 }
 
 void ChatItem::continueSelecting(const QPointF &pos) {
   _selectionMode = PartialSelection;
   _selectionEnd = posToCursor(pos);
   update();
+}
+
+bool ChatItem::isPosOverSelection(const QPointF &pos) const {
+  if(_selectionMode == FullSelection)
+    return true;
+  if(_selectionMode == PartialSelection) {
+    int cursor = posToCursor(pos);
+    return cursor >= qMin(_selectionStart, _selectionEnd) && cursor <= qMax(_selectionStart, _selectionEnd);
+  }
+  return false;
 }
 
 QTextLayout::FormatRange ChatItem::selectionFormat() const {
@@ -215,15 +251,13 @@ QList<QRectF> ChatItem::findWords(const QString &searchWord, Qt::CaseSensitivity
   return resultList;
 }
 
-void ChatItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-  if(event->buttons() == Qt::LeftButton) {
+void ChatItem::handleClick(const QPointF &pos, ChatScene::ClickMode clickMode) {
+  // single clicks are already handled by the scene (for clearing the selection)
+  if(clickMode == ChatScene::DragStartClick) {
     chatScene()->setSelectingItem(this);
-    _selectionStart = _selectionEnd = posToCursor(event->pos());
+    _selectionStart = _selectionEnd = posToCursor(pos);
     _selectionMode = NoSelection; // will be set to PartialSelection by mouseMoveEvent
     update();
-    event->accept();
-  } else {
-    event->ignore();
   }
 }
 
@@ -246,16 +280,25 @@ void ChatItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
   }
 }
 
+void ChatItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+  if(event->buttons() == Qt::LeftButton)
+    event->accept();
+  else
+    event->ignore();
+}
+
 void ChatItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
   if(_selectionMode != NoSelection && !event->buttons() & Qt::LeftButton) {
-    _selectionEnd = posToCursor(event->pos());
-    QString selection
-        = data(MessageModel::DisplayRole).toString().mid(qMin(_selectionStart, _selectionEnd), qAbs(_selectionStart - _selectionEnd));
-    chatScene()->putToClipboard(selection);
+    chatScene()->selectionToClipboard(QClipboard::Selection);
     event->accept();
-  } else {
+  } else
     event->ignore();
-  }
+}
+
+void ChatItem::addActionsToMenu(QMenu *menu, const QPointF &pos) {
+  Q_UNUSED(menu);
+  Q_UNUSED(pos);
+
 }
 
 // ************************************************************
@@ -310,6 +353,9 @@ void SenderChatItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 // ************************************************************
 // ContentsChatItem
 // ************************************************************
+
+ContentsChatItem::ActionProxy ContentsChatItem::_actionProxy;
+
 ContentsChatItem::ContentsChatItem(const qreal &width, const QPointF &pos, QGraphicsItem *parent)
   : ChatItem(0, 0, pos, parent)
 {
@@ -442,21 +488,15 @@ void ContentsChatItem::endHoverMode() {
   }
 }
 
-void ContentsChatItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-  privateData()->hasDragged = false;
-  ChatItem::mousePressEvent(event);
-}
-
-void ContentsChatItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-  if(!event->buttons() && !privateData()->hasDragged) {
-    // got a click
+void ContentsChatItem::handleClick(const QPointF &pos, ChatScene::ClickMode clickMode) {
+  if(clickMode == ChatScene::SingleClick) {
     Clickable click = privateData()->currentClickable;
     if(click.isValid()) {
       QString str = data(ChatLineModel::DisplayRole).toString().mid(click.start, click.length);
       switch(click.type) {
         case Clickable::Url:
-	  if(!str.contains("://"))
-	    str = "http://" + str;
+          if(!str.contains("://"))
+            str = "http://" + str;
           QDesktopServices::openUrl(QUrl::fromEncoded(str.toAscii()));
           break;
         case Clickable::Channel:
@@ -466,17 +506,33 @@ void ContentsChatItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
           break;
       }
     }
+  } else if(clickMode == ChatScene::DoubleClick) {
+    chatScene()->setSelectingItem(this);
+    setSelectionMode(PartialSelection);
+    Clickable click = privateData()->currentClickable;
+    if(click.isValid()) {
+      setSelectionStart(click.start);
+      setSelectionEnd(click.start + click.length);
+    } else {
+      // find word boundary
+      QString str = data(ChatLineModel::DisplayRole).toString();
+      qint16 cursor = posToCursor(pos);
+      qint16 start = str.lastIndexOf(QRegExp("\\W"), cursor) + 1;
+      qint16 end = qMin(str.indexOf(QRegExp("\\W"), cursor), str.length());
+      if(end < 0) end = str.length();
+      setSelectionStart(start);
+      setSelectionEnd(end);
+    }
+    update();
+  } else if(clickMode == ChatScene::TripleClick) {
+    setSelection(PartialSelection, 0, data(ChatLineModel::DisplayRole).toString().length());
   }
-  ChatItem::mouseReleaseEvent(event);
+  ChatItem::handleClick(pos, clickMode);
 }
 
 void ContentsChatItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
   // mouse move events always mean we're not hovering anymore...
   endHoverMode();
-  // also, check if we have dragged the mouse
-  if(hasPrivateData() && !privateData()->hasDragged && event->buttons() & Qt::LeftButton
-    && (event->buttonDownScreenPos(Qt::LeftButton) - event->screenPos()).manhattanLength() >= QApplication::startDragDistance())
-    privateData()->hasDragged = true;
   ChatItem::mouseMoveEvent(event);
 }
 
@@ -493,10 +549,10 @@ void ContentsChatItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event) {
     if(idx >= click.start && idx < click.start + click.length) {
       if(click.type == Clickable::Url) {
         onClickable = true;
-	showWebPreview(click);
+        showWebPreview(click);
       } else if(click.type == Clickable::Channel) {
         // TODO: don't make clickable if it's our own name
-        //onClickable = true; //FIXME disabled for now
+        // onClickable = true; //FIXME disabled for now
       }
       if(onClickable) {
         setCursor(Qt::PointingHandCursor);
@@ -510,28 +566,33 @@ void ContentsChatItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event) {
   event->accept();
 }
 
-void ContentsChatItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
-  qint16 idx = posToCursor(event->pos());
-  for(int i = 0; i < privateData()->clickables.count(); i++) {
-    Clickable click = privateData()->clickables.at(i);
-    if(idx >= click.start && idx < click.start + click.length) {
-      if(click.type == Clickable::Url) {
-        QMenu menu;
-        QAction *copyToClipboard = menu.addAction(QObject::tr("Copy to Clipboard"));
-        QAction *selected = menu.exec(event->screenPos());
-        if(selected == copyToClipboard) {
-          QString url = data(ChatLineModel::DisplayRole).toString().mid(click.start, click.length);
-#   ifdef Q_WS_X11
-          QApplication::clipboard()->setText(url, QClipboard::Selection);
-#   endif
-//# else
-          QApplication::clipboard()->setText(url);
-//# endif
-        }
-      }
+void ContentsChatItem::addActionsToMenu(QMenu *menu, const QPointF &pos) {
+  Q_UNUSED(pos); // we assume that the current mouse cursor pos is the point of invocation
+
+  if(privateData()->currentClickable.isValid()) {
+    switch(privateData()->currentClickable.type) {
+      case Clickable::Url:
+        privateData()->activeClickable = privateData()->currentClickable;
+        menu->addAction(tr("Copy Link Address"), &_actionProxy, SLOT(copyLinkToClipboard()))->setData(QVariant::fromValue<void *>(this));
+        break;
+
+      default:
+        break;
     }
   }
 }
+
+void ContentsChatItem::copyLinkToClipboard() {
+  Clickable click = privateData()->activeClickable;
+  if(click.isValid() && click.type == Clickable::Url) {
+    QString url = data(ChatLineModel::DisplayRole).toString().mid(click.start, click.length);
+    if(!url.contains("://"))
+      url = "http://" + url;
+    chatScene()->stringToClipboard(url);
+  }
+}
+
+/******** WEB PREVIEW *****************************************************************************/
 
 void ContentsChatItem::showWebPreview(const Clickable &click) {
 #ifndef HAVE_WEBKIT
@@ -623,4 +684,6 @@ qint16 ContentsChatItem::WrapColumnFinder::nextWrapColumn() {
   Q_ASSERT(false);
   return -1;
 }
+
+/*************************************************************************************************/
 

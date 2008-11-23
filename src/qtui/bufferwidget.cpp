@@ -18,20 +18,22 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <QLayout>
+#include <QKeyEvent>
+#include <QScrollBar>
+
+#include "action.h"
+#include "actioncollection.h"
 #include "bufferwidget.h"
 #include "chatview.h"
 #include "chatviewsearchbar.h"
 #include "chatviewsearchcontroller.h"
-#include "settings.h"
 #include "client.h"
-
-#include "action.h"
-#include "actioncollection.h"
+#include "iconloader.h"
+#include "inputline.h"
 #include "qtui.h"
+#include "settings.h"
 
-#include <QLayout>
-#include <QKeyEvent>
-#include <QScrollBar>
 
 BufferWidget::BufferWidget(QWidget *parent)
   : AbstractBufferContainer(parent),
@@ -64,23 +66,23 @@ BufferWidget::BufferWidget(QWidget *parent)
 
   connect(_chatViewSearchController, SIGNAL(newCurrentHighlight(QGraphicsItem *)),
 	  this, SLOT(scrollToHighlight(QGraphicsItem *)));
-  
+
   ActionCollection *coll = QtUi::actionCollection();
 
-  Action *zoomChatview = coll->add<Action>("ZoomChatView");
-  connect(zoomChatview, SIGNAL(triggered()), SLOT(zoomIn()));
-  zoomChatview->setText(tr("Enlarge Chat View"));
-  zoomChatview->setShortcut(tr("Ctrl++"));
+  Action *zoomInChatview = coll->add<Action>("ZoomInChatView", this, SLOT(zoomIn()));
+  zoomInChatview->setText(tr("Zoom In"));
+  zoomInChatview->setIcon(SmallIcon("zoom-in"));
+  zoomInChatview->setShortcut(QKeySequence::ZoomIn);
 
-  Action *zoomOutChatview = coll->add<Action>("ZoomOutChatView");
-  connect(zoomOutChatview, SIGNAL(triggered()), SLOT(zoomOut()));
-  zoomOutChatview->setText(tr("Demagnify Chat View"));
-  zoomOutChatview->setShortcut(tr("Ctrl+-"));
+  Action *zoomOutChatview = coll->add<Action>("ZoomOutChatView", this, SLOT(zoomOut()));
+  zoomOutChatview->setIcon(SmallIcon("zoom-out"));
+  zoomOutChatview->setText(tr("Zoom Out"));
+  zoomOutChatview->setShortcut(QKeySequence::ZoomOut);
 
-  Action *zoomNormalChatview = coll->add<Action>("ZoomNormalChatView");
-  connect(zoomNormalChatview, SIGNAL(triggered()), SLOT(zoomNormal()));
-  zoomNormalChatview->setText(tr("Normalize zoom of Chat View"));
-  zoomNormalChatview->setShortcut(tr("Ctrl+0"));
+  Action *zoomOriginalChatview = coll->add<Action>("ZoomOriginalChatView", this, SLOT(zoomOriginal()));
+  zoomOriginalChatview->setIcon(SmallIcon("zoom-original"));
+  zoomOriginalChatview->setText(tr("Zoom Original"));
+  zoomOriginalChatview->setShortcut(tr("Ctrl+0"));
 }
 
 BufferWidget::~BufferWidget() {
@@ -91,6 +93,7 @@ BufferWidget::~BufferWidget() {
 AbstractChatView *BufferWidget::createChatView(BufferId id) {
   ChatView *chatView;
   chatView = new ChatView(id, this);
+  chatView->setBufferContainer(this);
   _chatViews[id] = chatView;
   ui.stackedWidget->addWidget(chatView);
   chatView->setFocusProxy(this);
@@ -126,28 +129,49 @@ void BufferWidget::scrollToHighlight(QGraphicsItem *highlightItem) {
 
 void BufferWidget::zoomIn() {
   ChatView *view = qobject_cast<ChatView *>(ui.stackedWidget->currentWidget());
-  if(!view) return;
-  view->zoomIn();
+  if(view)
+    view->zoomIn();
 }
 
 void BufferWidget::zoomOut() {
   ChatView *view = qobject_cast<ChatView *>(ui.stackedWidget->currentWidget());
-  if(!view) return;
-  view->zoomOut();
+  if(view)
+    view->zoomOut();
 }
 
-void BufferWidget::zoomNormal() {
+void BufferWidget::zoomOriginal() {
   ChatView *view = qobject_cast<ChatView *>(ui.stackedWidget->currentWidget());
-  if(!view) return;
-  view->zoomNormal();
+  if(view)
+    view->zoomOriginal();
+}
+
+void BufferWidget::addActionsToMenu(QMenu *menu, const QPointF &pos) {
+  Q_UNUSED(pos);
+  ActionCollection *coll = QtUi::actionCollection();
+  menu->addSeparator();
+  menu->addAction(coll->action("ZoomInChatView"));
+  menu->addAction(coll->action("ZoomOutChatView"));
+  menu->addAction(coll->action("ZoomOriginalChatView"));
 }
 
 bool BufferWidget::eventFilter(QObject *watched, QEvent *event) {
-  Q_UNUSED(watched);
   if(event->type() != QEvent::KeyPress)
     return false;
 
   QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+
+  // Intercept copy key presses
+  if(keyEvent == QKeySequence::Copy) {
+    InputLine *inputLine = qobject_cast<InputLine *>(watched);
+    if(!inputLine)
+      return false;
+    if(inputLine->hasSelectedText())
+      return false;
+    ChatView *view = qobject_cast<ChatView *>(ui.stackedWidget->currentWidget());
+    if(view)
+      view->scene()->selectionToClipboard();
+    return true;
+  }
 
   int direction = 1;
   switch(keyEvent->key()) {

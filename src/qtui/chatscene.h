@@ -22,15 +22,20 @@
 #define CHATSCENE_H_
 
 #include <QAbstractItemModel>
+#include <QClipboard>
+#include <QGraphicsItem>
 #include <QGraphicsScene>
 #include <QSet>
+#include <QTimer>
 
-#include "columnhandleitem.h"
+#include "chatlinemodel.h"
 #include "messagefilter.h"
 
 class AbstractUiMsg;
 class ChatItem;
 class ChatLine;
+class ChatView;
+class ColumnHandleItem;
 class WebPreviewItem;
 
 class QGraphicsSceneMouseEvent;
@@ -51,26 +56,48 @@ public:
     SenderChatItemType,
     ContentsChatItemType,
     SearchHighlightType,
-    WebPreviewType
+    WebPreviewType,
+    ColumnHandleType
   };
 
-  ChatScene(QAbstractItemModel *model, const QString &idString, qreal width, QObject *parent);
+  enum ClickMode {
+    NoClick,
+    DragStartClick,
+    SingleClick,
+    DoubleClick,
+    TripleClick
+  };
+
+  ChatScene(QAbstractItemModel *model, const QString &idString, qreal width, ChatView *parent);
   virtual ~ChatScene();
 
   inline QAbstractItemModel *model() const { return _model; }
   inline QString idString() const { return _idString; }
 
-  int sectionByScenePos(int x);
-  inline int sectionByScenePos(const QPoint &pos) { return sectionByScenePos(pos.x()); }
+  int rowByScenePos(qreal y) const;
+  inline int rowByScenePos(const QPointF &pos) const { return rowByScenePos(pos.y()); }
+  ChatLineModel::ColumnType columnByScenePos(qreal x) const ;
+  inline ChatLineModel::ColumnType columnByScenePos(const QPointF &pos) const { return columnByScenePos(pos.x()); }
+
+  ChatView *chatView() const;
+  ChatItem *chatItemAt(const QPointF &pos) const;
+
   inline bool isSingleBufferScene() const { return _singleBufferScene; }
-  inline bool containsBuffer(const BufferId &id) const;
+  bool containsBuffer(const BufferId &id) const;
   inline ChatLine *chatLine(int row) { return (row < _lines.count()) ? _lines[row] : 0; }
 
-  inline ColumnHandleItem *firstColumnHandle() const { return _firstColHandle; }
-  inline ColumnHandleItem *secondColumnHandle() const { return _secondColHandle; }
+  ColumnHandleItem *firstColumnHandle() const;
+  ColumnHandleItem *secondColumnHandle() const;
 
   inline CutoffMode senderCutoffMode() const { return _cutoffMode; }
   inline void setSenderCutoffMode(CutoffMode mode) { _cutoffMode = mode; }
+
+  QString selection() const;
+  bool hasSelection() const;
+  bool hasGlobalSelection() const;
+  bool isPosOverSelection(const QPointF &) const;
+  bool isGloballySelecting() const;
+  void initiateDrag(QWidget *source);
 
   bool isScrollingAllowed() const;
 
@@ -84,7 +111,10 @@ public:
   void setSelectingItem(ChatItem *item);
   ChatItem *selectingItem() const { return _selectingItem; }
   void startGlobalSelection(ChatItem *item, const QPointF &itemPos);
-  void putToClipboard(const QString &);
+  void clearGlobalSelection();
+  void clearSelection();
+  void selectionToClipboard(QClipboard::Mode = QClipboard::Clipboard);
+  void stringToClipboard(const QString &str, QClipboard::Mode = QClipboard::Clipboard);
 
   void requestBacklog();
 
@@ -97,9 +127,12 @@ signals:
   void mouseMoveWhileSelecting(const QPointF &scenePos);
 
 protected:
+  virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent);
   virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent);
   virtual void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
   virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent);
+  virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEvent);
+  virtual void handleClick(Qt::MouseButton button, const QPointF &scenePos);
 
 protected slots:
   void rowsInserted(const QModelIndex &, int, int);
@@ -110,12 +143,15 @@ private slots:
   void secondHandlePositionChanged(qreal xpos);
   void showWebPreviewEvent();
   void deleteWebPreviewEvent();
+  void showWebPreviewChanged();
+
+  void clickTimeout();
 
 private:
   void setHandleXLimits();
   void updateSelection(const QPointF &pos);
-  QString selectionToString() const;
 
+  ChatView *_chatView;
   QString _idString;
   QAbstractItemModel *_model;
   QList<ChatLine *> _lines;
@@ -141,6 +177,14 @@ private:
   int _firstSelectionRow;
   bool _isSelecting;
 
+  QTimer _clickTimer;
+  ClickMode _clickMode;
+  QPointF _clickPos;
+  bool _clickHandled;
+  bool _leftButtonPressed;
+
+  bool _showWebPreview;
+
   struct WebPreview {
     ChatItem *parentItem;
     QGraphicsItem *previewItem;
@@ -152,13 +196,5 @@ private:
   };
   WebPreview webPreview;
 };
-
-bool ChatScene::containsBuffer(const BufferId &id) const {
-  MessageFilter *filter = qobject_cast<MessageFilter*>(model());
-  if(filter)
-    return filter->containsBuffer(id);
-  else
-    return false;
-}
 
 #endif

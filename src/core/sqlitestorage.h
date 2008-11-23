@@ -89,8 +89,7 @@ protected:
   inline virtual QString driverName() { return "QSQLITE"; }
   inline virtual QString databaseName() { return backlogFile(); }
   virtual int installedSchemaVersion();
-
-  virtual bool init(const QVariantMap &settings = QVariantMap()); // only needed for migration
+  bool safeExec(QSqlQuery &query, int retryCount = 0);
   
 private:
   static QString backlogFile();
@@ -98,6 +97,8 @@ private:
   bool isValidBuffer(const UserId &user, const BufferId &bufferId);
   NetworkId getNetworkId(UserId user, const QString &network);
   void createBuffer(UserId user, const NetworkId &networkId, BufferInfo::Type type, const QString &buffer);
+
+  static int _maxRetryCount;
 };
 
 #endif

@@ -22,49 +22,51 @@
 
 #include "logger.h"
 
+#include <QMutexLocker>
 #include <QSqlError>
 #include <QSqlQuery>
 
 AbstractSqlStorage::AbstractSqlStorage(QObject *parent)
   : Storage(parent),
-    _schemaVersion(0)
+    _schemaVersion(0),
+    _nextConnectionId(0)
 {
 }
 
 AbstractSqlStorage::~AbstractSqlStorage() {
-  QHash<QPair<QString, int>, QSqlQuery *>::iterator iter = _queryCache.begin();
-  while(iter != _queryCache.end()) {
-    delete *iter;
-    iter = _queryCache.erase(iter);
+  // disconnect the connections, so their deletion is no longer interessting for us
+  QHash<QThread *, Connection *>::iterator conIter;
+  for(conIter = _connectionPool.begin(); conIter != _connectionPool.end(); conIter++) {
+    disconnect(conIter.value(), 0, this, 0);
   }
-  
-  {
-    QSqlDatabase db = QSqlDatabase::database("quassel_connection");
-    db.commit();
-    db.close();
-  }
-  QSqlDatabase::removeDatabase("quassel_connection");  
 }
 
 QSqlDatabase AbstractSqlStorage::logDb() {
-  QSqlDatabase db = QSqlDatabase::database("quassel_connection");
-  if(db.isValid() && db.isOpen())
-    return db;
+  if(!_connectionPool.contains(QThread::currentThread()))
+    addConnectionToPool();
 
-  if(!openDb()) {
-    qWarning() << "Unable to Open Database" << displayName();
-    qWarning() << "-" << db.lastError().text();
-  }
-
-  return QSqlDatabase::database("quassel_connection");
+  return QSqlDatabase::database(_connectionPool[QThread::currentThread()]->name());
 }
 
-bool AbstractSqlStorage::openDb() {
-  QSqlDatabase db = QSqlDatabase::database("quassel_connection");
-  if(db.isValid() && !db.isOpen())
-    return db.open();
+void AbstractSqlStorage::addConnectionToPool() {
+  QMutexLocker locker(&_connectionPoolMutex);
+  // we have to recheck if the connection pool already contains a connection for
+  // this thread. Since now (after the lock) we can only tell for sure
+  if(_connectionPool.contains(QThread::currentThread()))
+    return;
 
-  db = QSqlDatabase::addDatabase(driverName(), "quassel_connection");
+  QThread *currentThread = QThread::currentThread();
+
+  int connectionId = _nextConnectionId++;
+
+  Connection *connection = new Connection(QLatin1String(QString("quassel_connection_%1").arg(connectionId).toLatin1()));
+  connection->moveToThread(currentThread);
+  connect(this, SIGNAL(destroyed()), connection, SLOT(deleteLater()));
+  connect(currentThread, SIGNAL(destroyed()), connection, SLOT(deleteLater()));
+  connect(connection, SIGNAL(destroyed()), this, SLOT(connectionDestroyed()));
+  _connectionPool[currentThread] = connection;
+
+  QSqlDatabase db = QSqlDatabase::addDatabase(driverName(), connection->name());
   db.setDatabaseName(databaseName());
 
   if(!hostName().isEmpty())
@@ -75,7 +77,10 @@ bool AbstractSqlStorage::openDb() {
     db.setPassword(password());
   }
 
-  return db.open();
+  if(!db.open()) {
+    qWarning() << "Unable to open database" << displayName() << "for thread" << QThread::currentThread();
+    qWarning() << "-" << db.lastError().text();
+  }
 }
 
 bool AbstractSqlStorage::init(const QVariantMap &settings) {
@@ -104,16 +109,6 @@ bool AbstractSqlStorage::init(const QVariantMap &settings) {
   return true;
 }
 
-void AbstractSqlStorage::sync() {
-  QHash<QPair<QString, int>, QSqlQuery *>::iterator iter = _queryCache.begin();
-  while(iter != _queryCache.end()) {
-    delete *iter;
-    iter = _queryCache.erase(iter);
-  }
-
-  logDb().commit();
-}
-
 QString AbstractSqlStorage::queryString(const QString &queryName, int version) {
   if(version == 0)
     version = schemaVersion();
@@ -131,24 +126,6 @@ QString AbstractSqlStorage::queryString(const QString &queryName, int version) {
   queryFile.close();
   
   return query.trimmed();
-}
-
-QString AbstractSqlStorage::queryString(const QString &queryName) {
-  return queryString(queryName, 0);
-}
-
-QSqlQuery *AbstractSqlStorage::cachedQuery(const QString &queryName, int version) {
-  QPair<QString, int> queryId = qMakePair(queryName, version);
-  if(!_queryCache.contains(queryId)) {
-    QSqlQuery *query = new QSqlQuery(logDb());
-    query->prepare(queryString(queryName, version));
-    _queryCache[queryId] = query;
-  }
-  return _queryCache[queryId];
-}
-
-QSqlQuery *AbstractSqlStorage::cachedQuery(const QString &queryName) {
-  return cachedQuery(queryName, 0);
 }
 
 QStringList AbstractSqlStorage::setupQueries() {
@@ -170,7 +147,7 @@ bool AbstractSqlStorage::setup(const QVariantMap &settings) {
 
   foreach(QString queryString, setupQueries()) {
     QSqlQuery query = db.exec(queryString);
-    if(!watchQuery(&query)) {
+    if(!watchQuery(query)) {
       qCritical() << "Unable to setup Logging Backend!";
       return false;
     }
@@ -196,7 +173,7 @@ bool AbstractSqlStorage::upgradeDb() {
   for(int ver = installedSchemaVersion() + 1; ver <= schemaVersion(); ver++) {
     foreach(QString queryString, upgradeQueries(ver)) {
       QSqlQuery query = db.exec(queryString);
-      if(!watchQuery(&query)) {
+      if(!watchQuery(query)) {
 	qCritical() << "Unable to upgrade Logging Backend!";
 	return false;
       }
@@ -229,21 +206,46 @@ int AbstractSqlStorage::schemaVersion() {
   return _schemaVersion;
 }
 
-bool AbstractSqlStorage::watchQuery(QSqlQuery *query) {
-  if(query->lastError().isValid()) {
+bool AbstractSqlStorage::watchQuery(QSqlQuery &query) {
+  if(query.lastError().isValid()) {
     qCritical() << "unhandled Error in QSqlQuery!";
-    qCritical() << "                  last Query:\n" << query->lastQuery();
-    qCritical() << "              executed Query:\n" << query->executedQuery();
+    qCritical() << "                  last Query:\n" << query.lastQuery();
+    qCritical() << "              executed Query:\n" << query.executedQuery();
     qCritical() << "                bound Values:";
-    QList<QVariant> list = query->boundValues().values();
+    QList<QVariant> list = query.boundValues().values();
     for (int i = 0; i < list.size(); ++i)
       qCritical() << i << ": " << list.at(i).toString().toAscii().data();
-    qCritical() << "                Error Number:"   << query->lastError().number();
-    qCritical() << "               Error Message:"   << query->lastError().text();
-    qCritical() << "              Driver Message:"   << query->lastError().driverText();
-    qCritical() << "                  DB Message:"   << query->lastError().databaseText();
+    qCritical() << "                Error Number:"   << query.lastError().number();
+    qCritical() << "               Error Message:"   << query.lastError().text();
+    qCritical() << "              Driver Message:"   << query.lastError().driverText();
+    qCritical() << "                  DB Message:"   << query.lastError().databaseText();
     
     return false;
   }
   return true;
+}
+
+void AbstractSqlStorage::connectionDestroyed() {
+  QMutexLocker locker(&_connectionPoolMutex);
+  _connectionPool.remove(sender()->thread());
+}
+
+// ========================================
+//  AbstractSqlStorage::Connection
+// ========================================
+AbstractSqlStorage::Connection::Connection(const QString &name, QObject *parent)
+  : QObject(parent),
+    _name(name.toLatin1())
+{
+}
+
+AbstractSqlStorage::Connection::~Connection() {
+  {
+    QSqlDatabase db = QSqlDatabase::database(name(), false);
+    if(db.isOpen()) {
+      db.commit();
+      db.close();
+    }
+  }
+  QSqlDatabase::removeDatabase(name());
 }
