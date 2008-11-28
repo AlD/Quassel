@@ -154,6 +154,7 @@ class UiStyle {
     QString mircToInternal(const QString &) const;
 
     void setFormat(FormatType, QTextCharFormat, Settings::Mode mode/* = Settings::Custom*/);
+    void setSenderAutoColor(bool state);
     QTextCharFormat format(FormatType, Settings::Mode mode = Settings::Custom) const;
     QTextCharFormat mergedFormat(quint32 formatType);
     QFontMetricsF *fontMetrics(quint32 formatType);
@@ -166,7 +167,7 @@ class UiStyle {
     QList<QTextLayout::FormatRange> toTextLayoutList(const FormatList &, int textLength);
 
   protected:
-
+    bool _senderAutoColor;
 
   private:
 
