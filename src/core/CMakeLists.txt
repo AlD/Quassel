@@ -13,9 +13,11 @@ set(SOURCES
     corealiasmanager.cpp
     coreapplication.cpp
     corebacklogmanager.cpp
+    corebuffersyncer.cpp
     corebufferviewconfig.cpp
     corebufferviewmanager.cpp
     corecoreinfo.cpp
+    coreidentity.cpp
     coreircchannel.cpp
     coreirclisthelper.cpp
     corenetwork.cpp
@@ -24,7 +26,6 @@ set(SOURCES
     coreusersettings.cpp
     ctcphandler.cpp
     ircserverhandler.cpp
-    networkconnection.cpp
     sessionthread.cpp
     sqlitestorage.cpp
     storage.cpp
@@ -37,16 +38,17 @@ set(MOC_HDRS
     corealiasmanager.h
     coreapplication.h
     corebacklogmanager.h
+    corebuffersyncer.h
     corebufferviewconfig.h
     corebufferviewmanager.h
     corecoreinfo.h
+    coreidentity.h
     coreircchannel.h
     coreirclisthelper.h
     corenetwork.h
     coresession.h
     ctcphandler.h
     ircserverhandler.h
-    networkconnection.h
     sqlitestorage.h
     storage.h
     sessionthread.h

@@ -42,8 +42,6 @@ bool Quassel::DEBUG = false;
 QString Quassel::_coreDumpFileName;
 
 Quassel::Quassel() {
-  Q_INIT_RESOURCE(i18n);
-
   // We catch SIGTERM and SIGINT (caused by Ctrl+C) to graceful shutdown Quassel.
   signal(SIGTERM, handleSignal);
   signal(SIGINT, handleSignal);
@@ -58,11 +56,6 @@ Quassel::Quassel() {
 #  endif
 #endif
 
-  _cliParser = new CliParser();
-
-  // put shared client&core arguments here
-  cliParser()->addSwitch("debug",'d', tr("Enable debug output"));
-  cliParser()->addSwitch("help",'h', tr("Display this help and exit"));
 }
 
 Quassel::~Quassel() {
@@ -78,18 +71,15 @@ bool Quassel::init() {
 
   registerMetaTypes();
 
-  QCoreApplication::setApplicationName(buildInfo().applicationName);
-  QCoreApplication::setOrganizationName(buildInfo().organizationName);
-  QCoreApplication::setOrganizationDomain(buildInfo().organizationDomain);
-
   Network::setDefaultCodecForServer("ISO-8859-1");
   Network::setDefaultCodecForEncoding("UTF-8");
   Network::setDefaultCodecForDecoding("ISO-8859-15");
 
-  if(!cliParser()->parse(QCoreApplication::arguments()) || isOptionSet("help")) {
+  if(isOptionSet("help")) {
     cliParser()->usage();
     return false;
   }
+
   DEBUG = isOptionSet("debug");
   return true;
 }
@@ -104,6 +94,7 @@ void Quassel::registerMetaTypes() {
   qRegisterMetaType<Message>("Message");
   qRegisterMetaType<BufferInfo>("BufferInfo");
   qRegisterMetaType<NetworkInfo>("NetworkInfo");
+  qRegisterMetaType<Network::Server>("Network::Server");
   qRegisterMetaType<Identity>("Identity");
   qRegisterMetaType<Network::ConnectionState>("Network::ConnectionState");
 
@@ -111,6 +102,7 @@ void Quassel::registerMetaTypes() {
   qRegisterMetaTypeStreamOperators<Message>("Message");
   qRegisterMetaTypeStreamOperators<BufferInfo>("BufferInfo");
   qRegisterMetaTypeStreamOperators<NetworkInfo>("NetworkInfo");
+  qRegisterMetaTypeStreamOperators<Network::Server>("Network::Server");
   qRegisterMetaTypeStreamOperators<Identity>("Identity");
   qRegisterMetaTypeStreamOperators<qint8>("Network::ConnectionState");
 

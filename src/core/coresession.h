@@ -28,11 +28,12 @@
 #include "corealiasmanager.h"
 #include "message.h"
 
-class BufferSyncer;
 class CoreBacklogManager;
+class CoreBufferSyncer;
 class CoreBufferViewManager;
 class CoreIrcListHelper;
 class Identity;
+class CoreIdentity;
 class NetworkConnection;
 class CoreNetwork;
 struct NetworkInfo;
@@ -51,38 +52,34 @@ public:
   inline UserId user() const { return _user; }
   CoreNetwork *network(NetworkId) const;
   NetworkConnection *networkConnection(NetworkId) const;
-  Identity *identity(IdentityId) const;
+  CoreIdentity *identity(IdentityId) const;
 
   QVariant sessionState();
 
-  SignalProxy *signalProxy() const;
+  inline SignalProxy *signalProxy() const { return _signalProxy; }
 
   const AliasManager &aliasManager() const { return _aliasManager; }
   AliasManager &aliasManager() { return _aliasManager; }
 
   inline CoreIrcListHelper *ircListHelper() const { return _ircListHelper; }
 
-  void attachNetworkConnection(NetworkConnection *conn);
+//   void attachNetworkConnection(NetworkConnection *conn);
 
   //! Return necessary data for restoring the session after restarting the core
   void saveSessionState() const;
   void restoreSessionState();
 
 public slots:
-  void networkStateRequested();
-
   void addClient(QIODevice *device);
   void addClient(SignalProxy *proxy);
-
-  void connectToNetwork(NetworkId);
-  void disconnectFromNetwork(NetworkId id);
 
   void msgFromClient(BufferInfo, QString message);
 
   //! Create an identity and propagate the changes to the clients.
   /** \param identity The identity to be created.
    */
-  void createIdentity(const Identity &identity);
+  void createIdentity(const Identity &identity, const QVariantMap &additional);
+  void createIdentity(const CoreIdentity &identity);
 
   //! Remove identity and propagate that fact to the clients.
   /** \param identity The identity to be removed.
@@ -94,27 +91,18 @@ public slots:
    */
   void createNetwork(const NetworkInfo &info);
 
-  //! Remove identity and propagate that fact to the clients.
-  /** \param identity The identity to be removed.
+  //! Remove network and propagate that fact to the clients.
+  /** \param network The id of the network to be removed.
    */
   void removeNetwork(NetworkId network);
-
-  //! Remove a buffer and it's backlog permanently
-  /** \param bufferId The id of the buffer to be removed.
-   *  emits bufferRemoved(bufferId) on success.
-   */
-  void removeBufferRequested(BufferId bufferId);
 
   //! Rename a Buffer for a given network
   /* \param networkId The id of the network the buffer belongs to
    * \param newName   The new name of the buffer
    * \param oldName   The old name of the buffer
-   * emits bufferRenamed(bufferId, newName) on success.
    */
   void renameBuffer(const NetworkId &networkId, const QString &newName, const QString &oldName);
 
-  void channelJoined(NetworkId id, const QString &channel, const QString &key = QString());
-  void channelParted(NetworkId, const QString &channel);
   QHash<QString, QString> persistentChannels(NetworkId) const;
 
 signals:
@@ -124,11 +112,6 @@ signals:
   //void msgFromGui(uint netid, QString buf, QString message);
   void displayMsg(Message message);
   void displayStatusMsg(QString, QString);
-
-  //void connectToIrc(QString net);
-  //void disconnectFromIrc(QString net);
-
-  void bufferInfoUpdated(BufferInfo);
 
   void scriptResult(QString result);
 
@@ -146,34 +129,21 @@ signals:
 
   void networkCreated(NetworkId);
   void networkRemoved(NetworkId);
-  void bufferRemoved(BufferId);
-  void bufferRenamed(BufferId, QString);
 
 private slots:
   void removeClient(QIODevice *dev);
 
   void recvStatusMsgFromServer(QString msg);
   void recvMessageFromServer(Message::Type, BufferInfo::Type, QString target, QString text, QString sender = "", Message::Flags flags = Message::None);
-  void networkConnected(NetworkId networkid);
-  void networkDisconnected(NetworkId networkid);
 
   void destroyNetwork(NetworkId);
-
-  void identityUpdated(const QVariantMap &);
-
-  //! Called when storage updated a BufferInfo.
-  /** This emits bufferInfoUpdated() via SignalProxy, iff it's one of our buffers.
-   *  \param user       The buffer's owner (not necessarily us)
-   *  \param bufferInfo The updated BufferInfo
-   */
-  void updateBufferInfo(UserId user, const BufferInfo &bufferInfo);
-
-  void storeBufferLastSeenMsg(BufferId buffer, const MsgId &msgId);
 
   void scriptRequest(QString script);
 
   void clientsConnected();
   void clientsDisconnected();
+
+  void updateIdentityBySender();
 
 private:
   void loadSettings();
@@ -183,12 +153,12 @@ private:
 
   SignalProxy *_signalProxy;
   CoreAliasManager _aliasManager;
-  QHash<NetworkId, NetworkConnection *> _connections;
+  // QHash<NetworkId, NetworkConnection *> _connections;
   QHash<NetworkId, CoreNetwork *> _networks;
   //  QHash<NetworkId, CoreNetwork *> _networksToRemove;
-  QHash<IdentityId, Identity *> _identities;
+  QHash<IdentityId, CoreIdentity *> _identities;
 
-  BufferSyncer *_bufferSyncer;
+  CoreBufferSyncer *_bufferSyncer;
   CoreBacklogManager *_backlogManager;
   CoreBufferViewManager *_bufferViewManager;
   CoreIrcListHelper *_ircListHelper;

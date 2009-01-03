@@ -48,10 +48,10 @@ public:
   virtual void notify(const Notification &) = 0;
   virtual void close(uint notificationId) { Q_UNUSED(notificationId); }
 
-  //! factory to create a configuration widget suitable for a specific notification backend
+  //! Factory to create a configuration widget suitable for a specific notification backend
   /**
-   * AbstractNotification will not take owner ship of that configWidget!
-   * in case you need to communicate with the configWidget directly, make your connections here
+   * AbstractNotification will not take ownership of that configWidget!
+   * In case you need to communicate with the configWidget directly, make your connections here
    */
   virtual SettingsPage *createConfigWidget() const = 0;
 };

@@ -20,13 +20,16 @@
 
 #include "settingsdlg.h"
 
+#include "iconloader.h"
+
 SettingsDlg::SettingsDlg(QWidget *parent)
   : QDialog(parent),
     _currentPage(0)
 {
+  ui.setupUi(this);
   setModal(true);
   setAttribute(Qt::WA_DeleteOnClose, true);
-  ui.setupUi(this);
+  setWindowIcon(SmallIcon("configure"));
 
   updateGeometry();
 
@@ -34,6 +37,8 @@ SettingsDlg::SettingsDlg(QWidget *parent)
 
   connect(ui.settingsTree, SIGNAL(itemSelectionChanged()), this, SLOT(itemSelected()));
   connect(ui.buttonBox, SIGNAL(clicked(QAbstractButton *)), this, SLOT(buttonClicked(QAbstractButton *)));
+
+  setButtonStates();
 }
 
 void SettingsDlg::registerSettingsPage(SettingsPage *sp) {
@@ -82,6 +87,7 @@ void SettingsDlg::selectPage(SettingsPage *sp) {
 
   if(sp != currentPage()) {
     ui.pageTitle->setText(sp->title());
+    setWindowTitle(tr("Configure %1").arg(sp->title()));
     ui.settingsStack->setCurrentWidget(sp);
     _currentPage = sp;
   }

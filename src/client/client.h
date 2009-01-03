@@ -34,6 +34,7 @@ class MessageModel;
 class AbstractMessageProcessor;
 
 class Identity;
+class CertIdentity;
 class Network;
 
 class AbstractUi;
@@ -62,19 +63,20 @@ public:
   static Client *instance();
   static void destroy();
   static void init(AbstractUi *);
+  static AbstractUi *mainUi();
 
   static QList<NetworkId> networkIds();
   static const Network * network(NetworkId);
 
   static QList<IdentityId> identityIds();
-  static const Identity * identity(IdentityId);
+  static const Identity *identity(IdentityId);
 
   //! Request creation of an identity with the given data.
   /** The request will be sent to the core, and will be propagated back to all the clients
    *  with a new valid IdentityId.
    *  \param identity The identity template for the new identity. It does not need to have a valid ID.
    */
-  static void createIdentity(const Identity &identity);
+  static void createIdentity(const CertIdentity &identity);
 
   //! Request update of an identity with the given data.
   /** The request will be sent to the core, and will be propagated back to all the clients.
@@ -111,6 +113,8 @@ public:
 
   static void setBufferLastSeenMsg(BufferId id, const MsgId &msgId); // this is synced to core and other clients
   static void removeBuffer(BufferId id);
+  static void renameBuffer(BufferId bufferId, const QString &newName);
+  static void mergeBuffersPermanently(BufferId bufferId1, BufferId bufferId2);
 
   static void logMessage(QtMsgType type, const char *msg);
   static inline const QString &debugLog() { return instance()->_debugLogBuffer; }
@@ -140,7 +144,7 @@ signals:
   void identityRemoved(IdentityId id);
 
   //! Sent to the core when an identity shall be created. Should not be used elsewhere.
-  void requestCreateIdentity(const Identity &);
+  void requestCreateIdentity(const Identity &, const QVariantMap &);
   //! Sent to the core when an identity shall be removed. Should not be used elsewhere.
   void requestRemoveIdentity(IdentityId);
 
@@ -161,6 +165,7 @@ public slots:
 
   void bufferRemoved(BufferId bufferId);
   void bufferRenamed(BufferId bufferId, const QString &newName);
+  void buffersPermanentlyMerged(BufferId bufferId1, BufferId bufferId2);
 
 private slots:
   void disconnectedFromCore();
@@ -176,6 +181,7 @@ private slots:
 
   void setConnectedToCore(AccountId id, QIODevice *socket = 0);
   void setSyncedToCore();
+  void requestInitialBacklog();
   void setSecuredConnection();
 
 
@@ -191,7 +197,7 @@ private:
   static QPointer<Client> instanceptr;
 
   SignalProxy * _signalProxy;
-  AbstractUi * mainUi;
+  AbstractUi * _mainUi;
   NetworkModel * _networkModel;
   BufferModel * _bufferModel;
   BufferSyncer * _bufferSyncer;

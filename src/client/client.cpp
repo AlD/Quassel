@@ -28,7 +28,7 @@
 #include "bufferviewmanager.h"
 #include "clientbacklogmanager.h"
 #include "clientirclisthelper.h"
-#include "identity.h"
+#include "clientidentity.h"
 #include "ircchannel.h"
 #include "ircuser.h"
 #include "message.h"
@@ -56,21 +56,21 @@ Client *Client::instance() {
 
 void Client::destroy() {
   if(instanceptr) {
-    delete instanceptr->mainUi;
+    delete instanceptr->mainUi();
     instanceptr->deleteLater();
     instanceptr = 0;
   }
 }
 
 void Client::init(AbstractUi *ui) {
-  instance()->mainUi = ui;
+  instance()->_mainUi = ui;
   instance()->init();
 }
 
 Client::Client(QObject *parent)
   : QObject(parent),
     _signalProxy(new SignalProxy(SignalProxy::Client, this)),
-    mainUi(0),
+    _mainUi(0),
     _networkModel(0),
     _bufferModel(0),
     _bufferSyncer(0),
@@ -98,8 +98,8 @@ void Client::init() {
           _networkModel, SLOT(networkRemoved(NetworkId)));
 
   _bufferModel = new BufferModel(_networkModel);
-  _messageModel = mainUi->createMessageModel(this);
-  _messageProcessor = mainUi->createMessageProcessor(this);
+  _messageModel = mainUi()->createMessageModel(this);
+  _messageProcessor = mainUi()->createMessageProcessor(this);
 
   SignalProxy *p = signalProxy();
 
@@ -110,7 +110,7 @@ void Client::init() {
   p->attachSignal(this, SIGNAL(sendInput(BufferInfo, QString)));
   p->attachSignal(this, SIGNAL(requestNetworkStates()));
 
-  p->attachSignal(this, SIGNAL(requestCreateIdentity(const Identity &)), SIGNAL(createIdentity(const Identity &)));
+  p->attachSignal(this, SIGNAL(requestCreateIdentity(const Identity &, const QVariantMap &)), SIGNAL(createIdentity(const Identity &, const QVariantMap &)));
   p->attachSignal(this, SIGNAL(requestRemoveIdentity(IdentityId)), SIGNAL(removeIdentity(IdentityId)));
   p->attachSlot(SIGNAL(identityCreated(const Identity &)), this, SLOT(coreIdentityCreated(const Identity &)));
   p->attachSlot(SIGNAL(identityRemoved(IdentityId)), this, SLOT(coreIdentityRemoved(IdentityId)));
@@ -122,10 +122,10 @@ void Client::init() {
 
   connect(p, SIGNAL(disconnected()), this, SLOT(disconnectedFromCore()));
 
-  //connect(mainUi, SIGNAL(connectToCore(const QVariantMap &)), this, SLOT(connectToCore(const QVariantMap &)));
-  connect(mainUi, SIGNAL(disconnectFromCore()), this, SLOT(disconnectFromCore()));
-  connect(this, SIGNAL(connected()), mainUi, SLOT(connectedToCore()));
-  connect(this, SIGNAL(disconnected()), mainUi, SLOT(disconnectedFromCore()));
+  //connect(mainUi(), SIGNAL(connectToCore(const QVariantMap &)), this, SLOT(connectToCore(const QVariantMap &)));
+  connect(mainUi(), SIGNAL(disconnectFromCore()), this, SLOT(disconnectFromCore()));
+  connect(this, SIGNAL(connected()), mainUi(), SLOT(connectedToCore()));
+  connect(this, SIGNAL(disconnected()), mainUi(), SLOT(disconnectedFromCore()));
 
   // attach backlog manager
   p->synchronize(backlogManager());
@@ -133,6 +133,10 @@ void Client::init() {
 }
 
 /*** public static methods ***/
+
+AbstractUi *Client::mainUi() {
+  return instance()->_mainUi;
+}
 
 AccountId Client::currentCoreAccount() {
   return _currentCoreAccount;
@@ -210,13 +214,18 @@ QList<IdentityId> Client::identityIds() {
   return instance()->_identities.keys();
 }
 
-const Identity * Client::identity(IdentityId id) {
+const Identity *Client::identity(IdentityId id) {
   if(instance()->_identities.contains(id)) return instance()->_identities[id];
   else return 0;
 }
 
-void Client::createIdentity(const Identity &id) {
-  emit instance()->requestCreateIdentity(id);
+void Client::createIdentity(const CertIdentity &id) {
+  QVariantMap additional;
+#ifdef HAVE_SSL
+  additional["KeyPem"] = id.sslKey().toPem();
+  additional["CertPem"] = id.sslCert().toPem();
+#endif
+  emit instance()->requestCreateIdentity(id, additional);
 }
 
 void Client::updateIdentity(IdentityId id, const QVariantMap &ser) {
@@ -277,15 +286,25 @@ void Client::setSyncedToCore() {
   connect(bufferSyncer(), SIGNAL(lastSeenMsgSet(BufferId, MsgId)), _networkModel, SLOT(setLastSeenMsgId(BufferId, MsgId)));
   connect(bufferSyncer(), SIGNAL(bufferRemoved(BufferId)), this, SLOT(bufferRemoved(BufferId)));
   connect(bufferSyncer(), SIGNAL(bufferRenamed(BufferId, QString)), this, SLOT(bufferRenamed(BufferId, QString)));
+  connect(bufferSyncer(), SIGNAL(buffersPermanentlyMerged(BufferId, BufferId)), this, SLOT(buffersPermanentlyMerged(BufferId, BufferId)));
+  connect(bufferSyncer(), SIGNAL(buffersPermanentlyMerged(BufferId, BufferId)), _messageModel, SLOT(buffersPermanentlyMerged(BufferId, BufferId)));
+  connect(bufferSyncer(), SIGNAL(initDone()), this, SLOT(requestInitialBacklog()));
   connect(networkModel(), SIGNAL(setLastSeenMsg(BufferId, MsgId)), bufferSyncer(), SLOT(requestSetLastSeenMsg(BufferId, const MsgId &)));
   signalProxy()->synchronize(bufferSyncer());
 
   // create a new BufferViewManager
+  Q_ASSERT(!_bufferViewManager);
   _bufferViewManager = new BufferViewManager(signalProxy(), this);
+  connect(bufferViewManager(), SIGNAL(initDone()), this, SLOT(requestInitialBacklog()));
 
   _syncedToCore = true;
   emit connected();
   emit coreConnectionStateChanged(true);
+}
+
+void Client::requestInitialBacklog() {
+  if(bufferViewManager()->isInitialized() && bufferSyncer()->isInitialized())
+    Client::backlogManager()->requestInitialBacklog();
 }
 
 void Client::setSecuredConnection() {
@@ -334,10 +353,10 @@ void Client::disconnectedFromCore() {
   }
   Q_ASSERT(_networks.isEmpty());
 
-  QHash<IdentityId, Identity*>::iterator idIter = _identities.begin();
+  QHash<IdentityId, Identity *>::iterator idIter = _identities.begin();
   while(idIter != _identities.end()) {
+    emit identityRemoved(idIter.key());
     Identity *id = idIter.value();
-    emit identityRemoved(id->id());
     idIter = _identities.erase(idIter);
     id->deleteLater();
   }
@@ -381,6 +400,18 @@ void Client::removeBuffer(BufferId id) {
   bufferSyncer()->requestRemoveBuffer(id);
 }
 
+void Client::renameBuffer(BufferId bufferId, const QString &newName) {
+  if(!bufferSyncer())
+    return;
+  bufferSyncer()->requestRenameBuffer(bufferId, newName);
+}
+
+void Client::mergeBuffersPermanently(BufferId bufferId1, BufferId bufferId2) {
+  if(!bufferSyncer())
+    return;
+  bufferSyncer()->requestMergeBuffersPermanently(bufferId1, bufferId2);
+}
+
 void Client::bufferRemoved(BufferId bufferId) {
   // select a sane buffer (status buffer)
   /* we have to manually select a buffer because otherwise inconsitent changes
@@ -404,6 +435,12 @@ void Client::bufferRenamed(BufferId bufferId, const QString &newName) {
   if(bufferIndex.isValid()) {
     networkModel()->setData(bufferIndex, newName, Qt::DisplayRole);
   }
+}
+
+void Client::buffersPermanentlyMerged(BufferId bufferId1, BufferId bufferId2) {
+  QModelIndex idx = networkModel()->bufferIndex(bufferId1);
+  bufferModel()->setCurrentIndex(bufferModel()->mapFromSource(idx));
+  networkModel()->removeBuffer(bufferId2);
 }
 
 void Client::logMessage(QtMsgType type, const char *msg) {

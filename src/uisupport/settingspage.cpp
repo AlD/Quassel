@@ -21,6 +21,8 @@
 #include "settingspage.h"
 
 #include <QCheckBox>
+#include <QComboBox>
+#include <QSpinBox>
 #include <QVariant>
 
 SettingsPage::SettingsPage(const QString &category, const QString &title, QWidget *parent)
@@ -45,4 +47,23 @@ void SettingsPage::load(QCheckBox *box, bool checked) {
 
 bool SettingsPage::hasChanged(QCheckBox *box) {
   return box->property("StoredValue").toBool() == box->isChecked();
+}
+
+
+void SettingsPage::load(QComboBox *box, int index) {
+  box->setProperty("StoredValue", index);
+  box->setCurrentIndex(index);
+}
+
+bool SettingsPage::hasChanged(QComboBox *box) {
+  return box->property("StoredValue").toInt() == box->currentIndex();
+}
+
+void SettingsPage::load(QSpinBox *box, int value) {
+  box->setProperty("StoredValue", value);
+  box->setValue(value);
+}
+
+bool SettingsPage::hasChanged(QSpinBox *box) {
+  return box->property("StoredValue").toInt() == box->value();
 }

@@ -34,7 +34,7 @@ public:
     NetworkField = 0x01,
     BufferField = 0x02,
     SenderField = 0x04,
-    AllFields = 0xFF
+    AllFields = 0xff
   };
 
   ChatMonitorFilter(MessageModel *model, QObject *parent = 0);
@@ -52,12 +52,18 @@ public slots:
   void setShowOwnMessages(bool show);
 
 private slots:
-  void showFieldsSettingsChanged(const QVariant &newValue);
+  void showFieldsSettingChanged(const QVariant &newValue);
   void showOwnMessagesSettingChanged(const QVariant &newValue);
+  void showHighlightsSettingChanged(const QVariant &newValue);
+  void operationModeSettingChanged(const QVariant &newValue);
+  void buffersSettingChanged(const QVariant &newValue);
 
 private:
   int _showFields;
   bool _showOwnMessages;
+  QList<BufferId> _bufferIds;
+  bool _showHighlights;
+  int _operationMode;
 };
 
 #endif

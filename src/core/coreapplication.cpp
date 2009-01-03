@@ -27,14 +27,6 @@ CoreApplicationInternal::CoreApplicationInternal()
   : _coreCreated(false)
 {
   Q_INIT_RESOURCE(sql);
-
-  // put core-only arguments here
-  CliParser *parser = Quassel::cliParser();
-  parser->addOption("port",'p', tr("The port quasselcore will listen at"), QString("4242"));
-  parser->addSwitch("norestore", 'n', tr("Don't restore last core's state"));
-  parser->addOption("logfile", 'l', tr("Path to logfile"));
-  parser->addOption("loglevel", 'L', tr("Loglevel Debug|Info|Warning|Error"), "Info");
-  parser->addOption("datadir", 0, tr("Specify the directory holding datafiles like the Sqlite DB and the SSL Cert"));
 }
 
 CoreApplicationInternal::~CoreApplicationInternal() {
@@ -60,22 +52,29 @@ bool CoreApplicationInternal::init() {
   Core::instance();  // create and init the core
   _coreCreated = true;
 
-  if(!Quassel::isOptionSet("norestore")) {
+#ifdef HAVE_KDE
+  // if using KDE, option is called "restore" instead of "norestore"
+  if(Quassel::isOptionSet("restore"))
+#else
+  if(!Quassel::isOptionSet("norestore"))
+#endif
     Core::restoreState();
-  }
+
   return true;
 }
 
 /*****************************************************************************/
 
 CoreApplication::CoreApplication(int &argc, char **argv)
-  : QCoreApplication(argc, argv),
-    Quassel()
-{
+#ifdef HAVE_KDE
+: KApplication(false), Quassel() {
+  Q_UNUSED(argc); Q_UNUSED(argv);
+#else
+: QCoreApplication(argc, argv), Quassel() {
+#endif
+
   setRunMode(Quassel::CoreOnly);
   _internal = new CoreApplicationInternal();
-
-  qInstallMsgHandler(Logger::logMessage);
 }
 
 CoreApplication::~CoreApplication() {
@@ -83,7 +82,9 @@ CoreApplication::~CoreApplication() {
 }
 
 bool CoreApplication::init() {
-  if(Quassel::init())
-    return _internal->init();
+  if(Quassel::init() && _internal->init()) {
+    qInstallMsgHandler(Logger::logMessage);
+    return true;
+  }
   return false;
 }

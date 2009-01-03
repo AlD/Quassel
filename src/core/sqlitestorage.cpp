@@ -191,6 +191,190 @@ QVariant SqliteStorage::getUserSetting(UserId userId, const QString &settingName
   }
 }
 
+IdentityId SqliteStorage::createIdentity(UserId user, CoreIdentity &identity) {
+  IdentityId identityId;
+
+  QSqlQuery query(logDb());
+  query.prepare(queryString("insert_identity"));
+  query.bindValue(":userid", user.toInt());
+  query.bindValue(":identityname", identity.identityName());
+  query.bindValue(":realname", identity.realName());
+  query.bindValue(":awaynick", identity.awayNick());
+  query.bindValue(":awaynickenabled", identity.awayNickEnabled() ? 1 : 0);
+  query.bindValue(":awayreason", identity.awayReason());
+  query.bindValue(":awayreasonenabled", identity.awayReasonEnabled() ? 1 : 0);
+  query.bindValue(":autoawayenabled", identity.awayReasonEnabled() ? 1 : 0);
+  query.bindValue(":autoawaytime", identity.autoAwayTime());
+  query.bindValue(":autoawayreason", identity.autoAwayReason());
+  query.bindValue(":autoawayreasonenabled", identity.autoAwayReasonEnabled() ? 1 : 0);
+  query.bindValue(":detachawayenabled", identity.detachAwayEnabled() ? 1 : 0);
+  query.bindValue(":detachawayreason", identity.detachAwayReason());
+  query.bindValue(":detachawayreasonenabled", identity.detachAwayReasonEnabled() ? 1 : 0);
+  query.bindValue(":ident", identity.ident());
+  query.bindValue(":kickreason", identity.kickReason());
+  query.bindValue(":partreason", identity.partReason());
+  query.bindValue(":quitreason", identity.quitReason());
+#ifdef HAVE_SSL
+  query.bindValue(":sslcert", identity.sslCert().toPem());
+  query.bindValue(":sslkey", identity.sslKey().toPem());
+#else
+  query.bindValue(":sslcert", QByteArray());
+  query.bindValue(":sslkey", QByteArray());
+#endif
+
+  safeExec(query);
+
+  identityId = query.lastInsertId().toInt();
+  if(!identityId.isValid()) {
+    watchQuery(query);
+  } else {
+    QSqlQuery deleteNickQuery(logDb());
+    deleteNickQuery.prepare(queryString("delete_nicks"));
+    deleteNickQuery.bindValue(":identityid", identityId.toInt());
+    safeExec(deleteNickQuery);
+
+    QSqlQuery insertNickQuery(logDb());
+    insertNickQuery.prepare(queryString("insert_nick"));
+    foreach(QString nick, identity.nicks()) {
+      insertNickQuery.bindValue(":identityid", identityId.toInt());
+      insertNickQuery.bindValue(":nick", nick);
+      safeExec(insertNickQuery);
+    }
+  }
+  identity.setId(identityId);
+  return identityId;
+}
+
+bool SqliteStorage::updateIdentity(UserId user, const CoreIdentity &identity) {
+  QSqlQuery checkQuery(logDb());
+  checkQuery.prepare(queryString("select_checkidentity"));
+  checkQuery.bindValue(":identityid", identity.id().toInt());
+  checkQuery.bindValue(":userid", user.toInt());
+  safeExec(checkQuery);
+
+  if(!checkQuery.first() || checkQuery.value(0).toInt() != 1) // there should be exactly one identity for the given id and user
+    return false;
+
+  QSqlQuery query(logDb());
+  query.prepare(queryString("update_identity"));
+  query.bindValue(":identityname", identity.identityName());
+  query.bindValue(":realname", identity.realName());
+  query.bindValue(":awaynick", identity.awayNick());
+  query.bindValue(":awaynickenabled", identity.awayNickEnabled() ? 1 : 0);
+  query.bindValue(":awayreason", identity.awayReason());
+  query.bindValue(":awayreasonenabled", identity.awayReasonEnabled() ? 1 : 0);
+  query.bindValue(":autoawayenabled", identity.awayReasonEnabled() ? 1 : 0);
+  query.bindValue(":autoawaytime", identity.autoAwayTime());
+  query.bindValue(":autoawayreason", identity.autoAwayReason());
+  query.bindValue(":autoawayreasonenabled", identity.autoAwayReasonEnabled() ? 1 : 0);
+  query.bindValue(":detachawayenabled", identity.detachAwayEnabled() ? 1 : 0);
+  query.bindValue(":detachawayreason", identity.detachAwayReason());
+  query.bindValue(":detachawayreasonenabled", identity.detachAwayReasonEnabled() ? 1 : 0);
+  query.bindValue(":ident", identity.ident());
+  query.bindValue(":kickreason", identity.kickReason());
+  query.bindValue(":partreason", identity.partReason());
+  query.bindValue(":quitreason", identity.quitReason());
+#ifdef HAVE_SSL
+  query.bindValue(":sslcert", identity.sslCert().toPem());
+  query.bindValue(":sslkey", identity.sslKey().toPem());
+#else
+  query.bindValue(":sslcert", QByteArray());
+  query.bindValue(":sslkey", QByteArray());
+#endif
+  query.bindValue(":identityid", identity.id().toInt());
+  safeExec(query);
+  watchQuery(query);
+
+  QSqlQuery deleteNickQuery(logDb());
+  deleteNickQuery.prepare(queryString("delete_nicks"));
+  deleteNickQuery.bindValue(":identityid", identity.id().toInt());
+  safeExec(deleteNickQuery);
+  watchQuery(deleteNickQuery);
+
+  QSqlQuery insertNickQuery(logDb());
+  insertNickQuery.prepare(queryString("insert_nick"));
+  foreach(QString nick, identity.nicks()) {
+    insertNickQuery.bindValue(":identityid", identity.id().toInt());
+    insertNickQuery.bindValue(":nick", nick);
+    safeExec(insertNickQuery);
+    watchQuery(insertNickQuery);
+  }
+
+  return true;
+}
+
+void SqliteStorage::removeIdentity(UserId user, IdentityId identityId) {
+  QSqlQuery checkQuery(logDb());
+  checkQuery.prepare(queryString("select_checkidentity"));
+  checkQuery.bindValue(":identityid", identityId.toInt());
+  checkQuery.bindValue(":userid", user.toInt());
+  safeExec(checkQuery);
+
+  if(!checkQuery.first() || checkQuery.value(0).toInt() != 1) // there should be exactly one identity for the given id and user
+    return;
+
+  QSqlQuery deleteNickQuery(logDb());
+  deleteNickQuery.prepare(queryString("delete_nicks"));
+  deleteNickQuery.bindValue(":identityid", identityId.toInt());
+  safeExec(deleteNickQuery);
+
+  QSqlQuery deleteIdentityQuery(logDb());
+  deleteIdentityQuery.prepare(queryString("delete_identity"));
+  deleteIdentityQuery.bindValue(":identityid", identityId.toInt());
+  deleteIdentityQuery.bindValue(":userid", user.toInt());
+  safeExec(deleteIdentityQuery);
+}
+
+QList<CoreIdentity> SqliteStorage::identities(UserId user) {
+  QList<CoreIdentity> identities;
+
+  QSqlQuery query(logDb());
+  query.prepare(queryString("select_identities"));
+  query.bindValue(":userid", user.toInt());
+
+  QSqlQuery nickQuery(logDb());
+  nickQuery.prepare(queryString("select_nicks"));
+
+  safeExec(query);
+
+  while(query.next()) {
+    CoreIdentity identity(IdentityId(query.value(0).toInt()));
+
+    identity.setIdentityName(query.value(1).toString());
+    identity.setRealName(query.value(2).toString());
+    identity.setAwayNick(query.value(3).toString());
+    identity.setAwayNickEnabled(!!query.value(4).toInt());
+    identity.setAwayReason(query.value(5).toString());
+    identity.setAwayReasonEnabled(!!query.value(6).toInt());
+    identity.setAutoAwayEnabled(!!query.value(7).toInt());
+    identity.setAutoAwayTime(query.value(8).toInt());
+    identity.setAutoAwayReason(query.value(9).toString());
+    identity.setAutoAwayReasonEnabled(!!query.value(10).toInt());
+    identity.setDetachAwayEnabled(!!query.value(11).toInt());
+    identity.setDetachAwayReason(query.value(12).toString());
+    identity.setDetachAwayReasonEnabled(!!query.value(13).toInt());
+    identity.setIdent(query.value(14).toString());
+    identity.setKickReason(query.value(15).toString());
+    identity.setPartReason(query.value(16).toString());
+    identity.setQuitReason(query.value(17).toString());
+#ifdef HAVE_SSL
+    identity.setSslCert(query.value(18).toByteArray());
+    identity.setSslKey(query.value(19).toByteArray());
+#endif
+
+    nickQuery.bindValue(":identityid", identity.id().toInt());
+    QList<QString> nicks;
+    safeExec(nickQuery);
+    watchQuery(nickQuery);
+    while(nickQuery.next()) {
+      nicks << nickQuery.value(0).toString();
+    }
+    identity.setNicks(nicks);
+    identities << identity;
+  }
+  return identities;
+}
+
 NetworkId SqliteStorage::createNetwork(UserId user, const NetworkInfo &info) {
   NetworkId networkId;
   QSqlQuery query(logDb());
@@ -246,14 +430,20 @@ bool SqliteStorage::updateNetwork(UserId user, const NetworkInfo &info) {
 
   QSqlQuery insertServersQuery(logDb());
   insertServersQuery.prepare(queryString("insert_server"));
-  foreach(QVariant server_, info.serverList) {
-    QVariantMap server = server_.toMap();
-    insertServersQuery.bindValue(":hostname", server["Host"]);
-    insertServersQuery.bindValue(":port", server["Port"].toInt());
-    insertServersQuery.bindValue(":password", server["Password"]);
-    insertServersQuery.bindValue(":ssl", server["UseSSL"].toBool() ? 1 : 0);
+  foreach(Network::Server server, info.serverList) {
     insertServersQuery.bindValue(":userid", user.toInt());
     insertServersQuery.bindValue(":networkid", info.networkId.toInt());
+    insertServersQuery.bindValue(":hostname", server.host);
+    insertServersQuery.bindValue(":port", server.port);
+    insertServersQuery.bindValue(":password", server.password);
+    insertServersQuery.bindValue(":ssl", server.useSsl ? 1 : 0);
+    insertServersQuery.bindValue(":sslversion", server.sslVersion);
+    insertServersQuery.bindValue(":useproxy", server.useProxy ? 1 : 0);
+    insertServersQuery.bindValue(":proxytype", server.proxyType);
+    insertServersQuery.bindValue(":proxyhost", server.proxyHost);
+    insertServersQuery.bindValue(":proxyport", server.proxyPort);
+    insertServersQuery.bindValue(":proxyuser", server.proxyUser);
+    insertServersQuery.bindValue(":proxypass", server.proxyPass);
 
     safeExec(insertServersQuery);
     if(!watchQuery(insertServersQuery))
@@ -358,13 +548,20 @@ QList<NetworkInfo> SqliteStorage::networks(UserId user) {
     if(!watchQuery(serversQuery))
       return nets;
 
-    QVariantList servers;
+    Network::ServerList servers;
     while(serversQuery.next()) {
-      QVariantMap server;
-      server["Host"] = serversQuery.value(0).toString();
-      server["Port"] = serversQuery.value(1).toInt();
-      server["Password"] = serversQuery.value(2).toString();
-      server["UseSSL"] = serversQuery.value(3).toInt() == 1 ? true : false;
+      Network::Server server;
+      server.host = serversQuery.value(0).toString();
+      server.port = serversQuery.value(1).toUInt();
+      server.password = serversQuery.value(2).toString();
+      server.useSsl = serversQuery.value(3).toInt() == 1 ? true : false;
+      server.sslVersion = serversQuery.value(4).toInt();
+      server.useProxy = serversQuery.value(5).toInt() == 1 ? true : false;
+      server.proxyType = serversQuery.value(6).toInt();
+      server.proxyHost = serversQuery.value(7).toString();
+      server.proxyPort = serversQuery.value(8).toUInt();
+      server.proxyUser = serversQuery.value(9).toString();
+      server.proxyPass = serversQuery.value(10).toString();
       servers << server;
     }
     net.serverList = servers;
@@ -494,7 +691,7 @@ void SqliteStorage::createBuffer(UserId user, const NetworkId &networkId, Buffer
   watchQuery(query);
 }
 
-BufferInfo SqliteStorage::getBufferInfo(UserId user, const NetworkId &networkId, BufferInfo::Type type, const QString &buffer) {
+BufferInfo SqliteStorage::bufferInfo(UserId user, const NetworkId &networkId, BufferInfo::Type type, const QString &buffer, bool create) {
   QSqlQuery query(logDb());
   query.prepare(queryString("select_bufferByName"));
   query.bindValue(":networkid", networkId.toInt());
@@ -503,6 +700,9 @@ BufferInfo SqliteStorage::getBufferInfo(UserId user, const NetworkId &networkId,
   safeExec(query);
 
   if(!query.first()) {
+    if(!create)
+      return BufferInfo();
+
     createBuffer(user, networkId, type, buffer);
     safeExec(query);
     if(!query.first()) {
@@ -594,45 +794,45 @@ bool SqliteStorage::removeBuffer(const UserId &user, const BufferId &bufferId) {
   return true;
 }
 
-BufferId SqliteStorage::renameBuffer(const UserId &user, const NetworkId &networkId, const QString &newName, const QString &oldName) {
-  // check if such a buffer exists...
-  QSqlQuery existsQuery(logDb());
-  existsQuery.prepare(queryString("select_bufferByName"));
-  existsQuery.bindValue(":networkid", networkId.toInt());
-  existsQuery.bindValue(":userid", user.toInt());
-  existsQuery.bindValue(":buffercname", oldName.toLower());
-  safeExec(existsQuery);
-  if(!watchQuery(existsQuery))
+bool SqliteStorage::renameBuffer(const UserId &user, const BufferId &bufferId, const QString &newName) {
+  if(!isValidBuffer(user, bufferId))
     return false;
 
-  if(!existsQuery.first())
+  QSqlQuery query(logDb());
+  query.prepare(queryString("update_buffer_name"));
+  query.bindValue(":buffername", newName);
+  query.bindValue(":buffercname", newName.toLower());
+  query.bindValue(":bufferid", bufferId.toInt());
+  safeExec(query);
+  if(query.lastError().isValid()) {
+    // unexepcted error occured (19 == constraint violation)
+    if(query.lastError().number() != 19)
+      watchQuery(query);
+    return false;
+  }
+
+  return true;
+}
+
+bool SqliteStorage::mergeBuffersPermanently(const UserId &user, const BufferId &bufferId1, const BufferId &bufferId2) {
+  if(!isValidBuffer(user, bufferId1) || !isValidBuffer(user, bufferId2))
     return false;
 
-  const int bufferid = existsQuery.value(0).toInt();
-
-  Q_ASSERT(!existsQuery.next());
-
-  // ... and if the new name is still free.
-  existsQuery.bindValue(":networkid", networkId.toInt());
-  existsQuery.bindValue(":userid", user.toInt());
-  existsQuery.bindValue(":buffercname", newName.toLower());
-  safeExec(existsQuery);
-  if(!watchQuery(existsQuery))
+  QSqlQuery query(logDb());
+  query.prepare(queryString("update_backlog_bufferid"));
+  query.bindValue(":oldbufferid", bufferId2.toInt());
+  query.bindValue(":newbufferid", bufferId1.toInt());
+  safeExec(query);
+  if(!watchQuery(query))
     return false;
 
-  if(existsQuery.first())
-    return false;
+  QSqlQuery delBufferQuery(logDb());
+  delBufferQuery.prepare(queryString("delete_buffer_for_bufferid"));
+  delBufferQuery.bindValue(":bufferid", bufferId2.toInt());
+  safeExec(delBufferQuery);
+  watchQuery(delBufferQuery);
 
-  QSqlQuery renameBufferQuery(logDb());
-  renameBufferQuery.prepare(queryString("update_buffer_name"));
-  renameBufferQuery.bindValue(":buffername", newName);
-  renameBufferQuery.bindValue(":buffercname", newName.toLower());
-  renameBufferQuery.bindValue(":bufferid", bufferid);
-  safeExec(renameBufferQuery);
-  if(watchQuery(existsQuery))
-    return BufferId(bufferid);
-  else
-    return BufferId();
+  return true;
 }
 
 void SqliteStorage::setBufferLastSeenMsg(UserId user, const BufferId &bufferId, const MsgId &msgId) {
@@ -693,118 +893,75 @@ MsgId SqliteStorage::logMessage(Message msg) {
   return msgId;
 }
 
-QList<Message> SqliteStorage::requestMsgs(UserId user, BufferId bufferId, int lastmsgs, int offset) {
+QList<Message> SqliteStorage::requestMsgs(UserId user, BufferId bufferId, MsgId first, MsgId last, int limit) {
   QList<Message> messagelist;
 
   BufferInfo bufferInfo = getBufferInfo(user, bufferId);
   if(!bufferInfo.isValid())
     return messagelist;
 
-  if(offset == -1) {
-    offset = 0;
+  QSqlQuery query(logDb());
+  
+  if(last == -1 && first == -1) {
+    query.prepare(queryString("select_messagesNewestK"));
+  } else if(last == -1) {
+    query.prepare(queryString("select_messagesNewerThan"));
+    query.bindValue(":firstmsg", first.toInt());
   } else {
-    // we have to determine the real offset first
-    QSqlQuery offsetQuery(logDb());
-    offsetQuery.prepare(queryString("select_messagesOffset"));
-
-    offsetQuery.bindValue(":bufferid", bufferId.toInt());
-    offsetQuery.bindValue(":messageid", offset);
-    safeExec(offsetQuery);
-    offsetQuery.first();
-    offset = offsetQuery.value(0).toInt();
+    query.prepare(queryString("select_messages"));
+    query.bindValue(":lastmsg", last.toInt());
+    query.bindValue(":firstmsg", first.toInt());
   }
 
-  // now let's select the messages
-  QSqlQuery msgQuery(logDb());
-  msgQuery.prepare(queryString("select_messages"));
+  query.bindValue(":bufferid", bufferId.toInt());
+  query.bindValue(":limit", limit);
+  safeExec(query);
 
-  msgQuery.bindValue(":bufferid", bufferId.toInt());
-  msgQuery.bindValue(":limit", lastmsgs);
-  msgQuery.bindValue(":offset", offset);
-  safeExec(msgQuery);
+  watchQuery(query);
 
-  watchQuery(msgQuery);
-
-  while(msgQuery.next()) {
-    Message msg(QDateTime::fromTime_t(msgQuery.value(1).toInt()),
+  while(query.next()) {
+    Message msg(QDateTime::fromTime_t(query.value(1).toInt()),
                 bufferInfo,
-                (Message::Type)msgQuery.value(2).toUInt(),
-                msgQuery.value(5).toString(),
-                msgQuery.value(4).toString(),
-                (Message::Flags)msgQuery.value(3).toUInt());
-    msg.setMsgId(msgQuery.value(0).toInt());
+                (Message::Type)query.value(2).toUInt(),
+                query.value(5).toString(),
+                query.value(4).toString(),
+                (Message::Flags)query.value(3).toUInt());
+    msg.setMsgId(query.value(0).toInt());
     messagelist << msg;
   }
   return messagelist;
 }
 
-
-QList<Message> SqliteStorage::requestMsgs(UserId user, BufferId bufferId, QDateTime since, int offset) {
+QList<Message> SqliteStorage::requestAllMsgs(UserId user, MsgId first, MsgId last, int limit) {
   QList<Message> messagelist;
 
-  BufferInfo bufferInfo = getBufferInfo(user, bufferId);
-  if(!bufferInfo.isValid())
-    return messagelist;
-
-  // we have to determine the real offset first
-  QSqlQuery offsetQuery(logDb());
-  offsetQuery.prepare(queryString("select_messagesSinceOffset"));
-
-  offsetQuery.bindValue(":bufferid", bufferId.toInt());
-  offsetQuery.bindValue(":since", since.toTime_t());
-  safeExec(offsetQuery);
-  offsetQuery.first();
-  offset = offsetQuery.value(0).toInt();
-
-  // now let's select the messages
-  QSqlQuery msgQuery(logDb());
-  msgQuery.prepare(queryString("select_messagesSince"));
-  msgQuery.bindValue(":bufferid", bufferId.toInt());
-  msgQuery.bindValue(":since", since.toTime_t());
-  msgQuery.bindValue(":offset", offset);
-  safeExec(msgQuery);
-
-  watchQuery(msgQuery);
-
-  while(msgQuery.next()) {
-    Message msg(QDateTime::fromTime_t(msgQuery.value(1).toInt()),
-                bufferInfo,
-                (Message::Type)msgQuery.value(2).toUInt(),
-                msgQuery.value(5).toString(),
-                msgQuery.value(4).toString(),
-                (Message::Flags)msgQuery.value(3).toUInt());
-    msg.setMsgId(msgQuery.value(0).toInt());
-    messagelist << msg;
+  QHash<BufferId, BufferInfo> bufferInfoHash;
+  foreach(BufferInfo bufferInfo, requestBuffers(user)) {
+    bufferInfoHash[bufferInfo.bufferId()] = bufferInfo;
   }
 
-  return messagelist;
-}
+  QSqlQuery query(logDb());
+  if(last == -1) {
+    query.prepare(queryString("select_messagesAllNew"));
+  } else {
+    query.prepare(queryString("select_messagesAll"));
+    query.bindValue(":lastmsg", last.toInt());
+  }
+  query.bindValue(":userid", user.toInt());
+  query.bindValue(":firstmsg", first.toInt());
+  query.bindValue(":limit", limit);
+  safeExec(query);
 
+  watchQuery(query);
 
-QList<Message> SqliteStorage::requestMsgRange(UserId user, BufferId bufferId, int first, int last) {
-  QList<Message> messagelist;
-
-  BufferInfo bufferInfo = getBufferInfo(user, bufferId);
-  if(!bufferInfo.isValid())
-    return messagelist;
-
-  QSqlQuery rangeQuery(logDb());
-  rangeQuery.prepare(queryString("select_messageRange"));
-  rangeQuery.bindValue(":bufferid", bufferId.toInt());
-  rangeQuery.bindValue(":firstmsg", first);
-  rangeQuery.bindValue(":lastmsg", last);
-  safeExec(rangeQuery);
-
-  watchQuery(rangeQuery);
-
-  while(rangeQuery.next()) {
-    Message msg(QDateTime::fromTime_t(rangeQuery.value(1).toInt()),
-                bufferInfo,
-                (Message::Type)rangeQuery.value(2).toUInt(),
-                rangeQuery.value(5).toString(),
-                rangeQuery.value(4).toString(),
-                (Message::Flags)rangeQuery.value(3).toUInt());
-    msg.setMsgId(rangeQuery.value(0).toInt());
+  while(query.next()) {
+    Message msg(QDateTime::fromTime_t(query.value(2).toInt()),
+                bufferInfoHash[query.value(1).toInt()],
+                (Message::Type)query.value(3).toUInt(),
+                query.value(6).toString(),
+                query.value(5).toString(),
+                (Message::Flags)query.value(4).toUInt());
+    msg.setMsgId(query.value(0).toInt());
     messagelist << msg;
   }
 

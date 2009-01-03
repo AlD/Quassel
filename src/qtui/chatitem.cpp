@@ -28,9 +28,12 @@
 #include <QTextLayout>
 #include <QMenu>
 
-
+#include "buffermodel.h"
+#include "bufferview.h"
 #include "chatitem.h"
 #include "chatlinemodel.h"
+#include "iconloader.h"
+#include "mainwin.h"
 #include "qtui.h"
 #include "qtuistyle.h"
 
@@ -507,11 +510,20 @@ void ContentsChatItem::handleClick(const QPointF &pos, ChatScene::ClickMode clic
         case Clickable::Url:
           if(!str.contains("://"))
             str = "http://" + str;
-	  QDesktopServices::openUrl(QUrl::fromEncoded(str.toUtf8(), QUrl::TolerantMode));
+          QDesktopServices::openUrl(QUrl::fromEncoded(str.toUtf8(), QUrl::TolerantMode));
           break;
-        case Clickable::Channel:
-          // TODO join or whatever...
+        case Clickable::Channel: {
+          NetworkId networkId = Client::networkModel()->networkId(data(MessageModel::BufferIdRole).value<BufferId>());
+          BufferId bufId = Client::networkModel()->bufferId(networkId, str);
+          if(bufId.isValid()) {
+            QModelIndex targetIdx = Client::networkModel()->bufferIndex(bufId);
+            Client::bufferModel()->switchToBuffer(bufId);
+            if(!targetIdx.data(NetworkModel::ItemActiveRole).toBool())
+              Client::userInput(BufferInfo::fakeStatusBuffer(networkId), QString("/JOIN %1").arg(str));
+          } else
+              Client::userInput(BufferInfo::fakeStatusBuffer(networkId), QString("/JOIN %1").arg(str));
           break;
+        }
         default:
           break;
       }
@@ -559,8 +571,14 @@ void ContentsChatItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event) {
       onClickable = true;
       showWebPreview(click);
     } else if(click.type == Clickable::Channel) {
-      // TODO: don't make clickable if it's our own name
-      // onClickable = true; //FIXME disabled for now
+      QString name = data(ChatLineModel::DisplayRole).toString().mid(click.start, click.length);
+      // don't make clickable if it could be a #number
+      if(!QRegExp("^#\\d+$").exactMatch(name)) {
+      // don't make clickable if it's our own name
+        BufferId myId = data(MessageModel::BufferIdRole).value<BufferId>();
+        if(Client::networkModel()->bufferName(myId) != name)
+          onClickable = true;
+      }
     }
     if(onClickable) {
       setCursor(Qt::PointingHandCursor);
@@ -577,15 +595,28 @@ void ContentsChatItem::addActionsToMenu(QMenu *menu, const QPointF &pos) {
   Q_UNUSED(pos); // we assume that the current mouse cursor pos is the point of invocation
 
   if(privateData()->currentClickable.isValid()) {
-    switch(privateData()->currentClickable.type) {
+    Clickable click = privateData()->currentClickable;
+    switch(click.type) {
       case Clickable::Url:
-        privateData()->activeClickable = privateData()->currentClickable;
-        menu->addAction(tr("Copy Link Address"), &_actionProxy, SLOT(copyLinkToClipboard()))->setData(QVariant::fromValue<void *>(this));
+        privateData()->activeClickable = click;
+        menu->addAction(SmallIcon("edit-copy"), tr("Copy Link Address"),
+                         &_actionProxy, SLOT(copyLinkToClipboard()))->setData(QVariant::fromValue<void *>(this));
         break;
-
+      case Clickable::Channel: {
+        // Hide existing menu actions, they confuse us when right-clicking on a clickable
+        foreach(QAction *action, menu->actions())
+          action->setVisible(false);
+        QString name = data(ChatLineModel::DisplayRole).toString().mid(click.start, click.length);
+        Client::mainUi()->actionProvider()->addActions(menu, chatScene()->filter(), data(MessageModel::BufferIdRole).value<BufferId>(), name);
+        break;
+      }
       default:
         break;
     }
+  } else {
+
+    // Buffer-specific actions
+    Client::mainUi()->actionProvider()->addActions(menu, chatScene()->filter(), data(MessageModel::BufferIdRole).value<BufferId>());
   }
 }
 

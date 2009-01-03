@@ -19,6 +19,15 @@
  ***************************************************************************/
 #include "mainwin.h"
 
+#ifdef HAVE_KDE
+#  include <KAction>
+#  include <KActionCollection>
+#  include <KHelpMenu>
+#  include <KMenuBar>
+#  include <KShortcutsDialog>
+#  include <KStatusBar>
+#endif
+
 #include "aboutdlg.h"
 #include "action.h"
 #include "actioncollection.h"
@@ -53,15 +62,24 @@
 #include "topicwidget.h"
 #include "verticaldock.h"
 
-#ifdef HAVE_DBUS
-#  include "desktopnotificationbackend.h"
-#endif
-#include "systraynotificationbackend.h"
-#include "taskbarnotificationbackend.h"
+#ifndef HAVE_KDE
+#  ifdef HAVE_DBUS
+#    include "desktopnotificationbackend.h"
+#  endif
+#  ifdef HAVE_PHONON
+#    include "phononnotificationbackend.h"
+#  endif
+#  include "systraynotificationbackend.h"
+#  include "taskbarnotificationbackend.h"
+#else /* HAVE_KDE */
+#  include "knotificationbackend.h"
+#endif /* HAVE_KDE */
 
 #include "settingspages/aliasessettingspage.h"
 #include "settingspages/appearancesettingspage.h"
+#include "settingspages/backlogsettingspage.h"
 #include "settingspages/bufferviewsettingspage.h"
+#include "settingspages/chatmonitorsettingspage.h"
 #include "settingspages/colorsettingspage.h"
 #include "settingspages/fontssettingspage.h"
 #include "settingspages/generalsettingspage.h"
@@ -71,7 +89,12 @@
 #include "settingspages/notificationssettingspage.h"
 
 MainWin::MainWin(QWidget *parent)
+#ifdef HAVE_KDE
+  : KMainWindow(parent),
+  _kHelpMenu(new KHelpMenu(this)),
+#else
   : QMainWindow(parent),
+#endif
     coreLagLabel(new QLabel()),
     sslLabel(new QLabel()),
     msgProcessorStatusWidget(new MsgProcessorStatusWidget()),
@@ -92,11 +115,19 @@ MainWin::MainWin(QWidget *parent)
 
   installEventFilter(new JumpKeyHandler(this));
 
-  QtUi::registerNotificationBackend(new TaskbarNotificationBackend(this));
-  QtUi::registerNotificationBackend(new SystrayNotificationBackend(this));
-#ifdef HAVE_DBUS
-  QtUi::registerNotificationBackend(new DesktopNotificationBackend(this));
-#endif
+#ifndef HAVE_KDE
+    QtUi::registerNotificationBackend(new TaskbarNotificationBackend(this));
+    QtUi::registerNotificationBackend(new SystrayNotificationBackend(this));
+#  ifdef HAVE_PHONON
+    QtUi::registerNotificationBackend(new PhononNotificationBackend(this));
+#  endif
+#  ifdef HAVE_DBUS
+    QtUi::registerNotificationBackend(new DesktopNotificationBackend(this));
+#  endif
+
+#else /* HAVE_KDE */
+    QtUi::registerNotificationBackend(new KNotificationBackend(this));
+#endif /* HAVE_KDE */
 
   QtUiApplication* app = qobject_cast<QtUiApplication*> qApp;
   connect(app, SIGNAL(saveStateToSession(const QString&)), SLOT(saveStateToSession(const QString&)));
@@ -113,6 +144,7 @@ void MainWin::init() {
   connect(QApplication::instance(), SIGNAL(aboutToQuit()), SLOT(saveLayout()));
   connect(Client::instance(), SIGNAL(networkCreated(NetworkId)), SLOT(clientNetworkCreated(NetworkId)));
   connect(Client::instance(), SIGNAL(networkRemoved(NetworkId)), SLOT(clientNetworkRemoved(NetworkId)));
+  connect(Client::mainUi()->actionProvider(), SIGNAL(showChannelList(NetworkId)), SLOT(showChannelList(NetworkId)));
 
   // Setup Dock Areas
   setDockNestingEnabled(true);
@@ -173,15 +205,15 @@ void MainWin::setupActions() {
                                                 Client::instance(), SLOT(disconnectFromCore())));
   coll->addAction("CoreInfo", new Action(SmallIcon("help-about"), tr("Core &Info..."), coll,
                                           this, SLOT(showCoreInfoDlg())));
-  coll->addAction("EditNetworks", new Action(SmallIcon("configure"), tr("Edit &Networks..."), coll,
-                                              this, SLOT(on_actionEditNetworks_triggered())));
+  coll->addAction("ConfigureNetworks", new Action(SmallIcon("configure"), tr("Configure &Networks..."), coll,
+                                              this, SLOT(on_actionConfigureNetworks_triggered())));
   coll->addAction("Quit", new Action(SmallIcon("application-exit"), tr("&Quit"), coll,
                                       qApp, SLOT(quit()), tr("Ctrl+Q")));
 
   // View
-  coll->addAction("ManageBufferViews", new Action(SmallIcon("view-tree"), tr("&Manage Buffer Views..."), coll,
-                                             this, SLOT(on_actionManageViews_triggered())));
-  Action *lockAct = coll->addAction("LockDockPositions", new Action(tr("&Lock Dock Positions"), coll));
+  coll->addAction("ConfigureBufferViews", new Action(tr("&Configure Buffer Views..."), coll,
+                                             this, SLOT(on_actionConfigureViews_triggered())));
+  QAction *lockAct = coll->addAction("LockDockPositions", new Action(tr("&Lock Dock Positions"), coll));
   lockAct->setCheckable(true);
   connect(lockAct, SIGNAL(toggled(bool)), SLOT(on_actionLockDockPositions_toggled(bool)));
 
@@ -195,9 +227,9 @@ void MainWin::setupActions() {
                                                   this, SLOT(showSettingsDlg()), tr("F7")));
 
   // Help
-  coll->addAction("AboutQuassel", new Action(SmallIcon("quassel"), tr("&About Quassel..."), coll,
+  coll->addAction("AboutQuassel", new Action(SmallIcon("quassel"), tr("&About Quassel"), coll,
                                               this, SLOT(showAboutDlg())));
-  coll->addAction("AboutQt", new Action(QIcon(":/pics/qt-logo.png"), tr("About &Qt..."), coll,
+  coll->addAction("AboutQt", new Action(QIcon(":/pics/qt-logo.png"), tr("About &Qt"), coll,
                                          qApp, SLOT(aboutQt())));
   coll->addAction("DebugNetworkModel", new Action(SmallIcon("tools-report-bug"), tr("Debug &NetworkModel"), coll,
                                        this, SLOT(on_actionDebugNetworkModel_triggered())));
@@ -216,14 +248,14 @@ void MainWin::setupMenus() {
   _fileMenu->addAction(coll->action("CoreInfo"));
   _fileMenu->addSeparator();
   _networksMenu = _fileMenu->addMenu(tr("&Networks"));
-  _networksMenu->addAction(coll->action("EditNetworks"));
+  _networksMenu->addAction(coll->action("ConfigureNetworks"));
   _networksMenu->addSeparator();
   _fileMenu->addSeparator();
   _fileMenu->addAction(coll->action("Quit"));
 
   _viewMenu = menuBar()->addMenu(tr("&View"));
   _bufferViewsMenu = _viewMenu->addMenu(tr("&Buffer Views"));
-  _bufferViewsMenu->addAction(coll->action("ManageBufferViews"));
+  _bufferViewsMenu->addAction(coll->action("ConfigureBufferViews"));
   _viewMenu->addSeparator();
   _viewMenu->addAction(coll->action("ToggleSearchBar"));
   _viewMenu->addAction(coll->action("ToggleStatusBar"));
@@ -231,11 +263,19 @@ void MainWin::setupMenus() {
   _viewMenu->addAction(coll->action("LockDockPositions"));
 
   _settingsMenu = menuBar()->addMenu(tr("&Settings"));
+#ifdef HAVE_KDE
+  _settingsMenu->addAction(KStandardAction::keyBindings(this, SLOT(showShortcutsDlg()), this));
+  _settingsMenu->addAction(KStandardAction::configureNotifications(this, SLOT(showNotificationsDlg()), this));
+#endif
   _settingsMenu->addAction(coll->action("ConfigureQuassel"));
 
   _helpMenu = menuBar()->addMenu(tr("&Help"));
   _helpMenu->addAction(coll->action("AboutQuassel"));
+#ifndef HAVE_KDE
   _helpMenu->addAction(coll->action("AboutQt"));
+#else
+  _helpMenu->addAction(KStandardAction::aboutKDE(_kHelpMenu, SLOT(aboutKDE()), this));
+#endif
   _helpMenu->addSeparator();
   _helpDebugMenu = _helpMenu->addMenu(SmallIcon("tools-report-bug"), tr("Debug"));
   _helpDebugMenu->addAction(coll->action("DebugNetworkModel"));
@@ -269,8 +309,6 @@ void MainWin::addBufferView(BufferViewConfig *config) {
   BufferView *view = new BufferView(dock);
   view->setFilteredModel(Client::bufferModel(), config);
   view->show();
-
-  connect(&view->showChannelList, SIGNAL(triggered()), this, SLOT(showChannelList()));
 
   Client::bufferModel()->synchronizeView(view);
 
@@ -306,12 +344,17 @@ BufferView *MainWin::allBuffersView() const {
   return 0;
 }
 
-void MainWin::on_actionEditNetworks_triggered() {
+void MainWin::showNotificationsDlg() {
+  SettingsPageDlg dlg(new NotificationsSettingsPage(this), this);
+  dlg.exec();
+}
+
+void MainWin::on_actionConfigureNetworks_triggered() {
   SettingsPageDlg dlg(new NetworksSettingsPage(this), this);
   dlg.exec();
 }
 
-void MainWin::on_actionManageViews_triggered() {
+void MainWin::on_actionConfigureViews_triggered() {
   SettingsPageDlg dlg(new BufferViewSettingsPage(this), this);
   dlg.exec();
 }
@@ -483,7 +526,6 @@ void MainWin::connectedToCore() {
   connect(Client::bufferViewManager(), SIGNAL(initDone()), this, SLOT(loadLayout()));
 
   setConnectedState();
-  Client::backlogManager()->requestInitialBacklog();
 }
 
 void MainWin::setConnectedState() {
@@ -585,9 +627,11 @@ void MainWin::showSettingsDlg() {
   dlg->registerSettingsPage(new AppearanceSettingsPage(dlg)); //General
   //Category: Behaviour
   dlg->registerSettingsPage(new GeneralSettingsPage(dlg));
+  dlg->registerSettingsPage(new BacklogSettingsPage(dlg));
   dlg->registerSettingsPage(new HighlightSettingsPage(dlg));
   dlg->registerSettingsPage(new AliasesSettingsPage(dlg));
   dlg->registerSettingsPage(new NotificationsSettingsPage(dlg));
+  dlg->registerSettingsPage(new ChatMonitorSettingsPage(dlg));
   //Category: General
   dlg->registerSettingsPage(new IdentitiesSettingsPage(dlg));
   dlg->registerSettingsPage(new NetworksSettingsPage(dlg));
@@ -599,6 +643,12 @@ void MainWin::showSettingsDlg() {
 void MainWin::showAboutDlg() {
   AboutDlg(this).exec();
 }
+
+#ifdef HAVE_KDE
+void MainWin::showShortcutsDlg() {
+  KShortcutsDialog::configure(QtUi::actionCollection("General"), KShortcutsEditor::LetterShortcutsDisallowed);
+}
+#endif
 
 void MainWin::closeEvent(QCloseEvent *event) {
   QtUiSettings s;

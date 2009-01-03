@@ -20,7 +20,12 @@
 
 #include "backlogmanager.h"
 
-QVariantList BacklogManager::requestBacklog(BufferId bufferId, int lastMsgs, int offset) {
-  emit backlogRequested(bufferId, lastMsgs, offset);
+QVariantList BacklogManager::requestBacklog(BufferId bufferId, MsgId first, MsgId last, int limit, int additional) {
+  emit backlogRequested(bufferId, first, last, limit, additional);
+  return QVariantList();
+}
+
+QVariantList BacklogManager::requestBacklogAll(MsgId first, MsgId last, int limit, int additional) {
+  emit backlogAllRequested(first, last, limit, additional);
   return QVariantList();
 }

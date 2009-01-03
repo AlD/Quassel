@@ -21,7 +21,12 @@
 #ifndef MAINWIN_H_
 #define MAINWIN_H_
 
-#include <QMainWindow>
+#ifdef HAVE_KDE
+#  include <KMainWindow>
+#else
+#  include <QMainWindow>
+#endif
+
 #include <QSystemTrayIcon>
 
 #include "qtui.h"
@@ -40,8 +45,15 @@ class SystemTrayIcon;
 class QMenu;
 class QLabel;
 
+class KHelpMenu;
+
 //!\brief The main window of Quassel's QtUi.
-class MainWin : public QMainWindow {
+class MainWin
+#ifdef HAVE_KDE
+: public KMainWindow {
+#else
+: public QMainWindow {
+#endif
   Q_OBJECT
 
   public:
@@ -83,8 +95,12 @@ class MainWin : public QMainWindow {
     void showCoreConnectionDlg(bool autoConnect = false);
     void showCoreInfoDlg();
     void showSettingsDlg();
-    void on_actionEditNetworks_triggered();
-    void on_actionManageViews_triggered();
+    void showNotificationsDlg();
+#ifdef HAVE_KDE
+    void showShortcutsDlg();
+#endif
+    void on_actionConfigureNetworks_triggered();
+    void on_actionConfigureViews_triggered();
     void on_actionLockDockPositions_toggled(bool lock);
     void on_actionDebugNetworkModel_triggered();
     void on_actionDebugMessageModel_triggered();
@@ -105,6 +121,9 @@ class MainWin : public QMainWindow {
     void disconnectFromCore();
 
   private:
+#ifdef HAVE_KDE
+    KHelpMenu *_kHelpMenu;
+#endif
 
     QMenu *systrayMenu;
     QLabel *coreLagLabel;

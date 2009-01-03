@@ -24,6 +24,7 @@
 #include "quasselui.h"
 
 #include "abstractnotificationbackend.h"
+#include "mainwin.h"
 
 class ActionCollection;
 class MainWin;
@@ -55,6 +56,7 @@ public:
    *  @param category The category (default: "General")
    */
   static ActionCollection *actionCollection(const QString &category = "General");
+  inline AbstractActionProvider *actionProvider() const;
 
   /* Notifications */
 
@@ -75,7 +77,9 @@ protected slots:
   void disconnectedFromCore();
 
 private:
-  static MainWin *_mainWin;
+  AbstractActionProvider *_actionProvider;
+
+  static QPointer<MainWin> _mainWin;
   static QHash<QString, ActionCollection *> _actionCollections;
   static QtUiStyle *_style;
   static QList<AbstractNotificationBackend *> _notificationBackends;
@@ -84,5 +88,6 @@ private:
 
 QtUiStyle *QtUi::style() { return _style; }
 MainWin *QtUi::mainWindow() { return _mainWin; }
+AbstractActionProvider *QtUi::actionProvider() const { return _actionProvider; }
 
 #endif

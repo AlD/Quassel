@@ -48,7 +48,7 @@ ChatScene::ChatScene(QAbstractItemModel *model, const QString &idString, qreal w
     _chatView(parent),
     _idString(idString),
     _model(model),
-    _singleBufferScene(false),
+    _singleBufferId(BufferId()),
     _sceneRect(0, 0, width, 0),
     _firstLineRow(-1),
     _viewportHeight(0),
@@ -61,8 +61,8 @@ ChatScene::ChatScene(QAbstractItemModel *model, const QString &idString, qreal w
     _leftButtonPressed(false)
 {
   MessageFilter *filter = qobject_cast<MessageFilter*>(model);
-  if(filter) {
-    _singleBufferScene = filter->isSingleBufferFilter();
+  if(filter && filter->isSingleBufferFilter()) {
+    _singleBufferId = filter->singleBufferId();
   }
 
   ChatViewSettings defaultSettings;
@@ -587,6 +587,9 @@ void ChatScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
   ChatItem *item = chatItemAt(pos);
   if(item)
     item->addActionsToMenu(&menu, item->mapFromScene(pos));
+  else
+    // no item -> default scene actions
+    Client::mainUi()->actionProvider()->addActions(&menu, filter(), BufferId());
 
   menu.exec(event->screenPos());
 

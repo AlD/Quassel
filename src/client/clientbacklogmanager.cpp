@@ -35,12 +35,8 @@ ClientBacklogManager::ClientBacklogManager(QObject *parent)
 {
 }
 
-void ClientBacklogManager::receiveBacklog(BufferId bufferId, int lastMsgs, int offset, QVariantList msgs) {
-  Q_UNUSED(lastMsgs)
-  Q_UNUSED(offset)
-
-  if(msgs.isEmpty())
-    return;
+void ClientBacklogManager::receiveBacklog(BufferId bufferId, MsgId first, MsgId last, int limit, int additional, QVariantList msgs) {
+  Q_UNUSED(first) Q_UNUSED(last) Q_UNUSED(limit) Q_UNUSED(additional)
 
   emit messagesReceived(bufferId, msgs.count());
 
@@ -55,10 +51,25 @@ void ClientBacklogManager::receiveBacklog(BufferId bufferId, int lastMsgs, int o
     if(!_requester->buffer(bufferId, msglist)) {
       // this was the last part to buffer
       stopBuffering();
+      reset();
     }
   } else {
     dispatchMessages(msglist);
   }
+}
+
+void ClientBacklogManager::receiveBacklogAll(MsgId first, MsgId last, int limit, int additional, QVariantList msgs) {
+  Q_UNUSED(first) Q_UNUSED(last) Q_UNUSED(limit) Q_UNUSED(additional)
+
+  MessageList msglist;
+  foreach(QVariant v, msgs) {
+    Message msg = v.value<Message>();
+    msg.setFlags(msg.flags() | Message::Backlog);
+    msglist << msg;
+  }
+
+  dispatchMessages(msglist);
+  reset();
 }
 
 void ClientBacklogManager::requestInitialBacklog() {
@@ -70,7 +81,11 @@ void ClientBacklogManager::requestInitialBacklog() {
   BacklogSettings settings;
   switch(settings.requesterType()) {
   case BacklogRequester::GlobalUnread:
+    _requester = new GlobalUnreadBacklogRequester(this);
+    break;
   case BacklogRequester::PerBufferUnread:
+    _requester = new PerBufferUnreadBacklogRequester(this);
+    break;
   case BacklogRequester::PerBufferFixed:
   default:
     _requester = new FixedBacklogRequester(this);
@@ -83,7 +98,6 @@ void ClientBacklogManager::stopBuffering() {
   Q_ASSERT(_requester);
 
   dispatchMessages(_requester->bufferedMessages(), true);
-  reset();
 }
 
 bool ClientBacklogManager::isBuffering() {

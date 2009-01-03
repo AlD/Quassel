@@ -370,7 +370,7 @@ void MessageModel::requestBacklog(BufferId bufferId) {
 						      .arg(requestCount)
 						      .arg(Client::networkModel()->networkName(bufferId))
 						      .arg(Client::networkModel()->bufferName(bufferId)));
-      Client::backlogManager()->requestBacklog(bufferId, requestCount, _messageList.at(i)->msgId().toInt());
+      Client::backlogManager()->requestBacklog(bufferId, -1, _messageList.at(i)->msgId(), requestCount);
       return;
     }
   }
@@ -383,6 +383,16 @@ void MessageModel::messagesReceived(BufferId bufferId, int count) {
   _messagesWaiting[bufferId] -= count;
   if(_messagesWaiting[bufferId] <= 0)
     _messagesWaiting.remove(bufferId);
+}
+
+void MessageModel::buffersPermanentlyMerged(BufferId bufferId1, BufferId bufferId2) {
+  for(int i = 0; i < _messageList.count(); i++) {
+    if(_messageList[i]->bufferId() == bufferId2) {
+      _messageList[i]->setBufferId(bufferId1);
+      QModelIndex idx = index(i, 0);
+      emit dataChanged(idx, idx);
+    }
+  }
 }
 
 // ========================================
@@ -425,7 +435,6 @@ bool MessageModelItem::setData(int column, const QVariant &value, int role) {
     return false;
   }
 }
-
 
 // Stuff for later
 bool MessageModelItem::lessThan(const MessageModelItem *m1, const MessageModelItem *m2){

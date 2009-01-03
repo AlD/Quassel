@@ -47,14 +47,14 @@
 // }
 
 QtUiApplication::QtUiApplication(int &argc, char **argv)
-  : QApplication(argc, argv), Quassel()
-{
-  setRunMode(Quassel::ClientOnly);
+#ifdef HAVE_KDE
+  : KApplication(), Quassel() {
+  Q_UNUSED(argc); Q_UNUSED(argv);
+#else
+  : QApplication(argc, argv), Quassel() {
+#endif
 
-  // put client-only arguments here
-  CliParser *parser = Quassel::cliParser();
-  parser->addSwitch("debugbufferswitches",0,"Enables debugging for bufferswitches");
-  parser->addSwitch("debugmodel",0,"Enables debugging for models");
+  setRunMode(Quassel::ClientOnly);
 
   qInstallMsgHandler(Client::logMessage);
 }

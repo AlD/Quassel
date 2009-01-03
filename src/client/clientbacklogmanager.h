@@ -32,15 +32,14 @@ class ClientBacklogManager : public BacklogManager {
 public:
   ClientBacklogManager(QObject *parent = 0);
 
-  virtual const QMetaObject *syncMetaObject() const { return &BacklogManager::staticMetaObject; }
-
   // helper for the backlogRequester, as it isn't a QObject and can't emit itself
   inline void emitMessagesRequested(const QString &msg) const { emit messagesRequested(msg); }
 
   void reset();
 
 public slots:
-  virtual void receiveBacklog(BufferId bufferId, int lastMsgs, int offset, QVariantList msgs);
+  virtual void receiveBacklog(BufferId bufferId, MsgId first, MsgId last, int limit, int additional, QVariantList msgs);
+  virtual void receiveBacklogAll(MsgId first, MsgId last, int limit, int additional, QVariantList msgs);
   void requestInitialBacklog();
 
 signals:

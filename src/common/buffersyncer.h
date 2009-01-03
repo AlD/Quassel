@@ -29,6 +29,7 @@ class BufferSyncer : public SyncableObject {
 
 public:
   explicit BufferSyncer(QObject *parent);
+  inline virtual const QMetaObject *syncMetaObject() const { return &staticMetaObject; }
 
   MsgId lastSeenMsg(BufferId buffer) const;
 
@@ -36,24 +37,35 @@ public slots:
   QVariantList initLastSeenMsg() const;
   void initSetLastSeenMsg(const QVariantList &);
 
-  void requestSetLastSeenMsg(BufferId buffer, const MsgId &msgId);
-  void requestRemoveBuffer(BufferId buffer);
-  void removeBuffer(BufferId buffer);
-  void renameBuffer(BufferId buffer, QString newName);
+  virtual inline void requestSetLastSeenMsg(BufferId buffer, const MsgId &msgId) { emit setLastSeenMsgRequested(buffer, msgId); }
+
+  virtual inline void requestRemoveBuffer(BufferId buffer) { emit removeBufferRequested(buffer); }
+  virtual void removeBuffer(BufferId buffer);
+
+  virtual inline void requestRenameBuffer(BufferId buffer, QString newName) { emit renameBufferRequested(buffer, newName); }
+  virtual inline void renameBuffer(BufferId buffer, QString newName) { emit bufferRenamed(buffer, newName); }
+
+  virtual inline void requestMergeBuffersPermanently(BufferId buffer1, BufferId buffer2) { emit mergeBuffersPermanentlyRequested(buffer1, buffer2); }
+  virtual void mergeBuffersPermanently(BufferId buffer1, BufferId buffer2);
 
 signals:
   void lastSeenMsgSet(BufferId buffer, const MsgId &msgId);
   void setLastSeenMsgRequested(BufferId buffer, const MsgId &msgId);
+
   void removeBufferRequested(BufferId buffer);
   void bufferRemoved(BufferId buffer);
+
+  void renameBufferRequested(BufferId buffer, QString newName);
   void bufferRenamed(BufferId buffer, QString newName);
 
-private slots:
+  void mergeBuffersPermanentlyRequested(BufferId buffer1, BufferId buffer2);
+  void buffersPermanentlyMerged(BufferId buffer1, BufferId buffer2);
+
+protected slots:
   bool setLastSeenMsg(BufferId buffer, const MsgId &msgId);
 
 private:
   QHash<BufferId, MsgId> _lastSeenMsg;
-
 };
 
 #endif

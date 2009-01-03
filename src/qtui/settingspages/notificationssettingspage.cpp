@@ -25,7 +25,9 @@
 #include "qtui.h"
 
 NotificationsSettingsPage::NotificationsSettingsPage(QWidget *parent)
-  : SettingsPage(tr("Behaviour"), tr("Notifications"), parent) {
+  : SettingsPage(tr("Behaviour"), tr("Notifications"), parent),
+  _hasDefaults(false)
+{
 
   QVBoxLayout *layout = new QVBoxLayout(this);
   foreach(AbstractNotificationBackend *backend, QtUi::notificationBackends()) {
@@ -35,13 +37,15 @@ NotificationsSettingsPage::NotificationsSettingsPage(QWidget *parent)
       _configWidgets.append(cw);
       layout->addWidget(cw);
       connect(cw, SIGNAL(changed(bool)), SLOT(widgetHasChanged()));
+      _hasDefaults |= cw->hasDefaults();
     }
   }
   layout->addStretch(1);
+  load();
 }
 
 bool NotificationsSettingsPage::hasDefaults() const {
-  return true;
+  return _hasDefaults;
 }
 
 void NotificationsSettingsPage::defaults() {

@@ -44,6 +44,8 @@ MessageFilter::MessageFilter(MessageModel *source, const QList<BufferId> &buffer
 }
 
 void MessageFilter::init() {
+  setDynamicSortFilter(true);
+
   BufferSettings defaultSettings;
   _messageTypeFilter = defaultSettings.messageFilter();
   defaultSettings.notify("MessageTypeFilter", this, SLOT(messageTypeFilterChanged()));
@@ -103,7 +105,7 @@ QString MessageFilter::idString() const {
   if(_validBuffers.isEmpty())
     return "*";
 
-  QList<BufferId> bufferIds = _validBuffers.toList();;
+  QList<BufferId> bufferIds = _validBuffers.toList();
   qSort(bufferIds);
 
   QStringList bufferIdStrings;

@@ -20,6 +20,16 @@
 
 #include "bufferview.h"
 
+#include <QApplication>
+#include <QAction>
+#include <QFlags>
+#include <QHeaderView>
+#include <QLineEdit>
+#include <QMenu>
+#include <QMessageBox>
+#include <QSet>
+
+#include "action.h"
 #include "buffermodel.h"
 #include "bufferviewfilter.h"
 #include "buffersettings.h"
@@ -29,17 +39,43 @@
 #include "mappedselectionmodel.h"
 #include "network.h"
 #include "networkmodel.h"
-
+#include "networkmodelactionprovider.h"
+#include "quasselui.h"
 #include "uisettings.h"
 
-#include <QAction>
-#include <QFlags>
-#include <QHeaderView>
-#include <QInputDialog>
-#include <QLineEdit>
-#include <QMenu>
-#include <QMessageBox>
-#include <QSet>
+bool TristateDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index) {
+  if(event->type() != QEvent::MouseButtonRelease)
+    return QStyledItemDelegate::editorEvent(event, model, option, index);
+
+  if(!(model->flags(index) & Qt::ItemIsUserCheckable))
+    return QStyledItemDelegate::editorEvent(event, model, option, index);
+
+  QVariant value = index.data(Qt::CheckStateRole);
+  if(!value.isValid())
+    return QStyledItemDelegate::editorEvent(event, model, option, index);
+
+  QStyleOptionViewItemV4 viewOpt(option);
+  initStyleOption(&viewOpt, index);
+
+  QRect checkRect = viewOpt.widget->style()->subElementRect(QStyle::SE_ItemViewItemCheckIndicator, &viewOpt, viewOpt.widget);
+  QMouseEvent *me = static_cast<QMouseEvent*>(event);
+
+  if(me->button() != Qt::LeftButton || !checkRect.contains(me->pos()))
+    return QStyledItemDelegate::editorEvent(event, model, option, index);
+
+  Qt::CheckState state = static_cast<Qt::CheckState>(value.toInt());
+  if(state == Qt::Unchecked)
+    state = Qt::PartiallyChecked;
+  else if(state == Qt::PartiallyChecked)
+    state = Qt::Checked;
+  else
+    state = Qt::Unchecked;
+  model->setData(index, state, Qt::CheckStateRole);
+  return true;
+}
+
+
+
 
 /*****************************************
 * The TreeView showing the Buffers
@@ -47,44 +83,20 @@
 // Please be carefull when reimplementing methods which are used to inform the view about changes to the data
 // to be on the safe side: call QTreeView's method aswell
 BufferView::BufferView(QWidget *parent)
-  : QTreeView(parent),
-    showChannelList(tr("Show Channel List"), this),
-    _connectNetAction(tr("Connect"), this),
-    _disconnectNetAction(tr("Disconnect"), this),
-    _joinChannelAction(tr("Join Channel"), this),
-
-    _joinBufferAction(tr("Join"), this),
-    _partBufferAction(tr("Part"), this),
-    _hideBufferTemporarilyAction(tr("Hide buffers"), this),
-    _hideBufferPermanentlyAction(tr("Hide buffers permanently"), this),
-    _removeBufferAction(tr("Delete buffer"), this),
-    _ignoreListAction(tr("Ignore list"), this),
-
-    _hideJoinAction(tr("Joins"), this),
-    _hidePartAction(tr("Parts"), this),
-    _hideQuitAction(tr("Quits"), this),
-    _hideNickAction(tr("Nick Changes"), this),
-    _hideModeAction(tr("Mode"), this),
-    _hideDayChangeAction(tr("Day Change"), this)
+  : QTreeView(parent)
 {
-  _hideJoinAction.setCheckable(true);
-  _hidePartAction.setCheckable(true);
-  _hideQuitAction.setCheckable(true);
-  _hideNickAction.setCheckable(true);
-  _hideModeAction.setCheckable(true);
-  _hideDayChangeAction.setCheckable(true);
-  _ignoreListAction.setEnabled(false);
-
-  showChannelList.setIcon(SmallIcon("format-list-unordered"));
-
-  connect(this, SIGNAL(collapsed(const QModelIndex &)), this, SLOT(on_collapse(const QModelIndex &)));
-  connect(this, SIGNAL(expanded(const QModelIndex &)), this, SLOT(on_expand(const QModelIndex &)));
+  connect(this, SIGNAL(collapsed(const QModelIndex &)), SLOT(on_collapse(const QModelIndex &)));
+  connect(this, SIGNAL(expanded(const QModelIndex &)), SLOT(on_expand(const QModelIndex &)));
 
   setSelectionMode(QAbstractItemView::ExtendedSelection);
+
+  QAbstractItemDelegate *oldDelegate = itemDelegate();
+  TristateDelegate *tristateDelegate = new TristateDelegate(this);
+  setItemDelegate(tristateDelegate);
+  delete oldDelegate;
 }
 
 void BufferView::init() {
-  setIndentation(10);
   header()->setContextMenuPolicy(Qt::ActionsContextMenu);
   hideColumn(1);
   hideColumn(2);
@@ -102,7 +114,7 @@ void BufferView::init() {
   sortByColumn(0, Qt::AscendingOrder);
 
   // activated() fails on X11 and Qtopia at least
-#if defined Q_WS_QWS or defined Q_WS_X11
+#if defined Q_WS_QWS || defined Q_WS_X11
   connect(this, SIGNAL(doubleClicked(QModelIndex)), SLOT(joinChannel(QModelIndex)));
 #else
   // afaik this is better on Mac and Windows
@@ -165,13 +177,13 @@ void BufferView::setFilteredModel(QAbstractItemModel *model_, BufferViewConfig *
 void BufferView::setSelectionModel(QItemSelectionModel *selectionModel) {
   if(QTreeView::selectionModel())
     disconnect(selectionModel, SIGNAL(currentChanged(QModelIndex, QModelIndex)),
-	       model(), SIGNAL(checkPreviousCurrentForRemoval(QModelIndex, QModelIndex)));
+               model(), SIGNAL(checkPreviousCurrentForRemoval(QModelIndex, QModelIndex)));
 
   QTreeView::setSelectionModel(selectionModel);
   BufferViewFilter *filter = qobject_cast<BufferViewFilter *>(model());
   if(filter) {
     connect(selectionModel, SIGNAL(currentChanged(QModelIndex, QModelIndex)),
-	    filter, SLOT(checkPreviousCurrentForRemoval(QModelIndex, QModelIndex)));
+            filter, SLOT(checkPreviousCurrentForRemoval(QModelIndex, QModelIndex)));
   }
 }
 
@@ -188,20 +200,23 @@ void BufferView::setConfig(BufferViewConfig *config) {
     connect(config, SIGNAL(networkIdSet(const NetworkId &)), this, SLOT(setRootIndexForNetworkId(const NetworkId &)));
     setRootIndexForNetworkId(config->networkId());
   } else {
+    setIndentation(10);
     setRootIndex(QModelIndex());
   }
 }
 
 void BufferView::setRootIndexForNetworkId(const NetworkId &networkId) {
   if(!networkId.isValid() || !model()) {
+    setIndentation(10);
     setRootIndex(QModelIndex());
   } else {
+    setIndentation(5);
     int networkCount = model()->rowCount();
     QModelIndex child;
     for(int i = 0; i < networkCount; i++) {
       child = model()->index(i, 0);
       if(networkId == model()->data(child, NetworkModel::NetworkIdRole).value<NetworkId>())
-	setRootIndex(child);
+        setRootIndex(child);
     }
   }
 }
@@ -223,6 +238,46 @@ void BufferView::keyPressEvent(QKeyEvent *event) {
     removeSelectedBuffers();
   }
   QTreeView::keyPressEvent(event);
+}
+
+void BufferView::dropEvent(QDropEvent *event) {
+  QModelIndex index = indexAt(event->pos());
+
+  QRect indexRect = visualRect(index);
+  QPoint cursorPos = event->pos();
+
+  // check if we're really _on_ the item and not indicating a move to just above or below the item
+  const int margin = 2;
+  if(cursorPos.y() - indexRect.top() < margin
+     || indexRect.bottom() - cursorPos.y() < margin)
+    return QTreeView::dropEvent(event);
+
+  QList< QPair<NetworkId, BufferId> > bufferList = Client::networkModel()->mimeDataToBufferList(event->mimeData());
+  if(bufferList.count() != 1)
+    return QTreeView::dropEvent(event);
+
+  NetworkId networkId = bufferList[0].first;
+  BufferId bufferId2 = bufferList[0].second;
+
+  if(index.data(NetworkModel::ItemTypeRole) != NetworkModel::BufferItemType)
+    return QTreeView::dropEvent(event);
+
+  if(index.data(NetworkModel::BufferTypeRole) != BufferInfo::QueryBuffer)
+    return QTreeView::dropEvent(event);
+
+  if(index.data(NetworkModel::NetworkIdRole).value<NetworkId>() != networkId)
+    return QTreeView::dropEvent(event);
+
+  BufferId bufferId1 = index.data(NetworkModel::BufferIdRole).value<BufferId>();
+  if(bufferId1 == bufferId2)
+    return QTreeView::dropEvent(event);
+
+  int res = QMessageBox::question(0, tr("Merge buffers permanently?"),
+				  tr("Do you want to merge the buffer \"%1\" permanently into buffer \"%2\"?\n This cannot be reversed!").arg(Client::networkModel()->bufferName(bufferId2)).arg(Client::networkModel()->bufferName(bufferId1)),
+				  QMessageBox::Yes|QMessageBox::No, QMessageBox::No);
+  if(res == QMessageBox::Yes) {
+    Client::mergeBuffersPermanently(bufferId1, bufferId2);
+  }
 }
 
 void BufferView::removeSelectedBuffers(bool permanently) {
@@ -339,228 +394,51 @@ void BufferView::toggleHeader(bool checked) {
   header()->setSectionHidden((action->property("column")).toInt(), !checked);
 }
 
-bool BufferView::checkRequirements(const QModelIndex &index, ItemActiveStates requiredActiveState) {
-  if(!index.isValid())
-    return false;
-
-  ItemActiveStates isActive = index.data(NetworkModel::ItemActiveRole).toBool()
-    ? ActiveState
-    : InactiveState;
-
-  if(!(isActive & requiredActiveState))
-    return false;
-
-  return true;
-}
-
-void BufferView::addItemToMenu(QAction &action, QMenu &menu, const QModelIndex &index, ItemActiveStates requiredActiveState) {
-  if(checkRequirements(index, requiredActiveState)) {
-    menu.addAction(&action);
-    action.setVisible(true);
-  } else {
-    action.setVisible(false);
-  }
-}
-
-void BufferView::addItemToMenu(QAction &action, QMenu &menu, bool condition) {
-  if(condition) {
-    menu.addAction(&action);
-    action.setVisible(true);
-  } else {
-    action.setVisible(false);
-  }
-}
-
-
-void BufferView::addItemToMenu(QMenu &subMenu, QMenu &menu, const QModelIndex &index, ItemActiveStates requiredActiveState) {
-  if(checkRequirements(index, requiredActiveState)) {
-    menu.addMenu(&subMenu);
-    subMenu.setVisible(true);
-  } else {
-    subMenu.setVisible(false);
-  }
-}
-
-void BufferView::addSeparatorToMenu(QMenu &menu, const QModelIndex &index, ItemActiveStates requiredActiveState) {
-  if(checkRequirements(index, requiredActiveState)) {
-    menu.addSeparator();
-  }
-}
-
-QMenu *BufferView::createHideEventsSubMenu(QMenu &menu, BufferId bufferId) {
-  int filter = BufferSettings(bufferId).messageFilter();
-  _hideJoinAction.setChecked(filter & Message::Join);
-  _hidePartAction.setChecked(filter & Message::Part);
-  _hideQuitAction.setChecked(filter & Message::Quit);
-  _hideNickAction.setChecked(filter & Message::Nick);
-  _hideModeAction.setChecked(filter & Message::Mode);
-  _hideDayChangeAction.setChecked(filter & Message::DayChange);
-
-  QMenu *hideEventsMenu = menu.addMenu(tr("Hide Events"));
-  hideEventsMenu->addAction(&_hideJoinAction);
-  hideEventsMenu->addAction(&_hidePartAction);
-  hideEventsMenu->addAction(&_hideQuitAction);
-  hideEventsMenu->addAction(&_hideNickAction);
-  hideEventsMenu->addAction(&_hideModeAction);
-  hideEventsMenu->addAction(&_hideDayChangeAction);
-  return hideEventsMenu;
-}
-
 void BufferView::contextMenuEvent(QContextMenuEvent *event) {
   QModelIndex index = indexAt(event->pos());
   if(!index.isValid())
     index = rootIndex();
-  if(!index.isValid())
-    return;
-
-  const Network *network = Client::network(index.data(NetworkModel::NetworkIdRole).value<NetworkId>());
-  Q_CHECK_PTR(network);
-
-  QPixmap connectionStateIcon;
-  if(network) {
-    if(network->connectionState() == Network::Initialized) {
-      connectionStateIcon = SmallIcon("network-connect");
-    } else if(network->connectionState() == Network::Disconnected) {
-      connectionStateIcon = SmallIcon("network-disconnect");
-    } else {
-      connectionStateIcon = SmallIcon("network-wired");  // FIXME network-connecting
-    }
-  }
 
   QMenu contextMenu(this);
-  NetworkModel::itemType itemType = static_cast<NetworkModel::itemType>(index.data(NetworkModel::ItemTypeRole).toInt());
 
-  switch(itemType) {
-  case NetworkModel::NetworkItemType:
-    showChannelList.setData(index.data(NetworkModel::NetworkIdRole));
-    _disconnectNetAction.setIcon(connectionStateIcon);
-    _connectNetAction.setIcon(connectionStateIcon);
-    addItemToMenu(showChannelList, contextMenu, index, ActiveState);
-    addItemToMenu(_disconnectNetAction, contextMenu, network->connectionState() != Network::Disconnected);
-    addItemToMenu(_connectNetAction, contextMenu, network->connectionState() == Network::Disconnected);
-    addSeparatorToMenu(contextMenu, index, ActiveState);
-    addItemToMenu(_joinChannelAction, contextMenu, index, ActiveState);
-    break;
-  case NetworkModel::BufferItemType:
-    {
-      BufferInfo bufferInfo = index.data(NetworkModel::BufferInfoRole).value<BufferInfo>();
-      switch(bufferInfo.type()) {
-      case BufferInfo::ChannelBuffer:
-	addItemToMenu(_joinBufferAction, contextMenu, index, InactiveState);
-	addItemToMenu(_partBufferAction, contextMenu, index, ActiveState);
-	addItemToMenu(_hideBufferTemporarilyAction, contextMenu, (bool)config());
-	addItemToMenu(_hideBufferPermanentlyAction, contextMenu, (bool)config());
-	addItemToMenu(_removeBufferAction, contextMenu, index, InactiveState);
-	createHideEventsSubMenu(contextMenu, bufferInfo.bufferId());
-	addItemToMenu(_ignoreListAction, contextMenu);
-	break;
-      case BufferInfo::QueryBuffer:
-	addItemToMenu(_hideBufferTemporarilyAction, contextMenu, (bool)config());
-	addItemToMenu(_hideBufferPermanentlyAction, contextMenu, (bool)config());
-	addItemToMenu(_removeBufferAction, contextMenu);
-	createHideEventsSubMenu(contextMenu, bufferInfo.bufferId());
-	break;
-      default:
-	addItemToMenu(_hideBufferTemporarilyAction, contextMenu, (bool)config());
-	addItemToMenu(_hideBufferPermanentlyAction, contextMenu, (bool)config());
-	break;
+  if(index.isValid()) {
+    addActionsToMenu(&contextMenu, index);
+  }
+
+  addFilterActions(&contextMenu, index);
+
+  if(!contextMenu.actions().isEmpty())
+    contextMenu.exec(QCursor::pos());
+}
+
+void BufferView::addActionsToMenu(QMenu *contextMenu, const QModelIndex &index) {
+  Client::mainUi()->actionProvider()->addActions(contextMenu, index, this, "menuActionTriggered", (bool)config());
+}
+
+void BufferView::addFilterActions(QMenu *contextMenu, const QModelIndex &index) {
+  BufferViewFilter *filter = qobject_cast<BufferViewFilter *>(model());
+  if(filter) {
+    QList<QAction *> filterActions = filter->actions(index);
+    if(!filterActions.isEmpty()) {
+      contextMenu->addSeparator();
+      foreach(QAction *action, filterActions) {
+	contextMenu->addAction(action);
       }
     }
-    break;
-  default:
-    return;
   }
+}
 
-  if(contextMenu.actions().isEmpty())
-    return;
-  QAction *result = contextMenu.exec(QCursor::pos());
-
-  // Handle Result
-  if(network && result == &_connectNetAction) {
-    network->requestConnect();
-    return;
-  }
-
-  if(network && result == &_disconnectNetAction) {
-    network->requestDisconnect();
-    return;
-  }
-
-  if(result == &_joinChannelAction) {
-    // FIXME no QInputDialog in Qtopia
-#ifndef Q_WS_QWS
-    bool ok;
-    QString channelName = QInputDialog::getText(this, tr("Join Channel"), tr("Input channel name:"), QLineEdit::Normal, QString(), &ok);
-    if(ok && !channelName.isEmpty()) {
-      Client::instance()->userInput(BufferInfo::fakeStatusBuffer(index.data(NetworkModel::NetworkIdRole).value<NetworkId>()), QString("/J %1").arg(channelName));
-    }
-#endif
-    return;
-  }
-
-  if(result == &_joinBufferAction) {
-    BufferInfo bufferInfo = index.data(NetworkModel::BufferInfoRole).value<BufferInfo>();
-    Client::instance()->userInput(bufferInfo, QString("/JOIN %1").arg(bufferInfo.bufferName()));
-    return;
-  }
-
-  if(result == &_partBufferAction) {
-    BufferInfo bufferInfo = index.data(NetworkModel::BufferInfoRole).value<BufferInfo>();
-    Client::instance()->userInput(bufferInfo, QString("/PART"));
-    return;
-  }
-
-  if(result == &_hideBufferTemporarilyAction) {
-    removeSelectedBuffers();
-    return;
-  }
-
-  if(result == &_hideBufferPermanentlyAction) {
-    removeSelectedBuffers(true);
-    return;
-  }
-
-  if(result == &_removeBufferAction) {
-    BufferInfo bufferInfo = index.data(NetworkModel::BufferInfoRole).value<BufferInfo>();
-    int res = QMessageBox::question(this, tr("Remove buffer permanently?"),
-                                    tr("Do you want to delete the buffer \"%1\" permanently? This will delete all related data, including all backlog "
-                                       "data, from the core's database!").arg(bufferInfo.bufferName()),
-                                        QMessageBox::Yes|QMessageBox::No, QMessageBox::No);
-    if(res == QMessageBox::Yes) {
-      Client::removeBuffer(bufferInfo.bufferId());
-    }
-    return;
-  }
-
-  if(result == & _hideJoinAction) {
-    BufferId bufferId = index.data(NetworkModel::BufferIdRole).value<BufferId>();
-    BufferSettings(bufferId).filterMessage(Message::Join, _hideJoinAction.isChecked());
-    return;
-  }
-  if(result == &_hidePartAction) {
-    BufferId bufferId = index.data(NetworkModel::BufferIdRole).value<BufferId>();
-    BufferSettings(bufferId).filterMessage(Message::Part, _hidePartAction.isChecked());
-    return;
-  }
-  if(result == &_hideQuitAction) {
-    BufferId bufferId = index.data(NetworkModel::BufferIdRole).value<BufferId>();
-    BufferSettings(bufferId).filterMessage(Message::Quit, _hideQuitAction.isChecked());
-    return;
-  }
-  if(result == &_hideNickAction) {
-    BufferId bufferId = index.data(NetworkModel::BufferIdRole).value<BufferId>();
-    BufferSettings(bufferId).filterMessage(Message::Nick, _hideNickAction.isChecked());
-    return;
-  }
-  if(result == &_hideModeAction) {
-    BufferId bufferId = index.data(NetworkModel::BufferIdRole).value<BufferId>();
-    BufferSettings(bufferId).filterMessage(Message::Mode, _hideModeAction.isChecked());
-    return;
-  }
-  if(result == &_hideDayChangeAction) {
-    BufferId bufferId = index.data(NetworkModel::BufferIdRole).value<BufferId>();
-    BufferSettings(bufferId).filterMessage(Message::DayChange, _hideDayChangeAction.isChecked());
-    return;
+void BufferView::menuActionTriggered(QAction *result) {
+  NetworkModelActionProvider::ActionType type = (NetworkModelActionProvider::ActionType)result->data().toInt();
+  switch(type) {
+    case NetworkModelActionProvider::HideBufferTemporarily:
+      removeSelectedBuffers();
+      break;
+    case NetworkModelActionProvider::HideBufferPermanently:
+      removeSelectedBuffers(true);
+      break;
+    default:
+      return;
   }
 }
 
@@ -590,7 +468,6 @@ void BufferView::wheelEvent(QWheelEvent* event) {
   selectionModel()->select( resultingIndex, QItemSelectionModel::ClearAndSelect );
 
 }
-
 
 QSize BufferView::sizeHint() const {
   return QTreeView::sizeHint();

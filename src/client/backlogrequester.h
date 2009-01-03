@@ -34,9 +34,9 @@ class BacklogRequester {
 public:
   enum RequesterTypes {
     InvalidRequester = 0,
-    GlobalUnread,
+    PerBufferFixed,
     PerBufferUnread,
-    PerBufferFixed
+    GlobalUnread
   };
 
   BacklogRequester(bool buffering, ClientBacklogManager *backlogManger);
@@ -76,5 +76,30 @@ private:
   int _backlogCount;
 };
 
+// ========================================
+//  GLOBAL UNREAD BACKLOG REQUESTER
+// ========================================
+class GlobalUnreadBacklogRequester : public BacklogRequester {
+public:
+  GlobalUnreadBacklogRequester(ClientBacklogManager *backlogManager);
+  virtual void requestBacklog();
+
+private:
+  int _limit;
+  int _additional;
+};
+
+// ========================================
+//  PER BUFFER UNREAD BACKLOG REQUESTER
+// ========================================
+class PerBufferUnreadBacklogRequester : public BacklogRequester {
+public:
+  PerBufferUnreadBacklogRequester(ClientBacklogManager *backlogManager);
+  virtual void requestBacklog();
+
+private:
+  int _limit;
+  int _additional;
+};
 
 #endif //BACKLOGREQUESTER_H

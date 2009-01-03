@@ -34,6 +34,14 @@ SyncableObject::SyncableObject(QObject *parent)
 {
 }
 
+SyncableObject::SyncableObject(const QString &objectName, QObject *parent)
+  : QObject(parent),
+    _initialized(false),
+    _allowClientUpdates(false)
+{
+  setObjectName(objectName);
+}
+
 SyncableObject::SyncableObject(const SyncableObject &other, QObject *parent)
   : QObject(parent),
     _initialized(other._initialized),
@@ -92,7 +100,6 @@ QVariantMap SyncableObject::toVariantMap() {
     QMetaObject::invokeMethod(this, methodname.toAscii(), genericvalue);
 
     properties[SignalProxy::methodBaseName(method)] = value;
-    // qDebug() << ">>> SYNC:" << methodBaseName(method) << value;
   }
   // properties["Payload"] = QByteArray(10000000, 'a');  // for testing purposes
   return properties;

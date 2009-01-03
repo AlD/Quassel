@@ -3,8 +3,10 @@
 # -DWANT_(CORE|QTCLIENT|MONO)=(ON|OFF)
 #                     : select binaries to build
 # -DWITH_OPENSSL=OFF  : Disable OpenSSL support
-# -DWITH_DBUS=OFF     : Disable D-Bus support
-# -DWITH_WEBKIT=OFF   : Disable WebKit support
+# -DWITH_DBUS=OFF     : Disable D-Bus support (dbus notifications)
+# -DWITH_WEBKIT=OFF   : Disable WebKit support (link previews)
+# -DWITH_PHONON=OFF   : Disable Phonon support (audio notifications)
+# -DWITH_KDE=ON       : Enable KDE4 support
 # -DOXYGEN_ICONS=(Builtin|External)  : If "Builtin" (the default), compile our Oxygen Icon Theme subset into the binary
 #                                    : If "External", we assume Oxygen is already installed on the system
 # -DQUASSEL_ICONS=(Builtin|External) : If "Builtin" (the default), put our own icons into the binary
@@ -30,13 +32,15 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
 # Various options and variables that can be set on the command line
 option(WANT_CORE     "Build the core (server) binary"           ON)
 option(WANT_QTCLIENT "Build the Qt4 GUI client binary"          ON)
-option(WANT_MONO     "Build the monolithic (all-in-one) binary" OFF)
+option(WANT_MONO     "Build the monolithic (all-in-one) binary" ON)
 
 option(ENABLE_INI    "Use .ini files for settings. Useful on windows"	OFF)
 
 option(WITH_OPENSSL  "Enable OpenSSL support if present on the system"	ON)
 option(WITH_DBUS     "Enable D-Bus support if present on the system"	ON)
-option(WITH_WEBKIT   "Enable WebKit support if present on the system"	ON)
+option(WITH_WEBKIT   "Enable WebKit support (for link previews)"	ON)
+option(WITH_PHONON   "Enable Phonon support (for audio notifications)"	ON)
+option(WITH_KDE      "Enable KDE4 integration"				OFF)
 
 option(STATIC        "Enable static building (might not be portable)" OFF)
 option(DEPLOY        "Mac OS X only! Adds required libs to bundle resources and create a dmg. Note: requires Qt to be built with 10.4u SDK" OFF)
@@ -52,11 +56,8 @@ if(STATIC)
   set(CMAKE_BUILD_TYPE Release)
   set(OXYGEN_ICONS "Builtin")
   set(QUASSEL_ICONS "Builtin")
+  set(WITH_KDE OFF)
 endif(STATIC)
-
-# RPATH needs to be set correctly
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH 1) 
-set(CMAKE_BUILD_WITH_INSTALL_RPATH 1)
 
 # Define install locations. Using variables will allow overriding this by the KDE macros later.
 set(BIN_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/bin)
@@ -146,12 +147,53 @@ if(WITH_WEBKIT)
     set(HAVE_WEBKIT true)
     set(MOC_DEFINES ${MOC_DEFINES} -DHAVE_WEBKIT)
   else(QT_QTWEBKIT_FOUND)
-    message(STATUS "QtWebKit not found, disabling D-Bus support")
+    message(STATUS "QtWebKit not found, disabling WebKit support")
   endif(QT_QTWEBKIT_FOUND)
 else(WITH_WEBKIT)
   message(STATUS "Disabling WebKit support")
 endif(WITH_WEBKIT)
 
+# Setup KDE4 support
+if(WITH_KDE)
+  find_package(KDE4)
+  if(KDE4_FOUND)
+    message(STATUS "Enabling KDE4 integration")
+    include_directories(${KDE4_INCLUDES})
+    add_definitions(-DHAVE_KDE ${KDE4_DEFINITIONS})
+    set(HAVE_KDE 1)
+    set(MOC_DEFINES ${MOC_DEFINES} -DHAVE_KDE)
+    set(QUASSEL_KDE_LIBRARIES ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBRARY} knotifyconfig)
+    # We always use external icons for KDE4 support, since we use its iconloader rather than our own
+    set(OXYGEN_ICONS "External")
+    set(QUASSEL_ICONS "External")
+  else(KDE4_FOUND)
+    message(STATUS "KDE4 not found, disabling KDE integration")
+  endif(KDE4_FOUND)
+else(WITH_KDE)
+  message(STATUS "Disabling KDE4 integration")
+endif(WITH_KDE)
+
+# Setup Phonon support - we only need this if we don't have or want KDE4
+if(NOT HAVE_KDE)
+  if(WITH_PHONON)
+    find_package(Phonon)
+    if(PHONON_FOUND)
+      message(STATUS "Enabling Phonon support")
+      add_definitions(-DHAVE_PHONON)
+      set(HAVE_PHONON true)
+      set(MOC_DEFINES ${MOC_DEFINES} -DHAVE_PHONON)
+    else(PHONON_FOUND)
+      message(STATUS "Phonon not found, disabling audio notifications")
+    endif(PHONON_FOUND)
+  else(WITH_PHONON)
+    message(STATUS "Disabling Phonon support")
+  endif(WITH_PHONON)
+endif(NOT HAVE_KDE)
+
+# RPATH needs to be set correctly
+# Do this down here, since otherwise KDE wants to handle it itself, and fails
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH 1)
+set(CMAKE_BUILD_WITH_INSTALL_RPATH 1)
 
 # Set global buildflags
 # This is very much non-portable, so don't use -DSTATIC until you know what
@@ -202,7 +244,7 @@ if(WANT_QTCLIENT OR WANT_MONO)
   endif(QUASSEL_ICONS MATCHES "External")
 
   if(OXYGEN_ICONS MATCHES "External")
-    message(STATUS "Use system-installed Oxygen icon theme")
+    message(STATUS "Use system-installed icon theme")
   else(OXYGEN_ICONS MATCHES "External")
     set(OXYGEN_ICONS "Builtin")
     message(STATUS "Compile Oxygen icon theme subset into the binary")

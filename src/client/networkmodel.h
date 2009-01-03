@@ -21,25 +21,12 @@
 #ifndef NETWORKMODEL_H
 #define NETWORKMODEL_H
 
-#include <QtCore>
-
-#include "treemodel.h"
 #include "bufferinfo.h"
-
-#include <QPointer>
-
-class BufferInfo;
-
-#include "selectionmodelsynchronizer.h"
-#include "modelpropertymapper.h"
 #include "clientsettings.h"
-#include "ircchannel.h"
-#include "ircuser.h"
 #include "message.h"
 #include "network.h"
+#include "treemodel.h"
 
-class MappedSelectionModel;
-class QAbstractItemView;
 class BufferItem;
 
 /*****************************************
@@ -153,12 +140,13 @@ public:
   QueryBufferItem(const BufferInfo &bufferInfo, NetworkItem *parent);
 
   virtual QVariant data(int column, int role) const;
+  virtual bool setData(int column, const QVariant &value, int role);
   virtual inline bool isActive() const { return (bool)_ircUser; }
   virtual QString toolTip(int column) const;
 
 public slots:
   void attachIrcUser(IrcUser *ircUser);
-  void ircUserDestroyed();
+  void ircUserQuited();
 
 private:
   IrcUser *_ircUser;
@@ -175,6 +163,7 @@ class ChannelBufferItem : public BufferItem {
 public:
   ChannelBufferItem(const BufferInfo &bufferInfo, AbstractTreeItem *parent);
 
+  virtual QVariant data(int column, int role) const;
   virtual inline bool isActive() const { return (bool)_ircChannel; }
   virtual QString toolTip(int column) const;
 
@@ -194,7 +183,7 @@ public slots:
   void userModeChanged(IrcUser *ircUser);
 
 private slots:
-  void ircChannelDestroyed();
+  void ircChannelParted();
 
 private:
   IrcChannel *_ircChannel;
@@ -245,7 +234,7 @@ public:
   virtual QString toolTip(int column) const;
 
 private slots:
-  inline void ircUserDestroyed() { parent()->removeChild(this); }
+  inline void ircUserQuited() { parent()->removeChild(this); }
 
 private:
   QPointer<IrcUser> _ircUser;
@@ -259,7 +248,7 @@ class NetworkModel : public TreeModel {
   Q_OBJECT
 
 public:
-  enum myRoles {
+  enum Role {
     BufferTypeRole = TreeModel::UserRole,
     ItemActiveRole,
     BufferActivityRole,
@@ -267,16 +256,18 @@ public:
     NetworkIdRole,
     BufferInfoRole,
     ItemTypeRole,
-    UserAwayRole
+    UserAwayRole,
+    IrcUserRole,
+    IrcChannelRole
   };
 
-  enum itemType {
+  enum ItemType {
     NetworkItemType = 0x01,
     BufferItemType = 0x02,
     UserCategoryItemType = 0x04,
     IrcUserItemType = 0x08
   };
-  Q_DECLARE_FLAGS(itemTypes, itemType)
+  Q_DECLARE_FLAGS(ItemTypes, ItemType)
 
   NetworkModel(QObject *parent = 0);
   static QList<QVariant> defaultHeader();
@@ -286,7 +277,6 @@ public:
 
   virtual QStringList mimeTypes() const;
   virtual QMimeData *mimeData(const QModelIndexList &) const;
-  virtual bool dropMimeData(const QMimeData *, Qt::DropAction, int, int, const QModelIndex &);
 
   void attachNetwork(Network *network);
 
@@ -305,7 +295,7 @@ public:
    *  @param bufferName The bufferName we look for
    *  @return The id of the buffer if found, an invalid one else
    */
-  BufferId bufferId(NetworkId networkId, const QString &bufferName) const;
+  BufferId bufferId(NetworkId networkId, const QString &bufferName, Qt::CaseSensitivity cs = Qt::CaseInsensitive) const;
 
   QString bufferName(BufferId bufferId) const;
   BufferInfo::Type bufferType(BufferId bufferId) const;
@@ -334,15 +324,15 @@ private slots:
   void checkForNewBuffers(const QModelIndex &parent, int start, int end);
 
 private:
-  int networkRow(NetworkId networkId);
-  NetworkItem *findNetworkItem(NetworkId networkId);
+  int networkRow(NetworkId networkId) const;
+  NetworkItem *findNetworkItem(NetworkId networkId) const;
   NetworkItem *networkItem(NetworkId networkId);
-  inline BufferItem *findBufferItem(const BufferInfo &bufferInfo) { return findBufferItem(bufferInfo.bufferId()); }
-  BufferItem *findBufferItem(BufferId bufferId);
+  inline BufferItem *findBufferItem(const BufferInfo &bufferInfo) const { return findBufferItem(bufferInfo.bufferId()); }
+  BufferItem *findBufferItem(BufferId bufferId) const;
   BufferItem *bufferItem(const BufferInfo &bufferInfo);
 
   QHash<BufferId, BufferItem *> _bufferItemCache;
 };
-Q_DECLARE_OPERATORS_FOR_FLAGS(NetworkModel::itemTypes)
+Q_DECLARE_OPERATORS_FOR_FLAGS(NetworkModel::ItemTypes)
 
 #endif // NETWORKMODEL_H

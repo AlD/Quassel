@@ -29,21 +29,48 @@ ChatMonitorFilter::ChatMonitorFilter(MessageModel *model, QObject *parent)
   : MessageFilter(model, parent)
 {
   ChatViewSettings viewSettings(idString());
-  _showFields = viewSettings.value("showFields", AllFields).toInt();
-  _showOwnMessages = viewSettings.value("showOwnMsgs", true).toBool();
-  viewSettings.notify("showFields", this, SLOT(showFieldsSettingsChanged(const QVariant &)));
-  viewSettings.notify("showOwnMsgs", this, SLOT(showOwnMessagesSettingChanged(const QVariant &)));
+  _showFields = viewSettings.value("ShowFields", AllFields).toInt();
+  _showOwnMessages = viewSettings.value("ShowOwnMsgs", true).toBool();
+  viewSettings.notify("ShowFields", this, SLOT(showFieldsSettingChanged(const QVariant &)));
+  viewSettings.notify("ShowOwnMsgs", this, SLOT(showOwnMessagesSettingChanged(const QVariant &)));
+
+  // ChatMonitorSettingsPage
+  QString showHighlightsSettingsId = "ShowHighlights";
+  QString operationModeSettingsId = "OperationMode";
+  QString buffersSettingsId = "Buffers";
+
+  _showHighlights = viewSettings.value(showHighlightsSettingsId, false).toBool();
+  _operationMode = viewSettings.value(operationModeSettingsId, 0).toInt();
+  // read configured list of buffers to monitor/ignore
+  foreach(QVariant v, viewSettings.value(buffersSettingsId, QVariant()).toList())
+    _bufferIds << v.value<BufferId>();
+
+  viewSettings.notify(showHighlightsSettingsId, this, SLOT(showHighlightsSettingChanged(const QVariant &)));
+  viewSettings.notify(operationModeSettingsId, this, SLOT(operationModeSettingChanged(const QVariant &)));
+  viewSettings.notify(buffersSettingsId, this, SLOT(buffersSettingChanged(const QVariant &)));
 }
 
 bool ChatMonitorFilter::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const {
   Q_UNUSED(sourceParent)
 
-  Message::Flags flags = (Message::Flags)sourceModel()->data(sourceModel()->index(sourceRow, 0), MessageModel::FlagsRole).toInt();
+  QModelIndex source_index = sourceModel()->index(sourceRow, 0);
+
+  Message::Flags flags = (Message::Flags)source_index.data(MessageModel::FlagsRole).toInt();
   if(flags & Message::Backlog || (!_showOwnMessages && flags & Message::Self))
     return false;
 
-  Message::Type type = (Message::Type)sourceModel()->data(sourceModel()->index(sourceRow, 0), MessageModel::TypeRole).toInt();
+  Message::Type type = (Message::Type)source_index.data(MessageModel::TypeRole).toInt();
   if(!(type & (Message::Plain | Message::Notice | Message::Action)))
+    return false;
+
+  // ChatMonitorSettingsPage
+  if(_operationMode == ChatViewSettings::OptOut
+    && !(_showHighlights && flags & Message::Highlight)
+    &&  _bufferIds.contains(source_index.data(MessageModel::BufferIdRole).value<BufferId>()))
+    return false;
+  if(_operationMode == ChatViewSettings::OptIn
+    && !(_showHighlights && flags & Message::Highlight)
+    && !_bufferIds.contains(source_index.data(MessageModel::BufferIdRole).value<BufferId>()))
     return false;
 
   return true;
@@ -70,7 +97,7 @@ QVariant ChatMonitorFilter::data(const QModelIndex &index, int role) const {
     fields << Client::networkModel()->bufferName(bufid);
   }
 
-  Message::Type messageType = (Message::Type)sourceModel()->data(source_index, MessageModel::TypeRole).toInt();
+  Message::Type messageType = (Message::Type)source_index.data(MessageModel::TypeRole).toInt();
   if(messageType & (Message::Plain | Message::Notice)) {
     QString sender = MessageFilter::data(index, ChatLineModel::EditRole).toString();
     fields << sender;
@@ -82,30 +109,30 @@ void ChatMonitorFilter::addShowField(int field) {
   if(_showFields & field)
     return;
 
-  ChatViewSettings(idString()).setValue("showFields", _showFields | field); 
+  ChatViewSettings(idString()).setValue("ShowFields", _showFields | field);
 }
 
 void ChatMonitorFilter::removeShowField(int field) {
   if(!(_showFields & field))
     return;
 
-  ChatViewSettings(idString()).setValue("showFields", _showFields ^ field);
+  ChatViewSettings(idString()).setValue("ShowFields", _showFields ^ field);
 }
 
 void ChatMonitorFilter::setShowOwnMessages(bool show) {
   if(_showOwnMessages == show)
     return;
 
-  ChatViewSettings(idString()).setValue("showOwnMsgs", show);
+  ChatViewSettings(idString()).setValue("ShowOwnMsgs", show);
 }
 
-void ChatMonitorFilter::showFieldsSettingsChanged(const QVariant &newValue) {
+void ChatMonitorFilter::showFieldsSettingChanged(const QVariant &newValue) {
   int newFields = newValue.toInt();
   if(_showFields == newFields)
     return;
 
   _showFields = newFields;
-  
+
   int rows = rowCount();
   if(rows == 0)
     return;
@@ -115,4 +142,19 @@ void ChatMonitorFilter::showFieldsSettingsChanged(const QVariant &newValue) {
 
 void ChatMonitorFilter::showOwnMessagesSettingChanged(const QVariant &newValue) {
   _showOwnMessages = newValue.toBool();
+}
+
+void ChatMonitorFilter::showHighlightsSettingChanged(const QVariant &newValue) {
+  _showHighlights = newValue.toBool();
+}
+
+void ChatMonitorFilter::operationModeSettingChanged(const QVariant &newValue) {
+  _operationMode = newValue.toInt();
+}
+
+void ChatMonitorFilter::buffersSettingChanged(const QVariant &newValue) {
+  _bufferIds.clear();
+  foreach (QVariant v, newValue.toList()) {
+    _bufferIds << v.value<BufferId>();
+  }
 }
