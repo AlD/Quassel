@@ -61,6 +61,8 @@ BufferViewSettingsPage::BufferViewSettingsPage(QWidget *parent)
   connect(ui.hideInactiveBuffers, SIGNAL(clicked(bool)), this, SLOT(widgetHasChanged()));
   connect(ui.networkSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(widgetHasChanged()));
   connect(ui.minimumActivitySelector, SIGNAL(currentIndexChanged(int)), this, SLOT(widgetHasChanged()));
+
+  connect(ui.networkSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(enableStatusBuffers(int)));
 }
 
 BufferViewSettingsPage::~BufferViewSettingsPage() {
@@ -69,6 +71,7 @@ BufferViewSettingsPage::~BufferViewSettingsPage() {
 
 void BufferViewSettingsPage::reset() {
   ui.bufferViewList->clear();
+  ui.deleteBufferView->setEnabled(false);
 
   QHash<BufferViewConfig *, BufferViewConfig *>::iterator changedConfigIter = _changedBufferViews.begin();
   QHash<BufferViewConfig *, BufferViewConfig *>::iterator changedConfigIterEnd = _changedBufferViews.end();
@@ -188,6 +191,7 @@ void BufferViewSettingsPage::addBufferView(BufferViewConfig *config) {
   item->setData(Qt::UserRole, qVariantFromValue<QObject *>(qobject_cast<QObject *>(config)));
   connect(config, SIGNAL(updatedRemotely()), this, SLOT(updateBufferView()));
   connect(config, SIGNAL(destroyed()), this, SLOT(bufferViewDeleted()));
+  ui.deleteBufferView->setEnabled(ui.bufferViewList->count() > 1);
 }
 
 void BufferViewSettingsPage::addBufferView(int bufferViewId) {
@@ -205,9 +209,10 @@ void BufferViewSettingsPage::bufferViewDeleted() {
     if(config == static_cast<BufferViewConfig *>(obj)) {
       QListWidgetItem *item = ui.bufferViewList->takeItem(i);
       delete item;
-      return;
+      break;
     }
   }
+  ui.deleteBufferView->setEnabled(ui.bufferViewList->count() > 1);
 }
 
 void BufferViewSettingsPage::newBufferView(const QString &bufferViewName) {
@@ -218,9 +223,10 @@ void BufferViewSettingsPage::newBufferView(const QString &bufferViewName) {
   config->setInitialized();
   QList<BufferId> bufferIds;
   if(config->addNewBuffersAutomatically()) {
-    bufferIds = Client::networkModel()->allBufferIds();
     if(config->sortAlphabetically())
-      qSort(bufferIds.begin(), bufferIds.end(), bufferIdLessThan);
+      bufferIds = Client::networkModel()->allBufferIdsSorted();
+    else
+      bufferIds = Client::networkModel()->allBufferIds();
   }
   config->initSetBufferList(bufferIds);
 
@@ -273,6 +279,12 @@ void BufferViewSettingsPage::updateBufferView() {
   ui.bufferViewList->item(itemPos)->setText(config->bufferViewName());
   if(itemPos == ui.bufferViewList->currentRow())
     loadConfig(config);
+}
+
+void BufferViewSettingsPage::enableStatusBuffers(int networkIdx) {
+  // we don't show a status buffer if we show multiple networks as selecting
+  // the network is the same as selecting the status buffer.
+  ui.onlyStatusBuffers->setEnabled(networkIdx != 0);
 }
 
 void BufferViewSettingsPage::on_addBufferView_clicked() {
@@ -329,10 +341,25 @@ void BufferViewSettingsPage::on_deleteBufferView_clicked() {
 
   if(ret == QMessageBox::Yes) {
     ui.bufferViewList->removeItemWidget(currentItem);
+    BufferViewConfig *config = qobject_cast<BufferViewConfig *>(currentItem->data(Qt::UserRole).value<QObject *>());
     delete currentItem;
-    if(viewId >= 0)
+    if(viewId >= 0) {
       _deleteBufferViews << viewId;
-    changed();
+      changed();
+    } else if(config) {
+      QList<BufferViewConfig *>::iterator iter = _newBufferViews.begin();
+      while(iter != _newBufferViews.end()) {
+	if(*iter == config) {
+	  iter = _newBufferViews.erase(iter);
+	  break;
+	} else {
+	  iter++;
+	}
+      }
+      delete config;
+      if(_deleteBufferViews.isEmpty() && _changedBufferViews.isEmpty() && _newBufferViews.isEmpty())
+	setChangedState(false);
+    }
   }
 }
 
@@ -410,9 +437,10 @@ void BufferViewSettingsPage::saveConfig(BufferViewConfig *config) {
   if(_newBufferViews.contains(config)) {
     QList<BufferId> bufferIds;
     if(config->addNewBuffersAutomatically()) {
-      bufferIds = Client::networkModel()->allBufferIds();
       if(config->sortAlphabetically())
-	qSort(bufferIds.begin(), bufferIds.end(), bufferIdLessThan);
+	bufferIds = Client::networkModel()->allBufferIdsSorted();
+      else
+	bufferIds = Client::networkModel()->allBufferIds();
     }
     config->initSetBufferList(bufferIds);
   }
@@ -436,7 +464,7 @@ bool BufferViewSettingsPage::testHasChanged() {
   while(iter != iterEnd) {
     if(&(iter.key()) == &(iter.value())) {
       iter.value()->deleteLater();
-      _changedBufferViews.erase(iter);
+      iter = _changedBufferViews.erase(iter);
     } else {
       changed = true;
       iter++;

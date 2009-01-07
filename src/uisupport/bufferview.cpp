@@ -100,6 +100,7 @@ void BufferView::init() {
   header()->setContextMenuPolicy(Qt::ActionsContextMenu);
   hideColumn(1);
   hideColumn(2);
+  setIndentation(10);
   expandAll();
 
   setAnimated(true);
@@ -496,14 +497,6 @@ BufferViewDock::BufferViewDock(BufferViewConfig *config, QWidget *parent)
   toggleViewAction()->setData(config->bufferViewId());
   setAllowedAreas(Qt::RightDockWidgetArea|Qt::LeftDockWidgetArea);
   connect(config, SIGNAL(bufferViewNameSet(const QString &)), this, SLOT(bufferViewRenamed(const QString &)));
-}
-
-BufferViewDock::BufferViewDock(QWidget *parent)
-  : QDockWidget(tr("All Buffers"), parent)
-{
-  setObjectName("BufferViewDock--1");
-  toggleViewAction()->setData((int)-1);
-  setAllowedAreas(Qt::RightDockWidgetArea|Qt::LeftDockWidgetArea);
 }
 
 void BufferViewDock::bufferViewRenamed(const QString &newName) {

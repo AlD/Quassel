@@ -41,6 +41,7 @@
 #include "chatmonitorview.h"
 #include "chatview.h"
 #include "client.h"
+#include "clientsyncer.h"
 #include "clientbacklogmanager.h"
 #include "coreinfodlg.h"
 #include "coreconnectdlg.h"
@@ -91,7 +92,7 @@
 MainWin::MainWin(QWidget *parent)
 #ifdef HAVE_KDE
   : KMainWindow(parent),
-  _kHelpMenu(new KHelpMenu(this)),
+  _kHelpMenu(new KHelpMenu(this, KGlobal::mainComponent().aboutData())),
 #else
   : QMainWindow(parent),
 #endif
@@ -114,20 +115,6 @@ MainWin::MainWin(QWidget *parent)
   updateIcon();
 
   installEventFilter(new JumpKeyHandler(this));
-
-#ifndef HAVE_KDE
-    QtUi::registerNotificationBackend(new TaskbarNotificationBackend(this));
-    QtUi::registerNotificationBackend(new SystrayNotificationBackend(this));
-#  ifdef HAVE_PHONON
-    QtUi::registerNotificationBackend(new PhononNotificationBackend(this));
-#  endif
-#  ifdef HAVE_DBUS
-    QtUi::registerNotificationBackend(new DesktopNotificationBackend(this));
-#  endif
-
-#else /* HAVE_KDE */
-    QtUi::registerNotificationBackend(new KNotificationBackend(this));
-#endif /* HAVE_KDE */
 
   QtUiApplication* app = qobject_cast<QtUiApplication*> qApp;
   connect(app, SIGNAL(saveStateToSession(const QString&)), SLOT(saveStateToSession(const QString&)));
@@ -157,7 +144,6 @@ void MainWin::init() {
   setupActions();
   setupBufferWidget();
   setupMenus();
-  setupViews();
   setupTopicWidget();
   setupChatMonitor();
   setupNickWidget();
@@ -165,6 +151,20 @@ void MainWin::init() {
   setupStatusBar();
   setupSystray();
   setupTitleSetter();
+
+#ifndef HAVE_KDE
+  QtUi::registerNotificationBackend(new TaskbarNotificationBackend(this));
+  QtUi::registerNotificationBackend(new SystrayNotificationBackend(this));
+#  ifdef HAVE_PHONON
+  QtUi::registerNotificationBackend(new PhononNotificationBackend(this));
+#  endif
+#  ifdef HAVE_DBUS
+  QtUi::registerNotificationBackend(new DesktopNotificationBackend(this));
+#  endif
+
+#else /* HAVE_KDE */
+  QtUi::registerNotificationBackend(new KNotificationBackend(this));
+#endif /* HAVE_KDE */
 
   // restore mainwin state
   restoreState(s.value("MainWinState").toByteArray());
@@ -175,7 +175,11 @@ void MainWin::init() {
   setDisconnectedState();  // Disable menus and stuff
 
   show();
-  showCoreConnectionDlg(true); // autoconnect if appropriate
+  if(Quassel::runMode() != Quassel::Monolithic) {
+    showCoreConnectionDlg(true); // autoconnect if appropriate
+  } else {
+    startInternalCore();
+  }
 }
 
 MainWin::~MainWin() {
@@ -243,10 +247,18 @@ void MainWin::setupMenus() {
   ActionCollection *coll = QtUi::actionCollection("General");
 
   _fileMenu = menuBar()->addMenu(tr("&File"));
-  _fileMenu->addAction(coll->action("ConnectCore"));
-  _fileMenu->addAction(coll->action("DisconnectCore"));
-  _fileMenu->addAction(coll->action("CoreInfo"));
-  _fileMenu->addSeparator();
+
+  static const QStringList coreActions = QStringList()
+    << "ConnectCore" << "DisconnectCore" << "CoreInfo";
+
+  QAction *coreAction;
+  foreach(QString actionName, coreActions) {
+    coreAction = coll->action(actionName);
+    _fileMenu->addAction(coreAction);
+    flagRemoteCoreOnly(coreAction);
+  }
+  flagRemoteCoreOnly(_fileMenu->addSeparator());
+
   _networksMenu = _fileMenu->addMenu(tr("&Networks"));
   _networksMenu->addAction(coll->action("ConfigureNetworks"));
   _networksMenu->addSeparator();
@@ -290,20 +302,15 @@ void MainWin::setupBufferWidget() {
   setCentralWidget(_bufferWidget);
 }
 
-void MainWin::setupViews() {
-  addBufferView();
-}
-
 void MainWin::addBufferView(int bufferViewConfigId) {
   addBufferView(Client::bufferViewManager()->bufferViewConfig(bufferViewConfigId));
 }
 
 void MainWin::addBufferView(BufferViewConfig *config) {
-  BufferViewDock *dock;
-  if(config)
-    dock = new BufferViewDock(config, this);
-  else
-    dock = new BufferViewDock(this);
+  if(!config)
+    return;
+
+  BufferViewDock *dock = new BufferViewDock(config, this);
 
   //create the view and initialize it's filter
   BufferView *view = new BufferView(dock);
@@ -452,12 +459,14 @@ void MainWin::setupStatusBar() {
   // Core Lag:
   updateLagIndicator(0);
   statusBar()->addPermanentWidget(coreLagLabel);
+  coreLagLabel->hide();
   connect(Client::signalProxy(), SIGNAL(lagUpdated(int)), this, SLOT(updateLagIndicator(int)));
 
   // SSL indicator
   connect(Client::instance(), SIGNAL(securedConnection()), this, SLOT(securedConnection()));
   sslLabel->setPixmap(QPixmap());
   statusBar()->addPermanentWidget(sslLabel);
+  sslLabel->hide();
 
   _viewMenu->addSeparator();
   QAction *showStatusbar = QtUi::actionCollection("General")->action("ToggleStatusBar");
@@ -486,10 +495,9 @@ void MainWin::setupSystray() {
 
   ActionCollection *coll = QtUi::actionCollection("General");
   systrayMenu = new QMenu(this);
-  systrayMenu->addAction(coll->action("AboutQuassel"));
-  systrayMenu->addSeparator();
   systrayMenu->addAction(coll->action("ConnectCore"));
   systrayMenu->addAction(coll->action("DisconnectCore"));
+  systrayMenu->addAction(coll->action("CoreInfo"));
   systrayMenu->addSeparator();
   systrayMenu->addAction(coll->action("Quit"));
 
@@ -530,14 +538,25 @@ void MainWin::connectedToCore() {
 
 void MainWin::setConnectedState() {
   ActionCollection *coll = QtUi::actionCollection("General");
-  //ui.menuCore->setEnabled(true);
+
   coll->action("ConnectCore")->setEnabled(false);
   coll->action("DisconnectCore")->setEnabled(true);
   coll->action("CoreInfo")->setEnabled(true);
+
+  foreach(QAction *action, _fileMenu->actions()) {
+    if(isRemoteCoreOnly(action))
+      action->setVisible(!Client::internalCore());
+  }
+
   // _viewMenu->setEnabled(true);
-  statusBar()->showMessage(tr("Connected to core."));
+  if(!Client::internalCore())
+    statusBar()->showMessage(tr("Connected to core."));
+
   if(sslLabel->width() == 0)
     sslLabel->setPixmap(SmallIcon("security-low"));
+
+  sslLabel->setVisible(!Client::internalCore());
+  coreLagLabel->setVisible(!Client::internalCore());
   updateIcon();
 }
 
@@ -593,7 +612,16 @@ void MainWin::setDisconnectedState() {
   //_viewMenu->setEnabled(false);
   statusBar()->showMessage(tr("Not connected to core."));
   sslLabel->setPixmap(QPixmap());
+  sslLabel->hide();
+  coreLagLabel->hide();
   updateIcon();
+}
+
+void MainWin::startInternalCore() {
+  ClientSyncer *syncer = new ClientSyncer();
+  Client::registerClientSyncer(syncer);
+  connect(syncer, SIGNAL(syncFinished()), syncer, SLOT(deleteLater()), Qt::QueuedConnection);
+  syncer->useInternalCore();
 }
 
 void MainWin::showCoreConnectionDlg(bool autoConnect) {
@@ -836,3 +864,4 @@ void MainWin::saveStateToSessionSettings(SessionSettings & s)
 void MainWin::showStatusBarMessage(const QString &message) {
   statusBar()->showMessage(message, 10000);
 }
+

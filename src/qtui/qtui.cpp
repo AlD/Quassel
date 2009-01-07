@@ -32,16 +32,18 @@
 #include "util.h"
 
 QHash<QString, ActionCollection *> QtUi::_actionCollections;
+QPointer<QtUi> QtUi::_instance = 0;
 QPointer<MainWin> QtUi::_mainWin = 0;
 QList<AbstractNotificationBackend *> QtUi::_notificationBackends;
 QList<AbstractNotificationBackend::Notification> QtUi::_notifications;
 QtUiStyle *QtUi::_style = 0;
 
 QtUi::QtUi() : AbstractUi() {
-  if(_style != 0) {
+  if(_instance != 0) {
     qWarning() << "QtUi has been instantiated again!";
     return;
   }
+  _instance = this;
 
   _actionProvider = new NetworkModelActionProvider(this);
 
@@ -93,6 +95,7 @@ void QtUi::disconnectedFromCore() {
 void QtUi::registerNotificationBackend(AbstractNotificationBackend *backend) {
   if(!_notificationBackends.contains(backend)) {
     _notificationBackends.append(backend);
+    instance()->connect(backend, SIGNAL(activated()), SLOT(notificationActivated()));
   }
 }
 
@@ -124,10 +127,11 @@ void QtUi::closeNotification(uint notificationId) {
     if((*i).notificationId == notificationId) {
       foreach(AbstractNotificationBackend *backend, _notificationBackends)
         backend->close(notificationId);
-      _notifications.erase(i);
+      i = _notifications.erase(i);
       break;
+    } else {
+      ++i;
     }
-    ++i;
   }
 }
 
@@ -137,9 +141,10 @@ void QtUi::closeNotifications(BufferId bufferId) {
     if(!bufferId.isValid() || (*i).bufferId == bufferId) {
       foreach(AbstractNotificationBackend *backend, _notificationBackends)
         backend->close((*i).notificationId);
-      _notifications.erase(i);
+      i = _notifications.erase(i);
+    } else {
+      ++i;
     }
-    ++i;
   }
 }
 
@@ -147,3 +152,8 @@ const QList<AbstractNotificationBackend::Notification> &QtUi::activeNotification
   return _notifications;
 }
 
+void QtUi::notificationActivated() {
+  // this might not work with some window managers
+  _mainWin->raise();
+  _mainWin->activateWindow();
+}

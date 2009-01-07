@@ -25,6 +25,7 @@
 #include "buffermodel.h"
 #include "buffersettings.h"
 #include "buffersyncer.h"
+#include "bufferviewconfig.h"
 #include "bufferviewmanager.h"
 #include "clientbacklogmanager.h"
 #include "clientirclisthelper.h"
@@ -81,6 +82,7 @@ Client::Client(QObject *parent)
     _messageProcessor(0),
     _connectedToCore(false),
     _syncedToCore(false),
+    _internalCore(false),
     _debugLog(&_debugLogBuffer)
 {
   _signalProxy->synchronize(_ircListHelper);
@@ -275,6 +277,7 @@ void Client::setConnectedToCore(AccountId id, QIODevice *socket) {
     socket->setParent(0);
     signalProxy()->addPeer(socket);
   }
+  _internalCore = !socket;
   _connectedToCore = true;
   setCurrentCoreAccount(id);
 }
@@ -296,7 +299,7 @@ void Client::setSyncedToCore() {
   Q_ASSERT(!_bufferViewManager);
   _bufferViewManager = new BufferViewManager(signalProxy(), this);
   connect(bufferViewManager(), SIGNAL(initDone()), this, SLOT(requestInitialBacklog()));
-
+  connect(bufferViewManager(), SIGNAL(initDone()), this, SLOT(createDefautBufferView()));
   _syncedToCore = true;
   emit connected();
   emit coreConnectionStateChanged(true);
@@ -305,6 +308,15 @@ void Client::setSyncedToCore() {
 void Client::requestInitialBacklog() {
   if(bufferViewManager()->isInitialized() && bufferSyncer()->isInitialized())
     Client::backlogManager()->requestInitialBacklog();
+}
+
+void Client::createDefautBufferView() {
+  if(bufferViewManager()->bufferViewConfigs().isEmpty()) {
+    BufferViewConfig config(-1);
+    config.setBufferViewName(tr("All Buffers"));
+    config.initSetBufferList(networkModel()->allBufferIdsSorted());
+    bufferViewManager()->requestCreateBufferView(config.toVariantMap());
+  }
 }
 
 void Client::setSecuredConnection() {
