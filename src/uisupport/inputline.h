@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-08 by the Quassel Project                          *
+ *   Copyright (C) 2005-09 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -35,6 +35,7 @@ public:
 protected:
   //    virtual bool event(QEvent *);
   virtual void keyPressEvent(QKeyEvent * event);
+  virtual bool eventFilter(QObject *watched, QEvent *event);
 
 private slots:
   void on_returnPressed();

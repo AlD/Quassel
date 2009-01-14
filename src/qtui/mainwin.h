@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-08 by the Quassel Project                          *
+ *   Copyright (C) 2005-09 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -38,6 +38,7 @@ class BufferView;
 class BufferViewConfig;
 class BufferViewDock;
 class BufferWidget;
+class InputWidget;
 class MsgProcessorStatusWidget;
 class NickListWidget;
 class SystemTrayIcon;
@@ -84,7 +85,7 @@ class MainWin
   protected slots:
     void connectedToCore();
     void setConnectedState();
-    void updateLagIndicator(int lag);
+    void updateLagIndicator(int lag = -1);
     void securedConnection();
     void disconnectedFromCore();
     void setDisconnectedState();
@@ -157,6 +158,7 @@ class MainWin
     QList<BufferViewDock *> _bufferViews;
     BufferWidget *_bufferWidget;
     NickListWidget *_nickListWidget;
+    InputWidget *_inputWidget;
 
     QMenu *_fileMenu, *_networksMenu, *_viewMenu, *_bufferViewsMenu, *_settingsMenu, *_helpMenu, *_helpDebugMenu;
 

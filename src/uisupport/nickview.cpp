@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-08 by the Quassel Project                          *
+ *   Copyright (C) 2005-09 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -47,6 +47,7 @@ NickView::NickView(QWidget *parent)
   sortByColumn(0, Qt::AscendingOrder);
 
   setContextMenuPolicy(Qt::CustomContextMenu);
+  setSelectionMode(QAbstractItemView::ExtendedSelection);
 
   connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(showContextMenu(const QPoint&)));
 
@@ -89,8 +90,13 @@ void NickView::showContextMenu(const QPoint & pos ) {
   if(index.data(NetworkModel::ItemTypeRole) != NetworkModel::IrcUserItemType)
     return;
 
+  QModelIndexList indexList = selectedIndexes();
+  // make sure the item we clicked on is first
+  indexList.removeAll(index);
+  indexList.prepend(index);
+
   QMenu contextMenu(this);
-  Client::mainUi()->actionProvider()->addActions(&contextMenu, index);
+  Client::mainUi()->actionProvider()->addActions(&contextMenu, indexList);
   contextMenu.exec(QCursor::pos());
 }
 

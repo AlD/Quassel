@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-08 by the Quassel Project                          *
+ *   Copyright (C) 2005-09 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -117,7 +117,7 @@ void Client::init() {
   p->attachSlot(SIGNAL(identityCreated(const Identity &)), this, SLOT(coreIdentityCreated(const Identity &)));
   p->attachSlot(SIGNAL(identityRemoved(IdentityId)), this, SLOT(coreIdentityRemoved(IdentityId)));
 
-  p->attachSignal(this, SIGNAL(requestCreateNetwork(const NetworkInfo &)), SIGNAL(createNetwork(const NetworkInfo &)));
+  p->attachSignal(this, SIGNAL(requestCreateNetwork(const NetworkInfo &, const QStringList &)), SIGNAL(createNetwork(const NetworkInfo &, const QStringList &)));
   p->attachSignal(this, SIGNAL(requestRemoveNetwork(NetworkId)), SIGNAL(removeNetwork(NetworkId)));
   p->attachSlot(SIGNAL(networkCreated(NetworkId)), this, SLOT(coreNetworkCreated(NetworkId)));
   p->attachSlot(SIGNAL(networkRemoved(NetworkId)), this, SLOT(coreNetworkRemoved(NetworkId)));
@@ -167,8 +167,8 @@ const Network * Client::network(NetworkId networkid) {
   else return 0;
 }
 
-void Client::createNetwork(const NetworkInfo &info) {
-  emit instance()->requestCreateNetwork(info);
+void Client::createNetwork(const NetworkInfo &info, const QStringList &persistentChannels) {
+  emit instance()->requestCreateNetwork(info, persistentChannels);
 }
 
 void Client::removeNetwork(NetworkId id) {
@@ -299,7 +299,11 @@ void Client::setSyncedToCore() {
   Q_ASSERT(!_bufferViewManager);
   _bufferViewManager = new BufferViewManager(signalProxy(), this);
   connect(bufferViewManager(), SIGNAL(initDone()), this, SLOT(requestInitialBacklog()));
-  connect(bufferViewManager(), SIGNAL(initDone()), this, SLOT(createDefautBufferView()));
+  connect(bufferViewManager(), SIGNAL(initDone()), this, SLOT(createDefaultBufferView()));
+
+  createDefaultIdentity();
+  createDefaultNetworks();
+
   _syncedToCore = true;
   emit connected();
   emit coreConnectionStateChanged(true);
@@ -310,12 +314,34 @@ void Client::requestInitialBacklog() {
     Client::backlogManager()->requestInitialBacklog();
 }
 
-void Client::createDefautBufferView() {
+void Client::createDefaultBufferView() {
   if(bufferViewManager()->bufferViewConfigs().isEmpty()) {
     BufferViewConfig config(-1);
     config.setBufferViewName(tr("All Buffers"));
     config.initSetBufferList(networkModel()->allBufferIdsSorted());
     bufferViewManager()->requestCreateBufferView(config.toVariantMap());
+  }
+}
+
+void Client::createDefaultIdentity() {
+  if(_identities.isEmpty()) {
+    Identity identity;
+    identity.setToDefaults();
+    identity.setIdentityName(tr("Default Identity"));
+    createIdentity(identity);
+  }
+}
+
+void Client::createDefaultNetworks() {
+  if(_networks.isEmpty()) {
+    QStringList defaultNets = Network::presetNetworks(true);
+    foreach(QString net, defaultNets) {
+      NetworkInfo info = Network::networkInfoFromPreset(net);
+      if(info.networkName.isEmpty())
+        continue;
+      QStringList defaultChans = Network::presetDefaultChannels(net);
+      createNetwork(info, defaultChans);
+    }
   }
 }
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-08 by the Quassel Project                          *
+ *   Copyright (C) 2005-09 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -19,11 +19,11 @@
  ***************************************************************************/
 
 #include <QGraphicsTextItem>
+#include <QKeyEvent>
 #include <QMenu>
 #include <QScrollBar>
 
 #include "bufferwidget.h"
-#include "chatlinemodelitem.h"
 #include "chatscene.h"
 #include "chatview.h"
 #include "client.h"

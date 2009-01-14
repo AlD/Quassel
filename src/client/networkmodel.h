@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-08 by the Quassel Project                          *
+ *   Copyright (C) 2005-09 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -64,6 +64,9 @@ public slots:
   void attachIrcChannel(IrcChannel *channel);
   void attachIrcUser(IrcUser *ircUser);
 
+signals:
+  void networkDataChanged(int column = -1);
+
 private:
   NetworkId _networkId;
 
@@ -89,7 +92,7 @@ public:
   inline BufferId bufferId() const { return _bufferInfo.bufferId(); }
   inline BufferInfo::Type bufferType() const { return _bufferInfo.type(); }
 
-  void setBufferName(const QString &name);
+  virtual void setBufferName(const QString &name);
   virtual inline QString bufferName() const { return _bufferInfo.bufferName(); }
   virtual inline QString topic() const { return QString(); }
   virtual inline int nickCount() const { return 0; }
@@ -141,12 +144,15 @@ public:
 
   virtual QVariant data(int column, int role) const;
   virtual bool setData(int column, const QVariant &value, int role);
+
   virtual inline bool isActive() const { return (bool)_ircUser; }
   virtual QString toolTip(int column) const;
 
+  virtual void setBufferName(const QString &name);
+
 public slots:
-  void attachIrcUser(IrcUser *ircUser);
-  void ircUserQuited();
+  void setIrcUser(IrcUser *ircUser);
+  void removeIrcUser();
 
 private:
   IrcUser *_ircUser;

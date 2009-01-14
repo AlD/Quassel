@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-08 by the Quassel IRC Team                         *
+ *   Copyright (C) 2005-09 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -27,6 +27,7 @@
 #include "settingspage.h"
 
 #include "ui_networkssettingspage.h"
+#include "ui_networkadddlg.h"
 #include "ui_networkeditdlg.h"
 #include "ui_servereditdlg.h"
 #include "ui_saveidentitiesdlg.h"
@@ -65,8 +66,9 @@ class NetworksSettingsPage : public SettingsPage {
     void on_addNetwork_clicked();
     void on_deleteNetwork_clicked();
     void on_renameNetwork_clicked();
+    void on_editIdentities_clicked();
 
-    void on_connectNow_clicked();
+    // void on_connectNow_clicked();
 
     void on_serverList_itemSelectionChanged();
     void on_addServer_clicked();
@@ -92,6 +94,25 @@ class NetworksSettingsPage : public SettingsPage {
     void saveToNetworkInfo(NetworkInfo &);
 };
 
+
+class NetworkAddDlg : public QDialog {
+  Q_OBJECT
+
+  public:
+    NetworkAddDlg(const QStringList &existing = QStringList(), QWidget *parent = 0);
+
+    NetworkInfo networkInfo() const;
+
+  private slots:
+    void setButtonStates();
+
+  private:
+    Ui::NetworkAddDlg ui;
+
+    QStringList existing;
+};
+
+
 class NetworkEditDlg : public QDialog {
   Q_OBJECT
 
@@ -108,7 +129,6 @@ class NetworkEditDlg : public QDialog {
 
     QStringList existing;
 };
-
 
 
 class ServerEditDlg : public QDialog {

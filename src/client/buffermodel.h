@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-08 by the Quassel Project                          *
+ *   Copyright (C) 2005-09 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -28,7 +28,6 @@
 #include "selectionmodelsynchronizer.h"
 
 class NetworkModel;
-class MappedSelectionModel;
 class QAbstractItemView;
 
 class BufferModel : public QSortFilterProxyModel {
@@ -42,7 +41,7 @@ public:
   inline const SelectionModelSynchronizer *selectionModelSynchronizer() const { return &_selectionModelSynchronizer; }
   inline QItemSelectionModel *standardSelectionModel() const { return _selectionModelSynchronizer.selectionModel(); }
   
-  void synchronizeSelectionModel(MappedSelectionModel *selectionModel);
+  inline void synchronizeSelectionModel(QItemSelectionModel *selectionModel) { _selectionModelSynchronizer.synchronizeSelectionModel(selectionModel); }
   void synchronizeView(QAbstractItemView *view);
 
   inline QModelIndex currentIndex() { return standardSelectionModel()->currentIndex(); }

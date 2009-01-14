@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-08 by the Quassel Project                          *
+ *   Copyright (C) 2005-09 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -22,6 +22,7 @@
 
 #include <QCoreApplication>
 #include <QDebug>
+#include <QFile>
 #include <QLibraryInfo>
 #include <QTextCodec>
 #include <QTranslator>
@@ -173,6 +174,34 @@ QDir quasselDir() {
   }
 
   return qDir;
+}
+
+QStringList dataDirPaths() {
+  QStringList dataDirNames = QString(qgetenv("XDG_DATA_DIRS")).split(':', QString::SkipEmptyParts);
+
+  // Provide a fallback
+# ifdef Q_OS_UNIX
+  if(dataDirNames.isEmpty()) dataDirNames.append("/usr/share");
+  // on UNIX, we always check our install prefix
+  QString appDir = QCoreApplication::applicationDirPath();
+  int binpos = appDir.lastIndexOf("/bin");
+  if(binpos >= 0) {
+    appDir.replace(binpos, 4, "/share");
+    if(!dataDirNames.contains(appDir)) dataDirNames.append(appDir);
+  }
+# endif
+
+  return dataDirNames;
+}
+
+QString findDataFilePath(const QString &fileName) {
+  QStringList dataDirs = dataDirPaths();
+  foreach(QString dataDir, dataDirs) {
+    QString path = dataDir + "/apps/quassel/" + fileName;
+    if(QFile::exists(path))
+      return path;
+  }
+  return QString();
 }
 
 void loadTranslation(const QLocale &locale) {

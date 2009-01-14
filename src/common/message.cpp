@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-08 by the Quassel Project                          *
+ *   Copyright (C) 2005-09 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -42,10 +42,6 @@ Message::Message(const QDateTime &ts, const BufferInfo &bufferInfo, Type type, c
     _type(type),
     _flags(flags)
 {
-}
-
-void Message::setFlags(Flags flags) {
-  _flags = flags;
 }
 
 QDataStream &operator<<(QDataStream &out, const Message &msg) {

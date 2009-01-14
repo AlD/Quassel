@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-08 by the Quassel Project                          *
+ *   Copyright (C) 2005-09 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -89,7 +89,7 @@ public slots:
   //! Create a network and propagate the changes to the clients.
   /** \param info The network's settings.
    */
-  void createNetwork(const NetworkInfo &info);
+  void createNetwork(const NetworkInfo &info, const QStringList &persistentChannels = QStringList());
 
   //! Remove network and propagate that fact to the clients.
   /** \param network The id of the network to be removed.

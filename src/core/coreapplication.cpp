@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-08 by the Quassel IRC Team                         *
+ *   Copyright (C) 2005-09 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -52,12 +52,7 @@ bool CoreApplicationInternal::init() {
   Core::instance();  // create and init the core
   _coreCreated = true;
 
-#ifdef HAVE_KDE
-  // if using KDE, option is called "restore" instead of "norestore"
-  if(Quassel::isOptionSet("restore"))
-#else
   if(!Quassel::isOptionSet("norestore"))
-#endif
     Core::restoreState();
 
   return true;
@@ -65,14 +60,7 @@ bool CoreApplicationInternal::init() {
 
 /*****************************************************************************/
 
-CoreApplication::CoreApplication(int &argc, char **argv)
-#ifdef HAVE_KDE
-: KApplication(false), Quassel() {
-  Q_UNUSED(argc); Q_UNUSED(argv);
-#else
-: QCoreApplication(argc, argv), Quassel() {
-#endif
-
+CoreApplication::CoreApplication(int &argc, char **argv) : QCoreApplication(argc, argv), Quassel() {
   setRunMode(Quassel::CoreOnly);
   _internal = new CoreApplicationInternal();
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-08 by the Quassel Project                          *
+ *   Copyright (C) 2005-09 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -315,6 +315,7 @@ void MainWin::addBufferView(BufferViewConfig *config) {
   //create the view and initialize it's filter
   BufferView *view = new BufferView(dock);
   view->setFilteredModel(Client::bufferModel(), config);
+  view->installEventFilter(_inputWidget->inputLine()); // for key presses
   view->show();
 
   Client::bufferModel()->synchronizeView(view);
@@ -414,20 +415,20 @@ void MainWin::setupInputWidget() {
   VerticalDock *dock = new VerticalDock(tr("Inputline"), this);
   dock->setObjectName("InputDock");
 
-  InputWidget *inputWidget = new InputWidget(dock);
-  dock->setWidget(inputWidget);
+  _inputWidget = new InputWidget(dock);
+  dock->setWidget(_inputWidget);
 
   addDockWidget(Qt::BottomDockWidgetArea, dock);
 
   _viewMenu->addAction(dock->toggleViewAction());
   dock->toggleViewAction()->setText(tr("Show Input Line"));
 
-  inputWidget->setModel(Client::bufferModel());
-  inputWidget->setSelectionModel(Client::bufferModel()->standardSelectionModel());
+  _inputWidget->setModel(Client::bufferModel());
+  _inputWidget->setSelectionModel(Client::bufferModel()->standardSelectionModel());
 
-  _bufferWidget->setFocusProxy(inputWidget);
+  _bufferWidget->setFocusProxy(_inputWidget);
 
-  inputWidget->inputLine()->installEventFilter(_bufferWidget);
+  _inputWidget->inputLine()->installEventFilter(_bufferWidget);
 }
 
 void MainWin::setupTopicWidget() {
@@ -457,7 +458,7 @@ void MainWin::setupStatusBar() {
   connect(Client::messageProcessor(), SIGNAL(progressUpdated(int, int)), msgProcessorStatusWidget, SLOT(setProgress(int, int)));
 
   // Core Lag:
-  updateLagIndicator(0);
+  updateLagIndicator();
   statusBar()->addPermanentWidget(coreLagLabel);
   coreLagLabel->hide();
   connect(Client::signalProxy(), SIGNAL(lagUpdated(int)), this, SLOT(updateLagIndicator(int)));
@@ -573,7 +574,12 @@ void MainWin::saveLayout() {
 }
 
 void MainWin::updateLagIndicator(int lag) {
-  coreLagLabel->setText(QString(tr("Core Lag: %1 msec")).arg(lag));
+  QString text = tr("Core Lag: %1");
+  if(lag == -1)
+    text = text.arg('-');
+  else
+    text = text.arg("%1 msec").arg(lag);
+  coreLagLabel->setText(text);
 }
 
 
@@ -613,6 +619,7 @@ void MainWin::setDisconnectedState() {
   statusBar()->showMessage(tr("Not connected to core."));
   sslLabel->setPixmap(QPixmap());
   sslLabel->hide();
+  updateLagIndicator();
   coreLagLabel->hide();
   updateIcon();
 }

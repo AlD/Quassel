@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-08 by the Quassel Project                          *
+ *   Copyright (C) 2005-09 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -55,6 +55,7 @@ public:
     HideNick = 0x0400,
     HideMode = 0x0500,
     HideDayChange = 0x0600,
+    HideUseDefaults = 0xe00,
     HideApplyToAll = 0xf00,
 
     // General actions
@@ -145,7 +146,7 @@ private:
 
   void addHideEventsMenu(QMenu *, BufferId bufferId);
   void addHideEventsMenu(QMenu *, MessageFilter *msgFilter);
-  void addHideEventsMenu(QMenu *, int filter);
+  void addHideEventsMenu(QMenu *, int filter = -1);
 
   void addNetworkItemActions(QMenu *, const QModelIndex &);
   void addBufferItemActions(QMenu *, const QModelIndex &, bool isCustomBufferView = false);
@@ -154,6 +155,7 @@ private:
   QString nickName(const QModelIndex &index) const;
   BufferId findQueryBuffer(const QModelIndex &index, const QString &predefinedNick = QString()) const;
   BufferId findQueryBuffer(NetworkId, const QString &nickName) const;
+  void removeBuffers(const QModelIndexList &indexList);
 
   NetworkModel *_model;
 

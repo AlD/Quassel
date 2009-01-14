@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-08 by the Quassel IRC Team                         *
+ *   Copyright (C) 2005-09 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -45,11 +45,7 @@ class CoreApplicationInternal {
     bool _coreCreated;
 };
 
-#ifdef HAVE_KDE
-class CoreApplication : public KApplication, public Quassel {
-#else
 class CoreApplication : public QCoreApplication, public Quassel {
-#endif
 
   Q_OBJECT
   public:

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-08 by the Quassel Project                          *
+ *   Copyright (C) 2005-09 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,28 +18,28 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef _MAPPEDSELECTIONMODEL_H_
-#define _MAPPEDSELECTIONMODEL_H_
+#ifndef KCMDLINEWRAPPER_H
+#define KCMDLINEWRAPPER_H
 
-#include <QObject>
-#include <QModelIndex>
-#include <QItemSelection>
-#include <QItemSelectionModel>
+#include "abstractcliparser.h"
 
-class QAbstractProxyModel;
+#include <KCmdLineOptions>
 
-class MappedSelectionModel : public QItemSelectionModel {
-  Q_OBJECT
-
+//! Wrapper for KCmdLineOptions
+class KCmdLineWrapper : public AbstractCliParser {
 public:
-  MappedSelectionModel(QAbstractItemModel *model = 0);
+  KCmdLineWrapper();
 
-  QModelIndex mapFromSource(const QModelIndex &sourceIndex);
-  QItemSelection mapSelectionFromSource(const QItemSelection &sourceSelection);
-									
-public slots:
-  void mappedSelect(const QItemSelection &selection, QItemSelectionModel::SelectionFlags command);
-  void mappedSetCurrentIndex(const QModelIndex &index, QItemSelectionModel::SelectionFlags command);
+  bool init(const QStringList &arguments = QStringList());
+
+  QString value(const QString &longName);
+  bool isSet(const QString &longName);
+  void usage();
+
+private:
+  void addArgument(const QString &longName, const CliParserArg &arg);
+
+  KCmdLineOptions _cmdLineOptions;
 };
 
 #endif

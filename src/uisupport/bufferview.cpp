@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-08 by the Quassel Project                          *
+ *   Copyright (C) 2005-09 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -36,7 +36,6 @@
 #include "buffersyncer.h"
 #include "client.h"
 #include "iconloader.h"
-#include "mappedselectionmodel.h"
 #include "network.h"
 #include "networkmodel.h"
 #include "networkmodelactionprovider.h"
@@ -347,13 +346,12 @@ void BufferView::on_configChanged() {
       collapse(networkIdx);
   }
 
-  // update selection to current one
-  MappedSelectionModel *mappedSelectionModel = qobject_cast<MappedSelectionModel *>(selectionModel());
-  if(!config() || !mappedSelectionModel)
-    return;
+  if(config()) {
+    // update selection to current one
+    Client::bufferModel()->synchronizeView(this);
+  }
 
-  mappedSelectionModel->mappedSetCurrentIndex(Client::bufferModel()->standardSelectionModel()->currentIndex(), QItemSelectionModel::Current);
-  mappedSelectionModel->mappedSelect(Client::bufferModel()->standardSelectionModel()->selection(), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+  return;
 }
 
 void BufferView::on_collapse(const QModelIndex &index) {
@@ -413,7 +411,12 @@ void BufferView::contextMenuEvent(QContextMenuEvent *event) {
 }
 
 void BufferView::addActionsToMenu(QMenu *contextMenu, const QModelIndex &index) {
-  Client::mainUi()->actionProvider()->addActions(contextMenu, index, this, "menuActionTriggered", (bool)config());
+  QModelIndexList indexList = selectedIndexes();
+  // make sure the item we clicked on is first
+  indexList.removeAll(index);
+  indexList.prepend(index);
+
+  Client::mainUi()->actionProvider()->addActions(contextMenu, indexList, this, "menuActionTriggered", (bool)config());
 }
 
 void BufferView::addFilterActions(QMenu *contextMenu, const QModelIndex &index) {

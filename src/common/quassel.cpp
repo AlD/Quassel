@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-08 by the Quassel IRC Team                         *
+ *   Copyright (C) 2005-09 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -35,7 +35,7 @@
 #include "syncableobject.h"
 
 Quassel::BuildInfo Quassel::_buildInfo;
-CliParser *Quassel::_cliParser = 0;
+AbstractCliParser *Quassel::_cliParser = 0;
 Quassel::RunMode Quassel::_runMode;
 bool Quassel::_initialized = false;
 bool Quassel::DEBUG = false;

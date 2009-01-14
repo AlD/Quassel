@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-08 by the Quassel IRC Team                         *
+ *   Copyright (C) 2005-09 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -23,6 +23,9 @@
 
 #include "messagemodel.h"
 
+#include <QList>
+#include "chatlinemodelitem.h"
+
 class ChatLineModel : public MessageModel {
   Q_OBJECT
 
@@ -33,18 +36,28 @@ public:
 
   ChatLineModel(QObject *parent = 0);
 
-  /// Used to store information about words to be used for wrapping
-  struct Word {
-    quint16 start;
-    qreal endX;
-    qreal width;
-    qreal trailing;
-  };
-  typedef QVector<Word> WrapList;
+  typedef ChatLineModelItem::Word Word;
+  typedef ChatLineModelItem::WrapList WrapList;
 
 protected:
-  virtual MessageModelItem *createMessageModelItem(const Message &);
+//   virtual MessageModelItem *createMessageModelItem(const Message &);
 
+  virtual inline int messageCount() const { return _messageList.count(); }
+  virtual inline bool messagesIsEmpty() const { return _messageList.isEmpty(); }
+  virtual inline const MessageModelItem *messageItemAt(int i) const { return &_messageList[i]; }
+  virtual inline MessageModelItem *messageItemAt(int i) { return &_messageList[i]; }
+  virtual inline const MessageModelItem *firstMessageItem() const { return &_messageList.first(); }
+  virtual inline MessageModelItem *firstMessageItem() { return &_messageList.first(); }
+  virtual inline const MessageModelItem *lastMessageItem() const { return &_messageList.last(); }
+  virtual inline MessageModelItem *lastMessageItem() { return &_messageList.last(); }
+  virtual inline void insertMessage__(int pos, const Message &msg) { _messageList.insert(pos, ChatLineModelItem(msg)); }
+  virtual void insertMessages__(int pos, const QList<Message> &);
+  virtual inline void removeMessageAt(int i) { _messageList.removeAt(i); }
+  virtual inline void removeAllMessages() { _messageList.clear(); }
+  virtual Message takeMessageAt(int i);
+
+private:
+  QList<ChatLineModelItem> _messageList;
 };
 
 QDataStream &operator<<(QDataStream &out, const ChatLineModel::WrapList);

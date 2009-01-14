@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-08 by the Quassel Project                          *
+ *   Copyright (C) 2005-09 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -67,17 +67,20 @@ public:
           const QString &contents = "", const QString &sender = "", Flags flags = None);
 
   inline static Message ChangeOfDay(const QDateTime &day) { return Message(day, BufferInfo(), DayChange, tr("Day changed to %1").arg(day.toString("dddd MMMM d yyyy"))); }
-  inline MsgId msgId() const { return _msgId; }
+  inline const MsgId &msgId() const { return _msgId; }
   inline void setMsgId(MsgId id) { _msgId = id; }
 
-  inline BufferInfo bufferInfo() const { return _bufferInfo; }
-  inline QString contents() const { return _contents; }
-  inline QString sender() const { return _sender; }
+  inline const BufferInfo &bufferInfo() const { return _bufferInfo; }
+  inline const BufferId &bufferId() const { return _bufferInfo.bufferId(); }
+  inline void setBufferId(BufferId id) { _bufferInfo.setBufferId(id); }
+  inline const QString &contents() const { return _contents; }
+  inline const QString &sender() const { return _sender; }
   inline Type type() const { return _type; }
   inline Flags flags() const { return _flags; }
-  inline QDateTime timestamp() const { return _timestamp; }
+  inline void setFlags(Flags flags) { _flags = flags; }
+  inline const QDateTime &timestamp() const { return _timestamp; }
 
-  void setFlags(Flags flags);
+  inline bool isValid() const { return _msgId.isValid(); }
 
   inline bool operator<(const Message &other) const { return _msgId < other._msgId; }
 
@@ -89,8 +92,6 @@ private:
   QString _sender;
   Type _type;
   Flags _flags;
-
-  QString _formattedTimestamp, _formattedSender, _formattedText; // cache
 
   friend QDataStream &operator>>(QDataStream &in, Message &msg);
 };

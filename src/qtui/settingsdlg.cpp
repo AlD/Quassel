@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-08 by the Quassel Project                          *
+ *   Copyright (C) 2005-09 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -58,6 +58,7 @@ void SettingsDlg::registerSettingsPage(SettingsPage *sp) {
   }
   QTreeWidgetItem *item = new QTreeWidgetItem(cat, QStringList(sp->title()));
   item->setData(0, SettingsPageRole, qVariantFromValue<QObject *>(sp));
+  ui.settingsTree->setMinimumWidth(ui.settingsTree->header()->sectionSizeHint(0) + 5);
   pageIsLoaded[sp] = false;
 }
 

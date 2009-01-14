@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-08 by the Quassel IRC Team                         *
+ *   Copyright (C) 2005-09 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -28,7 +28,10 @@
 #include "iconloader.h"
 #include "identity.h"
 #include "network.h"
+#include "settingspagedlg.h"
+#include "util.h"
 
+#include "settingspages/identitiessettingspage.h"
 
 NetworksSettingsPage::NetworksSettingsPage(QWidget *parent) : SettingsPage(tr("General"), tr("Networks"), parent) {
   ui.setupUi(this);
@@ -42,6 +45,7 @@ NetworksSettingsPage::NetworksSettingsPage(QWidget *parent) : SettingsPage(tr("G
   ui.editServer->setIcon(SmallIcon("configure"));
   ui.upServer->setIcon(SmallIcon("go-up"));
   ui.downServer->setIcon(SmallIcon("go-down"));
+  ui.editIdentities->setIcon(SmallIcon("configure"));
 
   _ignoreWidgetChanges = false;
 
@@ -68,12 +72,12 @@ NetworksSettingsPage::NetworksSettingsPage(QWidget *parent) : SettingsPage(tr("G
   connect(Client::instance(), SIGNAL(identityRemoved(IdentityId)), this, SLOT(clientIdentityRemoved(IdentityId)));
 
   connect(ui.identityList, SIGNAL(currentIndexChanged(int)), this, SLOT(widgetHasChanged()));
-  connect(ui.randomServer, SIGNAL(clicked(bool)), this, SLOT(widgetHasChanged()));
+  //connect(ui.randomServer, SIGNAL(clicked(bool)), this, SLOT(widgetHasChanged()));
   connect(ui.performEdit, SIGNAL(textChanged()), this, SLOT(widgetHasChanged()));
   connect(ui.autoIdentify, SIGNAL(clicked(bool)), this, SLOT(widgetHasChanged()));
   connect(ui.autoIdentifyService, SIGNAL(textEdited(const QString &)), this, SLOT(widgetHasChanged()));
   connect(ui.autoIdentifyPassword, SIGNAL(textEdited(const QString &)), this, SLOT(widgetHasChanged()));
-  connect(ui.useDefaultEncodings, SIGNAL(clicked(bool)), this, SLOT(widgetHasChanged()));
+  connect(ui.useCustomEncodings, SIGNAL(clicked(bool)), this, SLOT(widgetHasChanged()));
   connect(ui.sendEncoding, SIGNAL(currentIndexChanged(int)), this, SLOT(widgetHasChanged()));
   connect(ui.recvEncoding, SIGNAL(currentIndexChanged(int)), this, SLOT(widgetHasChanged()));
   connect(ui.serverEncoding, SIGNAL(currentIndexChanged(int)), this, SLOT(widgetHasChanged()));
@@ -186,6 +190,7 @@ void NetworksSettingsPage::setWidgetStates() {
     ui.detailsBox->setEnabled(true);
     ui.renameNetwork->setEnabled(true);
     ui.deleteNetwork->setEnabled(true);
+    /* button disabled for now
     ui.connectNow->setEnabled(net);
     //    && (Client::network(id)->connectionState() == Network::Initialized
     //    || Client::network(id)->connectionState() == Network::Disconnected));
@@ -200,11 +205,11 @@ void NetworksSettingsPage::setWidgetStates() {
     } else {
       ui.connectNow->setIcon(QIcon());
       ui.connectNow->setText(tr("Apply first!"));
-    }
+    } */
   } else {
     ui.renameNetwork->setEnabled(false);
     ui.deleteNetwork->setEnabled(false);
-    ui.connectNow->setEnabled(false);
+    //ui.connectNow->setEnabled(false);
     ui.detailsBox->setEnabled(false);
   }
   // network details
@@ -384,11 +389,14 @@ void NetworksSettingsPage::clientNetworkRemoved(NetworkId id) {
 }
 
 void NetworksSettingsPage::networkConnectionStateChanged(Network::ConnectionState state) {
+  Q_UNUSED(state);
   const Network *net = qobject_cast<const Network *>(sender());
   if(!net) return;
+  /*
   if(net->networkId() == currentId) {
     ui.connectNow->setEnabled(state == Network::Initialized || state == Network::Disconnected);
   }
+  */
   setItemState(net->networkId());
   setWidgetStates();
 }
@@ -429,10 +437,13 @@ void NetworksSettingsPage::displayNetwork(NetworkId id) {
     ui.identityList->setCurrentIndex(ui.identityList->findData(info.identity.toInt()));
     ui.serverList->clear();
     foreach(Network::Server server, info.serverList) {
-      ui.serverList->addItem(QString("%1:%2").arg(server.host).arg(server.port));
+      QListWidgetItem *item = new QListWidgetItem(QString("%1:%2").arg(server.host).arg(server.port));
+      if(server.useSsl)
+        item->setIcon(SmallIcon("document-encrypt"));
+      ui.serverList->addItem(item);
     }
     //setItemState(id);
-    ui.randomServer->setChecked(info.useRandomServer);
+    //ui.randomServer->setChecked(info.useRandomServer);
     ui.performEdit->setPlainText(info.perform.join("\n"));
     ui.autoIdentify->setChecked(info.useAutoIdentify);
     ui.autoIdentifyService->setText(info.autoIdentifyService);
@@ -441,12 +452,12 @@ void NetworksSettingsPage::displayNetwork(NetworkId id) {
       ui.sendEncoding->setCurrentIndex(ui.sendEncoding->findText(Network::defaultCodecForEncoding()));
       ui.recvEncoding->setCurrentIndex(ui.recvEncoding->findText(Network::defaultCodecForDecoding()));
       ui.serverEncoding->setCurrentIndex(ui.serverEncoding->findText(Network::defaultCodecForServer()));
-      ui.useDefaultEncodings->setChecked(true);
+      ui.useCustomEncodings->setChecked(false);
     } else {
       ui.sendEncoding->setCurrentIndex(ui.sendEncoding->findText(info.codecForEncoding));
       ui.recvEncoding->setCurrentIndex(ui.recvEncoding->findText(info.codecForDecoding));
       ui.serverEncoding->setCurrentIndex(ui.serverEncoding->findText(info.codecForServer));
-      ui.useDefaultEncodings->setChecked(false);
+      ui.useCustomEncodings->setChecked(true);
     }
     ui.autoReconnect->setChecked(info.useAutoReconnect);
     ui.reconnectInterval->setValue(info.autoReconnectInterval);
@@ -468,12 +479,12 @@ void NetworksSettingsPage::displayNetwork(NetworkId id) {
 
 void NetworksSettingsPage::saveToNetworkInfo(NetworkInfo &info) {
   info.identity = ui.identityList->itemData(ui.identityList->currentIndex()).toInt();
-  info.useRandomServer = ui.randomServer->isChecked();
+  //info.useRandomServer = ui.randomServer->isChecked();
   info.perform = ui.performEdit->toPlainText().split("\n");
   info.useAutoIdentify = ui.autoIdentify->isChecked();
   info.autoIdentifyService = ui.autoIdentifyService->text();
   info.autoIdentifyPassword = ui.autoIdentifyPassword->text();
-  if(ui.useDefaultEncodings->isChecked()) {
+  if(!ui.useCustomEncodings->isChecked()) {
     info.codecForEncoding.clear();
     info.codecForDecoding.clear();
     info.codecForServer.clear();
@@ -508,29 +519,19 @@ void NetworksSettingsPage::on_networkList_itemSelectionChanged() {
 void NetworksSettingsPage::on_addNetwork_clicked() {
   QStringList existing;
   for(int i = 0; i < ui.networkList->count(); i++) existing << ui.networkList->item(i)->text();
-  NetworkEditDlg dlg(QString(), existing, this);
+  NetworkAddDlg dlg(existing, this);
   if(dlg.exec() == QDialog::Accepted) {
+    NetworkInfo info = dlg.networkInfo();
+    if(info.networkName.isEmpty())
+      return;  // sanity check
+
     NetworkId id;
     for(id = 1; id <= networkInfos.count(); id++) {
       widgetHasChanged();
       if(!networkInfos.keys().contains(-id.toInt())) break;
     }
     id = -id.toInt();
-    NetworkInfo info;
     info.networkId = id;
-    info.networkName = dlg.networkName();
-    info.identity = 1;
-
-    // defaults
-    info.useRandomServer = false;
-    info.useAutoReconnect = true;
-    info.autoReconnectInterval = 60;
-    info.autoReconnectRetries = 20;
-    info.unlimitedReconnectRetries = false;
-    info.useAutoIdentify = false;
-    info.autoIdentifyService = "NickServ";
-    info.rejoinChannels = true;
-
     networkInfos[id] = info;
     QListWidgetItem *item = insertNetwork(info);
     ui.networkList->setCurrentItem(item);
@@ -569,6 +570,7 @@ void NetworksSettingsPage::on_renameNetwork_clicked() {
   }
 }
 
+/*
 void NetworksSettingsPage::on_connectNow_clicked() {
   if(!ui.networkList->selectedItems().count()) return;
   NetworkId id = ui.networkList->selectedItems()[0]->data(Qt::UserRole).value<NetworkId>();
@@ -577,6 +579,7 @@ void NetworksSettingsPage::on_connectNow_clicked() {
   if(net->connectionState() == Network::Disconnected) net->requestConnect();
   else net->requestDisconnect();
 }
+*/
 
 /*** Server list ***/
 
@@ -634,6 +637,55 @@ void NetworksSettingsPage::on_downServer_clicked() {
   widgetHasChanged();
 }
 
+void NetworksSettingsPage::on_editIdentities_clicked() {
+  SettingsPageDlg dlg(new IdentitiesSettingsPage(this), this);
+  dlg.exec();
+}
+
+/**************************************************************************
+* NetworkAddDlg
+*************************************************************************/
+
+NetworkAddDlg::NetworkAddDlg(const QStringList &exist, QWidget *parent) : QDialog(parent), existing(exist) {
+  ui.setupUi(this);
+  ui.useSSL->setIcon(SmallIcon("document-encrypt"));
+
+  // read preset networks
+  QStringList networks = Network::presetNetworks();
+  foreach(QString s, existing)
+    networks.removeAll(s);
+  if(networks.count())
+    ui.presetList->addItems(networks);
+  else {
+    ui.useManual->setChecked(true);
+    ui.usePreset->setEnabled(false);
+  }
+  connect(ui.networkName, SIGNAL(textChanged(const QString &)), SLOT(setButtonStates()));
+  connect(ui.serverAddress, SIGNAL(textChanged(const QString &)), SLOT(setButtonStates()));
+  setButtonStates();
+}
+
+NetworkInfo NetworkAddDlg::networkInfo() const {
+  if(ui.useManual->isChecked()) {
+    NetworkInfo info;
+    info.networkName = ui.networkName->text().trimmed();
+    info.serverList << Network::Server(ui.serverAddress->text().trimmed(), ui.port->value(), ui.serverPassword->text(), ui.useSSL->isChecked());
+    return info;
+  } else
+    return Network::networkInfoFromPreset(ui.presetList->currentText());
+}
+
+void NetworkAddDlg::setButtonStates() {
+  bool ok = false;
+  if(ui.usePreset->isChecked() && ui.presetList->count())
+    ok = true;
+  else if(ui.useManual->isChecked()) {
+    ok = !ui.networkName->text().trimmed().isEmpty() && !existing.contains(ui.networkName->text().trimmed())
+      && !ui.serverAddress->text().isEmpty();
+  }
+  ui.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(ok);
+}
+
 /**************************************************************************
  * NetworkEditDlg
  *************************************************************************/
@@ -656,7 +708,6 @@ QString NetworkEditDlg::networkName() const {
 void NetworkEditDlg::on_networkEdit_textChanged(const QString &text) {
   ui.buttonBox->button(QDialogButtonBox::Ok)->setDisabled(text.isEmpty() || existing.contains(text.trimmed()));
 }
-
 
 /**************************************************************************
  * ServerEditDlg

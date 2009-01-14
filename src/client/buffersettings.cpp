@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-08 by the Quassel IRC Team                         *
+ *   Copyright (C) 2005-09 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -37,4 +37,15 @@ void BufferSettings::filterMessage(Message::Type msgType, bool filter) {
     setLocalValue("MessageTypeFilter", localValue("MessageTypeFilter", 0).toInt() | msgType);
   else
     setLocalValue("MessageTypeFilter", localValue("MessageTypeFilter", 0).toInt() & ~msgType);
+}
+
+void BufferSettings::setMessageFilter(int filter) {
+  if(!hasFilter())
+    setLocalValue("hasMessageTypeFilter", true);
+  setLocalValue("MessageTypeFilter", filter);
+}
+
+void BufferSettings::removeFilter() {
+  setLocalValue("hasMessageTypeFilter", false);
+  removeLocalKey("MessageTypeFilter");
 }

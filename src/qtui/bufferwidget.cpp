@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-08 by the Quassel Project                          *
+ *   Copyright (C) 2005-09 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -81,8 +81,8 @@ BufferWidget::BufferWidget(QWidget *parent)
 
   Action *zoomOriginalChatview = coll->add<Action>("ZoomOriginalChatView", this, SLOT(zoomOriginal()));
   zoomOriginalChatview->setIcon(SmallIcon("zoom-original"));
-  zoomOriginalChatview->setText(tr("Zoom Original"));
-  zoomOriginalChatview->setShortcut(tr("Ctrl+0"));
+  zoomOriginalChatview->setText(tr("Actual Size"));
+  //zoomOriginalChatview->setShortcut(tr("Ctrl+0")); // used for RTS switching
 }
 
 BufferWidget::~BufferWidget() {
