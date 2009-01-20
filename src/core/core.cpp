@@ -244,20 +244,66 @@ bool Core::startListening() {
   bool success = false;
   uint port = Quassel::optionValue("port").toUInt();
 
-  if(_server.listen(QHostAddress::Any, port)) {
-    quInfo() << "Listening for GUI clients on IPv4 port" << _server.serverPort()
-             << "using protocol version" << Quassel::buildInfo().protocolVersion;
-    success = true;
+  const QString listen = Quassel::optionValue("listen");
+  const QStringList listen_list = listen.split(",", QString::SkipEmptyParts);
+  if(listen_list.size() > 0) {
+    foreach (const QString listen_term, listen_list) {  // TODO: handle multiple interfaces for same TCP version gracefully
+      QHostAddress addr;
+      if(!addr.setAddress(listen_term)) {
+        qCritical() << qPrintable(
+          tr("Invalid listen address %1")
+            .arg(listen_term)
+        );
+      } else {
+        switch(addr.protocol()) {
+          case QAbstractSocket::IPv4Protocol:
+            if(_server.listen(addr, port)) {
+              quInfo() << qPrintable(
+                tr("Listening for GUI clients on IPv4 %1 port %2 using protocol version %3")
+                  .arg(addr.toString())
+                  .arg(_server.serverPort())
+                  .arg(Quassel::buildInfo().protocolVersion)
+              );
+              success = true;
+            } else
+              quWarning() << qPrintable(
+                tr("Could not open IPv4 interface %1:%2: %3")
+                  .arg(addr.toString())
+                  .arg(port)
+                  .arg(_server.errorString()));
+            break;
+          case QAbstractSocket::IPv6Protocol:
+            if(_v6server.listen(addr, port)) {
+              quInfo() << qPrintable(
+                tr("Listening for GUI clients on IPv6 %1 port %2 using protocol version %3")
+                  .arg(addr.toString())
+                  .arg(_v6server.serverPort())
+                  .arg(Quassel::buildInfo().protocolVersion)
+              );
+              success = true;
+            } else {
+              // if v4 succeeded on Any, the port will be already in use - don't display the error then
+              // FIXME: handle this more sanely, make sure we can listen to both v4 and v6 by default!
+              if(!success || _v6server.serverError() != QAbstractSocket::AddressInUseError)
+                quWarning() << qPrintable(
+                  tr("Could not open IPv6 interface %1:%2: %3")
+                  .arg(addr.toString())
+                  .arg(port)
+                  .arg(_v6server.errorString()));
+            }
+            break;
+          default:
+            qCritical() << qPrintable(
+              tr("Invalid listen address %1, unknown network protocol")
+                  .arg(listen_term)
+            );
+            break;
+        }
+      }
+    }
   }
-  if(_v6server.listen(QHostAddress::AnyIPv6, port)) {
-    quInfo() << "Listening for GUI clients on IPv6 port" << _v6server.serverPort()
-             << "using protocol version" << Quassel::buildInfo().protocolVersion;
-    success = true;
-  }
-
-  if(!success) {
-    qCritical() << qPrintable(QString("Could not open GUI client port %1: %2").arg(port).arg(_server.errorString()));
-  }
+  if(!success)
+    quError() << qPrintable(tr("Could not open any network interfaces to listen on!"));
 
   return success;
 }
@@ -350,7 +396,7 @@ void Core::processClientMessage(QTcpSocket *socket, const QVariantMap &msg) {
 #ifdef HAVE_SSL
     SslServer *sslServer = qobject_cast<SslServer *>(&_server);
     QSslSocket *sslSocket = qobject_cast<QSslSocket *>(socket);
-    bool supportSsl = (bool)sslServer && (bool)sslSocket && sslServer->certIsValid();
+    bool supportSsl = (bool)sslServer && (bool)sslSocket && sslServer->isCertValid();
 #else
     bool supportSsl = false;
 #endif
