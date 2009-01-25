@@ -138,6 +138,9 @@ private:
   void handleGeneralAction(ActionType, QAction *);
   void handleExternalAction(ActionType, QAction *);
 
+  void addActions(QMenu *, const QList<QModelIndex> &indexList, MessageFilter *filter, const QString &chanOrNick,
+                  QObject *receiver, const char *slot, bool allowBufferHide);
+
   bool checkRequirements(const QModelIndex &index, ItemActiveStates requiredActiveState = QFlags<ItemActiveState>(ActiveState | InactiveState));
   Action * addAction(ActionType, QMenu *, bool condition = true);
   Action * addAction(Action * , QMenu *, bool condition = true);

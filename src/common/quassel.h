@@ -22,6 +22,7 @@
 #define QUASSEL_H_
 
 #include <QCoreApplication>
+#include <QLocale>
 #include <QString>
 
 #include "abstractcliparser.h"
@@ -63,6 +64,26 @@ public:
   static inline const BuildInfo & buildInfo();
   static inline RunMode runMode();
 
+  static QString configDirPath();
+
+  //! Returns a list of data directory paths
+  /** There are several locations for applications to install their data files in. On Unix,
+  *  a common location is /usr/share; others include $PREFIX/share and additional directories
+  *  specified in the env variable XDG_DATA_DIRS.
+  *  \return A list of directory paths to look for data files in
+  */
+  static QStringList dataDirPaths();
+
+  //! Searches for a data file in the possible data directories
+  /** Data files can reside in $DATA_DIR/apps/quassel, where $DATA_DIR is one of the directories
+  *  returned by \sa dataDirPaths().
+  *  \Note With KDE integration enabled, files are searched (only) in KDE's appdata dirs.
+  *  \return The full path to the data file if found; a null QString else
+  */
+  static QString findDataFilePath(const QString &filename);
+
+  static void loadTranslation(const QLocale &locale);
+
   static inline void setCliParser(AbstractCliParser *cliParser);
   static inline AbstractCliParser *cliParser();
   static inline QString optionValue(const QString &option);
@@ -79,6 +100,8 @@ protected:
   virtual bool init();
 
   inline void setRunMode(RunMode mode);
+  inline void setDataDirPaths(const QStringList &paths);
+  QStringList findDataDirPaths() const;
 
 private:
   void registerMetaTypes();
@@ -92,11 +115,15 @@ private:
   static bool _initialized;
 
   static QString _coreDumpFileName;
+  static QString _configDirPath;
+  static QStringList _dataDirPaths;
+  static QString _translationDirPath;
 };
 
 const Quassel::BuildInfo & Quassel::buildInfo() { return _buildInfo; }
 Quassel::RunMode Quassel::runMode() { return _runMode; }
 void Quassel::setRunMode(Quassel::RunMode mode) { _runMode = mode; }
+void Quassel::setDataDirPaths(const QStringList &paths) { _dataDirPaths = paths; }
 
 void Quassel::setCliParser(AbstractCliParser *parser) { _cliParser = parser; }
 AbstractCliParser *Quassel::cliParser() { return _cliParser; }

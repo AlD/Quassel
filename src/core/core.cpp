@@ -18,8 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <QMetaObject>
-#include <QMetaMethod>
 #include <QCoreApplication>
 
 #include "core.h"
@@ -32,6 +30,9 @@
 #include "logger.h"
 
 #include "util.h"
+
+// migration related
+#include <QFile>
 
 Core *Core::instanceptr = 0;
 
@@ -50,7 +51,82 @@ void Core::destroy() {
 Core::Core() : storage(0) {
   _startTime = QDateTime::currentDateTime().toUTC();  // for uptime :)
 
-  loadTranslation(QLocale::system());
+  Quassel::loadTranslation(QLocale::system());
+
+  // FIXME: MIGRATION 0.3 -> 0.4: Move database and core config to new location
+  // Move settings, note this does not delete the old files
+#ifdef Q_WS_MAC
+    QSettings newSettings("quassel-irc.org", "quasselcore");
+#else
+
+# ifdef Q_WS_WIN
+    QSettings::Format format = QSettings::IniFormat;
+# else
+    QSettings::Format format = QSettings::NativeFormat;
+# endif
+    QString newFilePath = Quassel::configDirPath() + "quasselcore"
+    + ((format == QSettings::NativeFormat) ? QLatin1String(".conf") : QLatin1String(".ini"));
+    QSettings newSettings(newFilePath, format);
+#endif /* Q_WS_MAC */
+
+  if(newSettings.value("Config/Version").toUInt() == 0) {
+#   ifdef Q_WS_MAC
+    QString org = "quassel-irc.org";
+#   else
+    QString org = "Quassel Project";
+#   endif
+    QSettings oldSettings(org, "Quassel Core");
+    if(oldSettings.allKeys().count()) {
+      qWarning() << "\n\n*** IMPORTANT: Config and data file locations have changed. Attempting to auto-migrate your core settings...";
+      foreach(QString key, oldSettings.allKeys())
+        newSettings.setValue(key, oldSettings.value(key));
+      newSettings.setValue("Config/Version", 1);
+      qWarning() << "*   Your core settings have been migrated to" << newFilePath;
+
+#ifndef Q_WS_MAC /* we don't need to move the db and cert for mac */
+#ifdef Q_OS_WIN32
+      QString quasselDir = qgetenv("APPDATA") + "/quassel/";
+#elif defined Q_WS_MAC
+      QString quasselDir = QDir::homePath() + "/Library/Application Support/Quassel/";
+#else
+      QString quasselDir = QDir::homePath() + "/.quassel/";
+#endif
+
+      QFileInfo info(Quassel::configDirPath() + "quassel-storage.sqlite");
+      if(!info.exists()) {
+      // move database, if we found it
+        QFile oldDb(quasselDir + "quassel-storage.sqlite");
+        if(oldDb.exists()) {
+          bool success = oldDb.rename(Quassel::configDirPath() + "quassel-storage.sqlite");
+          if(success)
+            qWarning() << "*   Your database has been moved to" << Quassel::configDirPath() + "quassel-storage.sqlite";
+          else
+            qWarning() << "!!! Moving your database has failed. Please move it manually into" << Quassel::configDirPath();
+        }
+      }
+      // move certificate
+      QFileInfo certInfo(quasselDir + "quasselCert.pem");
+      if(certInfo.exists()) {
+        QFile cert(quasselDir + "quasselCert.pem");
+        bool success = cert.rename(Quassel::configDirPath() + "quasselCert.pem");
+        if(success)
+          qWarning() << "*   Your certificate has been moved to" << Quassel::configDirPath() + "quasselCert.pem";
+        else
+          qWarning() << "!!! Moving your certificate has failed. Please move it manually into" << Quassel::configDirPath();
+      }
+      qWarning() << "*** Migration completed.\n\n";
+    }
+  }
+#endif /* !Q_WS_MAC */
+  // MIGRATION end
+
+  // check settings version
+  // so far, we only have 1
+  CoreSettings s;
+  if(s.version() != 1) {
+    qCritical() << "Invalid core settings version, terminating!";
+    exit(EXIT_FAILURE);
+  }
 
   // Register storage backends here!
   registerStorageBackend(new SqliteStorage(this));
@@ -74,16 +150,6 @@ void Core::init() {
   if(!(configured = initStorage(cs.storageSettings().toMap()))) {
     qWarning() << "Core is currently not configured! Please connect with a Quassel Client for basic setup.";
 
-    // try to migrate old settings
-    QVariantMap old = cs.oldDbSettings().toMap();
-    if(old.count() && old["Type"].toString().toUpper() == "SQLITE") {
-      QVariantMap newSettings;
-      newSettings["Backend"] = "SQLite";
-      if((configured = initStorage(newSettings))) {
-        qWarning() << "...but thankfully I found some old settings to migrate!";
-        cs.setStorageSettings(newSettings);
-      }
-    }
   }
 
   connect(&_server, SIGNAL(newConnection()), this, SLOT(incomingConnection()));
@@ -244,20 +310,66 @@ bool Core::startListening() {
   bool success = false;
   uint port = Quassel::optionValue("port").toUInt();
 
-  if(_server.listen(QHostAddress::Any, port)) {
-    quInfo() << "Listening for GUI clients on IPv4 port" << _server.serverPort()
-             << "using protocol version" << Quassel::buildInfo().protocolVersion;
-    success = true;
+  const QString listen = Quassel::optionValue("listen");
+  const QStringList listen_list = listen.split(",", QString::SkipEmptyParts);
+  if(listen_list.size() > 0) {
+    foreach (const QString listen_term, listen_list) {  // TODO: handle multiple interfaces for same TCP version gracefully
+      QHostAddress addr;
+      if(!addr.setAddress(listen_term)) {
+        qCritical() << qPrintable(
+          tr("Invalid listen address %1")
+            .arg(listen_term)
+        );
+      } else {
+        switch(addr.protocol()) {
+          case QAbstractSocket::IPv4Protocol:
+            if(_server.listen(addr, port)) {
+              quInfo() << qPrintable(
+                tr("Listening for GUI clients on IPv4 %1 port %2 using protocol version %3")
+                  .arg(addr.toString())
+                  .arg(_server.serverPort())
+                  .arg(Quassel::buildInfo().protocolVersion)
+              );
+              success = true;
+            } else
+              quWarning() << qPrintable(
+                tr("Could not open IPv4 interface %1:%2: %3")
+                  .arg(addr.toString())
+                  .arg(port)
+                  .arg(_server.errorString()));
+            break;
+          case QAbstractSocket::IPv6Protocol:
+            if(_v6server.listen(addr, port)) {
+              quInfo() << qPrintable(
+                tr("Listening for GUI clients on IPv6 %1 port %2 using protocol version %3")
+                  .arg(addr.toString())
+                  .arg(_v6server.serverPort())
+                  .arg(Quassel::buildInfo().protocolVersion)
+              );
+              success = true;
+            } else {
+              // if v4 succeeded on Any, the port will be already in use - don't display the error then
+              // FIXME: handle this more sanely, make sure we can listen to both v4 and v6 by default!
+              if(!success || _v6server.serverError() != QAbstractSocket::AddressInUseError)
+                quWarning() << qPrintable(
+                  tr("Could not open IPv6 interface %1:%2: %3")
+                  .arg(addr.toString())
+                  .arg(port)
+                  .arg(_v6server.errorString()));
+            }
+            break;
+          default:
+            qCritical() << qPrintable(
+              tr("Invalid listen address %1, unknown network protocol")
+                  .arg(listen_term)
+            );
+            break;
+        }
+      }
+    }
   }
-  if(_v6server.listen(QHostAddress::AnyIPv6, port)) {
-    quInfo() << "Listening for GUI clients on IPv6 port" << _v6server.serverPort()
-             << "using protocol version" << Quassel::buildInfo().protocolVersion;
-    success = true;
-  }
-
-  if(!success) {
-    qCritical() << qPrintable(QString("Could not open GUI client port %1: %2").arg(port).arg(_server.errorString()));
-  }
+  if(!success)
+    quError() << qPrintable(tr("Could not open any network interfaces to listen on!"));
 
   return success;
 }
@@ -350,7 +462,7 @@ void Core::processClientMessage(QTcpSocket *socket, const QVariantMap &msg) {
 #ifdef HAVE_SSL
     SslServer *sslServer = qobject_cast<SslServer *>(&_server);
     QSslSocket *sslSocket = qobject_cast<QSslSocket *>(socket);
-    bool supportSsl = (bool)sslServer && (bool)sslSocket && sslServer->certIsValid();
+    bool supportSsl = (bool)sslServer && (bool)sslSocket && sslServer->isCertValid();
 #else
     bool supportSsl = false;
 #endif

@@ -278,7 +278,7 @@ void ChatItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 }
 
 void ChatItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-  if(_selectionMode != NoSelection && !event->buttons() & Qt::LeftButton) {
+  if(_selectionMode != NoSelection && event->button() == Qt::LeftButton) {
     chatScene()->selectionToClipboard(QClipboard::Selection);
     event->accept();
   } else
@@ -286,9 +286,9 @@ void ChatItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 }
 
 void ChatItem::addActionsToMenu(QMenu *menu, const QPointF &pos) {
-  Q_UNUSED(menu);
   Q_UNUSED(pos);
 
+  Client::mainUi()->actionProvider()->addActions(menu, chatScene()->filter(), data(MessageModel::BufferIdRole).value<BufferId>());
 }
 
 // ************************************************************
@@ -602,8 +602,6 @@ void ContentsChatItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event) {
 }
 
 void ContentsChatItem::addActionsToMenu(QMenu *menu, const QPointF &pos) {
-  Q_UNUSED(pos); // we assume that the current mouse cursor pos is the point of invocation
-
   if(privateData()->currentClickable.isValid()) {
     Clickable click = privateData()->currentClickable;
     switch(click.type) {
@@ -624,9 +622,8 @@ void ContentsChatItem::addActionsToMenu(QMenu *menu, const QPointF &pos) {
         break;
     }
   } else {
-
     // Buffer-specific actions
-    Client::mainUi()->actionProvider()->addActions(menu, chatScene()->filter(), data(MessageModel::BufferIdRole).value<BufferId>());
+    ChatItem::addActionsToMenu(menu, pos);
   }
 }
 

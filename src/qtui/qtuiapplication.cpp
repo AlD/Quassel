@@ -22,37 +22,40 @@
 
 #include <QStringList>
 
+#ifdef HAVE_KDE
+#  include <KStandardDirs>
+#endif
+
 #include "client.h"
 #include "cliparser.h"
 #include "qtui.h"
+#include "qtuisettings.h"
 #include "sessionsettings.h"
-
-
-// void myMessageOutput(QtMsgType type, const char *msg) {
-//   Client::debugLog() << "Debug:" <<  msg << '\n';
-//   return;
-// //   switch (type) {
-// //   case QtDebugMsg:
-// //     break;
-// //   case QtWarningMsg:
-// //     fprintf(stderr, "Warning: %s\n", msg);
-// //     break;
-// //   case QtCriticalMsg:
-// //     fprintf(stderr, "Critical: %s\n", msg);
-// //     break;
-// //   case QtFatalMsg:
-// //     fprintf(stderr, "Fatal: %s\n", msg);
-// //     abort();
-// //   }
-// }
 
 QtUiApplication::QtUiApplication(int &argc, char **argv)
 #ifdef HAVE_KDE
-  : KApplication(), Quassel() {
-  Q_UNUSED(argc); Q_UNUSED(argv);
+  : KApplication(),
 #else
-  : QApplication(argc, argv), Quassel() {
+  : QApplication(argc, argv),
 #endif
+    Quassel(),
+    _aboutToQuit(false)
+{
+#ifdef HAVE_KDE
+  Q_UNUSED(argc); Q_UNUSED(argv);
+
+  // We need to setup KDE's data dirs
+  QStringList dataDirs = KGlobal::dirs()->findDirs("data", "");
+  for(int i = 0; i < dataDirs.count(); i++)
+    dataDirs[i].append("quassel/");
+  dataDirs.append(":/data/");
+  setDataDirPaths(dataDirs);
+
+#else /* HAVE_KDE */
+
+  setDataDirPaths(findDataDirPaths());
+
+#endif /* HAVE_KDE */
 
   setRunMode(Quassel::ClientOnly);
 
@@ -61,6 +64,51 @@ QtUiApplication::QtUiApplication(int &argc, char **argv)
 
 bool QtUiApplication::init() {
   if(Quassel::init()) {
+
+    // FIXME: MIGRATION 0.3 -> 0.4: Move database and core config to new location
+    // Move settings, note this does not delete the old files
+#ifdef Q_WS_MAC
+    QSettings newSettings("quassel-irc.org", "quasselclient");
+#else
+
+# ifdef Q_WS_WIN
+    QSettings::Format format = QSettings::IniFormat;
+# else
+    QSettings::Format format = QSettings::NativeFormat;
+# endif
+
+    QString newFilePath = Quassel::configDirPath() + "quasselclient"
+    + ((format == QSettings::NativeFormat) ? QLatin1String(".conf") : QLatin1String(".ini"));
+    QSettings newSettings(newFilePath, format);
+#endif /* Q_WS_MAC */
+
+    if(newSettings.value("Config/Version").toUInt() == 0) {
+#     ifdef Q_WS_MAC
+        QString org = "quassel-irc.org";
+#     else
+        QString org = "Quassel Project";
+#     endif
+      QSettings oldSettings(org, "Quassel Client");
+      if(oldSettings.allKeys().count()) {
+        qWarning() << "\n\n*** IMPORTANT: Config and data file locations have changed. Attempting to auto-migrate your client settings...";
+        foreach(QString key, oldSettings.allKeys())
+          newSettings.setValue(key, oldSettings.value(key));
+        newSettings.setValue("Config/Version", 1);
+        qWarning() << "*   Your client settings have been migrated to" << newFilePath;
+        qWarning() << "*** Migration completed.\n\n";
+      }
+    }
+
+    // MIGRATION end
+
+    // check settings version
+    // so far, we only have 1
+    QtUiSettings s;
+    if(s.version() != 1) {
+      qCritical() << "Invalid client settings version, terminating!";
+      return false;
+    }
+
     // session resume
     QtUi *gui = new QtUi();
     Client::init(gui);
@@ -75,6 +123,11 @@ bool QtUiApplication::init() {
 
 QtUiApplication::~QtUiApplication() {
   Client::destroy();
+}
+
+void QtUiApplication::commitData(QSessionManager &manager) {
+  Q_UNUSED(manager)
+  _aboutToQuit = true;
 }
 
 void QtUiApplication::saveState(QSessionManager & manager) {
@@ -102,5 +155,3 @@ void QtUiApplication::resumeSessionIfPossible() {
     s.cleanup();
   }
 }
-
-
