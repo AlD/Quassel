@@ -18,17 +18,20 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <QSettings>
 #include <QStringList>
-
-#ifdef Q_WS_QWS
-#include <Qtopia>
-#endif
 
 #include "settings.h"
 
+const int VERSION = 1;
+
 QHash<QString, QHash<QString, QVariant> > Settings::settingsCache;
 QHash<QString, QHash<QString, SettingsChangeNotifier *> > Settings::settingsChangeNotifier;
+
+#ifdef Q_WS_MAC
+#  define create_qsettings QSettings s(QCoreApplication::organizationDomain(), appName)
+#else
+#  define create_qsettings QSettings s(fileName(), format())
+#endif
 
 // Settings::Settings(QString group_, QString appName_)
 //   : group(group_),
@@ -60,8 +63,20 @@ void Settings::notify(const QString &key, QObject *receiver, const char *slot) {
 		   receiver, slot);
 }
 
+uint Settings::version() {
+  // we don't cache this value, and we ignore the group
+  create_qsettings;
+  uint ver = s.value("Config/Version", 0).toUInt();
+  if(!ver) {
+    // No version, so create one
+    s.setValue("Config/Version", VERSION);
+    return VERSION;
+  }
+  return ver;
+}
+
 QStringList Settings::allLocalKeys() {
-  QSettings s(cfgformat, QSettings::UserScope, org(), appName);
+  create_qsettings;
   s.beginGroup(group);
   QStringList res = s.allKeys();
   s.endGroup();
@@ -75,7 +90,7 @@ QStringList Settings::localChildKeys(const QString &rootkey) {
   else
     g = QString("%1/%2").arg(group, rootkey);
 
-  QSettings s(cfgformat, QSettings::UserScope, org(), appName);
+  create_qsettings;
   s.beginGroup(g);
   QStringList res = s.childKeys();
   s.endGroup();
@@ -89,7 +104,7 @@ QStringList Settings::localChildGroups(const QString &rootkey) {
   else
     g = QString("%1/%2").arg(group, rootkey);
 
-  QSettings s(cfgformat, QSettings::UserScope, org(), appName);
+  create_qsettings;
   s.beginGroup(g);
   QStringList res = s.childGroups();
   s.endGroup();
@@ -97,7 +112,7 @@ QStringList Settings::localChildGroups(const QString &rootkey) {
 }
 
 void Settings::setLocalValue(const QString &key, const QVariant &data) {
-  QSettings s(cfgformat, QSettings::UserScope, org(), appName);
+  create_qsettings;
   s.beginGroup(group);
   s.setValue(key, data);
   s.endGroup();
@@ -109,7 +124,7 @@ void Settings::setLocalValue(const QString &key, const QVariant &data) {
 
 const QVariant &Settings::localValue(const QString &key, const QVariant &def) {
   if(!isCached(group, key)) {
-    QSettings s(cfgformat, QSettings::UserScope, org(), appName);
+    create_qsettings;
     s.beginGroup(group);
     setCacheValue(group, key, s.value(key, def));
     s.endGroup();
@@ -118,7 +133,7 @@ const QVariant &Settings::localValue(const QString &key, const QVariant &def) {
 }
 
 void Settings::removeLocalKey(const QString &key) {
-  QSettings s(cfgformat, QSettings::UserScope, org(), appName);
+  create_qsettings;
   s.beginGroup(group);
   s.remove(key);
   s.endGroup();

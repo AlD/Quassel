@@ -24,8 +24,10 @@
 
 #include <QCoreApplication>
 #include <QDateTime>
-#include <QObject>
-#include <QMetaType>
+#include <QFileInfo>
+#include <QLibraryInfo>
+#include <QSettings>
+#include <QTranslator>
 
 #include "message.h"
 #include "identity.h"
@@ -37,6 +39,9 @@
 Quassel::BuildInfo Quassel::_buildInfo;
 AbstractCliParser *Quassel::_cliParser = 0;
 Quassel::RunMode Quassel::_runMode;
+QString Quassel::_configDirPath;
+QString Quassel::_translationDirPath;
+QStringList Quassel::_dataDirPaths;
 bool Quassel::_initialized = false;
 bool Quassel::DEBUG = false;
 QString Quassel::_coreDumpFileName;
@@ -123,8 +128,8 @@ void Quassel::registerMetaTypes() {
 
 void Quassel::setupBuildInfo(const QString &generated) {
   _buildInfo.applicationName = "Quassel IRC";
-  _buildInfo.coreApplicationName = "Quassel Core";
-  _buildInfo.clientApplicationName = "Quassel Client";
+  _buildInfo.coreApplicationName = "quasselcore";
+  _buildInfo.clientApplicationName = "quasselclient";
   _buildInfo.organizationName = "Quassel Project";
   _buildInfo.organizationDomain = "quassel-irc.org";
 
@@ -224,4 +229,148 @@ const QString &Quassel::coreDumpFileName() {
     dumpFile.close();
   }
   return _coreDumpFileName;
+}
+
+QString Quassel::configDirPath() {
+  if(!_configDirPath.isEmpty())
+    return _configDirPath;
+
+  if(Quassel::isOptionSet("datadir")) {
+    qWarning() << "Obsolete option --datadir used!";
+    _configDirPath = Quassel::optionValue("datadir");
+  } else if(Quassel::isOptionSet("configdir")) {
+    _configDirPath = Quassel::optionValue("configdir");
+  } else {
+
+#ifdef Q_WS_MAC
+    // On Mac, the path is always the same
+    _configDirPath = QDir::homePath() + "/Library/Application Support/Quassel/";
+#else
+    // We abuse QSettings to find us a sensible path on the other platforms
+#  ifdef Q_WS_WIN
+    // don't use the registry
+    QSettings::Format format = QSettings::IniFormat;
+#  else
+    QSettings::Format format = QSettings::NativeFormat;
+#  endif
+    QSettings s(format, QSettings::UserScope, QCoreApplication::organizationDomain(), buildInfo().applicationName);
+    QFileInfo fileInfo(s.fileName());
+    _configDirPath = fileInfo.dir().absolutePath();
+#endif /* Q_WS_MAC */
+  }
+
+  if(!_configDirPath.endsWith(QDir::separator()) && !_configDirPath.endsWith('/'))
+    _configDirPath += QDir::separator();
+
+  QDir qDir(_configDirPath);
+  if(!qDir.exists(_configDirPath)) {
+    if(!qDir.mkpath(_configDirPath)) {
+      qCritical() << "Unable to create Quassel config directory:" << qPrintable(qDir.absolutePath());
+      return QString();
+    }
+  }
+
+  return _configDirPath;
+}
+
+QStringList Quassel::dataDirPaths() {
+  return _dataDirPaths;
+}
+
+QStringList Quassel::findDataDirPaths() const {
+  QStringList dataDirNames = QString(qgetenv("XDG_DATA_DIRS")).split(':', QString::SkipEmptyParts);
+
+  if(!dataDirNames.isEmpty()) {
+    for(int i = 0; i < dataDirNames.count(); i++)
+      dataDirNames[i].append("/apps/quassel/");
+  } else {
+  // Provide a fallback
+#ifdef Q_OS_WIN32
+    dataDirNames << qgetenv("APPDATA") + QCoreApplication::organizationDomain() + "/share/apps/quassel/"
+                 << qgetenv("APPDATA") + QCoreApplication::organizationDomain()
+                 << QCoreApplication::applicationDirPath();
+  }
+#elif defined Q_WS_MAC
+    dataDirNames << QDir::homePath() + "/Library/Application Support/Quassel/"
+                 << QCoreApplication::applicationDirPath();
+  }
+#else
+    dataDirNames.append("/usr/share/apps/quassel/");
+  }
+  // on UNIX, we always check our install prefix
+  QString appDir = QCoreApplication::applicationDirPath();
+  int binpos = appDir.lastIndexOf("/bin");
+  if(binpos >= 0) {
+    appDir.replace(binpos, 4, "/share");
+    appDir.append("/apps/quassel/");
+    if(!dataDirNames.contains(appDir))
+      dataDirNames.append(appDir);
+  }
+#endif
+
+  // add resource path and workdir just in case
+  dataDirNames << QCoreApplication::applicationDirPath() + "/data/"
+               << ":/data/";
+
+  // append trailing '/' and check for existence
+  QStringList::Iterator iter = dataDirNames.begin();
+  while(iter != dataDirNames.end()) {
+    if(!iter->endsWith(QDir::separator()) && !iter->endsWith('/'))
+      iter->append(QDir::separator());
+    if(!QFile::exists(*iter))
+      iter = dataDirNames.erase(iter);
+    else
+      ++iter;
+  }
+
+  return dataDirNames;
+}
+
+QString Quassel::findDataFilePath(const QString &fileName) {
+  QStringList dataDirs = dataDirPaths();
+  foreach(QString dataDir, dataDirs) {
+    QString path = dataDir + fileName;
+    if(QFile::exists(path))
+      return path;
+  }
+  return QString();
+}
+
+void Quassel::loadTranslation(const QLocale &locale) {
+  if(_translationDirPath.isEmpty()) {
+    // We support only one translation dir; fallback mechanisms wouldn't work else.
+    // This means that if we have a $data/i18n dir, the internal :/i18n resource won't be considered.
+    foreach(const QString &dir, dataDirPaths()) {
+      if(QFile::exists(dir + "translations/")) {
+        _translationDirPath = dir + "translations/";
+        break;
+      }
+    }
+    if(_translationDirPath.isEmpty())
+      _translationDirPath = ":/i18n/";
+  }
+
+  QTranslator *qtTranslator = QCoreApplication::instance()->findChild<QTranslator *>("QtTr");
+  QTranslator *quasselTranslator = QCoreApplication::instance()->findChild<QTranslator *>("QuasselTr");
+
+  if(!qtTranslator) {
+    qtTranslator = new QTranslator(qApp);
+    qtTranslator->setObjectName("QtTr");
+    qApp->installTranslator(qtTranslator);
+  }
+  if(!quasselTranslator) {
+    quasselTranslator = new QTranslator(qApp);
+    quasselTranslator->setObjectName("QuasselTr");
+    qApp->installTranslator(quasselTranslator);
+  }
+
+  QLocale::setDefault(locale);
+
+  if(locale.language() == QLocale::C)
+    return;
+
+  bool success = qtTranslator->load(QString("qt_%1").arg(locale.name()), _translationDirPath);
+  if(!success)
+    qtTranslator->load(QString("qt_%1").arg(locale.name()), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+  quasselTranslator->load(QString("quassel_%1").arg(locale.name()), _translationDirPath);
 }

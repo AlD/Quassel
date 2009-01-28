@@ -45,7 +45,6 @@
 #include "quassel.h"
 
 int main(int argc, char **argv) {
-  Q_INIT_RESOURCE(i18n);
 
   // Setup build information and version string
   # include "version.gen"
@@ -92,7 +91,8 @@ int main(int argc, char **argv) {
   cliParser->addSwitch("norestore", 'n', "Don't restore last core's state");
   cliParser->addOption("logfile <path>", 'l', "Path to logfile");
   cliParser->addOption("loglevel <level>", 'L', "Loglevel Debug|Info|Warning|Error", "Info");
-  cliParser->addOption("datadir <path>", 0, "Specify the directory holding datafiles like the Sqlite DB and the SSL Cert");
+  cliParser->addOption("configdir <path>", 'c', "Specify the directory holding configuration files, the SQlite database and the SSL Cert");
+  cliParser->addOption("datadir <path>", 0, "DEPRECATED - Use --configdir instead");
 #endif
 
 #ifdef HAVE_KDE
