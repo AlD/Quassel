@@ -21,13 +21,14 @@
 #include "client.h"
 
 #include "abstractmessageprocessor.h"
+#include "abstractui.h"
 #include "bufferinfo.h"
 #include "buffermodel.h"
 #include "buffersettings.h"
 #include "buffersyncer.h"
 #include "bufferviewconfig.h"
-#include "bufferviewmanager.h"
 #include "clientbacklogmanager.h"
+#include "clientbufferviewmanager.h"
 #include "clientirclisthelper.h"
 #include "clientidentity.h"
 #include "ircchannel.h"
@@ -37,7 +38,6 @@
 #include "network.h"
 #include "networkmodel.h"
 #include "quassel.h"
-#include "quasselui.h"
 #include "signalproxy.h"
 #include "util.h"
 
@@ -297,7 +297,7 @@ void Client::setSyncedToCore() {
 
   // create a new BufferViewManager
   Q_ASSERT(!_bufferViewManager);
-  _bufferViewManager = new BufferViewManager(signalProxy(), this);
+  _bufferViewManager = new ClientBufferViewManager(signalProxy(), this);
   connect(bufferViewManager(), SIGNAL(initDone()), this, SLOT(requestInitialBacklog()));
   connect(bufferViewManager(), SIGNAL(initDone()), this, SLOT(createDefaultBufferView()));
 

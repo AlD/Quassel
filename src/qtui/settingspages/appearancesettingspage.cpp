@@ -30,10 +30,16 @@
 #include <QStyleFactory>
 
 AppearanceSettingsPage::AppearanceSettingsPage(QWidget *parent)
-  : SettingsPage(tr("Appearance"), tr("General"), parent) {
+  : SettingsPage(tr("Appearance"), tr("General"), parent)
+{
   ui.setupUi(this);
   initStyleComboBox();
   initLanguageComboBox();
+
+#ifndef HAVE_WEBKIT
+  ui.showWebPreview->hide();
+  ui.showWebPreview->setEnabled(false);
+#endif
 
   foreach(QComboBox *comboBox, findChildren<QComboBox *>()) {
     connect(comboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(widgetHasChanged()));
@@ -52,7 +58,7 @@ void AppearanceSettingsPage::initStyleComboBox() {
 }
 
 void AppearanceSettingsPage::initLanguageComboBox() {
-  QDir i18nDir(":/i18n", "quassel_*.qm");
+  QDir i18nDir(Quassel::translationDirPath(), "quassel_*.qm");
 
   foreach(QString translationFile, i18nDir.entryList()) {
     QString localeName(translationFile.mid(8));

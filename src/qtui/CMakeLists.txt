@@ -7,6 +7,8 @@ include(${QT_USE_FILE})
 
 set(SOURCES
     aboutdlg.cpp
+    awaylogfilter.cpp
+    awaylogview.cpp
     bufferwidget.cpp
     channellistdlg.cpp
     chatitem.cpp
@@ -29,6 +31,7 @@ set(SOURCES
     debugmessagemodelfilter.cpp
     inputwidget.cpp
     jumpkeyhandler.cpp
+    mainpage.cpp
     mainwin.cpp
     msgprocessorstatuswidget.cpp
     nicklistwidget.cpp
@@ -50,6 +53,8 @@ set(SOURCES
 
 set(MOC_HDRS
     aboutdlg.h
+    awaylogfilter.h
+    awaylogview.h
     bufferwidget.h
     channellistdlg.h
     chatitem.h
@@ -69,6 +74,7 @@ set(MOC_HDRS
     debugmessagemodelfilter.h
     inputwidget.h
     jumpkeyhandler.h
+    mainpage.h
     mainwin.h
     msgprocessorstatuswidget.h
     nicklistwidget.h

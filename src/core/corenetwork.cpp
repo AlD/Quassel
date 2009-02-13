@@ -40,6 +40,8 @@ CoreNetwork::CoreNetwork(const NetworkId &networkid, CoreSession *session)
     _previousConnectionAttemptFailed(false),
     _lastUsedServerIndex(0),
 
+    _gotPong(true),
+
     // TODO make autowho configurable (possibly per-network)
     _autoWhoEnabled(true),
     _autoWhoInterval(90),
@@ -50,7 +52,7 @@ CoreNetwork::CoreNetwork(const NetworkId &networkid, CoreSession *session)
   _socketCloseTimer.setSingleShot(true);
   connect(&_socketCloseTimer, SIGNAL(timeout()), this, SLOT(socketCloseTimeout()));
 
-  _pingTimer.setInterval(60000);
+  _pingTimer.setInterval(30000);
   connect(&_pingTimer, SIGNAL(timeout()), this, SLOT(sendPing()));
 
   _autoWhoTimer.setInterval(_autoWhoDelay * 1000);
@@ -137,6 +139,10 @@ void CoreNetwork::connectToIrc(bool reconnecting) {
     qWarning() << "Invalid identity configures, ignoring connect request!";
     return;
   }
+
+  // cleaning up old quit reason
+  _quitReason.clear();
+
   // use a random server?
   if(useRandomServer()) {
     _lastUsedServerIndex = qrand() % serverList().size();
@@ -177,24 +183,42 @@ void CoreNetwork::connectToIrc(bool reconnecting) {
 #endif
 }
 
-void CoreNetwork::disconnectFromIrc(bool requested, const QString &reason) {
+void CoreNetwork::disconnectFromIrc(bool requested, const QString &reason, bool withReconnect) {
   _quitRequested = requested; // see socketDisconnected();
-  _autoReconnectTimer.stop();
-  _autoReconnectCount = 0; // prohibiting auto reconnect
+  if(!withReconnect) {
+    _autoReconnectTimer.stop();
+    _autoReconnectCount = 0; // prohibiting auto reconnect
+  }
+
+  IrcUser *me_ = me();
+  if(me_) {
+    QString awayMsg;
+    if(me_->isAway())
+      awayMsg = me_->awayMessage();
+    Core::setAwayMessage(userId(), networkId(), awayMsg);
+    Core::setUserModes(userId(), networkId(), me_->userModes());
+  }
+
+  if(reason.isEmpty() && identityPtr())
+    _quitReason = identityPtr()->quitReason();
+  else
+    _quitReason = reason;
+
   displayMsg(Message::Server, BufferInfo::StatusBuffer, "", tr("Disconnecting."));
-  if(socket.state() == QAbstractSocket::UnconnectedState) {
+  switch(socket.state()) {
+  case QAbstractSocket::UnconnectedState:
     socketDisconnected();
-  } else if(socket.state() < QAbstractSocket::ConnectedState || !requested) {
-    // we might be in a state waiting for a timeout...
-    // or (!requested) this is a core shutdown...
-    // in both cases we don't really care... set a disconnected state
-    socket.close();
-    socketDisconnected();
-  } else {
-    // quit gracefully if it's user requested quit
-    userInputHandler()->issueQuit(reason);
-    // the irc server has 10 seconds to close the socket
-    _socketCloseTimer.start(10000);
+    break;
+  case QAbstractSocket::ConnectedState:
+    userInputHandler()->issueQuit(_quitReason);
+  default:
+    if(!requested) {
+      socket.close();
+      socketDisconnected();
+    } else {
+      // the irc server has 10 seconds to close the socket
+      _socketCloseTimer.start(10000);
+    }
   }
 }
 
@@ -315,6 +339,8 @@ void CoreNetwork::socketInitialized() {
 
 void CoreNetwork::socketDisconnected() {
   _pingTimer.stop();
+  resetPong();
+
   _autoWhoCycleTimer.stop();
   _autoWhoTimer.stop();
   _autoWhoQueue.clear();
@@ -327,7 +353,7 @@ void CoreNetwork::socketDisconnected() {
   IrcUser *me_ = me();
   if(me_) {
     foreach(QString channel, me_->channels())
-      emit displayMsg(Message::Quit, BufferInfo::ChannelBuffer, channel, "", me_->hostmask());
+      emit displayMsg(Message::Quit, BufferInfo::ChannelBuffer, channel, _quitReason, me_->hostmask());
   }
 
   setConnected(false);
@@ -376,8 +402,25 @@ void CoreNetwork::networkInitialized() {
     _autoReconnectCount = autoReconnectRetries();
   }
 
+  // restore away state
+  QString awayMsg = Core::awayMessage(userId(), networkId());
+  if(!awayMsg.isEmpty())
+    userInputHandler()->handleAway(BufferInfo(), Core::awayMessage(userId(), networkId()));
+
+  // restore old user modes if server default mode is set.
+  IrcUser *me_ = me();
+  if(me_) {
+    if(!me_->userModes().isEmpty()) {
+      restoreUserModes();
+    } else {
+      connect(me_, SIGNAL(userModesSet(QString)), this, SLOT(restoreUserModes()));
+      connect(me_, SIGNAL(userModesAdded(QString)), this, SLOT(restoreUserModes()));
+    }
+  }
+
   sendPerform();
 
+  resetPong();
   _pingTimer.start();
 
   if(_autoWhoEnabled) {
@@ -421,6 +464,27 @@ void CoreNetwork::sendPerform() {
   }
 }
 
+void CoreNetwork::restoreUserModes() {
+  IrcUser *me_ = me();
+  Q_ASSERT(me_);
+
+  disconnect(me_, SIGNAL(userModesSet(QString)), this, SLOT(restoreUserModes()));
+  disconnect(me_, SIGNAL(userModesAdded(QString)), this, SLOT(restoreUserModes()));
+
+  QString removeModes;
+  QString addModes = Core::userModes(userId(), networkId());
+  QString currentModes = me_->userModes();
+
+  removeModes = currentModes;
+  removeModes.remove(QRegExp(QString("[%1]").arg(addModes)));
+  addModes.remove(QRegExp(QString("[%1]").arg(currentModes)));
+
+  removeModes = QString("%1 -%2").arg(me_->nick(), removeModes);
+  addModes = QString("%1 +%2").arg(me_->nick(), addModes);
+  userInputHandler()->handleMode(BufferInfo(), removeModes);
+  userInputHandler()->handleMode(BufferInfo(), addModes);
+}
+
 void CoreNetwork::setUseAutoReconnect(bool use) {
   Network::setUseAutoReconnect(use);
   if(!use)
@@ -453,7 +517,12 @@ void CoreNetwork::doAutoReconnect() {
 }
 
 void CoreNetwork::sendPing() {
-  userInputHandler()->handlePing(BufferInfo(), QString());
+  if(!gotPong()) {
+    // disconnectFromIrc(false, QString("No Ping reply in %1 seconds.").arg(_pingTimer.interval() / 1000), true /* withReconnect */);
+  } else {
+    _gotPong = false;
+    userInputHandler()->handlePing(BufferInfo(), QString());
+  }
 }
 
 void CoreNetwork::sendAutoWho() {

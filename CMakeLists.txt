@@ -74,10 +74,29 @@ if(WIN32)
   set(EMBED_DATA ON)
 endif(WIN32)
 
+# Build Type
+# We need to make sure it's not empty
+# Supported: Release, RelWithDebugInfo, Debug, Debugfull
+
+# On WIN32, only Release seems to work correctly (?)
+if(WIN32)
+  set(DEFAULT_BUILD_TYPE "Release")
+else(WIN32)
+  set(DEFAULT_BUILD_TYPE "RelWithDebugInfo")
+endif(WIN32)
+
+set(CMAKE_BUILD_TYPE ${DEFAULT_BUILD_TYPE} CACHE STRING "CMake Build Type")
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE ${DEFAULT_BUILD_TYPE} CACHE STRING "CMake Build Type" FORCE)
+endif(NOT CMAKE_BUILD_TYPE)
+
 # Enable various flags on gcc
 if(CMAKE_COMPILER_IS_GNUCXX)
   # Let's just hope that all gccs support these options and skip the tests...
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ansi -Wall -Wextra -Wnon-virtual-dtor")
+  set(CMAKE_CXX_FLAGS_RELWITHDEBUGINFO "-O2")
+  set(CMAKE_CXX_FLAGS_DEBUG "-g -fno-reorder-blocks -fno-schedule-insns -fno-inline")
+  set(CMAKE_CXX_FLAGS_DEBUGFULL "-g3")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 set(QT_MIN_VERSION "4.4.0")
@@ -229,7 +248,7 @@ endif(STATIC AND CMAKE_COMPILER_IS_GNUCXX)
 
 if(WIN32)
   #if(STATIC)
-  link_libraries(imm32 winmm dbghelp)  # missing by default :/
+  link_libraries(imm32 winmm dbghelp Secur32)  # missing by default :/
   #endif(STATIC)
   if(HAVE_SSL)
      link_libraries(${OPENSSL_LIBRARIES} libeay32MD)

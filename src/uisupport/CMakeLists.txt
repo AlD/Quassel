@@ -7,7 +7,6 @@ include(${QT_USE_FILE})
 set(SOURCES
     abstractbuffercontainer.cpp
     abstractitemview.cpp
-    abstractnotificationbackend.cpp
     action.cpp
     actioncollection.cpp
     bufferview.cpp
@@ -15,16 +14,20 @@ set(SOURCES
     clearablelineedit.cpp
     clickablelabel.cpp
     colorbutton.cpp
+    contextmenuactionprovider.cpp
+    graphicalui.cpp
     icon.cpp
     iconloader.cpp
     inputline.cpp
-    networkmodelactionprovider.cpp
+    networkmodelcontroller.cpp
     nickview.cpp
     nickviewfilter.cpp
     settingspage.cpp
     tabcompleter.cpp
+    toolbaractionprovider.cpp
     uisettings.cpp
-    uistyle.cpp)
+    uistyle.cpp
+   )
 
 set(MOC_HDRS
     abstractbuffercontainer.h
@@ -37,18 +40,23 @@ set(MOC_HDRS
     clearablelineedit.h
     clickablelabel.h
     colorbutton.h
+    contextmenuactionprovider.h
+    graphicalui.h
     iconloader.h
     inputline.h
-    networkmodelactionprovider.h
+    networkmodelcontroller.h
     nickview.h
     nickviewfilter.h
     settingspage.h
-    tabcompleter.h)
+    tabcompleter.h
+    toolbaractionprovider.h
+   )
 
 set(HEADERS
     icon.h
     uisettings.h
-    uistyle.h)
+    uistyle.h
+   )
 
 if(HAVE_KDE)
     set(SOURCES ${SOURCES} kcmdlinewrapper.cpp)

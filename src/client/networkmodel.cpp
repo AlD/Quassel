@@ -37,13 +37,15 @@
 *****************************************/
 NetworkItem::NetworkItem(const NetworkId &netid, AbstractTreeItem *parent)
   : PropertyMapItem(QList<QString>() << "networkName" << "currentServer" << "nickCount", parent),
-    _networkId(netid)
+    _networkId(netid),
+    _statusBufferItem(0)
 {
   // DO NOT EMIT dataChanged() DIRECTLY IN NetworkItem
   // use networkDataChanged() instead. Otherwise you will end up in a infinite loop
   // as we "sync" the dataChanged() signals of NetworkItem and StatusBufferItem
   setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
   connect(this, SIGNAL(networkDataChanged(int)), this, SIGNAL(dataChanged(int)));
+  connect(this, SIGNAL(beginRemoveChilds(int, int)), this, SLOT(onBeginRemoveChilds(int, int)));
 }
 
 QVariant NetworkItem::data(int column, int role) const {
@@ -52,8 +54,8 @@ QVariant NetworkItem::data(int column, int role) const {
   case NetworkModel::BufferInfoRole:
   case NetworkModel::BufferTypeRole:
   case NetworkModel::BufferActivityRole:
-    if(childCount())
-      return child(0)->data(column, role);
+    if(_statusBufferItem)
+      return _statusBufferItem->data(column, role);
     else
       return QVariant();
   case NetworkModel::NetworkIdRole:
@@ -88,7 +90,8 @@ BufferItem *NetworkItem::bufferItem(const BufferInfo &bufferInfo) {
 
   switch(bufferInfo.type()) {
   case BufferInfo::StatusBuffer:
-    bufferItem = new StatusBufferItem(bufferInfo, this);
+    _statusBufferItem = new StatusBufferItem(bufferInfo, this);
+    bufferItem = _statusBufferItem;
     disconnect(this, SIGNAL(networkDataChanged(int)), this, SIGNAL(dataChanged(int)));
     connect(this, SIGNAL(networkDataChanged(int)), bufferItem, SIGNAL(dataChanged(int)));
     connect(bufferItem, SIGNAL(dataChanged(int)), this, SIGNAL(dataChanged(int)));
@@ -180,6 +183,16 @@ QString NetworkItem::toolTip(int column) const {
   }
 
   return QString("<p> %1 </p>").arg(toolTip.join("<br />"));
+}
+
+void NetworkItem::onBeginRemoveChilds(int start, int end) {
+  for(int i = start; i <= end; i++) {
+    StatusBufferItem *statusBufferItem = qobject_cast<StatusBufferItem *>(child(i));
+    if(statusBufferItem) {
+      _statusBufferItem = 0;
+      break;
+    }
+  }
 }
 
 /*****************************************
@@ -319,6 +332,8 @@ QueryBufferItem::QueryBufferItem(const BufferInfo &bufferInfo, NetworkItem *pare
 
 QVariant QueryBufferItem::data(int column, int role) const {
   switch(role) {
+  case Qt::EditRole:
+    return BufferItem::data(column, Qt::DisplayRole);
   case NetworkModel::IrcUserRole:
     return QVariant::fromValue<QObject *>(_ircUser);
   case NetworkModel::UserAwayRole:
@@ -783,6 +798,12 @@ NetworkModel::NetworkModel(QObject *parent)
 	  this, SLOT(checkForNewBuffers(const QModelIndex &, int, int)));
   connect(this, SIGNAL(rowsAboutToBeRemoved(const QModelIndex &, int, int)),
 	  this, SLOT(checkForRemovedBuffers(const QModelIndex &, int, int)));
+
+  BufferSettings defaultSettings;
+  defaultSettings.notify("UserNoticesTarget", this, SLOT(messageRedirectionSettingsChanged()));
+  defaultSettings.notify("ServerNoticesTarget", this, SLOT(messageRedirectionSettingsChanged()));
+  defaultSettings.notify("ErrorMsgsTarget", this, SLOT(messageRedirectionSettingsChanged()));
+  messageRedirectionSettingsChanged();
 }
 
 QList<QVariant >NetworkModel::defaultHeader() {
@@ -946,6 +967,15 @@ MsgId NetworkModel::lastSeenMarkerMsgId(BufferId bufferId) const {
   return _bufferItemCache[bufferId]->lastSeenMarkerMsgId();
 }
 
+MsgId NetworkModel::lastSeenMsgId(const BufferId &bufferId) {
+  BufferItem *bufferItem = findBufferItem(bufferId);
+  if(!bufferItem) {
+    qDebug() << "NetworkModel::lastSeenMsgId(): buffer is unknown:" << bufferId;
+    return MsgId();
+  }
+  return bufferItem->lastSeenMsgId();
+}
+
 void NetworkModel::setLastSeenMsgId(const BufferId &bufferId, const MsgId &msgId) {
   BufferItem *bufferItem = findBufferItem(bufferId);
   if(!bufferItem) {
@@ -955,11 +985,50 @@ void NetworkModel::setLastSeenMsgId(const BufferId &bufferId, const MsgId &msgId
   bufferItem->setLastSeenMsgId(msgId);
 }
 
-void NetworkModel::updateBufferActivity(const Message &msg) {
-  BufferItem *item = bufferItem(msg.bufferInfo());
-  item->updateActivityLevel(msg);
-  if(item->isCurrentBuffer())
-    emit setLastSeenMsg(item->bufferId(), msg.msgId());
+void NetworkModel::updateBufferActivity(Message &msg) {
+  int redirectionTarget = 0;
+  switch(msg.type()) {
+  case Message::Notice:
+    if(bufferType(msg.bufferId()) != BufferInfo::ChannelBuffer) {
+      msg.setFlags(msg.flags() | Message::Redirected);
+      if(msg.flags() & Message::ServerMsg) {
+	// server notice
+	redirectionTarget = _serverNoticesTarget;
+      } else {
+	redirectionTarget = _userNoticesTarget;
+      }
+    }
+    break;
+  case Message::Error:
+    msg.setFlags(msg.flags() | Message::Redirected);
+    redirectionTarget = _errorMsgsTarget;
+    break;
+  default:
+    break;
+  }
+
+  if(msg.flags() & Message::Redirected) {
+    if(redirectionTarget & BufferSettings::DefaultBuffer)
+      updateBufferActivity(bufferItem(msg.bufferInfo()), msg);
+
+    if(redirectionTarget & BufferSettings::StatusBuffer) {
+      const NetworkItem *netItem = findNetworkItem(msg.bufferInfo().networkId());
+      if(netItem) {
+	updateBufferActivity(netItem->statusBufferItem(), msg);
+      }
+    }
+  } else {
+    updateBufferActivity(bufferItem(msg.bufferInfo()), msg);
+  }
+}
+
+void NetworkModel::updateBufferActivity(BufferItem *bufferItem, const Message &msg) {
+  if(!bufferItem)
+    return;
+
+  bufferItem->updateActivityLevel(msg);
+  if(bufferItem->isCurrentBuffer())
+    emit setLastSeenMsg(bufferItem->bufferId(), msg.msgId());
 }
 
 void NetworkModel::setBufferActivity(const BufferId &bufferId, BufferInfo::ActivityLevel level) {
@@ -1095,3 +1164,10 @@ bool NetworkModel::bufferItemLessThan(const BufferItem *left, const BufferItem *
     return QString::compare(left->bufferName(), right->bufferName(), Qt::CaseInsensitive) < 0;
 }
 
+void NetworkModel::messageRedirectionSettingsChanged() {
+  BufferSettings bufferSettings;
+
+  _userNoticesTarget = bufferSettings.userNoticesTarget();
+  _serverNoticesTarget = bufferSettings.serverNoticesTarget();
+  _errorMsgsTarget = bufferSettings.errorMsgsTarget();
+}

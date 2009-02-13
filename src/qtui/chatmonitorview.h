@@ -39,6 +39,9 @@ private slots:
   void showFieldsChanged(bool checked);
   void showSettingsPage();
 
+protected:
+  inline ChatMonitorFilter *filter() const { return _filter; }
+
 private:
   ChatMonitorFilter *_filter;
 };

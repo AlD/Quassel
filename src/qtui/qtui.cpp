@@ -23,11 +23,12 @@
 #include "abstractnotificationbackend.h"
 #include "actioncollection.h"
 #include "chatlinemodel.h"
+#include "contextmenuactionprovider.h"
 #include "mainwin.h"
-#include "networkmodelactionprovider.h"
 #include "qtuimessageprocessor.h"
 #include "qtuisettings.h"
 #include "qtuistyle.h"
+#include "toolbaractionprovider.h"
 #include "types.h"
 #include "util.h"
 
@@ -38,14 +39,15 @@ QList<AbstractNotificationBackend *> QtUi::_notificationBackends;
 QList<AbstractNotificationBackend::Notification> QtUi::_notifications;
 QtUiStyle *QtUi::_style = 0;
 
-QtUi::QtUi() : AbstractUi() {
+QtUi::QtUi() : GraphicalUi() {
   if(_instance != 0) {
     qWarning() << "QtUi has been instantiated again!";
     return;
   }
   _instance = this;
 
-  _actionProvider = new NetworkModelActionProvider(this);
+  setContextMenuActionProvider(new ContextMenuActionProvider(this));
+  setToolBarActionProvider(new ToolBarActionProvider(this));
 
   QtUiSettings uiSettings;
   Quassel::loadTranslation(uiSettings.value("Locale", QLocale::system()).value<QLocale>());

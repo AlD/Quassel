@@ -18,10 +18,28 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "identity.h"
+
 #include <QMetaProperty>
 #include <QVariantMap>
 
-#include "identity.h"
+#ifdef Q_OS_MAC
+#  include <CoreServices/CoreServices.h>
+#  include "mac_utils.h"
+#endif
+
+#ifdef Q_OS_UNIX
+#  include <sys/types.h>
+#  include <pwd.h>
+#  include <unistd.h>
+#endif
+
+#ifdef Q_OS_WIN32
+#  include <windows.h>
+#  include <Winbase.h>
+#  define SECURITY_WIN32
+#  include <Security.h>
+#endif
 
 Identity::Identity(IdentityId id, QObject *parent)
   : SyncableObject(parent),
@@ -61,11 +79,73 @@ void Identity::init() {
   setAllowClientUpdates(true);
 }
 
+QString Identity::defaultNick() {
+  QString nick = QString("quassel%1").arg(qrand() & 0xff); // FIXME provide more sensible default nicks
+
+#ifdef Q_OS_MAC
+  QString shortUserName = CFStringToQString(CSCopyUserName(true));
+  if(!shortUserName.isEmpty())
+    nick = shortUserName;
+
+#elif defined(Q_OS_UNIX)
+  QString userName = getlogin();
+  if(!userName.isEmpty())
+    nick = userName;
+
+#elif defined(Q_OS_WIN32)
+  TCHAR  infoBuf[128];
+  DWORD  bufCharCount = 128;
+  //if(GetUserNameEx(/* NameSamCompatible */ 1, infoBuf, &bufCharCount))
+  if(GetUserNameEx(NameSamCompatible, infoBuf, &bufCharCount)) {
+    QString nickName(infoBuf);
+    int lastBs = nickName.lastIndexOf('\\');
+    if(lastBs != -1) {
+      nickName = nickName.mid(lastBs + 1);
+    }
+    if(!nickName.isEmpty())
+      nick = nickName;
+  }
+#endif
+
+  // cleaning forbidden characters from nick
+  QRegExp rx(QString("(^[\\d-]+|[^A-Za-z0-9\x5b-\x60\x7b-\x7d])"));
+  nick.remove(rx);
+  return nick;
+}
+
+QString Identity::defaultRealName() {
+  QString generalDefault = tr("Quassel IRC User");
+
+#ifdef Q_OS_MAC
+  return CFStringToQString(CSCopyUserName(false));
+
+#elif defined(Q_OS_UNIX)
+  QString realName;
+  struct passwd *pwd = getpwuid(getuid());
+  if(pwd)
+    realName = pwd->pw_gecos;
+  if(!realName.isEmpty())
+    return realName;
+  else
+    return generalDefault;
+
+#elif defined(Q_OS_WIN32)
+  TCHAR  infoBuf[128];
+  DWORD  bufCharCount = 128;
+  if(GetUserName(infoBuf, &bufCharCount))
+    return QString(infoBuf);
+  else
+    return generalDefault;
+#else
+  return generalDefault;
+#endif
+}
+
 void Identity::setToDefaults() {
   setIdentityName(tr("<empty>"));
-  setRealName(tr("Quassel IRC User"));
-  QStringList n;
-  n << QString("quassel%1").arg(qrand() & 0xff); // FIXME provide more sensible default nicks
+  setRealName(defaultRealName());
+  QString defNick = defaultNick();
+  QStringList n = QStringList() << defNick << defNick + "_" << defNick + "__";
   setNicks(n);
   setAwayNick("");
   setAwayNickEnabled(false);

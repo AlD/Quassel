@@ -91,7 +91,7 @@ public slots:
   virtual void setAutoReconnectRetries(quint16);
 
   void connectToIrc(bool reconnecting = false);
-  void disconnectFromIrc(bool requested = true, const QString &reason = QString());
+  void disconnectFromIrc(bool requested = true, const QString &reason = QString(), bool withReconnect = false);
 
   void userInput(BufferInfo bufferInfo, QString msg);
   void putRawLine(QByteArray input);
@@ -105,6 +105,9 @@ public slots:
   bool setAutoWhoDone(const QString &channel);
 
   Server usedServer() const;
+
+  inline void resetPong() { _gotPong = true; }
+  inline bool gotPong() { return _gotPong; }
 
 signals:
   void recvRawServerMsg(QString);
@@ -129,6 +132,7 @@ private slots:
   void networkInitialized();
 
   void sendPerform();
+  void restoreUserModes();
   void doAutoReconnect();
   void sendPing();
   void sendAutoWho();
@@ -166,11 +170,13 @@ private:
    * it is needed to determine whether or not the connection needs to be
    * in the automatic session restore. */
   bool _quitRequested;
+  QString _quitReason;
 
   bool _previousConnectionAttemptFailed;
   int _lastUsedServerIndex;
 
   QTimer _pingTimer;
+  bool _gotPong;
 
   bool _autoWhoEnabled;
   QStringList _autoWhoQueue;

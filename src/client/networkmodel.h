@@ -28,6 +28,7 @@
 #include "treemodel.h"
 
 class BufferItem;
+class StatusBufferItem;
 
 /*****************************************
  *  Network Items
@@ -55,6 +56,7 @@ public:
   BufferItem *findBufferItem(BufferId bufferId);
   inline BufferItem *findBufferItem(const BufferInfo &bufferInfo) { return findBufferItem(bufferInfo.bufferId()); }
   BufferItem *bufferItem(const BufferInfo &bufferInfo);
+  inline StatusBufferItem *statusBufferItem() const { return _statusBufferItem; }
 
 public slots:
   void setNetworkName(const QString &networkName);
@@ -67,8 +69,12 @@ public slots:
 signals:
   void networkDataChanged(int column = -1);
 
+private slots:
+  void onBeginRemoveChilds(int start, int end);
+
 private:
   NetworkId _networkId;
+  StatusBufferItem *_statusBufferItem;
 
   QPointer<Network> _network;
 };
@@ -318,10 +324,11 @@ public:
 public slots:
   void bufferUpdated(BufferInfo bufferInfo);
   void removeBuffer(BufferId bufferId);
+  MsgId lastSeenMsgId(const BufferId &bufferId);
   void setLastSeenMsgId(const BufferId &bufferId, const MsgId &msgId);
   void setBufferActivity(const BufferId &bufferId, BufferInfo::ActivityLevel activity);
   void clearBufferActivity(const BufferId &bufferId);
-  void updateBufferActivity(const Message &msg);
+  void updateBufferActivity(Message &msg);
   void networkRemoved(const NetworkId &networkId);
 
 signals:
@@ -330,6 +337,7 @@ signals:
 private slots:
   void checkForRemovedBuffers(const QModelIndex &parent, int start, int end);
   void checkForNewBuffers(const QModelIndex &parent, int start, int end);
+  void messageRedirectionSettingsChanged();
 
 private:
   int networkRow(NetworkId networkId) const;
@@ -339,9 +347,15 @@ private:
   BufferItem *findBufferItem(BufferId bufferId) const;
   BufferItem *bufferItem(const BufferInfo &bufferInfo);
 
+  void updateBufferActivity(BufferItem *bufferItem, const Message &msg);
+
   static bool bufferItemLessThan(const BufferItem *left, const BufferItem *right);
 
   QHash<BufferId, BufferItem *> _bufferItemCache;
+
+  int _userNoticesTarget;
+  int _serverNoticesTarget;
+  int _errorMsgsTarget;
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(NetworkModel::ItemTypes)
 

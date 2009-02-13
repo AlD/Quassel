@@ -8,11 +8,14 @@ include(${QT_USE_FILE})
 
 set(SOURCES
     abstractmessageprocessor.cpp
+    abstractui.cpp
     backlogrequester.cpp
     buffermodel.cpp
     buffersettings.cpp
     client.cpp
     clientbacklogmanager.cpp
+    clientbufferviewconfig.cpp
+    clientbufferviewmanager.cpp
     clientidentity.cpp
     clientirclisthelper.cpp
     clientsettings.cpp
@@ -21,15 +24,17 @@ set(SOURCES
     messagefilter.cpp
     messagemodel.cpp
     networkmodel.cpp
-    quasselui.cpp
     selectionmodelsynchronizer.cpp
     treemodel.cpp)
 
 set(MOC_HDRS
     abstractmessageprocessor.h
+    abstractui.h
     buffermodel.h
     client.h
     clientbacklogmanager.h
+    clientbufferviewconfig.h
+    clientbufferviewmanager.h
     clientcoreinfo.h
     clientidentity.h
     clientirclisthelper.h
@@ -38,7 +43,6 @@ set(MOC_HDRS
     messagefilter.h
     messagemodel.h
     networkmodel.h
-    quasselui.h
     selectionmodelsynchronizer.h
     treemodel.h)
 

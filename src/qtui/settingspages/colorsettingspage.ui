@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>517</width>
-    <height>561</height>
+    <width>516</width>
+    <height>486</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -53,6 +53,9 @@
             <property name="alignment" >
              <set>Qt::AlignCenter</set>
             </property>
+            <property name="NotInUse" stdset="0" >
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item row="0" column="3" >
@@ -62,6 +65,9 @@
             </property>
             <property name="alignment" >
              <set>Qt::AlignCenter</set>
+            </property>
+            <property name="NotInUse" stdset="0" >
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -99,6 +105,9 @@
             <property name="text" >
              <string/>
             </property>
+            <property name="NotInUse" stdset="0" >
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item row="1" column="3" >
@@ -111,6 +120,9 @@
             </property>
             <property name="text" >
              <string/>
+            </property>
+            <property name="NotInUse" stdset="0" >
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -136,6 +148,9 @@
             <property name="text" >
              <string/>
             </property>
+            <property name="NotInUse" stdset="0" >
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item row="2" column="3" >
@@ -151,6 +166,9 @@
             </property>
             <property name="text" >
              <string/>
+            </property>
+            <property name="NotInUse" stdset="0" >
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -176,6 +194,9 @@
             <property name="text" >
              <string/>
             </property>
+            <property name="NotInUse" stdset="0" >
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item row="3" column="3" >
@@ -188,6 +209,9 @@
             </property>
             <property name="text" >
              <string/>
+            </property>
+            <property name="NotInUse" stdset="0" >
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -213,6 +237,9 @@
             <property name="text" >
              <string/>
             </property>
+            <property name="NotInUse" stdset="0" >
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item row="4" column="3" >
@@ -225,6 +252,9 @@
             </property>
             <property name="text" >
              <string/>
+            </property>
+            <property name="NotInUse" stdset="0" >
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -250,6 +280,9 @@
             <property name="text" >
              <string/>
             </property>
+            <property name="NotInUse" stdset="0" >
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item row="5" column="3" >
@@ -262,6 +295,9 @@
             </property>
             <property name="text" >
              <string/>
+            </property>
+            <property name="NotInUse" stdset="0" >
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -335,6 +371,19 @@
            <string>Server Activity</string>
           </attribute>
           <layout class="QGridLayout" >
+           <item row="6" column="1" >
+            <spacer>
+             <property name="orientation" >
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0" >
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
            <item row="0" column="1" >
             <widget class="QLabel" name="label_44" >
              <property name="text" >
@@ -363,6 +412,9 @@
              <property name="alignment" >
               <set>Qt::AlignCenter</set>
              </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
            <item row="1" column="0" >
@@ -387,6 +439,9 @@
              <property name="text" >
               <string/>
              </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
            <item row="1" column="3" >
@@ -402,6 +457,9 @@
              </property>
              <property name="text" >
               <string/>
+             </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -427,6 +485,9 @@
              <property name="text" >
               <string/>
              </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
            <item row="2" column="3" >
@@ -442,6 +503,9 @@
              </property>
              <property name="text" >
               <string/>
+             </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -467,6 +531,9 @@
              <property name="text" >
               <string/>
              </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
            <item row="3" column="3" >
@@ -482,6 +549,9 @@
              </property>
              <property name="text" >
               <string/>
+             </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -507,6 +577,9 @@
              <property name="text" >
               <string/>
              </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
            <item row="4" column="3" >
@@ -522,6 +595,9 @@
              </property>
              <property name="text" >
               <string/>
+             </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -541,19 +617,6 @@
               <string/>
              </property>
             </widget>
-           </item>
-           <item row="6" column="2" >
-            <spacer name="verticalSpacer_2" >
-             <property name="orientation" >
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0" >
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
            </item>
           </layout>
          </widget>
@@ -580,6 +643,9 @@
              <property name="alignment" >
               <set>Qt::AlignCenter</set>
              </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
            <item row="0" column="3" >
@@ -589,6 +655,9 @@
              </property>
              <property name="alignment" >
               <set>Qt::AlignCenter</set>
+             </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -614,6 +683,9 @@
              <property name="text" >
               <string/>
              </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
            <item row="1" column="3" >
@@ -629,6 +701,9 @@
              </property>
              <property name="text" >
               <string/>
+             </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -654,6 +729,9 @@
              <property name="text" >
               <string/>
              </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
            <item row="2" column="3" >
@@ -669,6 +747,9 @@
              </property>
              <property name="text" >
               <string/>
+             </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -694,6 +775,9 @@
              <property name="text" >
               <string/>
              </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
            <item row="3" column="3" >
@@ -709,6 +793,9 @@
              </property>
              <property name="text" >
               <string/>
+             </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -734,6 +821,9 @@
              <property name="text" >
               <string/>
              </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
            <item row="4" column="3" >
@@ -749,6 +839,9 @@
              </property>
              <property name="text" >
               <string/>
+             </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -774,6 +867,9 @@
              <property name="text" >
               <string/>
              </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
            <item row="5" column="3" >
@@ -789,6 +885,9 @@
              </property>
              <property name="text" >
               <string/>
+             </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -814,6 +913,9 @@
              <property name="text" >
               <string/>
              </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
            <item row="6" column="3" >
@@ -829,6 +931,9 @@
              </property>
              <property name="text" >
               <string/>
+             </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -854,6 +959,9 @@
              <property name="text" >
               <string/>
              </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
            <item row="7" column="3" >
@@ -870,20 +978,10 @@
              <property name="text" >
               <string/>
              </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
+             </property>
             </widget>
-           </item>
-           <item row="8" column="1" >
-            <spacer name="verticalSpacer" >
-             <property name="orientation" >
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0" >
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
            </item>
           </layout>
          </widget>
@@ -891,8 +989,8 @@
           <attribute name="title" >
            <string>Message</string>
           </attribute>
-          <layout class="QGridLayout" name="gridLayout_2" >
-           <item row="0" column="2" >
+          <layout class="QGridLayout" >
+           <item row="0" column="1" >
             <widget class="QLabel" name="label_37" >
              <property name="text" >
               <string>Foreground</string>
@@ -902,7 +1000,7 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="3" >
+           <item row="0" column="2" >
             <widget class="QLabel" name="label_38" >
              <property name="text" >
               <string>Background</string>
@@ -910,15 +1008,21 @@
              <property name="alignment" >
               <set>Qt::AlignCenter</set>
              </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
-           <item row="0" column="4" >
+           <item row="0" column="3" >
             <widget class="QLabel" name="label_9" >
              <property name="text" >
               <string>Use BG</string>
              </property>
              <property name="alignment" >
               <set>Qt::AlignCenter</set>
+             </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -929,14 +1033,14 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="2" >
+           <item row="1" column="1" >
             <widget class="ColorButton" name="timestampFG" >
              <property name="text" >
               <string/>
              </property>
             </widget>
            </item>
-           <item row="1" column="3" >
+           <item row="1" column="2" >
             <widget class="ColorButton" name="timestampBG" >
              <property name="enabled" >
               <bool>false</bool>
@@ -944,9 +1048,12 @@
              <property name="text" >
               <string/>
              </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
-           <item row="1" column="4" >
+           <item row="1" column="3" >
             <widget class="QCheckBox" name="timestampUseBG" >
              <property name="sizePolicy" >
               <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
@@ -960,23 +1067,33 @@
              <property name="text" >
               <string/>
              </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
            <item row="5" column="0" >
+            <widget class="QLabel" name="label_28" >
+             <property name="text" >
+              <string>Sender:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="0" >
             <widget class="QLabel" name="label_30" >
              <property name="text" >
               <string>Nick:</string>
              </property>
             </widget>
            </item>
-           <item row="5" column="2" >
+           <item row="8" column="1" >
             <widget class="ColorButton" name="nickFG" >
              <property name="text" >
               <string/>
              </property>
             </widget>
            </item>
-           <item row="5" column="3" >
+           <item row="8" column="2" >
             <widget class="ColorButton" name="nickBG" >
              <property name="enabled" >
               <bool>false</bool>
@@ -984,9 +1101,12 @@
              <property name="text" >
               <string/>
              </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
-           <item row="5" column="4" >
+           <item row="8" column="3" >
             <widget class="QCheckBox" name="nickUseBG" >
              <property name="sizePolicy" >
               <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
@@ -1000,23 +1120,26 @@
              <property name="text" >
               <string/>
              </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
-           <item row="6" column="0" >
+           <item row="9" column="0" >
             <widget class="QLabel" name="label_31" >
              <property name="text" >
               <string>Hostmask:</string>
              </property>
             </widget>
            </item>
-           <item row="6" column="2" >
+           <item row="9" column="1" >
             <widget class="ColorButton" name="hostmaskFG" >
              <property name="text" >
               <string/>
              </property>
             </widget>
            </item>
-           <item row="6" column="3" >
+           <item row="9" column="2" >
             <widget class="ColorButton" name="hostmaskBG" >
              <property name="enabled" >
               <bool>false</bool>
@@ -1024,9 +1147,12 @@
              <property name="text" >
               <string/>
              </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
-           <item row="6" column="4" >
+           <item row="9" column="3" >
             <widget class="QCheckBox" name="hostmaskUseBG" >
              <property name="sizePolicy" >
               <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
@@ -1040,23 +1166,26 @@
              <property name="text" >
               <string/>
              </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
-           <item row="7" column="0" >
+           <item row="10" column="0" >
             <widget class="QLabel" name="label_32" >
              <property name="text" >
               <string>Channelname:</string>
              </property>
             </widget>
            </item>
-           <item row="7" column="2" >
+           <item row="10" column="1" >
             <widget class="ColorButton" name="channelnameFG" >
              <property name="text" >
               <string/>
              </property>
             </widget>
            </item>
-           <item row="7" column="3" >
+           <item row="10" column="2" >
             <widget class="ColorButton" name="channelnameBG" >
              <property name="enabled" >
               <bool>false</bool>
@@ -1064,9 +1193,12 @@
              <property name="text" >
               <string/>
              </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
-           <item row="7" column="4" >
+           <item row="10" column="3" >
             <widget class="QCheckBox" name="channelnameUseBG" >
              <property name="sizePolicy" >
               <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
@@ -1080,23 +1212,26 @@
              <property name="text" >
               <string/>
              </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
-           <item row="8" column="0" >
+           <item row="11" column="0" >
             <widget class="QLabel" name="label_33" >
              <property name="text" >
               <string>Mode flags:</string>
              </property>
             </widget>
            </item>
-           <item row="8" column="2" >
+           <item row="11" column="1" >
             <widget class="ColorButton" name="modeFlagsFG" >
              <property name="text" >
               <string/>
              </property>
             </widget>
            </item>
-           <item row="8" column="3" >
+           <item row="11" column="2" >
             <widget class="ColorButton" name="modeFlagsBG" >
              <property name="enabled" >
               <bool>false</bool>
@@ -1104,9 +1239,12 @@
              <property name="text" >
               <string/>
              </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
-           <item row="8" column="4" >
+           <item row="11" column="3" >
             <widget class="QCheckBox" name="modeFlagsUseBG" >
              <property name="sizePolicy" >
               <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
@@ -1120,23 +1258,26 @@
              <property name="text" >
               <string/>
              </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
-           <item row="9" column="0" >
+           <item row="12" column="0" >
             <widget class="QLabel" name="label_34" >
              <property name="text" >
               <string>Url:</string>
              </property>
             </widget>
            </item>
-           <item row="9" column="2" >
+           <item row="12" column="1" >
             <widget class="ColorButton" name="urlFG" >
              <property name="text" >
               <string/>
              </property>
             </widget>
            </item>
-           <item row="9" column="3" >
+           <item row="12" column="2" >
             <widget class="ColorButton" name="urlBG" >
              <property name="enabled" >
               <bool>false</bool>
@@ -1144,9 +1285,12 @@
              <property name="text" >
               <string/>
              </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
-           <item row="9" column="4" >
+           <item row="12" column="3" >
             <widget class="QCheckBox" name="urlUseBG" >
              <property name="sizePolicy" >
               <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
@@ -1160,166 +1304,97 @@
              <property name="text" >
               <string/>
              </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
-           <item row="10" column="0" >
+           <item row="13" column="0" >
             <widget class="QLabel" name="label_11" >
              <property name="text" >
               <string>New Message Marker:</string>
              </property>
             </widget>
            </item>
-           <item row="10" column="2" >
+           <item row="13" column="1" >
             <widget class="ColorButton" name="newMsgMarkerFG" >
              <property name="text" >
               <string/>
              </property>
             </widget>
            </item>
-           <item row="3" column="0" >
-            <widget class="QLabel" name="label_28" >
-             <property name="text" >
-              <string>Sender:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0" >
-            <widget class="QLabel" name="label_12" >
-             <property name="text" >
-              <string>Sender auto coloring:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="2" >
+           <item row="6" column="1" >
             <widget class="QCheckBox" name="senderAutoColor" >
              <property name="text" >
               <string>Enable</string>
              </property>
             </widget>
            </item>
-           <item row="3" column="2" colspan="3" >
-            <widget class="QFrame" name="senderFrame" >
-             <property name="frameShape" >
-              <enum>QFrame::NoFrame</enum>
+           <item row="6" column="0" >
+            <widget class="QLabel" name="label_12" >
+             <property name="text" >
+              <string>Sender auto coloring:</string>
              </property>
-             <property name="frameShadow" >
-              <enum>QFrame::Plain</enum>
+            </widget>
+           </item>
+           <item row="5" column="2" >
+            <widget class="ColorButton" name="senderBG" >
+             <property name="enabled" >
+              <bool>false</bool>
              </property>
-             <layout class="QGridLayout" name="_2" >
-              <property name="leftMargin" >
-               <number>0</number>
-              </property>
-              <property name="topMargin" >
-               <number>0</number>
-              </property>
-              <property name="rightMargin" >
-               <number>18</number>
-              </property>
-              <property name="bottomMargin" >
-               <number>0</number>
-              </property>
-              <item row="0" column="0" >
-               <widget class="ColorButton" name="senderFG" >
-                <property name="text" >
-                 <string/>
-                </property>
-                <property name="flat" >
-                 <bool>false</bool>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1" >
-               <widget class="ColorButton" name="senderBG" >
-                <property name="enabled" >
-                 <bool>false</bool>
-                </property>
-                <property name="text" >
-                 <string/>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="2" >
-               <widget class="QCheckBox" name="senderUseBG" >
-                <property name="sizePolicy" >
-                 <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="layoutDirection" >
-                 <enum>Qt::LeftToRight</enum>
-                </property>
-                <property name="text" >
-                 <string/>
-                </property>
-               </widget>
-              </item>
-             </layout>
+             <property name="text" >
+              <string/>
+             </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1" >
+            <widget class="ColorButton" name="senderFG" >
+             <property name="text" >
+              <string/>
+             </property>
+             <property name="flat" >
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="3" >
+            <widget class="QCheckBox" name="senderUseBG" >
+             <property name="sizePolicy" >
+              <sizepolicy vsizetype="Fixed" hsizetype="Maximum" >
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="layoutDirection" >
+              <enum>Qt::LeftToRight</enum>
+             </property>
+             <property name="text" >
+              <string/>
+             </property>
+             <property name="NotInUse" stdset="0" >
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
           </layout>
-          <zorder>label_37</zorder>
-          <zorder>label_38</zorder>
-          <zorder>label_9</zorder>
-          <zorder>label_29</zorder>
-          <zorder>timestampFG</zorder>
-          <zorder>timestampBG</zorder>
-          <zorder>timestampUseBG</zorder>
-          <zorder>label_30</zorder>
-          <zorder>nickFG</zorder>
-          <zorder>nickBG</zorder>
-          <zorder>nickUseBG</zorder>
-          <zorder>label_31</zorder>
-          <zorder>hostmaskFG</zorder>
-          <zorder>hostmaskBG</zorder>
-          <zorder>hostmaskUseBG</zorder>
-          <zorder>label_32</zorder>
-          <zorder>channelnameFG</zorder>
-          <zorder>channelnameBG</zorder>
-          <zorder>channelnameUseBG</zorder>
-          <zorder>label_33</zorder>
-          <zorder>modeFlagsFG</zorder>
-          <zorder>modeFlagsBG</zorder>
-          <zorder>modeFlagsUseBG</zorder>
-          <zorder>label_34</zorder>
-          <zorder>urlFG</zorder>
-          <zorder>urlBG</zorder>
-          <zorder>urlUseBG</zorder>
-          <zorder>label_11</zorder>
-          <zorder>newMsgMarkerFG</zorder>
-          <zorder>label_28</zorder>
-          <zorder>label_12</zorder>
-          <zorder>senderAutoColor</zorder>
-          <zorder>label_13</zorder>
-          <zorder>senderFrame</zorder>
          </widget>
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_5" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+        <spacer name="verticalSpacer" >
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
          </property>
-         <property name="title" >
-          <string>Preview:</string>
+         <property name="sizeHint" stdset="0" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
          </property>
-         <layout class="QHBoxLayout" >
-          <property name="sizeConstraint" >
-           <enum>QLayout::SetDefaultConstraint</enum>
-          </property>
-          <property name="bottomMargin" >
-           <number>9</number>
-          </property>
-          <item>
-           <widget class="QWidget" native="1" name="chatviewPreview" >
-            <zorder>tabWidget_2</zorder>
-           </widget>
-          </item>
-         </layout>
-        </widget>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -1587,7 +1662,7 @@
        <string>Nickview</string>
       </attribute>
       <layout class="QGridLayout" >
-       <item row="0" column="0" >
+       <item row="0" column="0" colspan="2" >
         <widget class="QGroupBox" name="groupBox_8" >
          <property name="title" >
           <string>Nick status:</string>
@@ -1611,6 +1686,9 @@
             <property name="alignment" >
              <set>Qt::AlignCenter</set>
             </property>
+            <property name="NotInUse" stdset="0" >
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item row="0" column="3" >
@@ -1620,6 +1698,9 @@
             </property>
             <property name="alignment" >
              <set>Qt::AlignCenter</set>
+            </property>
+            <property name="NotInUse" stdset="0" >
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -1645,6 +1726,9 @@
             <property name="text" >
              <string/>
             </property>
+            <property name="NotInUse" stdset="0" >
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item row="1" column="3" >
@@ -1660,6 +1744,9 @@
             </property>
             <property name="text" >
              <string/>
+            </property>
+            <property name="NotInUse" stdset="0" >
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -1685,6 +1772,9 @@
             <property name="text" >
              <string/>
             </property>
+            <property name="NotInUse" stdset="0" >
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item row="2" column="3" >
@@ -1697,6 +1787,9 @@
             </property>
             <property name="text" >
              <string/>
+            </property>
+            <property name="NotInUse" stdset="0" >
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -1712,24 +1805,6 @@
              </size>
             </property>
            </spacer>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="0" column="1" >
-        <widget class="QGroupBox" name="groupBox_9" >
-         <property name="title" >
-          <string>Preview:</string>
-         </property>
-         <layout class="QVBoxLayout" >
-          <item>
-           <widget class="QTreeWidget" name="nickviewPreview" >
-            <column>
-             <property name="text" >
-              <string>1</string>
-             </property>
-            </column>
-           </widget>
           </item>
          </layout>
         </widget>
@@ -2067,22 +2142,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>senderUseBG</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>senderBG</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>372</x>
-     <y>157</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>273</x>
-     <y>157</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>nickUseBG</sender>
    <signal>clicked(bool)</signal>
    <receiver>nickBG</receiver>
@@ -2163,17 +2222,33 @@
    </hints>
   </connection>
   <connection>
+   <sender>senderUseBG</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>senderBG</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>463</x>
+     <y>143</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>376</x>
+     <y>143</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
    <sender>senderAutoColor</sender>
    <signal>clicked(bool)</signal>
-   <receiver>senderFrame</receiver>
+   <receiver>senderFG</receiver>
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>234</x>
+     <x>232</x>
      <y>173</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>327</x>
+     <x>232</x>
      <y>143</y>
     </hint>
    </hints>

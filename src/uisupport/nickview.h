@@ -35,6 +35,9 @@ protected:
   virtual void rowsInserted(const QModelIndex &parent, int start, int end);
   virtual void customEvent(QEvent *event);
 
+  //! This reimplementation ensures that the current index is first in list
+  virtual QModelIndexList selectedIndexes() const;
+
 public slots:
   virtual void setModel(QAbstractItemModel *model);
   virtual void setRootIndex(const QModelIndex &index);
@@ -42,10 +45,30 @@ public slots:
   void showContextMenu(const QPoint & pos);
   void startQuery(const QModelIndex & modelIndex);
 
+signals:
+  void selectionUpdated();
+
 private:
-  BufferInfo bufferInfoFromModelIndex(const QModelIndex & index);
-  QString nickFromModelIndex(const QModelIndex & index);
-  void executeCommand(const BufferInfo & bufferInfo, const QString & command);
+  friend class NickListWidget;  // needs selectedIndexes()
+};
+
+// ******************************
+//  NickViewDelgate
+// ******************************
+#include <QStyledItemDelegate>
+
+class NickViewDelegate : public QStyledItemDelegate {
+  Q_OBJECT
+
+public:
+  NickViewDelegate(QObject *parent = 0);
+
+protected:
+  virtual void initStyleOption(QStyleOptionViewItem *option, const QModelIndex &index) const;
+
+private:
+  QColor _FgOnlineStatus;
+  QColor _FgAwayStatus;
 };
 
 #endif

@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "nickview.h"
+
 #include <QHeaderView>
 #include <QScrollBar>
 #include <QDebug>
@@ -25,11 +27,13 @@
 
 #include "buffermodel.h"
 #include "client.h"
+#include "contextmenuactionprovider.h"
+#include "graphicalui.h"
 #include "nickview.h"
 #include "nickviewfilter.h"
 #include "networkmodel.h"
-#include "quasselui.h"
 #include "types.h"
+#include "uisettings.h"
 
 class ExpandAllEvent : public QEvent {
 public:
@@ -39,6 +43,11 @@ public:
 NickView::NickView(QWidget *parent)
   : QTreeView(parent)
 {
+  QAbstractItemDelegate *oldDelegate = itemDelegate();
+  NickViewDelegate *newDelegate = new NickViewDelegate(this);
+  setItemDelegate(newDelegate);
+  delete oldDelegate;
+
   setIndentation(10);
   setAnimated(true);
   header()->hide();
@@ -65,10 +74,16 @@ void NickView::init() {
 
   for(int i = 1; i < model()->columnCount(); i++)
     setColumnHidden(i, true);
+
+  connect(selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)), SIGNAL(selectionUpdated()));
+  connect(selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)), SIGNAL(selectionUpdated()));
 }
 
-void NickView::setModel(QAbstractItemModel *model) {
-  QTreeView::setModel(model);
+void NickView::setModel(QAbstractItemModel *model_) {
+  if(model())
+    disconnect(model(), 0, this, 0);
+
+  QTreeView::setModel(model_);
   init();
 }
 
@@ -85,18 +100,23 @@ void NickView::setRootIndex(const QModelIndex &index) {
     QCoreApplication::postEvent(this, new ExpandAllEvent);
 }
 
-void NickView::showContextMenu(const QPoint & pos ) {
-  QModelIndex index = indexAt(pos);
-  if(index.data(NetworkModel::ItemTypeRole) != NetworkModel::IrcUserItemType)
-    return;
+QModelIndexList NickView::selectedIndexes() const {
+  QModelIndexList indexList = QTreeView::selectedIndexes();
 
-  QModelIndexList indexList = selectedIndexes();
   // make sure the item we clicked on is first
-  indexList.removeAll(index);
-  indexList.prepend(index);
+  if(indexList.contains(currentIndex())) {
+    indexList.removeAll(currentIndex());
+    indexList.prepend(currentIndex());
+  }
+
+  return indexList;
+}
+
+void NickView::showContextMenu(const QPoint &pos ) {
+  Q_UNUSED(pos);
 
   QMenu contextMenu(this);
-  Client::mainUi()->actionProvider()->addActions(&contextMenu, indexList);
+  GraphicalUi::contextMenuActionProvider()->addActions(&contextMenu, selectedIndexes());
   contextMenu.exec(QCursor::pos());
 }
 
@@ -142,4 +162,29 @@ void NickView::customEvent(QEvent *event) {
     }
   }
   event->accept();
+}
+
+
+// ****************************************
+//  NickViewDelgate
+// ****************************************
+NickViewDelegate::NickViewDelegate(QObject *parent)
+  : QStyledItemDelegate(parent)
+{
+  UiSettings s("QtUiStyle/Colors");
+  _FgOnlineStatus = s.value("onlineStatusFG", QVariant(QColor(Qt::black))).value<QColor>();
+  _FgAwayStatus = s.value("awayStatusFG", QVariant(QColor(Qt::gray))).value<QColor>();
+}
+
+void NickViewDelegate::initStyleOption(QStyleOptionViewItem *option, const QModelIndex &index) const {
+  QStyledItemDelegate::initStyleOption(option, index);
+
+  if(!index.isValid())
+    return;
+
+  QColor fgColor = _FgOnlineStatus;
+  if(!index.data(NetworkModel::ItemActiveRole).toBool())
+    fgColor = _FgAwayStatus;
+
+  option->palette.setColor(QPalette::Text, fgColor);
 }

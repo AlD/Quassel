@@ -28,8 +28,6 @@
 #include <QColorDialog>
 #include <QPainter>
 
-// #define PHONDEV
-
 ColorSettingsPage::ColorSettingsPage(QWidget *parent)
   : SettingsPage(tr("Appearance"), tr("Color settings"), parent),
     mapper(new QSignalMapper(this))
@@ -47,27 +45,12 @@ ColorSettingsPage::ColorSettingsPage(QWidget *parent)
   connect(mapper, SIGNAL(mapped(QWidget *)), this, SLOT(chooseColor(QWidget *)));
 
   //disable unused buttons:
-#ifndef PHONDEV
-  ui.inactiveActivityUseBG->setEnabled(false);
-  ui.noActivityUseBG->setEnabled(false);
-  ui.highlightActivityUseBG->setEnabled(false);
-  ui.newMessageActivityUseBG->setEnabled(false);
-  ui.otherActivityUseBG->setEnabled(false);
-
-  ui.nickFG->setEnabled(false);
-  ui.nickUseBG->setEnabled(false);
-  ui.hostmaskFG->setEnabled(false);
-  ui.hostmaskUseBG->setEnabled(false);
-  ui.channelnameFG->setEnabled(false);
-  ui.channelnameUseBG->setEnabled(false);
-  ui.modeFlagsFG->setEnabled(false);
-  ui.modeFlagsUseBG->setEnabled(false);
-  ui.urlFG->setEnabled(false);
-  ui.urlUseBG->setEnabled(false);
-
-  ui.onlineStatusUseBG->setEnabled(false);
-  ui.awayStatusUseBG->setEnabled(false);
-#endif
+  foreach(QWidget *widget, findChildren<QWidget *>()) {
+    if(widget->property("NotInUse").toBool()) {
+      widget->setEnabled(false);
+      widget->hide();
+    }
+  }
 }
 
 bool ColorSettingsPage::hasDefaults() const {
@@ -349,11 +332,8 @@ void ColorSettingsPage::load() {
   ui.timestampBG->setColor(QtUi::style()->format(UiStyle::Timestamp).background().color());
   ui.senderFG->setColor(QtUi::style()->format(UiStyle::Sender).foreground().color());
   ui.senderBG->setColor(QtUi::style()->format(UiStyle::Sender).background().color());
-  settings["SenderAutoColor"] = s.value("senderAutoColor", QVariant(true));
-  if (settings["SenderAutoColor"].toBool()) {
-    ui.senderAutoColor->setChecked(true);
-    ui.senderFrame->setEnabled(false);
-  }
+  settings["SenderAutoColor"] = s.value("senderAutoColor", QVariant(false));
+  ui.senderAutoColor->setChecked(settings["SenderAutoColor"].toBool());
   settings["NewMsgMarkerFG"] = s.value("newMsgMarkerFG", QColor(Qt::red));
   ui.newMsgMarkerFG->setColor(settings["NewMsgMarkerFG"].value<QColor>());
 

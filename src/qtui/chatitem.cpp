@@ -32,6 +32,7 @@
 #include "bufferview.h"
 #include "chatitem.h"
 #include "chatlinemodel.h"
+#include "contextmenuactionprovider.h"
 #include "iconloader.h"
 #include "mainwin.h"
 #include "qtui.h"
@@ -288,7 +289,7 @@ void ChatItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 void ChatItem::addActionsToMenu(QMenu *menu, const QPointF &pos) {
   Q_UNUSED(pos);
 
-  Client::mainUi()->actionProvider()->addActions(menu, chatScene()->filter(), data(MessageModel::BufferIdRole).value<BufferId>());
+  GraphicalUi::contextMenuActionProvider()->addActions(menu, chatScene()->filter(), data(MessageModel::BufferIdRole).value<BufferId>());
 }
 
 // ************************************************************
@@ -444,7 +445,7 @@ QList<ContentsChatItem::Clickable> ContentsChatItem::findClickables() const {
     for(int i = 0; i < regExpCount; i++) {
       if(matches[i] < 0 || matchEnd[i] > str.length()) continue;
       if(idx >= matchEnd[i]) {
-        matches[i] = str.indexOf(regExp[i], qMax(matchEnd[i], idx));
+        matches[i] = regExp[i].indexIn(str, qMax(matchEnd[i], idx));
         if(matches[i] >= 0) matchEnd[i] = matches[i] + regExp[i].cap(1).length();
       }
       if(matches[i] >= 0 && matches[i] < minidx) {
@@ -615,7 +616,7 @@ void ContentsChatItem::addActionsToMenu(QMenu *menu, const QPointF &pos) {
         foreach(QAction *action, menu->actions())
           action->setVisible(false);
         QString name = data(ChatLineModel::DisplayRole).toString().mid(click.start, click.length);
-        Client::mainUi()->actionProvider()->addActions(menu, chatScene()->filter(), data(MessageModel::BufferIdRole).value<BufferId>(), name);
+        GraphicalUi::contextMenuActionProvider()->addActions(menu, chatScene()->filter(), data(MessageModel::BufferIdRole).value<BufferId>(), name);
         break;
       }
       default:

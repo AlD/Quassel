@@ -29,11 +29,12 @@
 #endif
 
 #include "aboutdlg.h"
+#include "awaylogfilter.h"
+#include "awaylogview.h"
 #include "action.h"
 #include "actioncollection.h"
 #include "buffermodel.h"
 #include "bufferview.h"
-#include "bufferviewmanager.h"
 #include "bufferwidget.h"
 #include "channellistdlg.h"
 #include "chatlinemodel.h"
@@ -43,8 +44,11 @@
 #include "client.h"
 #include "clientsyncer.h"
 #include "clientbacklogmanager.h"
+#include "clientbufferviewconfig.h"
+#include "clientbufferviewmanager.h"
 #include "coreinfodlg.h"
 #include "coreconnectdlg.h"
+#include "contextmenuactionprovider.h"
 #include "debuglogwidget.h"
 #include "debugmessagemodelfilter.h"
 #include "iconloader.h"
@@ -60,6 +64,7 @@
 #include "sessionsettings.h"
 #include "settingsdlg.h"
 #include "settingspagedlg.h"
+#include "toolbaractionprovider.h"
 #include "topicwidget.h"
 #include "verticaldock.h"
 
@@ -100,7 +105,8 @@ MainWin::MainWin(QWidget *parent)
     sslLabel(new QLabel()),
     msgProcessorStatusWidget(new MsgProcessorStatusWidget()),
     _titleSetter(this),
-    _trayIcon(new QSystemTrayIcon(this))
+    _trayIcon(new QSystemTrayIcon(this)),
+    _awayLog(0)
 {
   QtUiSettings uiSettings;
   QString style = uiSettings.value("Style", QString()).toString();
@@ -131,7 +137,7 @@ void MainWin::init() {
   connect(QApplication::instance(), SIGNAL(aboutToQuit()), SLOT(saveLayout()));
   connect(Client::instance(), SIGNAL(networkCreated(NetworkId)), SLOT(clientNetworkCreated(NetworkId)));
   connect(Client::instance(), SIGNAL(networkRemoved(NetworkId)), SLOT(clientNetworkRemoved(NetworkId)));
-  connect(Client::mainUi()->actionProvider(), SIGNAL(showChannelList(NetworkId)), SLOT(showChannelList(NetworkId)));
+  connect(GraphicalUi::contextMenuActionProvider(), SIGNAL(showChannelList(NetworkId)), SLOT(showChannelList(NetworkId)));
 
   // Setup Dock Areas
   setDockNestingEnabled(true);
@@ -149,6 +155,7 @@ void MainWin::init() {
   setupNickWidget();
   setupInputWidget();
   setupStatusBar();
+  setupToolBars();
   setupSystray();
   setupTitleSetter();
 
@@ -170,7 +177,7 @@ void MainWin::init() {
   restoreState(s.value("MainWinState").toByteArray());
 
   // restore locked state of docks
-  QtUi::actionCollection("General")->action("LockDockPositions")->setChecked(s.value("LockDocks", false).toBool());
+  QtUi::actionCollection("General")->action("LockLayout")->setChecked(s.value("LockLayout", false).toBool());
 
   setDisconnectedState();  // Disable menus and stuff
 
@@ -217,12 +224,15 @@ void MainWin::setupActions() {
   // View
   coll->addAction("ConfigureBufferViews", new Action(tr("&Configure Buffer Views..."), coll,
                                              this, SLOT(on_actionConfigureViews_triggered())));
-  QAction *lockAct = coll->addAction("LockDockPositions", new Action(tr("&Lock Dock Positions"), coll));
+
+  QAction *lockAct = coll->addAction("LockLayout", new Action(tr("&Lock Layout"), coll));
   lockAct->setCheckable(true);
-  connect(lockAct, SIGNAL(toggled(bool)), SLOT(on_actionLockDockPositions_toggled(bool)));
+  connect(lockAct, SIGNAL(toggled(bool)), SLOT(on_actionLockLayout_toggled(bool)));
 
   coll->addAction("ToggleSearchBar", new Action(SmallIcon("edit-find"), tr("Show &Search Bar"), coll,
-                                                 0, 0, tr("Ctrl+F")))->setCheckable(true);
+						0, 0, tr("Ctrl+F")))->setCheckable(true);
+  coll->addAction("ShowAwayLog", new Action(tr("Show Away Log"), coll,
+					    this, SLOT(showAwayLog())));
   coll->addAction("ToggleStatusBar", new Action(tr("Show Status &Bar"), coll,
                                                  0, 0))->setCheckable(true);
 
@@ -268,11 +278,17 @@ void MainWin::setupMenus() {
   _viewMenu = menuBar()->addMenu(tr("&View"));
   _bufferViewsMenu = _viewMenu->addMenu(tr("&Buffer Views"));
   _bufferViewsMenu->addAction(coll->action("ConfigureBufferViews"));
+  _toolbarMenu = _viewMenu->addMenu(tr("&Toolbars"));
   _viewMenu->addSeparator();
   _viewMenu->addAction(coll->action("ToggleSearchBar"));
+
+  coreAction = coll->action("ShowAwayLog");
+  flagRemoteCoreOnly(coreAction);
+  _viewMenu->addAction(coreAction);
+
   _viewMenu->addAction(coll->action("ToggleStatusBar"));
   _viewMenu->addSeparator();
-  _viewMenu->addAction(coll->action("LockDockPositions"));
+  _viewMenu->addAction(coll->action("LockLayout"));
 
   _settingsMenu = menuBar()->addMenu(tr("&Settings"));
 #ifdef HAVE_KDE
@@ -303,13 +319,14 @@ void MainWin::setupBufferWidget() {
 }
 
 void MainWin::addBufferView(int bufferViewConfigId) {
-  addBufferView(Client::bufferViewManager()->bufferViewConfig(bufferViewConfigId));
+  addBufferView(Client::bufferViewManager()->clientBufferViewConfig(bufferViewConfigId));
 }
 
-void MainWin::addBufferView(BufferViewConfig *config) {
+void MainWin::addBufferView(ClientBufferViewConfig *config) {
   if(!config)
     return;
 
+  config->setLocked(QtUiSettings().value("LockLayout", false).toBool());
   BufferViewDock *dock = new BufferViewDock(config, this);
 
   //create the view and initialize it's filter
@@ -367,12 +384,17 @@ void MainWin::on_actionConfigureViews_triggered() {
   dlg.exec();
 }
 
-void MainWin::on_actionLockDockPositions_toggled(bool lock) {
+void MainWin::on_actionLockLayout_toggled(bool lock) {
   QList<VerticalDock *> docks = findChildren<VerticalDock *>();
   foreach(VerticalDock *dock, docks) {
     dock->showTitle(!lock);
   }
-  QtUiSettings().setValue("LockDocks", lock);
+  if(Client::bufferViewManager()) {
+    foreach(ClientBufferViewConfig *config, Client::bufferViewManager()->clientBufferViewConfigs()) {
+      config->setLocked(lock);
+    }
+  }
+  QtUiSettings().setValue("LockLayout", lock);
 }
 
 void MainWin::setupNickWidget() {
@@ -387,7 +409,7 @@ void MainWin::setupNickWidget() {
   addDockWidget(Qt::RightDockWidgetArea, nickDock);
   _viewMenu->addAction(nickDock->toggleViewAction());
   nickDock->toggleViewAction()->setText(tr("Show Nick List"));
-  nickDock->toggleViewAction()->setIcon(SmallIcon("view-sidetree"));
+
   // See NickListDock::NickListDock();
   // connect(nickDock->toggleViewAction(), SIGNAL(triggered(bool)), nickListWidget, SLOT(showWidget(bool)));
 
@@ -404,7 +426,7 @@ void MainWin::setupChatMonitor() {
   ChatMonitorView *chatView = new ChatMonitorView(filter, this);
   chatView->show();
   dock->setWidget(chatView);
-  dock->show();
+  dock->hide();
 
   addDockWidget(Qt::TopDockWidgetArea, dock, Qt::Vertical);
   _viewMenu->addAction(dock->toggleViewAction());
@@ -455,7 +477,6 @@ void MainWin::setupTitleSetter() {
 void MainWin::setupStatusBar() {
   // MessageProcessor progress
   statusBar()->addPermanentWidget(msgProcessorStatusWidget);
-  connect(Client::messageProcessor(), SIGNAL(progressUpdated(int, int)), msgProcessorStatusWidget, SLOT(setProgress(int, int)));
 
   // Core Lag:
   updateLagIndicator();
@@ -468,7 +489,6 @@ void MainWin::setupStatusBar() {
   statusBar()->addPermanentWidget(sslLabel);
   sslLabel->hide();
 
-  _viewMenu->addSeparator();
   QAction *showStatusbar = QtUi::actionCollection("General")->action("ToggleStatusBar");
 
   QtUiSettings uiSettings;
@@ -479,9 +499,6 @@ void MainWin::setupStatusBar() {
 
   connect(showStatusbar, SIGNAL(toggled(bool)), statusBar(), SLOT(setVisible(bool)));
   connect(showStatusbar, SIGNAL(toggled(bool)), this, SLOT(saveStatusBarStatus(bool)));
-
-  connect(Client::backlogManager(), SIGNAL(messagesRequested(const QString &)), this, SLOT(showStatusBarMessage(const QString &)));
-  connect(Client::backlogManager(), SIGNAL(messagesProcessed(const QString &)), this, SLOT(showStatusBarMessage(const QString &)));
 }
 
 void MainWin::saveStatusBarStatus(bool enabled) {
@@ -510,6 +527,30 @@ void MainWin::setupSystray() {
 
 #ifndef Q_WS_MAC
   connect(systemTrayIcon(), SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(systrayActivated(QSystemTrayIcon::ActivationReason)));
+#endif
+}
+
+void MainWin::setupToolBars() {
+  connect(_bufferWidget, SIGNAL(currentChanged(QModelIndex)),
+          QtUi::toolBarActionProvider(), SLOT(currentBufferChanged(QModelIndex)));
+  connect(_nickListWidget, SIGNAL(nickSelectionChanged(QModelIndexList)),
+          QtUi::toolBarActionProvider(), SLOT(nickSelectionChanged(QModelIndexList)));
+
+#ifdef Q_WS_MAC
+  setUnifiedTitleAndToolBarOnMac(true);
+#endif
+  _mainToolBar = addToolBar("Main Toolbar");
+  // _mainToolBar->setObjectName("MainToolBar"); // setting an object name breaks setUnifiedTitleAndToolBarOnMac... -.-
+  QtUi::toolBarActionProvider()->addActions(_mainToolBar, ToolBarActionProvider::MainToolBar);
+  _toolbarMenu->addAction(_mainToolBar->toggleViewAction());
+
+  //_nickToolBar = addToolBar("User");
+  //_nickToolBar->setObjectName("NickToolBar");
+  //QtUi::toolBarActionProvider()->addActions(_nickToolBar, ToolBarActionProvider::NickToolBar);
+
+#ifdef HAVE_KDE
+  _mainToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+  //_nickToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 #endif
 }
 
@@ -546,9 +587,20 @@ void MainWin::setConnectedState() {
       action->setVisible(!Client::internalCore());
   }
 
+  disconnect(Client::backlogManager(), SIGNAL(updateProgress(int, int)), msgProcessorStatusWidget, SLOT(setProgress(int, int)));
+  disconnect(Client::backlogManager(), SIGNAL(messagesRequested(const QString &)), this, SLOT(showStatusBarMessage(const QString &)));
+  disconnect(Client::backlogManager(), SIGNAL(messagesProcessed(const QString &)), this, SLOT(showStatusBarMessage(const QString &)));
+  if(!Client::internalCore()) {
+    connect(Client::backlogManager(), SIGNAL(updateProgress(int, int)), msgProcessorStatusWidget, SLOT(setProgress(int, int)));
+    connect(Client::backlogManager(), SIGNAL(messagesRequested(const QString &)), this, SLOT(showStatusBarMessage(const QString &)));
+    connect(Client::backlogManager(), SIGNAL(messagesProcessed(const QString &)), this, SLOT(showStatusBarMessage(const QString &)));
+  }
+
   // _viewMenu->setEnabled(true);
   if(!Client::internalCore())
     statusBar()->showMessage(tr("Connected to core."));
+  else
+    statusBar()->clearMessage();
 
   if(Client::signalProxy()->isSecure()) {
     sslLabel->setPixmap(SmallIcon("security-high"));
@@ -615,6 +667,8 @@ void MainWin::setDisconnectedState() {
   sslLabel->hide();
   updateLagIndicator();
   coreLagLabel->hide();
+  if(msgProcessorStatusWidget)
+    msgProcessorStatusWidget->setProgress(0, 0);
   updateIcon();
 }
 
@@ -645,6 +699,21 @@ void MainWin::showChannelList(NetworkId netId) {
 
 void MainWin::showCoreInfoDlg() {
   CoreInfoDlg(this).exec();
+}
+
+void MainWin::showAwayLog() {
+  if(_awayLog)
+    return;
+  AwayLogFilter *filter = new AwayLogFilter(Client::messageModel());
+  _awayLog = new AwayLogView(filter, 0);
+  filter->setParent(_awayLog);
+  connect(_awayLog, SIGNAL(destroyed()), this, SLOT(awayLogDestroyed()));
+  _awayLog->setAttribute(Qt::WA_DeleteOnClose);
+  _awayLog->show();
+}
+
+void MainWin::awayLogDestroyed() {
+  _awayLog = 0;
 }
 
 void MainWin::showSettingsDlg() {
@@ -684,7 +753,7 @@ void MainWin::closeEvent(QCloseEvent *event) {
   QtUiApplication* app = qobject_cast<QtUiApplication*> qApp;
   Q_ASSERT(app);
   if(!app->aboutToQuit() && s.value("UseSystemTrayIcon").toBool() && s.value("MinimizeOnClose").toBool()) {
-    hideToTray();
+    toggleMinimizedToTray();
     event->ignore();
   } else {
     event->accept();
@@ -734,7 +803,7 @@ void MainWin::messagesInserted(const QModelIndex &parent, int start, int end) {
       continue;
     }
     Message::Flags flags = (Message::Flags)idx.data(ChatLineModel::FlagsRole).toInt();
-    if(flags.testFlag(Message::Backlog)) continue;
+    if(flags.testFlag(Message::Backlog) || flags.testFlag(Message::Self)) continue;
     flags |= Message::Backlog;  // we only want to trigger a highlight once!
     Client::messageModel()->setData(idx, (int)flags, ChatLineModel::FlagsRole);
 

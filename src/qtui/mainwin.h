@@ -36,6 +36,7 @@
 class ActionCollection;
 class BufferView;
 class BufferViewConfig;
+class ClientBufferViewConfig;
 class BufferViewDock;
 class BufferWidget;
 class InputWidget;
@@ -45,6 +46,7 @@ class SystemTrayIcon;
 
 class QMenu;
 class QLabel;
+class QToolBar;
 
 class KHelpMenu;
 
@@ -63,7 +65,7 @@ class MainWin
 
     void init();
 
-    void addBufferView(BufferViewConfig *config);
+    void addBufferView(ClientBufferViewConfig *config);
     BufferView *allBuffersView() const;
 
     inline QSystemTrayIcon *systemTrayIcon() const;
@@ -92,6 +94,7 @@ class MainWin
 
   private slots:
     void addBufferView(int bufferViewConfigId);
+    void awayLogDestroyed();
     void removeBufferView(int bufferViewConfigId);
     void messagesInserted(const QModelIndex &parent, int start, int end);
     void showAboutDlg();
@@ -99,6 +102,7 @@ class MainWin
     void startInternalCore();
     void showCoreConnectionDlg(bool autoConnect = false);
     void showCoreInfoDlg();
+    void showAwayLog();
     void showSettingsDlg();
     void showNotificationsDlg();
 #ifdef HAVE_KDE
@@ -106,7 +110,7 @@ class MainWin
 #endif
     void on_actionConfigureNetworks_triggered();
     void on_actionConfigureViews_triggered();
-    void on_actionLockDockPositions_toggled(bool lock);
+    void on_actionLockLayout_toggled(bool lock);
     void on_actionDebugNetworkModel_triggered();
     void on_actionDebugMessageModel_triggered();
     void on_actionDebugLog_triggered();
@@ -147,6 +151,7 @@ class MainWin
     void setupStatusBar();
     void setupSystray();
     void setupTitleSetter();
+    void setupToolBars();
 
     void updateIcon();
     void hideToTray();
@@ -161,7 +166,10 @@ class MainWin
     InputWidget *_inputWidget;
 
     QMenu *_fileMenu, *_networksMenu, *_viewMenu, *_bufferViewsMenu, *_settingsMenu, *_helpMenu, *_helpDebugMenu;
+    QMenu *_toolbarMenu;
+    QToolBar *_mainToolBar, *_chatViewToolBar, *_nickToolBar;
 
+    QWidget *_awayLog;
     friend class QtUi;
 };
 
