@@ -446,10 +446,13 @@ bool BufferViewFilter::bufferLessThan(const QModelIndex &source_left, const QMod
 
 bool BufferViewFilter::networkLessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
 {
-    // NetworkId leftNetworkId = sourceModel()->data(source_left, NetworkModel::NetworkIdRole).value<NetworkId>();
-    // NetworkId rightNetworkId = sourceModel()->data(source_right, NetworkModel::NetworkIdRole).value<NetworkId>();
+  NetworkId leftNetworkId = sourceModel()->data(source_left, NetworkModel::NetworkIdRole).value<NetworkId>();
+  NetworkId rightNetworkId = sourceModel()->data(source_right, NetworkModel::NetworkIdRole).value<NetworkId>();
 
+  if(config() && config()->sortAlphabetically())
     return QSortFilterProxyModel::lessThan(source_left, source_right);
+  else
+    return leftNetworkId < rightNetworkId;
 }
 
 
