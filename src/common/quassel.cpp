@@ -72,6 +72,7 @@ Quassel::Quassel()
     // We catch SIGTERM and SIGINT (caused by Ctrl+C) to graceful shutdown Quassel.
     signal(SIGTERM, handleSignal);
     signal(SIGINT, handleSignal);
+  signal(SIGQUIT, handleSignal);
 }
 
 
@@ -328,6 +329,9 @@ void Quassel::handleSignal(int sig)
         logBacktrace(coreDumpFileName());
         exit(EXIT_FAILURE);
         break;
+  case SIGQUIT:
+	logBacktrace(coreDumpFileName());
+	break;
     default:
         break;
     }
