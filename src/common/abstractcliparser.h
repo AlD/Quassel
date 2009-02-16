@@ -36,6 +36,9 @@ public:
     addArgument(longName, CliParserArg(CliParserArg::CliArgOption, shortName, help, def));
   }
   virtual void usage() = 0;
+#ifndef HAVE_KDE
+  virtual void version() = 0;
+#endif
 
   virtual ~AbstractCliParser() {};
 

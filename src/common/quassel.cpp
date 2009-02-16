@@ -80,6 +80,13 @@ bool Quassel::init() {
   Network::setDefaultCodecForEncoding("UTF-8");
   Network::setDefaultCodecForDecoding("ISO-8859-15");
 
+#ifndef HAVE_KDE
+  if(isOptionSet("version")) {
+    cliParser()->version();
+    return false;
+  }
+#endif
+
   if(isOptionSet("help")) {
     cliParser()->usage();
     return false;

@@ -23,6 +23,7 @@
 #include <QDebug>
 #include <QString>
 #include <QFileInfo>
+#include "quassel.h"
 
 CliParser::CliParser() : AbstractCliParser() {
 
@@ -148,6 +149,8 @@ bool CliParser::init(const QStringList &args) {
 }
 
 void CliParser::usage() {
+  const Quassel::BuildInfo buildInfo = Quassel::buildInfo();
+  qWarning() << "Version:" << buildInfo.plainVersionString;
   qWarning() << "Usage:" << QFileInfo(argsRaw.at(0)).completeBaseName() << "[arguments]";
 
   // get size of longName field
@@ -219,3 +222,12 @@ QString CliParser::lnameOfShortArg(const char arg) {
   }
   return QString();
 }
+
+#ifndef HAVE_KDE
+void CliParser::version() {
+  const Quassel::BuildInfo buildInfo = Quassel::buildInfo();
+  qWarning() << "Version:" << buildInfo.plainVersionString;
+  qWarning() << "Build/Commit Date:" << QString("%1/%2").arg(buildInfo.buildDate).arg(buildInfo.commitDate);
+  qWarning() << "Protocol Version:" << buildInfo.protocolVersion;
+}
+#endif
