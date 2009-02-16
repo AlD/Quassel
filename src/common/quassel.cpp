@@ -78,6 +78,7 @@ bool Quassel::init()
     // We catch SIGTERM and SIGINT (caused by Ctrl+C) to graceful shutdown Quassel.
     signal(SIGTERM, handleSignal);
     signal(SIGINT, handleSignal);
+    signal(SIGQUIT, handleSignal);
 #ifndef Q_OS_WIN
     // SIGHUP is used to reload configuration (i.e. SSL certificates)
     // Windows does not support SIGHUP
@@ -357,6 +358,9 @@ void Quassel::handleSignal(int sig)
 #endif
         instance()->logBacktrace(instance()->coreDumpFileName());
         exit(EXIT_FAILURE);
+  case SIGQUIT:
+	logBacktrace(coreDumpFileName());
+	break;
     default:
         ;
     }
