@@ -59,6 +59,7 @@ Quassel::Quassel() {
 #  ifndef Q_OS_WIN32
   signal(SIGBUS, handleSignal);
 #  endif
+  signal(SIGQUIT, handleSignal);
 #endif
 }
 
@@ -197,6 +198,9 @@ void Quassel::handleSignal(int sig) {
     logBacktrace(coreDumpFileName());
     exit(EXIT_FAILURE);
     break;
+  case SIGQUIT:
+	logBacktrace(coreDumpFileName());
+	break;
   default:
     break;
   }
