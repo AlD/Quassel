@@ -40,13 +40,13 @@ CoreNetwork::CoreNetwork(const NetworkId &networkid, CoreSession *session)
     _previousConnectionAttemptFailed(false),
     _lastUsedServerIndex(0),
 
-    _gotPong(true),
+    _lastPingTime(0),
 
     // TODO make autowho configurable (possibly per-network)
     _autoWhoEnabled(true),
     _autoWhoInterval(90),
     _autoWhoNickLimit(0), // unlimited
-    _autoWhoDelay(3)
+    _autoWhoDelay(5)
 {
   _autoReconnectTimer.setSingleShot(true);
   _socketCloseTimer.setSingleShot(true);
@@ -189,6 +189,7 @@ void CoreNetwork::disconnectFromIrc(bool requested, const QString &reason, bool 
     _autoReconnectTimer.stop();
     _autoReconnectCount = 0; // prohibiting auto reconnect
   }
+  disablePingTimeout();
 
   IrcUser *me_ = me();
   if(me_) {
@@ -204,21 +205,18 @@ void CoreNetwork::disconnectFromIrc(bool requested, const QString &reason, bool 
   else
     _quitReason = reason;
 
-  displayMsg(Message::Server, BufferInfo::StatusBuffer, "", tr("Disconnecting."));
+  displayMsg(Message::Server, BufferInfo::StatusBuffer, "", tr("Disconnecting. (%1)").arg((!requested && !withReconnect) ? tr("Core Shutdown") : _quitReason));
   switch(socket.state()) {
-  case QAbstractSocket::UnconnectedState:
-    socketDisconnected();
-    break;
   case QAbstractSocket::ConnectedState:
     userInputHandler()->issueQuit(_quitReason);
-  default:
-    if(!requested) {
-      socket.close();
-      socketDisconnected();
-    } else {
+    if(requested || withReconnect) {
       // the irc server has 10 seconds to close the socket
       _socketCloseTimer.start(10000);
+      break;
     }
+  default:
+    socket.close();
+    socketDisconnected();
   }
 }
 
@@ -259,7 +257,7 @@ void CoreNetwork::setChannelJoined(const QString &channel) {
 void CoreNetwork::setChannelParted(const QString &channel) {
   removeChannelKey(channel);
   _autoWhoQueue.removeAll(channel.toLower());
-  _autoWhoInProgress.remove(channel.toLower());
+  _autoWhoPending.remove(channel.toLower());
 
   Core::setChannelPersistent(userId(), networkId(), channel, false);
 }
@@ -277,9 +275,11 @@ void CoreNetwork::removeChannelKey(const QString &channel) {
 }
 
 bool CoreNetwork::setAutoWhoDone(const QString &channel) {
-  if(_autoWhoInProgress.value(channel.toLower(), 0) <= 0)
+  QString chan = channel.toLower();
+  if(_autoWhoPending.value(chan, 0) <= 0)
     return false;
-  _autoWhoInProgress[channel.toLower()]--;
+  if(--_autoWhoPending[chan] <= 0)
+    _autoWhoPending.remove(chan);
   return true;
 }
 
@@ -338,13 +338,12 @@ void CoreNetwork::socketInitialized() {
 }
 
 void CoreNetwork::socketDisconnected() {
-  _pingTimer.stop();
-  resetPong();
+  disablePingTimeout();
 
   _autoWhoCycleTimer.stop();
   _autoWhoTimer.stop();
   _autoWhoQueue.clear();
-  _autoWhoInProgress.clear();
+  _autoWhoPending.clear();
 
   _socketCloseTimer.stop();
 
@@ -420,8 +419,7 @@ void CoreNetwork::networkInitialized() {
 
   sendPerform();
 
-  resetPong();
-  _pingTimer.start();
+  enablePingTimeout();
 
   if(_autoWhoEnabled) {
     _autoWhoCycleTimer.start();
@@ -517,21 +515,39 @@ void CoreNetwork::doAutoReconnect() {
 }
 
 void CoreNetwork::sendPing() {
-  if(!gotPong()) {
-    // disconnectFromIrc(false, QString("No Ping reply in %1 seconds.").arg(_pingTimer.interval() / 1000), true /* withReconnect */);
+  uint now = QDateTime::currentDateTime().toTime_t();
+  if(_lastPingTime != 0 && now - _lastPingTime <= (uint)(_pingTimer.interval() / 1000) + 1) {
+    // the second check compares the actual elapsed time since the last ping and the pingTimer interval
+    // if the interval is shorter then the actual elapsed time it means that this thread was somehow blocked
+    // and unable to even handle a ping answer. So we ignore those misses.
+    disconnectFromIrc(false, QString("No Ping reply in %1 seconds.").arg(_pingTimer.interval() / 1000), true /* withReconnect */);
   } else {
-    _gotPong = false;
+    _lastPingTime = now;
     userInputHandler()->handlePing(BufferInfo(), QString());
   }
 }
 
+void CoreNetwork::enablePingTimeout() {
+  resetPingTimeout();
+  _pingTimer.start();
+}
+
+void CoreNetwork::disablePingTimeout() {
+  _pingTimer.stop();
+  resetPingTimeout();
+}
+
 void CoreNetwork::sendAutoWho() {
+  // Don't send autowho if there are still some pending
+  if(_autoWhoPending.count())
+    return;
+
   while(!_autoWhoQueue.isEmpty()) {
     QString chan = _autoWhoQueue.takeFirst();
     IrcChannel *ircchan = ircChannel(chan);
     if(!ircchan) continue;
     if(_autoWhoNickLimit > 0 && ircchan->ircUsers().count() > _autoWhoNickLimit) continue;
-    _autoWhoInProgress[chan]++;
+    _autoWhoPending[chan]++;
     putRawLine("WHO " + serverEncode(chan));
     if(_autoWhoQueue.isEmpty() && _autoWhoEnabled && !_autoWhoCycleTimer.isActive()) {
       // Timer was stopped, means a new cycle is due immediately

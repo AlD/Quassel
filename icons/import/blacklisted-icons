@@ -1,4 +1,3 @@
-quassel_disconnected
-quassel_newmessage
-
-
+quassel_inactive
+irc-channel-active
+irc-channel-inactive

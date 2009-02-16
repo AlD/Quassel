@@ -30,6 +30,7 @@ set(SOURCES
     debuglogwidget.cpp
     debugmessagemodelfilter.cpp
     inputwidget.cpp
+    ircconnectionwizard.cpp
     jumpkeyhandler.cpp
     mainpage.cpp
     mainwin.cpp
@@ -43,6 +44,8 @@ set(SOURCES
     sessionsettings.cpp
     settingsdlg.cpp
     settingspagedlg.cpp
+    simplenetworkeditor.cpp
+    systemtray.cpp
     systraynotificationbackend.cpp
     taskbarnotificationbackend.cpp
     titlesetter.cpp
@@ -73,6 +76,7 @@ set(MOC_HDRS
     debuglogwidget.h
     debugmessagemodelfilter.h
     inputwidget.h
+    ircconnectionwizard.h
     jumpkeyhandler.h
     mainpage.h
     mainwin.h
@@ -83,6 +87,8 @@ set(MOC_HDRS
     qtuimessageprocessor.h
     settingsdlg.h
     settingspagedlg.h
+    simplenetworkeditor.h
+    systemtray.h
     systraynotificationbackend.h
     taskbarnotificationbackend.h
     titlesetter.h
@@ -118,6 +124,7 @@ set(FORMS
     nicklistwidget.ui
     settingsdlg.ui
     settingspagedlg.ui
+    simplenetworkeditor.ui
     topicwidget.ui)
 
 if(HAVE_KDE)
@@ -166,6 +173,7 @@ qt4_wrap_ui(UI ${FORMPATH} ${SPFRM})
 include_directories(${CMAKE_SOURCE_DIR}/src/common
                     ${CMAKE_SOURCE_DIR}/src/client
                     ${CMAKE_SOURCE_DIR}/src/qtui
+                    ${CMAKE_SOURCE_DIR}/src/qtui/settingspages
                     ${CMAKE_SOURCE_DIR}/src/uisupport
                     ${CMAKE_CURRENT_BINARY_DIR})
 

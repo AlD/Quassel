@@ -75,7 +75,7 @@ public:
 
   inline QString channelKey(const QString &channel) const { return _channelKeys.value(channel.toLower(), QString()); }
 
-  inline bool isAutoWhoInProgress(const QString &channel) const { return _autoWhoInProgress.value(channel.toLower(), 0); }
+  inline bool isAutoWhoInProgress(const QString &channel) const { return _autoWhoPending.value(channel.toLower(), 0); }
 
   inline UserId userId() const { return _coreSession->user(); }
 
@@ -106,8 +106,7 @@ public slots:
 
   Server usedServer() const;
 
-  inline void resetPong() { _gotPong = true; }
-  inline bool gotPong() { return _gotPong; }
+  inline void resetPingTimeout() { _lastPingTime = 0; }
 
 signals:
   void recvRawServerMsg(QString);
@@ -135,6 +134,8 @@ private slots:
   void restoreUserModes();
   void doAutoReconnect();
   void sendPing();
+  void enablePingTimeout();
+  void disablePingTimeout();
   void sendAutoWho();
   void startAutoWhoCycle();
 
@@ -176,11 +177,11 @@ private:
   int _lastUsedServerIndex;
 
   QTimer _pingTimer;
-  bool _gotPong;
+  uint _lastPingTime;
 
   bool _autoWhoEnabled;
   QStringList _autoWhoQueue;
-  QHash<QString, int> _autoWhoInProgress;
+  QHash<QString, int> _autoWhoPending;
   int _autoWhoInterval;
   int _autoWhoNickLimit;
   int _autoWhoDelay;

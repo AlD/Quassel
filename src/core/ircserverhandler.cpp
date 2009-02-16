@@ -88,11 +88,16 @@ void IrcServerHandler::handleServerMsg(QByteArray msg) {
   uint num = cmd.toUInt();
   if(num > 0) {
     if(params.count() == 0) {
-      qWarning() << "Message received from server violates RFC and is ignored!";
+      qWarning() << "Message received from server violates RFC and is ignored!" << msg;
       return;
     }
-    params.removeFirst();
+    _target = serverDecode(params.takeFirst());
+  } else {
+    _target = QString();
   }
+
+  // note that the IRC server is still alive
+  network()->resetPingTimeout();
 
   // Now we try to find a handler for this message. BTW, I do love the Trolltech guys ;-)
   handle(cmd, Q_ARG(QString, prefix), Q_ARG(QList<QByteArray>, params));
@@ -384,8 +389,6 @@ void IrcServerHandler::handlePong(const QString &prefix, const QList<QByteArray>
   // but using quote and whatnought one can send arbitrary pings, so we have to do some sanity checks
   if(params.count() < 2)
     return;
-
-  network()->resetPong();
 
   QString timestamp = serverDecode(params[1]);
   QTime sendTime = QTime::fromString(timestamp, "hh:mm:ss.zzz");
@@ -934,20 +937,19 @@ void IrcServerHandler::handle369(const QString &prefix, const QList<QByteArray> 
 void IrcServerHandler::handle432(const QString &prefix, const QList<QByteArray> &params) {
   Q_UNUSED(prefix);
 
+  QString errnick;
   if(params.size() < 2) {
     // handle unreal-ircd bug, where unreal ircd doesnt supply a TARGET in ERR_ERRONEUSNICKNAME during registration phase:
     // nick @@@
     // :irc.scortum.moep.net 432  @@@ :Erroneous Nickname: Illegal characters
     // correct server reply:
     // :irc.scortum.moep.net 432 * @@@ :Erroneous Nickname: Illegal characters
-    emit displayMsg(Message::Error, BufferInfo::StatusBuffer, "", tr("There is a nickname in your identity's nicklist which contains illegal characters"));
-    emit displayMsg(Message::Error, BufferInfo::StatusBuffer, "", tr("Due to a bug in Unreal IRCd (and maybe other irc-servers too) we're unable to determine the erroneous nick"));
-    emit displayMsg(Message::Error, BufferInfo::StatusBuffer, "", tr("Please use: /nick <othernick> to continue or clean up your nicklist"));
+    errnick = target();
   } else {
-    QString errnick = params[0];
-    emit displayMsg(Message::Error, BufferInfo::StatusBuffer, "", tr("Nick %1 contains illegal characters").arg(errnick));
-    tryNextNick(errnick);
+    errnick = params[0];
   }
+  emit displayMsg(Message::Error, BufferInfo::StatusBuffer, "", tr("Nick %1 contains illegal characters").arg(errnick));
+  tryNextNick(errnick, true /* erroneus */);
 }
 
 /* ERR_NICKNAMEINUSE */
@@ -974,14 +976,21 @@ void IrcServerHandler::handle433(const QString &prefix, const QList<QByteArray> 
 
 /* */
 
-void IrcServerHandler::tryNextNick(const QString &errnick) {
+void IrcServerHandler::tryNextNick(const QString &errnick, bool erroneus) {
   QStringList desiredNicks = coreSession()->identity(network()->identity())->nicks();
-  int nextNick = desiredNicks.indexOf(errnick) + 1;
-  if(desiredNicks.size() > nextNick) {
-    putCmd("NICK", serverEncode(desiredNicks[nextNick]));
+  int nextNickIdx = desiredNicks.indexOf(errnick) + 1;
+  QString nextNick;
+  if(nextNickIdx > 0 && desiredNicks.size() > nextNickIdx) {
+    nextNick = desiredNicks[nextNickIdx];
   } else {
-    emit displayMsg(Message::Error, BufferInfo::StatusBuffer, "", tr("No free and valid nicks in nicklist found. use: /nick <othernick> to continue"));
+    if(erroneus) {
+      emit displayMsg(Message::Error, BufferInfo::StatusBuffer, "", tr("No free and valid nicks in nicklist found. use: /nick <othernick> to continue"));
+      return;
+    } else {
+      nextNick = errnick + "_";
+    }
   }
+  putCmd("NICK", serverEncode(nextNick));
 }
 
 bool IrcServerHandler::checkParamCount(const QString &methodName, const QList<QByteArray> &params, int minParams) {

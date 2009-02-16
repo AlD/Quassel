@@ -88,7 +88,10 @@ QString Identity::defaultNick() {
     nick = shortUserName;
 
 #elif defined(Q_OS_UNIX)
-  QString userName = getlogin();
+  QString userName;
+  struct passwd *pwd = getpwuid(getuid());
+  if(pwd)
+    userName = pwd->pw_name;
   if(!userName.isEmpty())
     nick = userName;
 
@@ -144,8 +147,7 @@ QString Identity::defaultRealName() {
 void Identity::setToDefaults() {
   setIdentityName(tr("<empty>"));
   setRealName(defaultRealName());
-  QString defNick = defaultNick();
-  QStringList n = QStringList() << defNick << defNick + "_" << defNick + "__";
+  QStringList n = QStringList() << defaultNick();
   setNicks(n);
   setAwayNick("");
   setAwayNickEnabled(false);

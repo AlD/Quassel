@@ -55,6 +55,7 @@
 #include "inputwidget.h"
 #include "inputline.h"
 #include "irclistmodel.h"
+#include "ircconnectionwizard.h"
 #include "jumpkeyhandler.h"
 #include "msgprocessorstatuswidget.h"
 #include "nicklistwidget.h"
@@ -64,6 +65,7 @@
 #include "sessionsettings.h"
 #include "settingsdlg.h"
 #include "settingspagedlg.h"
+#include "systemtray.h"
 #include "toolbaractionprovider.h"
 #include "topicwidget.h"
 #include "verticaldock.h"
@@ -105,7 +107,6 @@ MainWin::MainWin(QWidget *parent)
     sslLabel(new QLabel()),
     msgProcessorStatusWidget(new MsgProcessorStatusWidget()),
     _titleSetter(this),
-    _trayIcon(new QSystemTrayIcon(this)),
     _awayLog(0)
 {
   QtUiSettings uiSettings;
@@ -137,6 +138,8 @@ void MainWin::init() {
   connect(QApplication::instance(), SIGNAL(aboutToQuit()), SLOT(saveLayout()));
   connect(Client::instance(), SIGNAL(networkCreated(NetworkId)), SLOT(clientNetworkCreated(NetworkId)));
   connect(Client::instance(), SIGNAL(networkRemoved(NetworkId)), SLOT(clientNetworkRemoved(NetworkId)));
+  connect(Client::messageModel(), SIGNAL(rowsInserted(const QModelIndex &, int, int)),
+           SLOT(messagesInserted(const QModelIndex &, int, int)));
   connect(GraphicalUi::contextMenuActionProvider(), SIGNAL(showChannelList(NetworkId)), SLOT(showChannelList(NetworkId)));
 
   // Setup Dock Areas
@@ -182,6 +185,7 @@ void MainWin::init() {
   setDisconnectedState();  // Disable menus and stuff
 
   show();
+
   if(Quassel::runMode() != Quassel::Monolithic) {
     showCoreConnectionDlg(true); // autoconnect if appropriate
   } else {
@@ -197,14 +201,19 @@ MainWin::~MainWin() {
 }
 
 void MainWin::updateIcon() {
+#ifdef Q_WS_MAC
+  const int size = 128;
+#else
+  const int size = 48;
+#endif
+
   QPixmap icon;
   if(Client::isConnected())
-    icon = DesktopIcon("quassel", IconLoader::SizeEnormous);
+    icon = DesktopIcon("quassel", size);
   else
-    icon = DesktopIcon("quassel_disconnected", IconLoader::SizeEnormous);
+    icon = DesktopIcon("quassel_inactive", size);
   setWindowIcon(icon);
   qApp->setWindowIcon(icon);
-  systemTrayIcon()->setIcon(icon);
 }
 
 void MainWin::setupActions() {
@@ -507,27 +516,12 @@ void MainWin::saveStatusBarStatus(bool enabled) {
 }
 
 void MainWin::setupSystray() {
-  connect(Client::messageModel(), SIGNAL(rowsInserted(const QModelIndex &, int, int)),
-                                  SLOT(messagesInserted(const QModelIndex &, int, int)));
-
-  ActionCollection *coll = QtUi::actionCollection("General");
-  systrayMenu = new QMenu(this);
-  systrayMenu->addAction(coll->action("ConnectCore"));
-  systrayMenu->addAction(coll->action("DisconnectCore"));
-  systrayMenu->addAction(coll->action("CoreInfo"));
-  systrayMenu->addSeparator();
-  systrayMenu->addAction(coll->action("Quit"));
-
-  systemTrayIcon()->setContextMenu(systrayMenu);
-
-  QtUiSettings s;
-  if(s.value("UseSystemTrayIcon", QVariant(true)).toBool()) {
-    systemTrayIcon()->show();
-  }
+  _systemTray = new SystemTray(this);
 
 #ifndef Q_WS_MAC
-  connect(systemTrayIcon(), SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(systrayActivated(QSystemTrayIcon::ActivationReason)));
+  connect(systemTray(), SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(systrayActivated(QSystemTrayIcon::ActivationReason)));
 #endif
+
 }
 
 void MainWin::setupToolBars() {
@@ -540,7 +534,8 @@ void MainWin::setupToolBars() {
   setUnifiedTitleAndToolBarOnMac(true);
 #endif
   _mainToolBar = addToolBar("Main Toolbar");
-  // _mainToolBar->setObjectName("MainToolBar"); // setting an object name breaks setUnifiedTitleAndToolBarOnMac... -.-
+  _mainToolBar->setObjectName("MainToolBar");
+
   QtUi::toolBarActionProvider()->addActions(_mainToolBar, ToolBarActionProvider::MainToolBar);
   _toolbarMenu->addAction(_mainToolBar->toggleViewAction());
 
@@ -611,6 +606,12 @@ void MainWin::setConnectedState() {
   sslLabel->setVisible(!Client::internalCore());
   coreLagLabel->setVisible(!Client::internalCore());
   updateIcon();
+  systemTray()->setState(SystemTray::Active);
+
+  if(Client::networkIds().isEmpty()) {
+    IrcConnectionWizard *wizard = new IrcConnectionWizard(this, Qt::Sheet);
+    wizard->show();
+  }
 }
 
 void MainWin::loadLayout() {
@@ -670,6 +671,7 @@ void MainWin::setDisconnectedState() {
   if(msgProcessorStatusWidget)
     msgProcessorStatusWidget->setProgress(0, 0);
   updateIcon();
+  systemTray()->setState(SystemTray::Inactive);
 }
 
 void MainWin::startInternalCore() {
@@ -720,20 +722,20 @@ void MainWin::showSettingsDlg() {
   SettingsDlg *dlg = new SettingsDlg();
 
   //Category: Appearance
+  dlg->registerSettingsPage(new AppearanceSettingsPage(dlg)); //General
   dlg->registerSettingsPage(new ColorSettingsPage(dlg));
   dlg->registerSettingsPage(new FontsSettingsPage(dlg));
-  dlg->registerSettingsPage(new AppearanceSettingsPage(dlg)); //General
-  //Category: Behaviour
-  dlg->registerSettingsPage(new GeneralSettingsPage(dlg));
-  dlg->registerSettingsPage(new BacklogSettingsPage(dlg));
   dlg->registerSettingsPage(new HighlightSettingsPage(dlg));
-  dlg->registerSettingsPage(new AliasesSettingsPage(dlg));
   dlg->registerSettingsPage(new NotificationsSettingsPage(dlg));
+  dlg->registerSettingsPage(new BacklogSettingsPage(dlg));
+  dlg->registerSettingsPage(new BufferViewSettingsPage(dlg));
   dlg->registerSettingsPage(new ChatMonitorSettingsPage(dlg));
-  //Category: General
+
+  //Category: Misc
+  dlg->registerSettingsPage(new GeneralSettingsPage(dlg));
   dlg->registerSettingsPage(new IdentitiesSettingsPage(dlg));
   dlg->registerSettingsPage(new NetworksSettingsPage(dlg));
-  dlg->registerSettingsPage(new BufferViewSettingsPage(dlg));
+  dlg->registerSettingsPage(new AliasesSettingsPage(dlg));
 
   dlg->show();
 }
@@ -768,14 +770,13 @@ void MainWin::systrayActivated(QSystemTrayIcon::ActivationReason activationReaso
 }
 
 void MainWin::hideToTray() {
-  if(!systemTrayIcon()->isSystemTrayAvailable()) {
+  if(!systemTray()->isSystemTrayAvailable()) {
     qWarning() << Q_FUNC_INFO << "was called with no SystemTray available!";
     return;
   }
-
   clearFocus();
   hide();
-  systemTrayIcon()->show();
+  systemTray()->setIconVisible();
 }
 
 void MainWin::toggleMinimizedToTray() {
@@ -783,6 +784,7 @@ void MainWin::toggleMinimizedToTray() {
     // restore
     setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
     show();
+    activateWindow();
     raise();
   } else {
     setWindowState((windowState() & ~Qt::WindowActive) | Qt::WindowMinimized);
