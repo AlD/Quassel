@@ -244,20 +244,10 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="0" >
-             <widget class="QCheckBox" name="awayReasonEnabled" >
-              <property name="toolTip" >
-               <string>Default away reason</string>
-              </property>
-              <property name="text" >
-               <string>Away Reason:</string>
-              </property>
-             </widget>
-            </item>
             <item row="1" column="1" >
              <widget class="QLineEdit" name="awayReason" >
               <property name="enabled" >
-               <bool>false</bool>
+               <bool>true</bool>
               </property>
               <property name="toolTip" >
                <string>Default away reason</string>
@@ -265,15 +255,16 @@
              </widget>
             </item>
             <item row="0" column="0" >
-             <widget class="QCheckBox" name="awayNickEnabled" >
-              <property name="enabled" >
-               <bool>false</bool>
-              </property>
-              <property name="toolTip" >
-               <string>Nick to be used when being away</string>
-              </property>
+             <widget class="QLabel" name="awayNickLabel" >
               <property name="text" >
                <string>Away Nick:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" >
+             <widget class="QLabel" name="awayReasonLabel" >
+              <property name="text" >
+               <string>Away Reason:</string>
               </property>
              </widget>
             </item>
@@ -300,24 +291,14 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout" >
             <item>
-             <widget class="QCheckBox" name="detachAwayReasonEnabled" >
-              <property name="toolTip" >
-               <string>Override default away reason for auto-away on detach</string>
-              </property>
+             <widget class="QLabel" name="label_13" >
               <property name="text" >
                <string>Away Reason:</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="detachAwayReason" >
-              <property name="enabled" >
-               <bool>false</bool>
-              </property>
-              <property name="toolTip" >
-               <string>Override default away reason for auto-away on detach</string>
-              </property>
-             </widget>
+             <widget class="QLineEdit" name="detachAwayReason" />
             </item>
            </layout>
           </item>

@@ -60,6 +60,10 @@ BufferView::BufferView(QWidget *parent)
   BufferViewDelegate *tristateDelegate = new BufferViewDelegate(this);
   setItemDelegate(tristateDelegate);
   delete oldDelegate;
+
+  UiStyleSettings s("QtUiStyle/Fonts"); // li'l dirty here, but fonts are stored in QtUiStyle :/
+  s.notify("BufferView", this, SLOT(setCustomFont(QVariant)));
+  setCustomFont(s.value("BufferView", QFont()));
 }
 
 void BufferView::init() {
@@ -82,9 +86,11 @@ void BufferView::init() {
 
   // activated() fails on X11 and Qtopia at least
 #if defined Q_WS_QWS || defined Q_WS_X11
+  disconnect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(joinChannel(QModelIndex)));
   connect(this, SIGNAL(doubleClicked(QModelIndex)), SLOT(joinChannel(QModelIndex)));
 #else
   // afaik this is better on Mac and Windows
+  disconnect(this, SIGNAL(activated(QModelIndex)), this, SLOT(joinChannel(QModelIndex)));
   connect(this, SIGNAL(activated(QModelIndex)), SLOT(joinChannel(QModelIndex)));
 #endif
 }
@@ -116,6 +122,7 @@ void BufferView::setModel(QAbstractItemModel *model) {
     header()->addAction(showSection);
   }
 
+  connect(model, SIGNAL(layoutChanged()), this, SLOT(on_layoutChanged()));
 }
 
 void BufferView::setFilteredModel(QAbstractItemModel *model_, BufferViewConfig *config) {
@@ -186,6 +193,13 @@ void BufferView::setRootIndexForNetworkId(const NetworkId &networkId) {
         setRootIndex(child);
     }
   }
+}
+
+void BufferView::setCustomFont(const QVariant &v) {
+  QFont font = v.value<QFont>();
+  if(font.family().isEmpty())
+    font = QApplication::font();
+  setFont(font);
 }
 
 void BufferView::joinChannel(const QModelIndex &index) {
@@ -270,17 +284,21 @@ void BufferView::removeSelectedBuffers(bool permanently) {
   }
 }
 
-void BufferView::rowsInserted(const QModelIndex & parent, int start, int end) {
+void BufferView::rowsInserted(const QModelIndex &parent, int start, int end) {
   QTreeView::rowsInserted(parent, start, end);
 
   // ensure that newly inserted network nodes are expanded per default
   if(parent.data(NetworkModel::ItemTypeRole) != NetworkModel::NetworkItemType)
     return;
 
-  if(model()->rowCount(parent) == 1 && parent.data(NetworkModel::ItemActiveRole) == true) {
-    // without updating the parent the expand will have no effect... Qt Bug?
-    update(parent);
-    expand(parent);
+  setExpandedState(parent);
+}
+
+void BufferView::on_layoutChanged() {
+  int numNets = model()->rowCount(QModelIndex());
+  for(int row = 0; row < numNets; row++) {
+    QModelIndex networkIdx = model()->index(row, 0, QModelIndex());
+    setExpandedState(networkIdx);
   }
 }
 
@@ -299,7 +317,6 @@ void BufferView::on_configChanged() {
     if(!networkId.isValid())
       continue;
 
-    update(networkIdx);
     setExpandedState(networkIdx);
   }
 
@@ -307,8 +324,6 @@ void BufferView::on_configChanged() {
     // update selection to current one
     Client::bufferModel()->synchronizeView(this);
   }
-
-  return;
 }
 
 void BufferView::storeExpandedState(const QModelIndex &networkIdx) {
@@ -340,9 +355,11 @@ void BufferView::setExpandedState(const QModelIndex &networkIdx) {
       expandNetwork = (bool)(oldState & WasExpanded);
   }
 
-  storeExpandedState(networkIdx); // this call is needed to keep track of the isActive state
-  if(expandNetwork != isExpanded(networkIdx))
+  if(expandNetwork != isExpanded(networkIdx)) {
+    update(networkIdx);
     setExpanded(networkIdx, expandNetwork);
+  }
+  storeExpandedState(networkIdx); // this call is needed to keep track of the isActive state
 }
 
 void BufferView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight) {
