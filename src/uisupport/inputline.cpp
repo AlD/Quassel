@@ -126,6 +126,8 @@ void InputLine::on_returnPressed() {
 
 void InputLine::on_textChanged(QString newText) {
   Q_UNUSED(newText);
+#ifdef Q_WS_MAC
+#endif
   return;
 }
 
