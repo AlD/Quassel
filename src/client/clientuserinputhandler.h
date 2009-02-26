@@ -18,52 +18,28 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#ifndef TABCOMPLETER_H_
-#define TABCOMPLETER_H_
+#ifndef CLIENTUSERINPUTHANDLER_H_
+#define CLIENTUSERINPUTHANDLER_H_
 
-#include <QPointer>
-#include <QString>
-#include <QMap>
+#include "bufferinfo.h"
 
-#include "types.h"
-
-class InputLine;
-class IrcUser;
-class Network;
-
-class TabCompleter : public QObject {
+class ClientUserInputHandler : public QObject {
   Q_OBJECT
 
 public:
-  TabCompleter(InputLine *inputLine_);
+  ClientUserInputHandler(QObject *parent = 0);
 
-  void reset();
-  void complete();
+public slots:
+  void handleUserInput(const BufferInfo &bufferInfo, const QString &msg);
 
-  virtual bool eventFilter(QObject *obj, QEvent *event);
+signals:
+  void sendInput(const BufferInfo &, const QString &);
+
+private slots:
+  void completionSuffixChanged(const QVariant &);
 
 private:
-  struct CompletionKey {
-    inline CompletionKey(const QString &n) { nick = n; }
-    bool operator<(const CompletionKey &other) const;
-    QString nick;
-  };
-
-  QPointer<InputLine> inputLine;
-  bool enabled;
-  QString nickSuffix;
-
-  static const Network *_currentNetwork;
-  static BufferId _currentBufferId;
-
-  QMap<CompletionKey, QString> completionMap;
-  // QStringList completionTemplates;
-
-  QMap<CompletionKey, QString>::Iterator nextCompletion;
-  int lastCompletionLength;
-
-  void buildCompletionList();
-
+  QRegExp _nickRx;
 };
 
 #endif

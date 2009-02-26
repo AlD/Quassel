@@ -18,52 +18,39 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
 
-#ifndef TABCOMPLETER_H_
-#define TABCOMPLETER_H_
+#include <QDateTime>
 
-#include <QPointer>
-#include <QString>
-#include <QMap>
+#include "client.h"
+#include "clientuserinputhandler.h"
+#include "clientsettings.h"
+#include "ircuser.h"
+#include "network.h"
 
-#include "types.h"
+ClientUserInputHandler::ClientUserInputHandler(QObject *parent) : QObject(parent) {
+  NickCompletionSettings s;
+  s.notify("CompletionSuffix", this, SLOT(completionSuffixChanged(QVariant)));
+  completionSuffixChanged(s.completionSuffix());
+}
 
-class InputLine;
-class IrcUser;
-class Network;
+void ClientUserInputHandler::completionSuffixChanged(const QVariant &v) {
+  QString suffix = v.toString();
+  QString letter = "A-Za-z";
+  QString special = "\x5b-\x60\x7b-\x7d";
+  _nickRx = QRegExp(QString("^([%1%2][%1%2\\d-]*)%3").arg(letter, special, suffix).trimmed());
+}
 
-class TabCompleter : public QObject {
-  Q_OBJECT
-
-public:
-  TabCompleter(InputLine *inputLine_);
-
-  void reset();
-  void complete();
-
-  virtual bool eventFilter(QObject *obj, QEvent *event);
-
-private:
-  struct CompletionKey {
-    inline CompletionKey(const QString &n) { nick = n; }
-    bool operator<(const CompletionKey &other) const;
-    QString nick;
-  };
-
-  QPointer<InputLine> inputLine;
-  bool enabled;
-  QString nickSuffix;
-
-  static const Network *_currentNetwork;
-  static BufferId _currentBufferId;
-
-  QMap<CompletionKey, QString> completionMap;
-  // QStringList completionTemplates;
-
-  QMap<CompletionKey, QString>::Iterator nextCompletion;
-  int lastCompletionLength;
-
-  void buildCompletionList();
-
-};
-
-#endif
+// this would be the place for a client-side hook
+void ClientUserInputHandler::handleUserInput(const BufferInfo &bufferInfo, const QString &msg) {
+  // check if we addressed a user and update its timestamp in that case
+  if(bufferInfo.type() == BufferInfo::ChannelBuffer) {
+    if(!msg.startsWith('/')) {
+      if(_nickRx.indexIn(msg) == 0) {
+        const Network *net = Client::network(bufferInfo.networkId());
+        IrcUser *user = net ? net->ircUser(_nickRx.cap(1)) : 0;
+        if(user)
+          user->setLastSpokenTo(bufferInfo.bufferId(), QDateTime::currentDateTime().toUTC());
+      }
+    }
+  }
+  emit sendInput(bufferInfo, msg);
+}
