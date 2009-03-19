@@ -84,9 +84,6 @@ int main(int argc, char **argv) {
   // put shared client&core arguments here
   cliParser->addSwitch("debug",'d', "Enable debug output");
   cliParser->addSwitch("help",'h', "Display this help and exit");
-#ifndef HAVE_KDE /* FIXME switch gets added even if HAVE_KDE was set, due to undef HAVE_KDE at the top */
-  cliParser->addSwitch("version",'v', "Display the version string");
-#endif
 
 #ifndef BUILD_CORE
   // put client-only arguments here

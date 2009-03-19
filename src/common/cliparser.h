@@ -35,9 +35,6 @@ public:
   QString value(const QString &longName);
   bool isSet(const QString &longName);
   void usage();
-#ifndef HAVE_KDE
-  void version();
-#endif
 
 private:
   void addArgument(const QString &longName, const CliParserArg &arg);
