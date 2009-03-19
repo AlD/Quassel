@@ -21,13 +21,17 @@
 #include <QDateTime>
 
 #include "client.h"
+#include "clientaliasmanager.h"
 #include "clientuserinputhandler.h"
 #include "clientsettings.h"
+#include "execwrapper.h"
 #include "ircuser.h"
 #include "network.h"
 
-ClientUserInputHandler::ClientUserInputHandler(QObject *parent) : QObject(parent) {
-  NickCompletionSettings s;
+ClientUserInputHandler::ClientUserInputHandler(QObject *parent)
+: QObject(parent)
+{
+  TabCompletionSettings s;
   s.notify("CompletionSuffix", this, SLOT(completionSuffixChanged(QVariant)));
   completionSuffixChanged(s.completionSuffix());
 }
@@ -41,16 +45,28 @@ void ClientUserInputHandler::completionSuffixChanged(const QVariant &v) {
 
 // this would be the place for a client-side hook
 void ClientUserInputHandler::handleUserInput(const BufferInfo &bufferInfo, const QString &msg) {
-  // check if we addressed a user and update its timestamp in that case
-  if(bufferInfo.type() == BufferInfo::ChannelBuffer) {
-    if(!msg.startsWith('/')) {
-      if(_nickRx.indexIn(msg) == 0) {
-        const Network *net = Client::network(bufferInfo.networkId());
-        IrcUser *user = net ? net->ircUser(_nickRx.cap(1)) : 0;
-        if(user)
-          user->setLastSpokenTo(bufferInfo.bufferId(), QDateTime::currentDateTime().toUTC());
-      }
+
+  if(!msg.startsWith('/')) {
+    if(_nickRx.indexIn(msg) == 0) {
+      const Network *net = Client::network(bufferInfo.networkId());
+      IrcUser *user = net ? net->ircUser(_nickRx.cap(1)) : 0;
+      if(user)
+        user->setLastSpokenTo(bufferInfo.bufferId(), QDateTime::currentDateTime().toUTC());
     }
   }
-  emit sendInput(bufferInfo, msg);
+
+  AliasManager::CommandList clist = Client::aliasManager()->processInput(bufferInfo, msg);
+
+  for(int i = 0; i < clist.count(); i++) {
+    QString cmd = clist.at(i).second.section(' ', 0, 0).remove(0, 1).toUpper();
+    if(cmd == "EXEC")
+      handleExec(clist.at(i).first, clist.at(i).second.section(' ', 1));
+    else
+      emit sendInput(clist.at(i).first, clist.at(i).second);
+  }
+}
+
+void ClientUserInputHandler::handleExec(const BufferInfo &bufferInfo, const QString &execString) {
+  ExecWrapper *exec = new ExecWrapper(this); // gets suicidal when it's done
+  exec->start(bufferInfo, execString);
 }

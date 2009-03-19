@@ -19,19 +19,43 @@
  ***************************************************************************/
 
 #include "bufferview.h"
+#include "graphicalui.h"
 #include "inputline.h"
 #include "tabcompleter.h"
 
 InputLine::InputLine(QWidget *parent)
-  : QLineEdit(parent),
+  :
+#ifdef HAVE_KDE
+    KTextEdit(parent),
+#else
+    QLineEdit(parent),
+#endif
     idx(0),
     tabCompleter(new TabCompleter(this))
 {
+#ifdef HAVE_KDE
+//This is done to make the KTextEdit look like a lineedit
+  setMaximumHeight(document()->size().toSize().height());
+  setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  setAcceptRichText(false);
+  setLineWrapMode(NoWrap);
+  enableFindReplace(false);
+  connect(this, SIGNAL(textChanged()), this, SLOT(on_textChanged()));
+#endif
+
   connect(this, SIGNAL(returnPressed()), this, SLOT(on_returnPressed()));
   connect(this, SIGNAL(textChanged(QString)), this, SLOT(on_textChanged(QString)));
 }
 
 InputLine::~InputLine() {
+}
+
+void InputLine::setCustomFont(const QFont &font) {
+  setFont(font);
+#ifdef HAVE_KDE
+  setMaximumHeight(document()->size().toSize().height());
+#endif
 }
 
 bool InputLine::eventFilter(QObject *watched, QEvent *event) {
@@ -56,6 +80,18 @@ bool InputLine::eventFilter(QObject *watched, QEvent *event) {
 }
 
 void InputLine::keyPressEvent(QKeyEvent * event) {
+
+#ifdef HAVE_KDE
+  if(event->matches(QKeySequence::Find)) {
+    QAction *act = GraphicalUi::actionCollection()->action("ToggleSearchBar");
+    if(act) {
+      act->toggle();
+      event->accept();
+      return;
+    }
+  }
+#endif
+
   switch(event->key()) {
   case Qt::Key_Up:
     event->accept();
@@ -89,9 +125,30 @@ void InputLine::keyPressEvent(QKeyEvent * event) {
 
   case Qt::Key_Select:		// for Qtopia
     emit returnPressed();
+    break;
+
+#ifdef HAVE_KDE
+//Since this is a ktextedit, we don't have this signal "natively"
+  case Qt::Key_Return:
+    event->accept();
+    if(!text().isEmpty())
+      emit returnPressed();
+    break;
+
+  case Qt::Key_Enter:
+    event->accept();
+    if(!text().isEmpty())
+      emit returnPressed();
+    break;
+
+#endif
 
   default:
+#ifdef HAVE_KDE
+    KTextEdit::keyPressEvent(event);
+#else
     QLineEdit::keyPressEvent(event);
+#endif
   }
 }
 
@@ -126,8 +183,7 @@ void InputLine::on_returnPressed() {
 
 void InputLine::on_textChanged(QString newText) {
   Q_UNUSED(newText);
-#ifdef Q_WS_MAC
-#endif
+
   return;
 }
 

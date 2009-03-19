@@ -38,6 +38,8 @@ signals:
 private slots:
   void completionSuffixChanged(const QVariant &);
 
+  void handleExec(const BufferInfo &bufferInfo, const QString &execStr);
+
 private:
   QRegExp _nickRx;
 };

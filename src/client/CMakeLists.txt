@@ -13,6 +13,7 @@ set(SOURCES
     buffermodel.cpp
     buffersettings.cpp
     client.cpp
+    clientaliasmanager.cpp
     clientbacklogmanager.cpp
     clientbufferviewconfig.cpp
     clientbufferviewmanager.cpp
@@ -21,6 +22,7 @@ set(SOURCES
     clientsettings.cpp
     clientsyncer.cpp
     clientuserinputhandler.cpp
+    execwrapper.cpp
     irclistmodel.cpp
     messagefilter.cpp
     messagemodel.cpp
@@ -33,6 +35,7 @@ set(MOC_HDRS
     abstractui.h
     buffermodel.h
     client.h
+    clientaliasmanager.h
     clientbacklogmanager.h
     clientbufferviewconfig.h
     clientbufferviewmanager.h
@@ -41,6 +44,7 @@ set(MOC_HDRS
     clientirclisthelper.h
     clientuserinputhandler.h
     clientsyncer.h
+    execwrapper.h
     irclistmodel.h
     messagefilter.h
     messagemodel.h

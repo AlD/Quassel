@@ -41,6 +41,8 @@ CoreNetwork::CoreNetwork(const NetworkId &networkid, CoreSession *session)
     _lastUsedServerIndex(0),
 
     _lastPingTime(0),
+    _maxPingCount(3),
+    _pingCount(0),
 
     // TODO make autowho configurable (possibly per-network)
     _autoWhoEnabled(true),
@@ -190,6 +192,7 @@ void CoreNetwork::disconnectFromIrc(bool requested, const QString &reason, bool 
     _autoReconnectCount = 0; // prohibiting auto reconnect
   }
   disablePingTimeout();
+  _msgQueue.clear();
 
   IrcUser *me_ = me();
   if(me_) {
@@ -303,7 +306,7 @@ void CoreNetwork::socketError(QAbstractSocket::SocketError error) {
   _previousConnectionAttemptFailed = true;
   qWarning() << qPrintable(tr("Could not connect to %1 (%2)").arg(networkName(), socket.errorString()));
   emit connectionError(socket.errorString());
-  emit displayMsg(Message::Error, BufferInfo::StatusBuffer, "", tr("Connection failure: %1").arg(socket.errorString()));
+  displayMsg(Message::Error, BufferInfo::StatusBuffer, "", tr("Connection failure: %1").arg(socket.errorString()));
   emitConnectionError(socket.errorString());
   if(socket.state() < QAbstractSocket::ConnectedState) {
     socketDisconnected();
@@ -325,20 +328,28 @@ void CoreNetwork::socketInitialized() {
   }
 
   // TokenBucket to avoid sending too much at once
-  _messagesPerSecond = 1;
+  _messageDelay = 2200;    // this seems to be a safe value (2.2 seconds delay)
   _burstSize = 5;
-  _tokenBucket = 5; // init with a full bucket
-  _tokenBucketTimer.start(_messagesPerSecond * 1000);
+  _tokenBucket = _burstSize; // init with a full bucket
+  _tokenBucketTimer.start(_messageDelay);
 
   if(!server.password.isEmpty()) {
     putRawLine(serverEncode(QString("PASS %1").arg(server.password)));
   }
-  putRawLine(serverEncode(QString("NICK :%1").arg(identity->nicks()[0])));
+  QString nick;
+  if(identity->nicks().isEmpty()) {
+    nick = "quassel";
+    qWarning() << "CoreNetwork::socketInitialized(): no nicks supplied for identity Id" << identity->id();
+  } else {
+    nick = identity->nicks()[0];
+  }
+  putRawLine(serverEncode(QString("NICK :%1").arg(nick)));
   putRawLine(serverEncode(QString("USER %1 8 * :%2").arg(identity->ident(), identity->realName())));
 }
 
 void CoreNetwork::socketDisconnected() {
   disablePingTimeout();
+  _msgQueue.clear();
 
   _autoWhoCycleTimer.stop();
   _autoWhoTimer.stop();
@@ -352,7 +363,7 @@ void CoreNetwork::socketDisconnected() {
   IrcUser *me_ = me();
   if(me_) {
     foreach(QString channel, me_->channels())
-      emit displayMsg(Message::Quit, BufferInfo::ChannelBuffer, channel, _quitReason, me_->hostmask());
+      displayMsg(Message::Quit, BufferInfo::ChannelBuffer, channel, _quitReason, me_->hostmask());
   }
 
   setConnected(false);
@@ -516,13 +527,18 @@ void CoreNetwork::doAutoReconnect() {
 
 void CoreNetwork::sendPing() {
   uint now = QDateTime::currentDateTime().toTime_t();
-  if(_lastPingTime != 0 && now - _lastPingTime <= (uint)(_pingTimer.interval() / 1000) + 1) {
+  if(_pingCount != 0) {
+    qDebug() << "UserId:" << userId() << "Network:" << networkName() << "missed" << _pingCount << "pings."
+	     << "BA:" << socket.bytesAvailable() << "BTW:" << socket.bytesToWrite();
+  }
+  if(_pingCount >= _maxPingCount && now - _lastPingTime <= (uint)(_pingTimer.interval() / 1000) + 1) {
     // the second check compares the actual elapsed time since the last ping and the pingTimer interval
     // if the interval is shorter then the actual elapsed time it means that this thread was somehow blocked
     // and unable to even handle a ping answer. So we ignore those misses.
-    disconnectFromIrc(false, QString("No Ping reply in %1 seconds.").arg(_pingTimer.interval() / 1000), true /* withReconnect */);
+    disconnectFromIrc(false, QString("No Ping reply in %1 seconds.").arg(_maxPingCount * _pingTimer.interval() / 1000), true /* withReconnect */);
   } else {
     _lastPingTime = now;
+    _pingCount++;
     userInputHandler()->handlePing(BufferInfo(), QString());
   }
 }

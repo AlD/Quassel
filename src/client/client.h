@@ -42,6 +42,7 @@ class AbstractUiMsg;
 class NetworkModel;
 class BufferModel;
 class BufferSyncer;
+class ClientAliasManager;
 class ClientBacklogManager;
 class ClientBufferViewManager;
 class ClientIrcListHelper;
@@ -61,6 +62,7 @@ public:
     RemoteCore
   };
 
+  static bool instanceExists();
   static Client *instance();
   static void destroy();
   static void init(AbstractUi *);
@@ -101,6 +103,7 @@ public:
   static inline AbstractMessageProcessor *messageProcessor() { return instance()->_messageProcessor; }
   static inline SignalProxy *signalProxy() { return instance()->_signalProxy; }
 
+  static inline ClientAliasManager *aliasManager() { return instance()->_aliasManager; }
   static inline ClientBacklogManager *backlogManager() { return instance()->_backlogManager; }
   static inline ClientIrcListHelper *ircListHelper() { return instance()->_ircListHelper; }
   static inline ClientBufferViewManager *bufferViewManager() { return instance()->_bufferViewManager; }
@@ -186,6 +189,8 @@ private slots:
   void requestInitialBacklog();
   void createDefaultBufferView();
 
+  void sendBufferedUserInput();
+
 private:
   Client(QObject *parent = 0);
   virtual ~Client();
@@ -202,6 +207,7 @@ private:
   NetworkModel * _networkModel;
   BufferModel * _bufferModel;
   BufferSyncer * _bufferSyncer;
+  ClientAliasManager *_aliasManager;
   ClientBacklogManager *_backlogManager;
   ClientBufferViewManager *_bufferViewManager;
   ClientIrcListHelper *_ircListHelper;
@@ -222,6 +228,8 @@ private:
 
   QString _debugLogBuffer;
   QTextStream _debugLog;
+
+  QList<QPair<BufferInfo, QString> > _userInputBuffer;
 
   friend class ClientSyncer;
 };

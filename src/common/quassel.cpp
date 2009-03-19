@@ -20,6 +20,7 @@
 
 #include "quassel.h"
 
+#include <iostream>
 #include <signal.h>
 
 #include <QCoreApplication>
@@ -82,6 +83,11 @@ bool Quassel::init() {
 
   if(isOptionSet("help")) {
     cliParser()->usage();
+    return false;
+  }
+
+  if(isOptionSet("version")) {
+    std::cout << qPrintable("Quassel IRC: " + Quassel::buildInfo().plainVersionString) << std::endl;
     return false;
   }
 
@@ -338,6 +344,13 @@ QString Quassel::findDataFilePath(const QString &fileName) {
       return path;
   }
   return QString();
+}
+
+QStringList Quassel::scriptDirPaths() {
+  QStringList res(configDirPath() + "scripts/");
+  foreach(QString path, dataDirPaths())
+    res << path + "scripts/";
+  return res;
 }
 
 QString Quassel::translationDirPath() {

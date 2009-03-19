@@ -106,12 +106,16 @@ public slots:
 
   Server usedServer() const;
 
-  inline void resetPingTimeout() { _lastPingTime = 0; }
+  inline void resetPingTimeout() { _pingCount = 0; }
+
+  inline void displayMsg(Message::Type msgType, BufferInfo::Type bufferType, const QString &target, const QString &text, const QString &sender = "", Message::Flags flags = Message::None) {
+    emit displayMsg(networkId(), msgType, bufferType, target, text, sender, flags);
+  }
 
 signals:
   void recvRawServerMsg(QString);
   void displayStatusMsg(QString);
-  void displayMsg(Message::Type, BufferInfo::Type, QString target, QString text, QString sender = "", Message::Flags flags = Message::None);
+  void displayMsg(NetworkId, Message::Type, BufferInfo::Type, const QString &target, const QString &text, const QString &sender = "", Message::Flags flags = Message::None);
   void disconnected(NetworkId networkId);
   void connectionError(const QString &errorMsg);
 
@@ -178,6 +182,8 @@ private:
 
   QTimer _pingTimer;
   uint _lastPingTime;
+  uint _maxPingCount;
+  uint _pingCount;
 
   bool _autoWhoEnabled;
   QStringList _autoWhoQueue;
@@ -188,7 +194,7 @@ private:
   QTimer _autoWhoTimer, _autoWhoCycleTimer;
 
   QTimer _tokenBucketTimer;
-  int _messagesPerSecond;   // token refill speed
+  int _messageDelay;        // token refill speed in ms
   int _burstSize;           // size of the token bucket
   int _tokenBucket;         // the virtual bucket that holds the tokens
   QList<QByteArray> _msgQueue;
