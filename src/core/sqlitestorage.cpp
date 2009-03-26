@@ -206,6 +206,29 @@ UserId SqliteStorage::getUserId(const QString &username) {
   return userId;
 }
 
+QString SqliteStorage::getUserName(const UserId userId) {
+  QString userName;
+
+  // this scope ensures that the query is freed in sqlite before we call unlock()
+  // this ensures that our thread doesn't hold a internal after unlock is called
+  // (see sqlites doc on implicit locking for details)
+  {
+    QSqlQuery query(logDb());
+    query.prepare(queryString("select_username"));
+    query.bindValue(":userid", userId.toInt());
+
+    lockForRead();
+    safeExec(query);
+
+    if(query.first()) {
+      userName = query.value(0).toString();
+    }
+  }
+  unlock();
+
+  return userName;
+}
+
 UserId SqliteStorage::internalUser() {
   UserId userId;
 

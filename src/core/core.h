@@ -82,6 +82,15 @@ public:
     return instance()->_storage->getUserSetting(userId, settingName, defaultValue);
   }
 
+  //! Retrieve a username to a given userId
+  /**
+   * \param userId     The users Id
+   * \return the username of the given id
+   */
+  static inline QString getUserName(UserId userId) {
+    return instance()->_storage->getUserName(userId);
+  }
+
   /* Identity handling */
   static inline IdentityId createIdentity(UserId user, CoreIdentity &identity) {
     return instance()->_storage->createIdentity(user, identity);
