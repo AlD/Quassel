@@ -39,6 +39,8 @@
 #include "message.h"
 #include "sessionthread.h"
 #include "types.h"
+#include "identserver.h"
+#include "identtypes.h"
 
 class CoreSession;
 class SessionThread;
@@ -57,7 +59,6 @@ public:
 
   static void saveState();
   static void restoreState();
-
   /*** Storage access ***/
   // These methods are threadsafe.
 
@@ -414,6 +415,7 @@ public:
   static inline QTimer &syncTimer() { return instance()->_storageSyncTimer; }
 
   static const int AddClientEventId;
+  bool getIdentInfo(IdentData& data);
 
 public slots:
   //! Make storage data persistent
@@ -422,6 +424,9 @@ public slots:
   void syncStorage();
   void setupInternalClientSession(SignalProxy *proxy);
 
+  /* these receive connection+user information for identd replies */
+  void addIdentInfo(IdentData& data);
+  void removeIdentInfo(IdentData& data);
 signals:
   //! Sent when a BufferInfo is updated in storage.
   void bufferInfoUpdated(UserId user, const BufferInfo &info);
@@ -480,6 +485,8 @@ private:
 #else
   QTcpServer _server, _v6server;
 #endif
+  IdentServer _identServer;
+  QList<IdentData> _identList;
 
   QHash<QTcpSocket *, quint32> blocksizes;
   QHash<QTcpSocket *, QVariantMap> clientInfo;

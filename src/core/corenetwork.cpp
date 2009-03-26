@@ -215,6 +215,7 @@ void CoreNetwork::disconnectFromIrc(bool requested, const QString &reason, bool 
     socket.close();
     socketDisconnected();
   }
+  // removeIdentData here
 }
 
 void CoreNetwork::userInput(BufferInfo buf, QString msg) {
@@ -362,6 +363,17 @@ void CoreNetwork::socketInitialized() {
     disconnectFromIrc();
     return;
   }
+
+  // fill ident data and send it to core object
+  IdentData identData;
+  identData.localIp = socket.localAddress();
+  identData.localPort = socket.localPort();
+  identData.remoteIp = socket.peerAddress();
+  identData.remotePort = socket.peerPort();
+  // if forced...
+  identData.userId = identity
+  connect(Core::instance(), SIGNAL(addIdentData(
+
 
   // TokenBucket to avoid sending too much at once
   _messageDelay = 2200;    // this seems to be a safe value (2.2 seconds delay)

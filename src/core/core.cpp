@@ -29,6 +29,7 @@
 #include "sqlitestorage.h"
 #include "network.h"
 #include "logger.h"
+#include "identsocket.h"
 
 #include "util.h"
 
@@ -198,8 +199,12 @@ void Core::init() {
     exit(0);
   }
 
+  //if(Quassel::isSet("with-identd")) {
+
   connect(&_server, SIGNAL(newConnection()), this, SLOT(incomingConnection()));
   connect(&_v6server, SIGNAL(newConnection()), this, SLOT(incomingConnection()));
+
+  //connect(&_identServer, SIGNAL(incomingConnection(int)), this, SLOT(incomingIdentConnection(int)));
   if(!startListening()) exit(1); // TODO make this less brutal
 }
 
@@ -382,6 +387,7 @@ bool Core::startListening() {
 
   bool success = false;
   uint port = Quassel::optionValue("port").toUInt();
+  quint16 identPort = Quassel::optionValue("ident-port").toUInt();
 
   const QString listen = Quassel::optionValue("listen");
   const QStringList listen_list = listen.split(",", QString::SkipEmptyParts);
@@ -443,6 +449,17 @@ bool Core::startListening() {
   if(!success)
     quError() << qPrintable(tr("Could not open any network interfaces to listen on!"));
 
+  if(Quassel::isOptionSet("with-identd")) {
+    if(_identServer.listen(QHostAddress::LocalHost, identPort)) {
+      quInfo() << qPrintable(tr("Listening for ident requests on localhost:%1").arg(identPort));
+    }
+    else {
+      quWarning() << qPrintable(
+          tr("Couldn't bind identd on localhost:%1: %2")
+          .arg(identPort)
+          .arg(_identServer.errorString()));
+    }
+  }
   return success;
 }
 
@@ -462,8 +479,25 @@ void Core::stopListening(const QString &reason) {
     else
       quInfo() << qPrintable(reason);
   }
+  if(_identServer.isListening()) {
+    _identServer.close();
+    quInfo() << qPrintable(tr("No longer listening for ident requests."));
+  }
 }
-
+/*
+void Core::incomingIdentConnection(int socketId)
+{
+  quInfo() << "incomingIdentConnection()";
+  IdentSocket *identSocket = new IdentSocket(this);
+  identSocket->setSocketDescriptor(socketId);
+  //QTcpServer *server = qobject_cast<QTcpServer *>(sender());
+  //Q_ASSERT(server);
+  //while(server->hasPendingConnections()) {
+  //  quInfo() << "creatin IdentSocket";
+ //   IdentSocket *identClient = qobject_cast<IdentSocket *>(server->nextPendingConnection());
+  //}
+}
+*/
 void Core::incomingConnection() {
   QTcpServer *server = qobject_cast<QTcpServer *>(sender());
   Q_ASSERT(server);
@@ -1000,6 +1034,25 @@ QVariantMap Core::promptForSettings(const Storage *storage) {
   return settings;
 }
 
+bool Core::getIdentInfo(IdentData& data)
+{
+  bool success = false;
+  //return QString(":USERID:UNIX:seezer");
+  data.userId = "seezer";
+  return true;
+}
+
+void Core::addIdentInfo(IdentData& data)
+{
+  quInfo() << "adding identData.userId to list:" << data.userId;
+  _identList << data;
+}
+
+void Core::removeIdentInfo(IdentData& data)
+{
+  quInfo() << "removing identData.userId from list:" << data.userId;
+  _identList.removeAll(data);
+}
 
 #ifdef Q_OS_WIN32
 void Core::stdInEcho(bool on) {

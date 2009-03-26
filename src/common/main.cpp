@@ -112,6 +112,9 @@ int main(int argc, char **argv) {
   cliParser->addOption("select-backend <backendidentifier>", 0, "Switch storage backend (migrating data if possible)");
   cliParser->addSwitch("add-user", 0, "Starts an interactive session to add a new core user");
   cliParser->addOption("change-userpass <username>", 0, "Starts an interactive session to change the password of the user identified by username");
+  cliParser->addSwitch("with-identd", 'I', "Start internal ident server");
+  cliParser->addOption("ident-port <port>",'i', "The port quasselcore's identd will listen at", QString("4243"));
+  //cliParser->addOption("ident-proxy
 #endif
 
 #ifdef HAVE_KDE

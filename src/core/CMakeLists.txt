@@ -32,6 +32,9 @@ set(SOURCES
     ctcpparser.cpp
     eventstringifier.cpp
     ircparser.cpp
+    identclient.cpp
+    identserver.cpp
+    identsocket.cpp
     netsplit.cpp
     postgresqlstorage.cpp
     sessionthread.cpp
@@ -58,9 +61,13 @@ set(MOC_HDRS
     corenetworkconfig.h
     coresession.h
     coresessioneventprocessor.h
+    ctcphandler.h
     coreuserinputhandler.h
     ctcpparser.h
     eventstringifier.h
+    identclient.h
+    identserver.h
+    identsocket.h
     ircparser.h
     netsplit.h
     postgresqlstorage.h
@@ -70,7 +77,8 @@ set(MOC_HDRS
 
 set(HEADERS
     coresettings.h
-    coreusersettings.h)
+    coreusersettings.h
+    identtypes.h)
 
 if(HAVE_SSL)
   set(SOURCES ${SOURCES} sslserver.cpp)
