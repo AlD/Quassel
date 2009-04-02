@@ -12,8 +12,11 @@ private slots:
     void readReply();
     void handleError(QAbstractSocket::SocketError error);
     void sendRequest();
+    void timeout();
+
 signals:
     void receivedReply(const QString&);
+    void failed();
 private:
     quint16 _localPort;
     quint16 _remotePort;

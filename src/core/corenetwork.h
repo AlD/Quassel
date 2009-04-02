@@ -24,6 +24,7 @@
 #include "network.h"
 #include "coreircchannel.h"
 #include "coreircuser.h"
+#include "identtypes.h"
 
 #include <QTimer>
 
@@ -147,6 +148,9 @@ signals:
 
   void newEvent(Event *event);
 
+  void newIdentData(IdentData identData);
+  void obsoleteIdentData(IdentData identData);
+
 protected:
   inline virtual IrcChannel *ircChannelFactory(const QString &channelname) { return new CoreIrcChannel(channelname, this); }
   inline virtual IrcUser *ircUserFactory(const QString &hostmask) { return new CoreIrcUser(hostmask, this); }
@@ -225,6 +229,7 @@ private:
   QList<QByteArray> _msgQueue;
 
   QString _requestedUserModes; // 2 strings separated by a '-' character. first part are requested modes to add, the second to remove
+  IdentData _identData;
 
   // Blowfish key map
   QHash<QString, QByteArray> _cipherKeys;

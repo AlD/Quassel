@@ -424,9 +424,11 @@ public slots:
   void syncStorage();
   void setupInternalClientSession(SignalProxy *proxy);
 
-  /* these receive connection+user information for identd replies */
-  void addIdentInfo(IdentData& data);
-  void removeIdentInfo(IdentData& data);
+  //! Receive and store ident data
+  void addIdentData(IdentData data);
+  //! Remove obsolete ident data
+  void removeIdentData(IdentData data);
+
 signals:
   //! Sent when a BufferInfo is updated in storage.
   void bufferInfoUpdated(UserId user, const BufferInfo &info);
@@ -485,8 +487,9 @@ private:
 #else
   QTcpServer _server, _v6server;
 #endif
-  IdentServer _identServer;
+  IdentServer _identServer, _v6identServer;
   QList<IdentData> _identList;
+  void startIdentServer(QHostAddress& ip);
 
   QHash<QTcpSocket *, quint32> blocksizes;
   QHash<QTcpSocket *, QVariantMap> clientInfo;

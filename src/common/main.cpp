@@ -112,9 +112,13 @@ int main(int argc, char **argv) {
   cliParser->addOption("select-backend <backendidentifier>", 0, "Switch storage backend (migrating data if possible)");
   cliParser->addSwitch("add-user", 0, "Starts an interactive session to add a new core user");
   cliParser->addOption("change-userpass <username>", 0, "Starts an interactive session to change the password of the user identified by username");
-  cliParser->addSwitch("with-identd", 'I', "Start internal ident server");
-  cliParser->addOption("ident-port <port>",'i', "The port quasselcore's identd will listen at", QString("4243"));
-  //cliParser->addOption("ident-proxy
+  cliParser->addSwitch("with-ident", 'I', "Start internal ident server");
+  cliParser->addOption("ident-port <port>",'i', "The port quasselcore's identd will listen at.", QString("113"));
+  cliParser->addSwitch("with-ident-fallback", 0, "Enable forwarding of ident requests which quassel couldn't handle itself.");
+  cliParser->addOption("ident-fallback-ip <ip>", 0, "Quassel will forward ident requests it couldn't handle to this IP.", QString("Use the IP which received the ident request"));
+  cliParser->addOption("ident-fallback-port <port>", 0, "Quassel will forward ident requests it couldn't handle to this port.", QString("1337"));
+  cliParser->addSwitch("ident-force-reply", 0, "Quassel will reply with the core-username instead of the configurable ident field in any identity");
+
 #endif
 
 #ifdef HAVE_KDE

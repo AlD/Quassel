@@ -199,12 +199,8 @@ void Core::init() {
     exit(0);
   }
 
-  //if(Quassel::isSet("with-identd")) {
-
   connect(&_server, SIGNAL(newConnection()), this, SLOT(incomingConnection()));
   connect(&_v6server, SIGNAL(newConnection()), this, SLOT(incomingConnection()));
-
-  //connect(&_identServer, SIGNAL(incomingConnection(int)), this, SLOT(incomingIdentConnection(int)));
   if(!startListening()) exit(1); // TODO make this less brutal
 }
 
@@ -387,7 +383,7 @@ bool Core::startListening() {
 
   bool success = false;
   uint port = Quassel::optionValue("port").toUInt();
-  quint16 identPort = Quassel::optionValue("ident-port").toUInt();
+
 
   const QString listen = Quassel::optionValue("listen");
   const QStringList listen_list = listen.split(",", QString::SkipEmptyParts);
@@ -410,6 +406,7 @@ bool Core::startListening() {
                   .arg(Quassel::buildInfo().protocolVersion)
               );
               success = true;
+              startIdentServer(addr);
             } else
               quWarning() << qPrintable(
                 tr("Could not open IPv6 interface %1:%2: %3")
@@ -426,6 +423,7 @@ bool Core::startListening() {
                   .arg(Quassel::buildInfo().protocolVersion)
               );
               success = true;
+              startIdentServer(addr);
             } else {
               // if v6 succeeded on Any, the port will be already in use - don't display the error then
               if(!success || _server.serverError() != QAbstractSocket::AddressInUseError)
@@ -449,17 +447,6 @@ bool Core::startListening() {
   if(!success)
     quError() << qPrintable(tr("Could not open any network interfaces to listen on!"));
 
-  if(Quassel::isOptionSet("with-identd")) {
-    if(_identServer.listen(QHostAddress::LocalHost, identPort)) {
-      quInfo() << qPrintable(tr("Listening for ident requests on localhost:%1").arg(identPort));
-    }
-    else {
-      quWarning() << qPrintable(
-          tr("Couldn't bind identd on localhost:%1: %2")
-          .arg(identPort)
-          .arg(_identServer.errorString()));
-    }
-  }
   return success;
 }
 
@@ -479,25 +466,21 @@ void Core::stopListening(const QString &reason) {
     else
       quInfo() << qPrintable(reason);
   }
+
+  // stop ident servers
+  wasListening = false;
   if(_identServer.isListening()) {
+    wasListening = true;
     _identServer.close();
-    quInfo() << qPrintable(tr("No longer listening for ident requests."));
   }
+  if(_v6identServer.isListening()) {
+    wasListening = true;
+    _v6identServer.close();
+  }
+  if(wasListening)
+    quInfo() << qPrintable(tr("No longer listening for ident requests."));
 }
-/*
-void Core::incomingIdentConnection(int socketId)
-{
-  quInfo() << "incomingIdentConnection()";
-  IdentSocket *identSocket = new IdentSocket(this);
-  identSocket->setSocketDescriptor(socketId);
-  //QTcpServer *server = qobject_cast<QTcpServer *>(sender());
-  //Q_ASSERT(server);
-  //while(server->hasPendingConnections()) {
-  //  quInfo() << "creatin IdentSocket";
- //   IdentSocket *identClient = qobject_cast<IdentSocket *>(server->nextPendingConnection());
-  //}
-}
-*/
+
 void Core::incomingConnection() {
   QTcpServer *server = qobject_cast<QTcpServer *>(sender());
   Q_ASSERT(server);
@@ -1036,22 +1019,87 @@ QVariantMap Core::promptForSettings(const Storage *storage) {
 
 bool Core::getIdentInfo(IdentData& data)
 {
-  bool success = false;
-  //return QString(":USERID:UNIX:seezer");
-  data.userId = "seezer";
-  return true;
+  qWarning() << "IN:" << data.localIp << ":" << QString::number(data.localPort) << "  " << data.remoteIp << ":" << QString::number(data.remotePort);
+
+  foreach(IdentData t, _identList) {
+    qWarning() << "CMP:" << t.localIp << ":" << QString::number(t.localPort) << "  " << t.remoteIp << ":" << QString::number(t.remotePort);
+  }
+
+  // if we aren't proxied get exact match
+  if(Quassel::optionValue("ident-port").toInt() == 113) {
+    int pos = _identList.indexOf(data);
+    if(pos != -1) {
+      data.userId = _identList.at(pos).userId;
+      return true;
+    }
+  }
+  // if not running on 113 we assume a proxy identd talking to us
+  else {
+    qWarning() << "Assuming proxied mode";
+    for(int i=0; i<_identList.size(); ++i) {
+      if(_identList.at(i).matchForProxy(data)) {
+        data.userId = _identList.at(i).userId;
+        return true;
+      }
+    }
+  }
+  return false;
 }
 
-void Core::addIdentInfo(IdentData& data)
+void Core::addIdentData(IdentData data)
 {
   quInfo() << "adding identData.userId to list:" << data.userId;
   _identList << data;
 }
 
-void Core::removeIdentInfo(IdentData& data)
+void Core::removeIdentData(IdentData data)
 {
-  quInfo() << "removing identData.userId from list:" << data.userId;
+  quInfo() << "removing identData.userId from list:" << data.userId << " remote:" << data.remoteIp << ":"<< QString::number(data.remotePort);
   _identList.removeAll(data);
+
+  quInfo() << "list is now:";
+  foreach(IdentData t, _identList) {
+    qWarning() << t.localIp << ":" << QString::number(t.localPort) << "  " << t.remoteIp << ":" << QString::number(t.remotePort);
+  }
+}
+
+void Core::startIdentServer(QHostAddress &ip)
+{
+  if(!Quassel::isOptionSet("with-ident"))
+    return;
+
+  bool ok;
+  quint16 identPort = Quassel::optionValue("ident-port").toUShort(&ok);
+  if(!ok) {
+    quError() << qPrintable(tr("Invalid ident-port given: %1").arg(identPort));
+    return;
+  }
+
+  IdentServer* srv = 0;
+
+  switch(ip.protocol()) {
+    case QAbstractSocket::IPv4Protocol:
+      srv = &_identServer;
+     break;
+   case QAbstractSocket::IPv6Protocol:
+     srv = &_v6identServer;
+     break;
+   default:
+     return;
+  }
+
+  if(srv->listen(ip, identPort)) {
+    quInfo() << qPrintable(tr("Listening for ident requests on %1:%2")
+                           .arg(ip.toString())
+                           .arg(identPort));
+  }
+  else {
+    quError() << qPrintable(
+        tr("Couldn't bind identd on %1:%2: %3")
+        .arg(ip.toString())
+        .arg(identPort)
+        .arg(srv->errorString()));
+  }
 }
 
 #ifdef Q_OS_WIN32

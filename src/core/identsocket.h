@@ -6,19 +6,27 @@
 
 class IdentSocket : public QTcpSocket
 {
-    Q_OBJECT
+  Q_OBJECT
 public:
-    IdentSocket(QObject* parent);
-    ~IdentSocket();
+  enum IdentReplyType {
+      IdentError,
+      IdentSuccess
+  };
 
-private slots:
-    void readRequest();
+  IdentSocket(QObject* parent);
+  ~IdentSocket();
+
 public slots:
-    void forwardReply(const QString& reply);
+  void forwardReply(const QString& reply);
+private slots:
+  void readRequest();
+  void timeout();
+  void handleError(QAbstractSocket::SocketError error);
+  void sendReply(IdentReplyType type = IdentError, QString reason = "UNKNOWN-ERROR");
 private:
-    void forwardLookup();
-    void localLookup();
-    IdentData _data;
+  void forwardLookup();
+  void localLookup();
+  IdentData _data;
 };
 
 #endif // IDENTSOCKET_H

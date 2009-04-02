@@ -23,6 +23,8 @@
 #include "core.h"
 #include "logger.h"
 
+#include <QHostAddress>
+
 CoreApplicationInternal::CoreApplicationInternal()
   : _coreCreated(false)
 {
@@ -37,6 +39,7 @@ CoreApplicationInternal::~CoreApplicationInternal() {
 }
 
 bool CoreApplicationInternal::init() {
+  bool initialized = true;
   /* FIXME
   This is an initial check if logfile is writable since the warning would spam stdout if done
   in current Logger implementation. Can be dropped whenever the logfile is only opened once.
@@ -49,13 +52,32 @@ bool CoreApplicationInternal::init() {
     else logFile.close();
   }
 
+  /* Since checking those options would happen quite often if not done here
+     and would probably be just bad to be hidden in a logfile, we make it fatal here */
+  if(Quassel::isOptionSet("with-ident-fallback")) {
+    bool ok;
+    Quassel::optionValue("ident-fallback-port").toUShort(&ok);
+    if(!ok) {
+      initialized = false;
+      quError() << qPrintable(tr("Invalid ident-fallback-port given."));
+    }
+    QHostAddress identFallback;
+    if(Quassel::isOptionSet("ident-fallback-ip")
+      && !identFallback.setAddress(Quassel::optionValue("ident-fallback-ip"))) {
+      initialized = false;
+      quError() << qPrintable(tr("Invalid ident-fallback-ip given."));
+    }
+    if(!initialized)
+      return initialized;
+  }
+
   Core::instance();  // create and init the core
   _coreCreated = true;
 
   if(!Quassel::isOptionSet("norestore"))
     Core::restoreState();
 
-  return true;
+  return initialized;
 }
 
 /*****************************************************************************/
