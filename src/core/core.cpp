@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <QCoreApplication>
+#include <QMutexLocker>
 
 #include "core.h"
 #include "coresession.h"
@@ -1019,6 +1020,7 @@ QVariantMap Core::promptForSettings(const Storage *storage) {
 
 bool Core::getIdentInfo(IdentData& data)
 {
+  QMutexLocker locker(&_mutex);
   qWarning() << "IN:" << data.localIp << ":" << QString::number(data.localPort) << "  " << data.remoteIp << ":" << QString::number(data.remotePort);
 
   foreach(IdentData t, _identList) {
@@ -1048,12 +1050,15 @@ bool Core::getIdentInfo(IdentData& data)
 
 void Core::addIdentData(IdentData data)
 {
+  _mutex.lock();
   quInfo() << "adding identData.userId to list:" << data.userId;
   _identList << data;
+  _mutex.unlock();
 }
 
 void Core::removeIdentData(IdentData data)
 {
+  _mutex.lock();
   quInfo() << "removing identData.userId from list:" << data.userId << " remote:" << data.remoteIp << ":"<< QString::number(data.remotePort);
   _identList.removeAll(data);
 
@@ -1061,6 +1066,7 @@ void Core::removeIdentData(IdentData data)
   foreach(IdentData t, _identList) {
     qWarning() << t.localIp << ":" << QString::number(t.localPort) << "  " << t.remoteIp << ":" << QString::number(t.remotePort);
   }
+  _mutex.unlock();
 }
 
 void Core::startIdentServer(QHostAddress &ip)

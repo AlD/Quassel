@@ -25,6 +25,7 @@
 #include <QString>
 #include <QVariant>
 #include <QTimer>
+#include <QMutex>
 
 #ifdef HAVE_SSL
 #  include <QSslSocket>
@@ -415,6 +416,15 @@ public:
   static inline QTimer &syncTimer() { return instance()->_storageSyncTimer; }
 
   static const int AddClientEventId;
+  //! Lookup a given ident request in local data
+  /** This method compares a given IdentData reference to the core's
+    * internal list of known connections and updates the reference if
+    * the missing data was found.
+    * \note This method is threadsafe
+    *
+    * \param data   IdentData struct with IPs and ports but without a userid
+    * \return true if successfull
+    */
   bool getIdentInfo(IdentData& data);
 
 public slots:
@@ -425,8 +435,14 @@ public slots:
   void setupInternalClientSession(SignalProxy *proxy);
 
   //! Receive and store ident data
+  /** This method adds new ident data to the core object's lookuptable
+    * \note This method is threadsafe
+    */
   void addIdentData(IdentData data);
   //! Remove obsolete ident data
+  /** This method removes obsolete ident data from the core object's lookuptable
+    * \note This method is threadsafe
+    */
   void removeIdentData(IdentData data);
 
 signals:
@@ -490,6 +506,7 @@ private:
   IdentServer _identServer, _v6identServer;
   QList<IdentData> _identList;
   void startIdentServer(QHostAddress& ip);
+  QMutex _mutex;
 
   QHash<QTcpSocket *, quint32> blocksizes;
   QHash<QTcpSocket *, QVariantMap> clientInfo;

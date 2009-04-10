@@ -81,8 +81,8 @@ CoreNetwork::CoreNetwork(const NetworkId &networkid, CoreSession *session)
   // identd
   if(Quassel::isOptionSet("with-ident")) {
     qRegisterMetaType<IdentData>("IdentData");
-    connect(this, SIGNAL(newIdentData(IdentData)), Core::instance(), SLOT(addIdentData(IdentData)), Qt::QueuedConnection);
-    connect(this, SIGNAL(obsoleteIdentData(IdentData)), Core::instance(), SLOT(removeIdentData(IdentData)), Qt::QueuedConnection);
+    connect(this, SIGNAL(newIdentData(IdentData)), Core::instance(), SLOT(addIdentData(IdentData)), Qt::DirectConnection);
+    connect(this, SIGNAL(obsoleteIdentData(IdentData)), Core::instance(), SLOT(removeIdentData(IdentData)), Qt::DirectConnection);
   }
 }
 

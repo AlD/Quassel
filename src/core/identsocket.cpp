@@ -76,9 +76,9 @@ void IdentSocket::localLookup()
   if(!Core::instance()->getIdentInfo(_data)) {
     quInfo() << qPrintable(tr("Local IdentLookup failed: localIp: %1 localPort: %2 remoteIp: %3 remotePort: %4")
                            .arg(localAddress().toString())
-                           .arg(QString::number(localPort()))
+                           .arg(QString::number(_data.localPort))
                            .arg(peerAddress().toString())
-                           .arg(QString::number(peerPort())));
+                           .arg(QString::number(_data.remotePort)));
 
     if(Quassel::isOptionSet("with-ident-fallback"))
       forwardLookup();
