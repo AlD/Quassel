@@ -81,6 +81,12 @@ CoreNetwork::CoreNetwork(const NetworkId &networkid, CoreSession *session)
   // identd
   if(Quassel::isOptionSet("with-ident")) {
     qRegisterMetaType<IdentData>("IdentData");
+
+    // Get username here since db lookup can be too slow in socketInitialized()
+    // when core is very busy (i.e. at startup).
+    //FIXME this needs visual feedback in client's settingspage
+    if(Quassel::isOptionSet("ident-force-reply"))
+      _identData.userId = Core::getUserName(userId());
     connect(this, SIGNAL(newIdentData(IdentData)), Core::instance(), SLOT(addIdentData(IdentData)), Qt::DirectConnection);
     connect(this, SIGNAL(obsoleteIdentData(IdentData)), Core::instance(), SLOT(removeIdentData(IdentData)), Qt::DirectConnection);
   }
@@ -375,11 +381,9 @@ void CoreNetwork::socketInitialized() {
   _identData.localPort = socket.localPort();
   _identData.remoteIp = socket.peerAddress().toString();
   _identData.remotePort = socket.peerPort();
-
-  //FIXME this needs visual feedback in client's settingspage
-  if(Quassel::isOptionSet("ident-force-reply"))
-    _identData.userId = Core::getUserName(userId());
-  else
+  // if ident reply is based on the identity->ident() we need to get that
+  // value for every connect since it could have changed
+  if(!Quassel::isOptionSet("ident-force-reply"))
     _identData.userId = identity->ident();
 
   emit newIdentData(_identData);
