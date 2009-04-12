@@ -169,10 +169,6 @@ bool InputLine::addToHistory(const QString &text, bool temporary) {
 }
 
 void InputLine::on_returnPressed() {
-  addToHistory(text());
-  foreach(QString newText, text().split(QRegExp("[\\r\\n]+")))
-    emit sendText(newText);
-  resetLine();
 }
 
 void InputLine::on_textChanged(QString newText) {
