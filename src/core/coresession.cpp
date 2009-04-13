@@ -109,6 +109,9 @@ CoreSession::CoreSession(UserId uid, bool restoreState, QObject *parent)
   // periodically save our session state
   connect(&(Core::instance()->syncTimer()), SIGNAL(timeout()), this, SLOT(saveSessionState()));
 
+  connect(Core::instance(), SIGNAL(requestIdentLookup(IdentData)), this, SLOT(identLookup(IdentData)), Qt::QueuedConnection);
+  connect(this, SIGNAL(identResult(IdentData)), Core::instance(), SLOT(identLookupReturned(IdentData)), Qt::QueuedConnection);
+
   p->synchronize(_bufferSyncer);
   p->synchronize(&aliasManager());
   p->synchronize(_backlogManager);
@@ -586,4 +589,17 @@ void CoreSession::globalAway(const QString &msg) {
 
     net->userInputHandler()->issueAway(msg, false /* no force away */);
   }
+}
+
+void CoreSession::identLookup(IdentData data)
+{
+  foreach(CoreNetwork* nw, _networks) {
+    if(data == nw->identData()) {
+      quInfo() << "Ident MATCH: " << nw->identData().userId;
+      emit identResult(nw->identData());
+      return;
+    }
+  }
+  quInfo() << "Ident DIDN'T MATCH";
+  emit identResult(data);
 }

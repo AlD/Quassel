@@ -19,6 +19,8 @@ IdentSocket::IdentSocket(QObject* parent)
           this, SLOT(handleError(QAbstractSocket::SocketError)));
   QTimer::singleShot(120000, this, SLOT(timeout()));
 
+  connect(this, SIGNAL(requestIdentLookup(IdentData)), Core::instance(), SLOT(newIdentLookup(IdentData)));
+  //connect(Core::instance(), SIGNAL(identLookupFinished(IdentData)), this, SLOT(localLookupReturned(IdentData)));
   quInfo() << "New identd connection";
 }
 
@@ -66,13 +68,19 @@ void IdentSocket::readRequest()
 
   _data.localIp = localAddress().toString();
   _data.remoteIp = peerAddress().toString();
+  if(Quassel::optionValue("ident-port").toInt() != 113)
+    _data.proxyMode = true;
+
   quInfo() << "Got a valid ident request: lAddr:" << _data.localIp << "lPort:" << _data.localPort
       << "rAddr:" << _data.remoteIp << "rPort:" << _data.remotePort;
-  localLookup();
+
+  //localLookup();
+  emit requestIdentLookup(_data);
 }
 
 void IdentSocket::localLookup()
 {
+  /*
   if(!Core::instance()->getIdentInfo(_data)) {
     quInfo() << qPrintable(tr("Local IdentLookup failed: localIp: %1 localPort: %2 remoteIp: %3 remotePort: %4")
                            .arg(localAddress().toString())
@@ -87,6 +95,21 @@ void IdentSocket::localLookup()
   }
   else {
     sendReply(IdentSuccess);
+  }*/
+}
+
+void IdentSocket::localLookupReturned(IdentData data)
+{
+  quInfo() << "IdentSocket::localLookupReturned() with userId:" << data.userId;
+  if(!data.userId.isEmpty()) {
+    _data = data;
+    sendReply(IdentSuccess);
+  }
+  else {
+    if(Quassel::isOptionSet("with-ident-fallback"))
+      forwardLookup();
+    else
+      sendReply(IdentError);
   }
 }
 
@@ -134,7 +157,7 @@ void IdentSocket::sendReply(IdentReplyType type, QString reason)
   else {
     reply.append(QString("ERROR:%1\r\n").arg(reason));
   }
-  quInfo() << "Replying: " << qPrintable(reply);
+  quInfo() << "Replying to " << peerAddress().toString() << ": " << qPrintable(reply);
   write(qPrintable(reply));
   disconnectFromHost();
 }

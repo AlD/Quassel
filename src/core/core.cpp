@@ -168,6 +168,8 @@ Core::Core()
 
   connect(&_storageSyncTimer, SIGNAL(timeout()), this, SLOT(syncStorage()));
   _storageSyncTimer.start(10 * 60 * 1000); // 10 minutes
+
+  qRegisterMetaType<IdentData>("IdentData");
 }
 
 void Core::init() {
@@ -1018,55 +1020,42 @@ QVariantMap Core::promptForSettings(const Storage *storage) {
   return settings;
 }
 
-bool Core::getIdentInfo(IdentData& data)
+
+
+
+void Core::newIdentLookup(const IdentData& data)
 {
-  QMutexLocker locker(&_mutex);
-  qWarning() << "IN:" << data.localIp << ":" << QString::number(data.localPort) << "  " << data.remoteIp << ":" << QString::number(data.remotePort);
-
-  foreach(IdentData t, _identList) {
-    qWarning() << "CMP:" << t.localIp << ":" << QString::number(t.localPort) << "  " << t.remoteIp << ":" << QString::number(t.remotePort);
+  IdentRequest request;
+  request.identSocket = qobject_cast<IdentSocket*>(sender());
+  foreach(SessionThread* thread, sessions) {
+    if(thread->session())
+      request.sessionList << thread->session();
   }
-
-  // if we aren't proxied get exact match
-  if(Quassel::optionValue("ident-port").toInt() == 113) {
-    int pos = _identList.indexOf(data);
-    if(pos != -1) {
-      data.userId = _identList.at(pos).userId;
-      return true;
-    }
-  }
-  // if not running on 113 we assume a proxy identd talking to us
-  else {
-    qWarning() << "Assuming proxied mode";
-    for(int i=0; i<_identList.size(); ++i) {
-      if(_identList.at(i).matchForProxy(data)) {
-        data.userId = _identList.at(i).userId;
-        return true;
-      }
-    }
-  }
-  return false;
+  _pendingIdentRequests[data] = request;
+  quInfo() << "newIdentLookup: sessionList.size(): " << request.sessionList.size();
+  emit requestIdentLookup(data);
 }
 
-void Core::addIdentData(IdentData data)
+void Core::identLookupReturned(IdentData data)
 {
-  _mutex.lock();
-  quInfo() << "adding identData.userId to list:" << data.userId;
-  _identList << data;
-  _mutex.unlock();
-}
+  quInfo() << "identLookupReturned()";
+  IdentRequest request = _pendingIdentRequests.value(data);
+  quInfo() << "###";
+  if(request.identSocket == 0)
+    return;
+  int d = request.sessionList.removeAll(sender());
+  _pendingIdentRequests[data].sessionList = request.sessionList;
+  quInfo() << "DBG: Removed " << QString::number(d) << " coresession: " << sender()
+      << " got userId:" << data.userId;
 
-void Core::removeIdentData(IdentData data)
-{
-  _mutex.lock();
-  quInfo() << "removing identData.userId from list:" << data.userId << " remote:" << data.remoteIp << ":"<< QString::number(data.remotePort);
-  _identList.removeAll(data);
-
-  quInfo() << "list is now:";
-  foreach(IdentData t, _identList) {
-    qWarning() << t.localIp << ":" << QString::number(t.localPort) << "  " << t.remoteIp << ":" << QString::number(t.remotePort);
+  quInfo() << "sessionList.size():" << request.sessionList.size();
+  // if we got an id or no other sessions received our request
+  if(!data.userId.isEmpty() || request.sessionList.isEmpty()) {
+    quInfo() << "_pendingIdentRequests.remove(data)";
+    _pendingIdentRequests.remove(data);
+    connect(this, SIGNAL(identLookupFinished(IdentData)), request.identSocket, SLOT(localLookupReturned(IdentData)));
+    emit identLookupFinished(data);
   }
-  _mutex.unlock();
 }
 
 void Core::startIdentServer(QHostAddress &ip)

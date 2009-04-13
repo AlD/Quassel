@@ -29,6 +29,8 @@
 #include "coreignorelistmanager.h"
 #include "message.h"
 #include "storage.h"
+#include "identtypes.h"
+#include "quassel.h"
 
 class CoreBacklogManager;
 class CoreBufferSyncer;
@@ -121,6 +123,8 @@ public slots:
 
   QHash<QString, QString> persistentChannels(NetworkId) const;
 
+  void identLookup(IdentData data);
+
   //! Marks us away (or unaway) on all networks
   void globalAway(const QString &msg = QString());
 
@@ -149,6 +153,8 @@ signals:
   void networkCreated(NetworkId);
   void networkRemoved(NetworkId);
   void networkDisconnected(NetworkId);
+
+  void identResult(IdentData data);
 
 protected:
   virtual void customEvent(QEvent *event);

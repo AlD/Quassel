@@ -86,6 +86,8 @@ public:
 
   inline UserId userId() const { return _coreSession->user(); }
 
+  inline IdentData identData() const { return _identData; }
+
 public slots:
   virtual void setMyNick(const QString &mynick);
 

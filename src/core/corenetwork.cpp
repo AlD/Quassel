@@ -80,15 +80,15 @@ CoreNetwork::CoreNetwork(const NetworkId &networkid, CoreSession *session)
   connect(this, SIGNAL(newEvent(Event *)), coreSession()->eventManager(), SLOT(postEvent(Event *)));
   // identd
   if(Quassel::isOptionSet("with-ident")) {
-    qRegisterMetaType<IdentData>("IdentData");
+
 
     // Get username here since db lookup can be too slow in socketInitialized()
     // when core is very busy (i.e. at startup).
     //FIXME this needs visual feedback in client's settingspage
     if(Quassel::isOptionSet("ident-force-reply"))
       _identData.userId = Core::getUserName(userId());
-    connect(this, SIGNAL(newIdentData(IdentData)), Core::instance(), SLOT(addIdentData(IdentData)), Qt::DirectConnection);
-    connect(this, SIGNAL(obsoleteIdentData(IdentData)), Core::instance(), SLOT(removeIdentData(IdentData)), Qt::DirectConnection);
+ //   connect(this, SIGNAL(newIdentData(IdentData)), Core::instance(), SLOT(addIdentData(IdentData)), Qt::DirectConnection);
+ //   connect(this, SIGNAL(obsoleteIdentData(IdentData)), Core::instance(), SLOT(removeIdentData(IdentData)), Qt::DirectConnection);
   }
 }
 
@@ -379,14 +379,20 @@ void CoreNetwork::socketInitialized() {
   // fill ident data and send it to core object
   _identData.localIp = socket.localAddress().toString();
   _identData.localPort = socket.localPort();
-  _identData.remoteIp = socket.peerAddress().toString();
   _identData.remotePort = socket.peerPort();
+  if(Quassel::optionValue("ident-port").toInt() != 113) {
+    _identData.proxyMode = true;
+    _identData.remoteIp = _identData.localIp;
+  }
+  else
+    _identData.remoteIp = socket.peerAddress().toString();
+
   // if ident reply is based on the identity->ident() we need to get that
   // value for every connect since it could have changed
   if(!Quassel::isOptionSet("ident-force-reply"))
     _identData.userId = identity->ident();
 
-  emit newIdentData(_identData);
+//  emit newIdentData(_identData);
 
   // TokenBucket to avoid sending too much at once
   _messageDelay = 2200;    // this seems to be a safe value (2.2 seconds delay)
@@ -433,8 +439,8 @@ void CoreNetwork::socketDisconnected() {
   setConnected(false);
   emit disconnected(networkId());
 
-  // request deletion of identData in core object
-  emit obsoleteIdentData(_identData);
+  // remove connection data from _identData
+  _identData.clean();
 
   if(_quitRequested) {
     _quitRequested = false;
