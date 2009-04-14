@@ -22,6 +22,7 @@
 
 #include <iostream>
 #include <signal.h>
+#include <sys/resource.h>
 
 #include <QCoreApplication>
 #include <QDateTime>
@@ -55,11 +56,20 @@ Quassel::Quassel() {
   // we have crashhandler for win32 and unix (based on execinfo).
   // on mac os we use it's integrated backtrace generator
 #if defined(Q_OS_WIN32) || (defined(HAVE_EXECINFO) && !defined(Q_OS_MAC))
-  signal(SIGABRT, handleSignal);
-  signal(SIGSEGV, handleSignal);
-#  ifndef Q_OS_WIN32
-  signal(SIGBUS, handleSignal);
-#  endif
+
+  // we only handle crashes ourselves if coredumps are disabled
+  struct rlimit *limit = (rlimit *) malloc(sizeof(struct rlimit));
+  int rc = getrlimit(RLIMIT_CORE, limit);
+
+  if ( rc == -1 || !((long)limit->rlim_cur > 0 || limit->rlim_cur == RLIM_INFINITY) ) {
+    signal(SIGABRT, handleSignal);
+    signal(SIGSEGV, handleSignal);
+#   ifndef Q_OS_WIN32
+    signal(SIGBUS, handleSignal);
+#   endif
+  }
+  free(limit);
+
   signal(SIGQUIT, handleSignal);
 #endif
 }
