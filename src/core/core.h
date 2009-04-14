@@ -25,7 +25,7 @@
 #include <QString>
 #include <QVariant>
 #include <QTimer>
-#include <QMutex>
+#include <QReadWriteLock>
 
 #ifdef HAVE_SSL
 #  include <QSslSocket>
@@ -418,6 +418,14 @@ public:
 
   static const int AddClientEventId;
 
+  //! Register CoreSession object
+  /** This Method is called from CoreSession Ctor to make its address available in Core
+   *  \note This method is threadsafe
+   *
+   * \param session  The CoreSession object
+   */
+  static void registerCoreSession(QObject* session);
+
 public slots:
   //! Make storage data persistent
   /** \note This method is threadsafe.
@@ -498,10 +506,13 @@ private:
   };
   IdentServer _identServer, _v6identServer;
   QHash<IdentData, IdentRequest> _pendingIdentRequests;
-  //QList<IdentData> _identList;
 
+  // treat threadsafe!
+  QList<QObject*> _coreSessionList;
+
+  QReadWriteLock _readWriteLock;
   void startIdentServer(QHostAddress& ip);
-  QMutex _mutex;
+
 
   QHash<QTcpSocket *, quint32> blocksizes;
   QHash<QTcpSocket *, QVariantMap> clientInfo;

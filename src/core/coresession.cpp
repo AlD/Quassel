@@ -111,6 +111,7 @@ CoreSession::CoreSession(UserId uid, bool restoreState, QObject *parent)
 
   connect(Core::instance(), SIGNAL(requestIdentLookup(IdentData)), this, SLOT(identLookup(IdentData)), Qt::QueuedConnection);
   connect(this, SIGNAL(identResult(IdentData)), Core::instance(), SLOT(identLookupReturned(IdentData)), Qt::QueuedConnection);
+  Core::registerCoreSession(this);
 
   p->synchronize(_bufferSyncer);
   p->synchronize(&aliasManager());

@@ -1020,17 +1020,22 @@ QVariantMap Core::promptForSettings(const Storage *storage) {
   return settings;
 }
 
-
-
+void Core::registerCoreSession(QObject* session)
+{
+  instance()->_readWriteLock.lockForWrite();
+  instance()->_coreSessionList << session;
+  instance()->_readWriteLock.unlock();
+}
 
 void Core::newIdentLookup(const IdentData& data)
 {
   IdentRequest request;
   request.identSocket = qobject_cast<IdentSocket*>(sender());
-  foreach(SessionThread* thread, sessions) {
-    if(thread->session())
-      request.sessionList << thread->session();
-  }
+
+  _readWriteLock.lockForRead();
+  request.sessionList = _coreSessionList;
+  _readWriteLock.unlock();
+
   _pendingIdentRequests[data] = request;
   quInfo() << "newIdentLookup: sessionList.size(): " << request.sessionList.size();
   emit requestIdentLookup(data);
