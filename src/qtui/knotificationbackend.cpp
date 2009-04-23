@@ -22,6 +22,7 @@
 
 #include <KNotification>
 #include <KNotifyConfigWidget>
+#include <QTextDocument>
 
 #include "knotificationbackend.h"
 
@@ -37,11 +38,26 @@ KNotificationBackend::KNotificationBackend(QObject *parent) : AbstractNotificati
 }
 
 void KNotificationBackend::notify(const Notification &n) {
-  //QString title = Client::networkModel()->networkName(n.bufferId) + " - " + Client::networkModel()->bufferName(n.bufferId);
-  QString message = QString("<b>&lt;%1&gt;</b> %2").arg(n.sender, n.message);
-  KNotification *notification = KNotification::event("Highlight", message, DesktopIcon("dialog-information"), QtUi::mainWindow(),
+  QString type;
+  switch(n.type) {
+    case Highlight:
+      type = "Highlight"; break;
+    case HighlightFocused:
+      type = "HighlightFocused"; break;
+    case PrivMsg:
+      type = "PrivMsg"; break;
+    case PrivMsgFocused:
+      type = "PrivMsgFocused"; break;
+  }
+
+  QString message = QString("<b>&lt;%1&gt;</b> %2").arg(n.sender, Qt::escape(n.message));
+  KNotification *notification = KNotification::event(type, message, DesktopIcon("dialog-information"), QtUi::mainWindow(),
                                 KNotification::Persistent|KNotification::RaiseWidgetOnActivation|KNotification::CloseWhenWidgetActivated);
-  connect(notification, SIGNAL(activated()), SLOT(notificationActivated()));
+  connect(notification, SIGNAL(activated(uint)), SLOT(notificationActivated()));
+  connect(notification, SIGNAL(closed()), SLOT(notificationClosed()));
+  notification->setActions(QStringList("View"));
+  _notificationIds[notification] = n.notificationId;
+
   QtUi::mainWindow()->systemTray()->setAlert(true);
 }
 
@@ -51,7 +67,18 @@ void KNotificationBackend::close(uint notificationId) {
 }
 
 void KNotificationBackend::notificationActivated() {
-  emit activated();
+  uint id = 0;
+  KNotification *n = qobject_cast<KNotification *>(sender());
+  if(n && _notificationIds.contains(n))
+    id = _notificationIds.value(n);
+
+  emit activated(id);
+}
+
+void KNotificationBackend::notificationClosed() {
+  KNotification *n = qobject_cast<KNotification *>(sender());
+  if(n && _notificationIds.contains(n))
+    _notificationIds.remove(n);
 }
 
 SettingsPage *KNotificationBackend::createConfigWidget() const {

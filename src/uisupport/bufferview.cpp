@@ -276,7 +276,9 @@ void BufferView::removeSelectedBuffers(bool permanently) {
       continue;
 
     removedRows << bufferId;
+  }
 
+  foreach(BufferId bufferId, removedRows) {
     if(permanently)
       config()->requestRemoveBufferPermanently(bufferId);
     else
@@ -597,4 +599,23 @@ BufferViewDock::BufferViewDock(BufferViewConfig *config, QWidget *parent)
 void BufferViewDock::bufferViewRenamed(const QString &newName) {
   setWindowTitle(newName);
   toggleViewAction()->setText(newName);
+}
+
+int BufferViewDock::bufferViewId() const {
+  BufferView *view = bufferView();
+  if(!view)
+    return 0;
+
+  if(view->config())
+    return view->config()->bufferViewId();
+  else
+    return 0;
+}
+
+BufferViewConfig *BufferViewDock::config() const {
+  BufferView *view = bufferView();
+  if(!view)
+    return 0;
+  else
+    return view->config();
 }

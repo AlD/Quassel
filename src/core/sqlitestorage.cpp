@@ -1146,6 +1146,7 @@ bool SqliteStorage::mergeBuffersPermanently(const UserId &user, const BufferId &
   QSqlQuery delBufferQuery(db);
   delBufferQuery.prepare(queryString("delete_buffer_for_bufferid"));
   delBufferQuery.bindValue(":bufferid", bufferId2.toInt());
+  delBufferQuery.bindValue(":userid", user.toInt());
   safeExec(delBufferQuery);
   if(!watchQuery(delBufferQuery)) {
     db.rollback();
@@ -1631,7 +1632,7 @@ bool SqliteMigrationReader::readMo(BacklogMO &backlog) {
   }
 
   backlog.messageid = value(0).toInt();
-  backlog.time = QDateTime::fromTime_t(value(1).toInt());
+  backlog.time = QDateTime::fromTime_t(value(1).toInt()).toUTC();
   backlog.bufferid = value(2).toInt();
   backlog.type = value(3).toInt();
   backlog.flags = value(4).toInt();

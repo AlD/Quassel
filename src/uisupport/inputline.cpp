@@ -18,32 +18,41 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <QApplication>
+#include <QMenu>
+#include <QMessageBox>
+
 #include "bufferview.h"
 #include "graphicalui.h"
 #include "inputline.h"
 #include "tabcompleter.h"
+
+const int leftMargin = 3;
 
 InputLine::InputLine(QWidget *parent)
   :
 #ifdef HAVE_KDE
     KTextEdit(parent),
 #else
-    QLineEdit(parent),
+    QTextEdit(parent),
 #endif
     idx(0),
     tabCompleter(new TabCompleter(this))
 {
-#ifdef HAVE_KDE
-//This is done to make the KTextEdit look like a lineedit
-  setMaximumHeight(document()->size().toSize().height());
+  // Make the QTextEdit look like a QLineEdit
+#if QT_VERSION >= 0x040500
+  document()->setDocumentMargin(0); // new in Qt 4.5 and we really don't want it here
+#endif
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setAcceptRichText(false);
   setLineWrapMode(NoWrap);
+#ifdef HAVE_KDE
   enableFindReplace(false);
-  connect(this, SIGNAL(textChanged()), this, SLOT(on_textChanged()));
 #endif
+  resetLine();
 
+  connect(this, SIGNAL(textChanged()), this, SLOT(on_textChanged()));
   connect(this, SIGNAL(returnPressed()), this, SLOT(on_returnPressed()));
   connect(this, SIGNAL(textChanged(QString)), this, SLOT(on_textChanged(QString)));
 }
@@ -53,9 +62,24 @@ InputLine::~InputLine() {
 
 void InputLine::setCustomFont(const QFont &font) {
   setFont(font);
-#ifdef HAVE_KDE
-  setMaximumHeight(document()->size().toSize().height());
-#endif
+}
+
+QSize InputLine::sizeHint() const {
+  // use the style to determine a decent size
+  QFontMetrics fm(font());
+  int h = fm.lineSpacing() + 2 * frameWidth();
+  QStyleOptionFrameV2 opt;
+  opt.initFrom(this);
+  opt.rect = QRect(0, 0, 100, h);
+  opt.lineWidth = lineWidth();
+  opt.midLineWidth = midLineWidth();
+  opt.state |= QStyle::State_Sunken;
+  QSize s = style()->sizeFromContents(QStyle::CT_LineEdit, &opt, QSize(100, h).expandedTo(QApplication::globalStrut()), this);
+  return s;
+}
+
+QSize InputLine::minimumSizeHint() const {
+  return sizeHint();
 }
 
 bool InputLine::eventFilter(QObject *watched, QEvent *event) {
@@ -80,8 +104,6 @@ bool InputLine::eventFilter(QObject *watched, QEvent *event) {
 }
 
 void InputLine::keyPressEvent(QKeyEvent * event) {
-
-#ifdef HAVE_KDE
   if(event->matches(QKeySequence::Find)) {
     QAction *act = GraphicalUi::actionCollection()->action("ToggleSearchBar");
     if(act) {
@@ -90,7 +112,6 @@ void InputLine::keyPressEvent(QKeyEvent * event) {
       return;
     }
   }
-#endif
 
   switch(event->key()) {
   case Qt::Key_Up:
@@ -123,32 +144,15 @@ void InputLine::keyPressEvent(QKeyEvent * event) {
 
     break;
 
-  case Qt::Key_Select:		// for Qtopia
+  case Qt::Key_Return:
+  case Qt::Key_Enter:
+  case Qt::Key_Select:
+    event->accept();
     emit returnPressed();
     break;
 
-#ifdef HAVE_KDE
-//Since this is a ktextedit, we don't have this signal "natively"
-  case Qt::Key_Return:
-    event->accept();
-    if(!text().isEmpty())
-      emit returnPressed();
-    break;
-
-  case Qt::Key_Enter:
-    event->accept();
-    if(!text().isEmpty())
-      emit returnPressed();
-    break;
-
-#endif
-
   default:
-#ifdef HAVE_KDE
-    KTextEdit::keyPressEvent(event);
-#else
-    QLineEdit::keyPressEvent(event);
-#endif
+    QTextEdit::keyPressEvent(event);
   }
 }
 
@@ -175,10 +179,12 @@ bool InputLine::addToHistory(const QString &text, bool temporary) {
 }
 
 void InputLine::on_returnPressed() {
-  addToHistory(text());
-  foreach(QString newText, text().split(QRegExp("[\\r\\n]+")))
-    emit sendText(newText);
-  resetLine();
+  if(!text().isEmpty()) {
+    addToHistory(text());
+    foreach(QString newText, text().split(QRegExp("[\\r\\n]+")))
+      emit sendText(newText);
+    resetLine();
+  }
 }
 
 void InputLine::on_textChanged(QString newText) {
@@ -191,9 +197,18 @@ void InputLine::resetLine() {
   // every time the InputLine is cleared we also reset history index
   idx = history.count();
   clear();
+  QTextBlockFormat format = textCursor().blockFormat();
+  format.setLeftMargin(leftMargin); // we want a little space between the frame and the contents
+  textCursor().setBlockFormat(format);
 }
 
 void InputLine::showHistoryEntry() {
   // if the user changed the history, display the changed line
-  tempHistory.contains(idx) ? setText(tempHistory[idx]) : setText(history[idx]);
+  setPlainText(tempHistory.contains(idx) ? tempHistory[idx] : history[idx]);
+  QTextCursor cursor = textCursor();
+  QTextBlockFormat format = cursor.blockFormat();
+  format.setLeftMargin(leftMargin); // we want a little space between the frame and the contents
+  cursor.setBlockFormat(format);
+  cursor.movePosition(QTextCursor::End);
+  setTextCursor(cursor);
 }

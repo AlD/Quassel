@@ -18,32 +18,69 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef CLIENTBUFFERVIEWMANAGER_H
-#define CLIENTBUFFERVIEWMANAGER_H
+#ifndef BUFFERVIEWOVERLAY_H
+#define BUFFERVIEWOVERLAY_H
 
-#include "bufferviewmanager.h"
+#include <QObject>
 
+#include "types.h"
+
+class BufferViewConfig;
 class ClientBufferViewConfig;
-class BufferViewOverlay;
 
-class ClientBufferViewManager : public BufferViewManager {
+class BufferViewOverlay : public QObject {
   Q_OBJECT
 
 public:
-  ClientBufferViewManager(SignalProxy *proxy, QObject *parent = 0);
+  BufferViewOverlay(QObject *parent = 0);
 
-  QList<ClientBufferViewConfig *> clientBufferViewConfigs() const;
-  ClientBufferViewConfig *clientBufferViewConfig(int bufferViewId) const;
+  bool allNetworks();
 
-protected:
-  virtual BufferViewConfig *bufferViewConfigFactory(int bufferViewConfigId);
+  const QSet<NetworkId> &networkIds();
+  const QSet<BufferId> &bufferIds();
+  const QSet<BufferId> &removedBufferIds();
+  const QSet<BufferId> &tempRemovedBufferIds();
+
+  bool addBuffersAutomatically();
+  bool hideInactiveBuffers();
+  int allowedBufferTypes();
+  int minimumActivity();
+
+public slots:
+  void addView(int viewId);
+  void removeView(int viewId);
+
+  // updates propagated from the actual views
+  void update();
 
 signals:
-  void viewsInitialized();
+  void hasChanged();
+
+protected:
+  virtual void customEvent(QEvent *event);
 
 private slots:
-  void waitForConfigInit();
-  void configInitBarrier();
+  void viewInitialized();
+  void viewInitialized(BufferViewConfig *config);
+
+private:
+  void updateHelper();
+  bool _aboutToUpdate;
+
+  QSet<int> _bufferViewIds;
+
+  QSet<NetworkId> _networkIds;
+
+  bool _addBuffersAutomatically;
+  bool _hideInactiveBuffers;
+  int _allowedBufferTypes;
+  int _minimumActivity;
+
+  QSet<BufferId> _buffers;
+  QSet<BufferId> _removedBuffers;
+  QSet<BufferId> _tempRemovedBuffers;
+
+  static const int _updateEventId;
 };
 
-#endif //CLIENTBUFFERVIEWMANAGER_H
+#endif //BUFFERVIEWOVERLAY_H

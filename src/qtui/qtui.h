@@ -49,14 +49,13 @@ public:
   inline static QtUiStyle *style();
   inline static MainWin *mainWindow();
 
-
   /* Notifications */
 
   static void registerNotificationBackend(AbstractNotificationBackend *);
   static void unregisterNotificationBackend(AbstractNotificationBackend *);
   static void unregisterAllNotificationBackends();
   static const QList<AbstractNotificationBackend *> &notificationBackends();
-  static uint invokeNotification(BufferId bufId, const QString &sender, const QString &text);
+  static uint invokeNotification(BufferId bufId, AbstractNotificationBackend::NotificationType type, const QString &sender, const QString &text);
   static void closeNotification(uint notificationId);
   static void closeNotifications(BufferId bufferId = BufferId());
   static const QList<AbstractNotificationBackend::Notification> &activeNotifications();
@@ -67,7 +66,7 @@ public slots:
 protected slots:
   void connectedToCore();
   void disconnectedFromCore();
-  void notificationActivated();
+  void notificationActivated(uint notificationId);
 
 private:
   static QPointer<QtUi> _instance;

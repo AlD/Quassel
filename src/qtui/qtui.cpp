@@ -21,6 +21,7 @@
 #include "qtui.h"
 
 #include "abstractnotificationbackend.h"
+#include "buffermodel.h"
 #include "chatlinemodel.h"
 #include "contextmenuactionprovider.h"
 #include "mainwin.h"
@@ -30,6 +31,10 @@
 #include "toolbaractionprovider.h"
 #include "types.h"
 #include "util.h"
+
+#ifdef Q_WS_X11
+#  include <QX11Info>
+#endif
 
 QPointer<QtUi> QtUi::_instance = 0;
 QPointer<MainWin> QtUi::_mainWin = 0;
@@ -88,7 +93,7 @@ void QtUi::disconnectedFromCore() {
 void QtUi::registerNotificationBackend(AbstractNotificationBackend *backend) {
   if(!_notificationBackends.contains(backend)) {
     _notificationBackends.append(backend);
-    instance()->connect(backend, SIGNAL(activated()), SLOT(notificationActivated()));
+    instance()->connect(backend, SIGNAL(activated(uint)), SLOT(notificationActivated(uint)));
   }
 }
 
@@ -104,10 +109,10 @@ const QList<AbstractNotificationBackend *> &QtUi::notificationBackends() {
   return _notificationBackends;
 }
 
-uint QtUi::invokeNotification(BufferId bufId, const QString &sender, const QString &text) {
+uint QtUi::invokeNotification(BufferId bufId, AbstractNotificationBackend::NotificationType type, const QString &sender, const QString &text) {
   static int notificationId = 0;
   //notificationId++;
-  AbstractNotificationBackend::Notification notification(++notificationId, bufId, sender, text);
+  AbstractNotificationBackend::Notification notification(++notificationId, bufId, type, sender, text);
   _notifications.append(notification);
   foreach(AbstractNotificationBackend *backend, _notificationBackends)
     backend->notify(notification);
@@ -122,9 +127,7 @@ void QtUi::closeNotification(uint notificationId) {
         backend->close(notificationId);
       i = _notifications.erase(i);
       break;
-    } else {
-      ++i;
-    }
+    } else ++i;
   }
 }
 
@@ -135,9 +138,7 @@ void QtUi::closeNotifications(BufferId bufferId) {
       foreach(AbstractNotificationBackend *backend, _notificationBackends)
         backend->close((*i).notificationId);
       i = _notifications.erase(i);
-    } else {
-      ++i;
-    }
+    } else ++i;
   }
 }
 
@@ -145,8 +146,30 @@ const QList<AbstractNotificationBackend::Notification> &QtUi::activeNotification
   return _notifications;
 }
 
-void QtUi::notificationActivated() {
-  // this might not work with some window managers
+void QtUi::notificationActivated(uint notificationId) {
+  if(notificationId != 0) {
+    QList<AbstractNotificationBackend::Notification>::iterator i = _notifications.begin();
+    while(i != _notifications.end()) {
+      if((*i).notificationId == notificationId) {
+        BufferId bufId = (*i).bufferId;
+        if(bufId.isValid())
+          Client::bufferModel()->switchToBuffer(bufId);
+        _notifications.erase(i);
+        break;
+      } else ++i;
+    }
+  }
+
+#ifdef Q_WS_X11
+  // Bypass focus stealing prevention
+  QX11Info::setAppUserTime(QX11Info::appTime());
+#endif
+
+  if(_mainWin->windowState() & Qt::WindowMinimized) {
+    // restore
+    _mainWin->setWindowState((_mainWin->windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+    _mainWin->show();
+  }
   _mainWin->raise();
   _mainWin->activateWindow();
 }

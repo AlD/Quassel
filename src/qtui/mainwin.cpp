@@ -35,6 +35,8 @@
 #include "actioncollection.h"
 #include "buffermodel.h"
 #include "bufferview.h"
+#include "bufferviewoverlay.h"
+#include "bufferviewoverlayfilter.h"
 #include "bufferwidget.h"
 #include "channellistdlg.h"
 #include "chatlinemodel.h"
@@ -255,6 +257,8 @@ void MainWin::setupActions() {
                                          qApp, SLOT(aboutQt())));
   coll->addAction("DebugNetworkModel", new Action(SmallIcon("tools-report-bug"), tr("Debug &NetworkModel"), coll,
                                        this, SLOT(on_actionDebugNetworkModel_triggered())));
+  coll->addAction("DebugBufferViewOverlay", new Action(SmallIcon("tools-report-bug"), tr("Debug &BufferViewOverlay"), coll,
+                                       this, SLOT(on_actionDebugBufferViewOverlay_triggered())));
   coll->addAction("DebugMessageModel", new Action(SmallIcon("tools-report-bug"), tr("Debug &MessageModel"), coll,
                                        this, SLOT(on_actionDebugMessageModel_triggered())));
   coll->addAction("DebugLog", new Action(SmallIcon("tools-report-bug"), tr("Debug &Log"), coll,
@@ -315,6 +319,7 @@ void MainWin::setupMenus() {
   _helpMenu->addSeparator();
   _helpDebugMenu = _helpMenu->addMenu(SmallIcon("tools-report-bug"), tr("Debug"));
   _helpDebugMenu->addAction(coll->action("DebugNetworkModel"));
+  _helpDebugMenu->addAction(coll->action("DebugBufferViewOverlay"));
   _helpDebugMenu->addAction(coll->action("DebugMessageModel"));
   _helpDebugMenu->addAction(coll->action("DebugLog"));
 }
@@ -351,6 +356,7 @@ void MainWin::addBufferView(ClientBufferViewConfig *config) {
   addDockWidget(Qt::LeftDockWidgetArea, dock);
   _bufferViewsMenu->addAction(dock->toggleViewAction());
 
+  connect(dock->toggleViewAction(), SIGNAL(toggled(bool)), this, SLOT(bufferViewToggled(bool)));
   _bufferViews.append(dock);
 }
 
@@ -367,6 +373,35 @@ void MainWin::removeBufferView(int bufferViewConfigId) {
       removeAction(action);
       dock->deleteLater();
     }
+  }
+}
+
+void MainWin::bufferViewToggled(bool enabled) {
+  QAction *action = qobject_cast<QAction *>(sender());
+  Q_ASSERT(action);
+  BufferViewDock *dock = qobject_cast<BufferViewDock *>(action->parent());
+  Q_ASSERT(dock);
+  if(enabled) {
+    Client::bufferViewOverlay()->addView(dock->bufferViewId());
+    BufferViewConfig *config = dock->config();
+    if(config && config->isInitialized()) {
+      BufferIdList buffers;
+      if(config->networkId().isValid()) {
+        foreach(BufferId bufferId, config->bufferList()) {
+          if(Client::networkModel()->networkId(bufferId) == config->networkId())
+            buffers << bufferId;
+        }
+        foreach(BufferId bufferId, config->temporarilyRemovedBuffers().toList()) {
+          if(Client::networkModel()->networkId(bufferId) == config->networkId())
+            buffers << bufferId;
+        }
+      } else {
+        buffers = BufferIdList::fromSet(config->bufferList().toSet() + config->temporarilyRemovedBuffers());
+      }
+      Client::backlogManager()->checkForBacklog(buffers);
+    }
+  } else {
+    Client::bufferViewOverlay()->removeView(dock->bufferViewId());
   }
 }
 
@@ -532,7 +567,7 @@ void MainWin::setupToolBars() {
 #ifdef Q_WS_MAC
   setUnifiedTitleAndToolBarOnMac(true);
 #endif
-  _mainToolBar = addToolBar("Main Toolbar");
+  _mainToolBar = addToolBar(tr("Main Toolbar"));
   _mainToolBar->setObjectName("MainToolBar");
 
   QtUi::toolBarActionProvider()->addActions(_mainToolBar, ToolBarActionProvider::MainToolBar);
@@ -793,8 +828,7 @@ void MainWin::toggleMinimizedToTray() {
 void MainWin::messagesInserted(const QModelIndex &parent, int start, int end) {
   Q_UNUSED(parent);
 
-  if(QApplication::activeWindow() != 0)
-    return;
+  bool hasFocus = QApplication::activeWindow() != 0;
 
   for(int i = start; i <= end; i++) {
     QModelIndex idx = Client::messageModel()->index(i, ChatLineModel::ContentsColumn);
@@ -803,18 +837,33 @@ void MainWin::messagesInserted(const QModelIndex &parent, int start, int end) {
       continue;
     }
     Message::Flags flags = (Message::Flags)idx.data(ChatLineModel::FlagsRole).toInt();
-    if(flags.testFlag(Message::Backlog) || flags.testFlag(Message::Self)) continue;
+    if(flags.testFlag(Message::Backlog) || flags.testFlag(Message::Self))
+      continue;
     flags |= Message::Backlog;  // we only want to trigger a highlight once!
     Client::messageModel()->setData(idx, (int)flags, ChatLineModel::FlagsRole);
 
     BufferId bufId = idx.data(ChatLineModel::BufferIdRole).value<BufferId>();
     BufferInfo::Type bufType = Client::networkModel()->bufferType(bufId);
 
+    if(hasFocus && bufId == _bufferWidget->currentBuffer())
+      continue;
+
     if(flags & Message::Highlight || bufType == BufferInfo::QueryBuffer) {
       QModelIndex senderIdx = Client::messageModel()->index(i, ChatLineModel::SenderColumn);
       QString sender = senderIdx.data(ChatLineModel::EditRole).toString();
       QString contents = idx.data(ChatLineModel::DisplayRole).toString();
-      QtUi::invokeNotification(bufId, sender, contents);
+      AbstractNotificationBackend::NotificationType type;
+
+      if(bufType == BufferInfo::QueryBuffer && !hasFocus)
+        type = AbstractNotificationBackend::PrivMsg;
+      else if(bufType == BufferInfo::QueryBuffer && hasFocus)
+        type = AbstractNotificationBackend::PrivMsgFocused;
+      else if(flags & Message::Highlight && !hasFocus)
+        type = AbstractNotificationBackend::Highlight;
+      else
+        type = AbstractNotificationBackend::HighlightFocused;
+
+      QtUi::invokeNotification(bufId, type, sender, contents);
     }
   }
 }
@@ -890,6 +939,20 @@ void MainWin::on_actionDebugNetworkModel_triggered() {
   view->setAttribute(Qt::WA_DeleteOnClose);
   view->setWindowTitle("Debug NetworkModel View");
   view->setModel(Client::networkModel());
+  view->setColumnWidth(0, 250);
+  view->setColumnWidth(1, 250);
+  view->setColumnWidth(2, 80);
+  view->resize(610, 300);
+  view->show();
+}
+
+void MainWin::on_actionDebugBufferViewOverlay_triggered() {
+  QTreeView *view = new QTreeView;
+  view->setAttribute(Qt::WA_DeleteOnClose);
+  view->setWindowTitle("Debug BufferViewOverlay View");
+  BufferViewOverlayFilter *filter = new BufferViewOverlayFilter(Client::bufferModel(), Client::bufferViewOverlay());
+  filter->setParent(view);
+  view->setModel(filter);
   view->setColumnWidth(0, 250);
   view->setColumnWidth(1, 250);
   view->setColumnWidth(2, 80);

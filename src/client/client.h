@@ -42,6 +42,7 @@ class AbstractUiMsg;
 class NetworkModel;
 class BufferModel;
 class BufferSyncer;
+class BufferViewOverlay;
 class ClientAliasManager;
 class ClientBacklogManager;
 class ClientBufferViewManager;
@@ -107,6 +108,7 @@ public:
   static inline ClientBacklogManager *backlogManager() { return instance()->_backlogManager; }
   static inline ClientIrcListHelper *ircListHelper() { return instance()->_ircListHelper; }
   static inline ClientBufferViewManager *bufferViewManager() { return instance()->_bufferViewManager; }
+  static inline BufferViewOverlay *bufferViewOverlay() { return instance()->_bufferViewOverlay; }
   static inline ClientUserInputHandler *inputHandler() { return instance()->_inputHandler; }
 
   static AccountId currentCoreAccount();
@@ -210,6 +212,7 @@ private:
   ClientAliasManager *_aliasManager;
   ClientBacklogManager *_backlogManager;
   ClientBufferViewManager *_bufferViewManager;
+  BufferViewOverlay *_bufferViewOverlay;
   ClientIrcListHelper *_ircListHelper;
   ClientUserInputHandler *_inputHandler;
 
