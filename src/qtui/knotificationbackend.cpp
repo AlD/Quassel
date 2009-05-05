@@ -34,7 +34,8 @@
 #include "systemtray.h"
 
 KNotificationBackend::KNotificationBackend(QObject *parent) : AbstractNotificationBackend(parent) {
-
+  connect(QtUi::mainWindow()->systemTray(), SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+                                            SLOT(notificationActivated(QSystemTrayIcon::ActivationReason)));
 }
 
 void KNotificationBackend::notify(const Notification &n) {
@@ -52,7 +53,9 @@ void KNotificationBackend::notify(const Notification &n) {
 
   QString message = QString("<b>&lt;%1&gt;</b> %2").arg(n.sender, Qt::escape(n.message));
   KNotification *notification = KNotification::event(type, message, DesktopIcon("dialog-information"), QtUi::mainWindow(),
-                                KNotification::Persistent|KNotification::RaiseWidgetOnActivation|KNotification::CloseWhenWidgetActivated);
+                                KNotification::RaiseWidgetOnActivation
+                               |KNotification::CloseWhenWidgetActivated
+                               |KNotification::CloseOnTimeout);
   connect(notification, SIGNAL(activated(uint)), SLOT(notificationActivated()));
   connect(notification, SIGNAL(closed()), SLOT(notificationClosed()));
   notification->setActions(QStringList("View"));
@@ -72,7 +75,30 @@ void KNotificationBackend::notificationActivated() {
   if(n && _notificationIds.contains(n))
     id = _notificationIds.value(n);
 
-  emit activated(id);
+  notificationActivated(id);
+}
+
+void KNotificationBackend::notificationActivated(QSystemTrayIcon::ActivationReason reason) {
+  if(reason == QSystemTrayIcon::Trigger && _notificationIds.count() > 0) {
+    notificationActivated(_notificationIds.values().at(0)); // we choose a random one for now
+  }
+}
+
+void KNotificationBackend::notificationActivated(uint notificationId) {
+  QHash<KNotification *, uint>::iterator i = _notificationIds.begin();
+  while(i != _notificationIds.end()) {
+    if(i.value() == notificationId)
+      i = _notificationIds.erase(i);
+    else
+      ++i;
+  }
+
+  QtUi::mainWindow()->systemTray()->setInhibitActivation();
+  emit activated(notificationId);
+
+  if(!_notificationIds.count())
+    QtUi::mainWindow()->systemTray()->setAlert(false);
+
 }
 
 void KNotificationBackend::notificationClosed() {
