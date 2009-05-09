@@ -181,7 +181,8 @@ bool InputLine::addToHistory(const QString &text, bool temporary) {
 void InputLine::on_returnPressed() {
   if(!text().isEmpty()) {
     addToHistory(text());
-    emit sendText(text());
+    foreach(QString newText, text().split(QRegExp("[\\r\\n]+")))
+      emit sendText(newText);
     resetLine();
   }
 }
