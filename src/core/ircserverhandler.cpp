@@ -57,11 +57,23 @@ void IrcServerHandler::handleServerMsg(QByteArray msg) {
   // NOTE: This assumes that this is true in raw encoding, but well, hopefully there are no servers running in japanese on protocol level...
   int idx = msg.indexOf(" :");
   if(idx >= 0) {
-    if(msg.length() > idx + 2) trailing = msg.mid(idx + 2);
+    if(msg.length() > idx + 2)
+      trailing = msg.mid(idx + 2);
     msg = msg.left(idx);
   }
   // OK, now it is safe to split...
   QList<QByteArray> params = msg.split(' ');
+
+  // This could still contain empty elements due to (faulty?) ircds sending multiple spaces in a row
+  // Also, QByteArray is not nearly as convenient to work with as QString for such things :)
+  QList<QByteArray>::iterator iter = params.begin();
+  while(iter != params.end()) {
+    if(iter->isEmpty())
+      iter = params.erase(iter);
+    else
+      ++iter;
+  }
+
   if(!trailing.isEmpty()) params << trailing;
   if(params.count() < 1) {
     qWarning() << "Received invalid string from server!";
@@ -124,12 +136,12 @@ void IrcServerHandler::defaultHandler(QString cmd, const QString &prefix, const 
         break;
       // Server error messages, display them in red. First param will be appended.
       case 401: {
-	QString target = params.takeFirst();
-	displayMsg(Message::Error, target, params.join(" ") + " " + target, prefix, Message::Redirected);
-	break;
+        QString target = params.takeFirst();
+        emit displayMsg(Message::Error, target, params.join(" ") + " " + target, prefix, Message::Redirected);
+        break;
       }
       case 402: case 403: case 404: case 406: case 408: case 415: case 421: case 442: {
-	QString channelName = params.takeFirst();
+        QString channelName = params.takeFirst();
         emit displayMsg(Message::Error, BufferInfo::StatusBuffer, "", params.join(" ") + " " + channelName, prefix);
         break;
       }
@@ -137,7 +149,8 @@ void IrcServerHandler::defaultHandler(QString cmd, const QString &prefix, const 
       case 413: case 414: case 423: case 441: case 444: case 461:  // FIXME see below for the 47x codes
       case 467: case 471: case 473: case 474: case 475: case 476: case 477: case 478: case 482:
       case 436: // ERR_NICKCOLLISION
-      { QString p = params.takeFirst();
+      {
+        QString p = params.takeFirst();
         emit displayMsg(Message::Error, BufferInfo::StatusBuffer, "", p + ": " + params.join(" "));
         break;
       }
@@ -147,15 +160,15 @@ void IrcServerHandler::defaultHandler(QString cmd, const QString &prefix, const 
 
       // Everything else will be marked in red, so we can add them somewhere.
       default:
-	if(_whois) {
-	  // many nets define their own WHOIS fields. we fetch those not in need of special attention here:
-	  emit displayMsg(Message::Server, BufferInfo::StatusBuffer, "", "[Whois] " + params.join(" "), prefix);
-	} else {
-	  if(coreSession()->ircListHelper()->requestInProgress(network()->networkId()))
-	    coreSession()->ircListHelper()->reportError(params.join(" "));
-	  else
-	    emit displayMsg(Message::Error, BufferInfo::StatusBuffer, "", cmd + " " + params.join(" "), prefix);
-	}
+        if(_whois) {
+          // many nets define their own WHOIS fields. we fetch those not in need of special attention here:
+          emit displayMsg(Message::Server, BufferInfo::StatusBuffer, "", "[Whois] " + params.join(" "), prefix);
+        } else {
+          if(coreSession()->ircListHelper()->requestInProgress(network()->networkId()))
+            coreSession()->ircListHelper()->reportError(params.join(" "));
+          else
+            emit displayMsg(Message::Error, BufferInfo::StatusBuffer, "", cmd + " " + params.join(" "), prefix);
+        }
     }
     //qDebug() << prefix <<":"<<cmd<<params;
   } else {
@@ -224,43 +237,43 @@ void IrcServerHandler::handleMode(const QString &prefix, const QList<QByteArray>
     int paramOffset = 2;
     for(int c = 0; c < modes.length(); c++) {
       if(modes[c] == '+') {
-	add = true;
-	continue;
+        add = true;
+        continue;
       }
       if(modes[c] == '-') {
-	add = false;
-	continue;
+        add = false;
+        continue;
       }
 
       if(network()->prefixModes().contains(modes[c])) {
-	// user channel modes (op, voice, etc...)
-	if(paramOffset < params.count()) {
-	  IrcUser *ircUser = network()->ircUser(params[paramOffset]);
-	  if(add)
-	    channel->addUserMode(ircUser, QString(modes[c]));
-	  else
-	    channel->removeUserMode(ircUser, QString(modes[c]));
-	} else {
-	  qWarning() << "Received MODE with too few parameters:" << serverDecode(params);
-	}
-	paramOffset++;
+        // user channel modes (op, voice, etc...)
+        if(paramOffset < params.count()) {
+          IrcUser *ircUser = network()->ircUser(params[paramOffset]);
+          if(add)
+            channel->addUserMode(ircUser, QString(modes[c]));
+          else
+            channel->removeUserMode(ircUser, QString(modes[c]));
+        } else {
+          qWarning() << "Received MODE with too few parameters:" << serverDecode(params);
+        }
+        paramOffset++;
       } else {
-	// regular channel modes
-	QString value;
-	Network::ChannelModeType modeType = network()->channelModeType(modes[c]);
-	if(modeType == Network::A_CHANMODE || modeType == Network::B_CHANMODE || (modeType == Network::C_CHANMODE && add)) {
-	    if(paramOffset < params.count()) {
-	      value = params[paramOffset];
-	    } else {
-	      qWarning() << "Received MODE with too few parameters:" << serverDecode(params);
-	    }
-	    paramOffset++;
-	}
+        // regular channel modes
+        QString value;
+        Network::ChannelModeType modeType = network()->channelModeType(modes[c]);
+        if(modeType == Network::A_CHANMODE || modeType == Network::B_CHANMODE || (modeType == Network::C_CHANMODE && add)) {
+          if(paramOffset < params.count()) {
+            value = params[paramOffset];
+          } else {
+            qWarning() << "Received MODE with too few parameters:" << serverDecode(params);
+          }
+          paramOffset++;
+        }
 
-	if(add)
-	  channel->addChannelMode(modes[c], value);
-	else
-	  channel->removeChannelMode(modes[c], value);
+        if(add)
+          channel->addChannelMode(modes[c], value);
+        else
+          channel->removeChannelMode(modes[c], value);
       }
     }
 
@@ -273,17 +286,17 @@ void IrcServerHandler::handleMode(const QString &prefix, const QList<QByteArray>
     bool add = false;
     for(int c = 0; c < modeString.count(); c++) {
       if(modeString[c] == '+') {
-	add = true;
-	continue;
+        add = true;
+        continue;
       }
       if(modeString[c] == '-') {
-	add = false;
-	continue;
+        add = false;
+        continue;
       }
       if(add)
-	addModes += modeString[c];
+        addModes += modeString[c];
       else
-	removeModes += modeString[c];
+        removeModes += modeString[c];
     }
     if(!addModes.isEmpty())
       ircUser->addUserModes(addModes);
@@ -338,9 +351,9 @@ void IrcServerHandler::handleNotice(const QString &prefix, const QList<QByteArra
       msg = msg.mid(welcomeRegExp.matchedLength());
       CoreIrcChannel *chan = static_cast<CoreIrcChannel *>(network()->ircChannel(channelname)); // we only have CoreIrcChannels in the core, so this cast is safe
       if(chan && !chan->receivedWelcomeMsg()) {
-	chan->setReceivedWelcomeMsg();
-	emit displayMsg(Message::Notice, BufferInfo::ChannelBuffer, channelname, msg, prefix);
-	return;
+        chan->setReceivedWelcomeMsg();
+        emit displayMsg(Message::Notice, BufferInfo::ChannelBuffer, channelname, msg, prefix);
+        return;
       }
     }
   }
@@ -729,7 +742,7 @@ void IrcServerHandler::handle317(const QString &prefix, const QList<QByteArray> 
     int idleSecs = serverDecode(params[1]).toInt();
     idleSecs *= -1;
     ircuser->setIdleTime(now.addSecs(idleSecs));
-    if(params.size() > 3) {	// if we have more then 3 params we have the obove mentioned "real life" situation
+    if(params.size() > 3) { // if we have more then 3 params we have the above mentioned "real life" situation
       int loginTime = serverDecode(params[2]).toInt();
       ircuser->setLoginTime(QDateTime::fromTime_t(loginTime));
       emit displayMsg(Message::Server, BufferInfo::StatusBuffer, "", tr("[Whois] %1 is logged in since %2").arg(ircuser->nick()).arg(ircuser->loginTime().toString()));
@@ -819,14 +832,34 @@ void IrcServerHandler::handle324(const QString &prefix, const QList<QByteArray> 
   handleMode(prefix, params);
 }
 
+/* RPL_??? - "<channel> <homepage> */
+void IrcServerHandler::handle328(const QString &prefix, const QList<QByteArray> &params) {
+  Q_UNUSED(prefix);
+  if(!checkParamCount("IrcServerHandler::handle328()", params, 2))
+    return;
+
+  QString channel = serverDecode(params[0]);
+  QString homepage = serverDecode(params[1]);
+
+  emit displayMsg(Message::Server, BufferInfo::ChannelBuffer, channel, tr("Homepage for %1 is %2").arg(channel, homepage));
+}
+
+
 /* RPL_??? - "<channel> <creation time (unix)>" */
 void IrcServerHandler::handle329(const QString &prefix, const QList<QByteArray> &params) {
   Q_UNUSED(prefix);
-  Q_UNUSED(params)
-#ifdef __GNUC__
-#  warning "Implement handle329 (Channel creation time)"
-#endif
-  // FIXME implement this...
+  if(!checkParamCount("IrcServerHandler::handle329()", params, 2))
+    return;
+
+  QString channel = serverDecode(params[0]);
+  uint unixtime = params[1].toUInt();
+  if(!unixtime) {
+    qWarning() << Q_FUNC_INFO << "received invalid timestamp:" << params[1];
+    return;
+  }
+  QDateTime time = QDateTime::fromTime_t(unixtime);
+
+  emit displayMsg(Message::Server, BufferInfo::ChannelBuffer, channel, tr("Channel %1 created on %2").arg(channel, time.toString()));
 }
 
 /* RPL_NOTOPIC */
