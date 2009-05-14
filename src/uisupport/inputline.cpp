@@ -162,22 +162,20 @@ bool InputLine::addToHistory(const QString &text, bool temporary) {
 
   Q_ASSERT(0 <= idx && idx <= history.count());
 
-  if(temporary) {
+  if(history.isEmpty() || text != history[idx - (int)(idx == history.count())]) {
     // if an entry of the history is changed, we remember it and show it again at this
     // position until a line was actually sent
     // sent lines get appended to the history
-    if(history.isEmpty() || text != history[idx - (int)(idx == history.count())]) {
+    if(temporary) {
       tempHistory[idx] = text;
-      return true;
-    }
-  } else {
-    if(history.isEmpty() || text != history.last()) {
+    } else {
       history << text;
       tempHistory.clear();
-      return true;
     }
+    return true;
+  } else {
+    return false;
   }
-  return false;
 }
 
 void InputLine::on_returnPressed() {
