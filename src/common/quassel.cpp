@@ -22,7 +22,9 @@
 
 #include <iostream>
 #include <signal.h>
+#ifndef Q_OS_WIN32
 #include <sys/resource.h>
+#endif
 
 #include <QCoreApplication>
 #include <QDateTime>
@@ -57,17 +59,19 @@ Quassel::Quassel() {
   // on mac os we use it's integrated backtrace generator
 #if defined(Q_OS_WIN32) || (defined(HAVE_EXECINFO) && !defined(Q_OS_MAC))
 
+# ifndef Q_OS_WIN32
   // we only handle crashes ourselves if coredumps are disabled
   struct rlimit *limit = (rlimit *) malloc(sizeof(struct rlimit));
   int rc = getrlimit(RLIMIT_CORE, limit);
 
   if ( rc == -1 || !((long)limit->rlim_cur > 0 || limit->rlim_cur == RLIM_INFINITY) ) {
+# endif
     signal(SIGABRT, handleSignal);
     signal(SIGSEGV, handleSignal);
 #   ifndef Q_OS_WIN32
     signal(SIGBUS, handleSignal);
-#   endif
   }
+#   endif
   free(limit);
 
   signal(SIGQUIT, handleSignal);
