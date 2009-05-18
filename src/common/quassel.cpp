@@ -103,6 +103,9 @@ bool Quassel::init()
         free(limit);
 # endif /* Q_OS_WIN */
 #endif /* Q_OS_WIN || HAVE_EXECINFO */
+#ifndef Q_OS_WIN
+    signal(SIGQUIT, handleSignal);
+#endif /* Q_OS_WIN */
     }
 
     instance()->_initialized = true;
@@ -358,9 +361,11 @@ void Quassel::handleSignal(int sig)
 #endif
         instance()->logBacktrace(instance()->coreDumpFileName());
         exit(EXIT_FAILURE);
-  case SIGQUIT:
+#ifndef Q_OS_WIN
+    case SIGQUIT:
 	logBacktrace(coreDumpFileName());
 	break;
+#endif
     default:
         ;
     }
