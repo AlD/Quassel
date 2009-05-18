@@ -71,10 +71,12 @@ Quassel::Quassel() {
 #   ifndef Q_OS_WIN32
     signal(SIGBUS, handleSignal);
   }
-#   endif
   free(limit);
+#   endif
 
+# ifndef Q_OS_WIN32
   signal(SIGQUIT, handleSignal);
+# endif
 #endif
 }
 
@@ -218,9 +220,11 @@ void Quassel::handleSignal(int sig) {
     logBacktrace(coreDumpFileName());
     exit(EXIT_FAILURE);
     break;
+#ifndef Q_OS_WIN32
   case SIGQUIT:
 	logBacktrace(coreDumpFileName());
 	break;
+#endif
   default:
     break;
   }
