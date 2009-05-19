@@ -22,8 +22,8 @@
 
 #include <iostream>
 #include <signal.h>
-#ifndef Q_OS_WIN32
-#include <sys/resource.h>
+#if !defined Q_OS_WIN32 && !defined Q_OS_MAC
+#  include <sys/resource.h>
 #endif
 
 #include <QCoreApplication>
@@ -64,7 +64,7 @@ Quassel::Quassel() {
   struct rlimit *limit = (rlimit *) malloc(sizeof(struct rlimit));
   int rc = getrlimit(RLIMIT_CORE, limit);
 
-  if ( rc == -1 || !((long)limit->rlim_cur > 0 || limit->rlim_cur == RLIM_INFINITY) ) {
+  if(rc == -1 || !((long)limit->rlim_cur > 0 || limit->rlim_cur == RLIM_INFINITY)) {
 # endif
     signal(SIGABRT, handleSignal);
     signal(SIGSEGV, handleSignal);
@@ -77,6 +77,7 @@ Quassel::Quassel() {
 # ifndef Q_OS_WIN32
   signal(SIGQUIT, handleSignal);
 # endif
+
 #endif
 }
 
