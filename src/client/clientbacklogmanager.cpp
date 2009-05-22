@@ -56,7 +56,8 @@ void ClientBacklogManager::receiveBacklog(BufferId bufferId, MsgId first, MsgId 
     bool lastPart = !_requester->buffer(bufferId, msglist);
     updateProgress(_requester->totalBuffers() - _requester->buffersWaiting(), _requester->totalBuffers());
     if(lastPart) {
-      stopBuffering();
+      dispatchMessages(_requester->bufferedMessages(), true);
+      _requester->flushBuffer();
     }
   } else {
     dispatchMessages(msglist);
@@ -77,7 +78,7 @@ void ClientBacklogManager::receiveBacklogAll(MsgId first, MsgId last, int limit,
 }
 
 void ClientBacklogManager::requestInitialBacklog() {
-  if(_requester) {
+  if(_requester && !_buffersRequested.isEmpty()) {
     qWarning() << "ClientBacklogManager::requestInitialBacklog() called twice in the same session! (Backlog has already been requested)";
     return;
   }
@@ -130,11 +131,6 @@ void ClientBacklogManager::checkForBacklog(const QList<BufferId> &bufferIds) {
         _requester->requestBacklog(buffers);
     }
   };
-}
-
-void ClientBacklogManager::stopBuffering() {
-  Q_ASSERT(_requester);
-  dispatchMessages(_requester->bufferedMessages(), true);
 }
 
 bool ClientBacklogManager::isBuffering() {

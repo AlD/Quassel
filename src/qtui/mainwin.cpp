@@ -37,6 +37,7 @@
 #include "awaylogview.h"
 #include "action.h"
 #include "actioncollection.h"
+#include "bufferhotlistfilter.h"
 #include "buffermodel.h"
 #include "bufferview.h"
 #include "bufferviewoverlay.h"
@@ -55,8 +56,10 @@
 #include "coreinfodlg.h"
 #include "coreconnectdlg.h"
 #include "contextmenuactionprovider.h"
+#include "debugbufferviewoverlay.h"
 #include "debuglogwidget.h"
 #include "debugmessagemodelfilter.h"
+#include "flatproxymodel.h"
 #include "iconloader.h"
 #include "inputwidget.h"
 #include "inputline.h"
@@ -164,6 +167,7 @@ void MainWin::init() {
   setupToolBars();
   setupSystray();
   setupTitleSetter();
+  setupHotList();
 
 #ifndef HAVE_KDE
   QtUi::registerNotificationBackend(new TaskbarNotificationBackend(this));
@@ -292,8 +296,14 @@ void MainWin::setupActions() {
                                        this, SLOT(on_actionDebugBufferViewOverlay_triggered())));
   coll->addAction("DebugMessageModel", new Action(SmallIcon("tools-report-bug"), tr("Debug &MessageModel"), coll,
                                        this, SLOT(on_actionDebugMessageModel_triggered())));
+  coll->addAction("DebugHotList", new Action(SmallIcon("tools-report-bug"), tr("Debug &HotList"), coll,
+                                       this, SLOT(on_actionDebugHotList_triggered())));
   coll->addAction("DebugLog", new Action(SmallIcon("tools-report-bug"), tr("Debug &Log"), coll,
                                        this, SLOT(on_actionDebugLog_triggered())));
+
+  // Navigation
+  coll->addAction("JumpHotBuffer", new Action(tr("Jump to hot buffer"), coll,
+                                              this, SLOT(on_jumpHotBuffer_triggered()), QKeySequence(Qt::META + Qt::Key_A)));
 }
 
 void MainWin::setupMenus() {
@@ -352,6 +362,7 @@ void MainWin::setupMenus() {
   _helpDebugMenu->addAction(coll->action("DebugNetworkModel"));
   _helpDebugMenu->addAction(coll->action("DebugBufferViewOverlay"));
   _helpDebugMenu->addAction(coll->action("DebugMessageModel"));
+  _helpDebugMenu->addAction(coll->action("DebugHotList"));
   _helpDebugMenu->addAction(coll->action("DebugLog"));
 }
 
@@ -573,6 +584,12 @@ void MainWin::setupStatusBar() {
 
   connect(showStatusbar, SIGNAL(toggled(bool)), statusBar(), SLOT(setVisible(bool)));
   connect(showStatusbar, SIGNAL(toggled(bool)), this, SLOT(saveStatusBarStatus(bool)));
+}
+
+void MainWin::setupHotList() {
+  FlatProxyModel *flatProxy = new FlatProxyModel(this);
+  flatProxy->setSourceModel(Client::bufferModel());
+  _bufferHotList = new BufferHotListFilter(flatProxy);
 }
 
 void MainWin::saveStatusBarStatus(bool enabled) {
@@ -1006,6 +1023,15 @@ void MainWin::connectOrDisconnectFromNet() {
   else net->requestDisconnect();
 }
 
+void MainWin::on_jumpHotBuffer_triggered() {
+  if(!_bufferHotList->rowCount())
+    return;
+
+  QModelIndex topIndex = _bufferHotList->index(0, 0);
+  BufferId bufferId = _bufferHotList->data(topIndex, NetworkModel::BufferIdRole).value<BufferId>();
+  Client::bufferModel()->switchToBuffer(bufferId);
+}
+
 void MainWin::on_actionDebugNetworkModel_triggered() {
   QTreeView *view = new QTreeView;
   view->setAttribute(Qt::WA_DeleteOnClose);
@@ -1018,18 +1044,17 @@ void MainWin::on_actionDebugNetworkModel_triggered() {
   view->show();
 }
 
-void MainWin::on_actionDebugBufferViewOverlay_triggered() {
+void MainWin::on_actionDebugHotList_triggered() {
   QTreeView *view = new QTreeView;
   view->setAttribute(Qt::WA_DeleteOnClose);
-  view->setWindowTitle("Debug BufferViewOverlay View");
-  BufferViewOverlayFilter *filter = new BufferViewOverlayFilter(Client::bufferModel(), Client::bufferViewOverlay());
-  filter->setParent(view);
-  view->setModel(filter);
-  view->setColumnWidth(0, 250);
-  view->setColumnWidth(1, 250);
-  view->setColumnWidth(2, 80);
-  view->resize(610, 300);
+  view->setModel(_bufferHotList);
   view->show();
+}
+
+void MainWin::on_actionDebugBufferViewOverlay_triggered() {
+  DebugBufferViewOverlay *overlay = new DebugBufferViewOverlay(0);
+  overlay->setAttribute(Qt::WA_DeleteOnClose);
+  overlay->show();
 }
 
 void MainWin::on_actionDebugMessageModel_triggered() {

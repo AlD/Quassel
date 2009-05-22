@@ -9,6 +9,7 @@ set(SOURCES
     abstractitemview.cpp
     action.cpp
     actioncollection.cpp
+    bufferhotlistfilter.cpp
     bufferview.cpp
     bufferviewfilter.cpp
     bufferviewoverlayfilter.cpp
@@ -16,6 +17,7 @@ set(SOURCES
     clickablelabel.cpp
     colorbutton.cpp
     contextmenuactionprovider.cpp
+    flatproxymodel.cpp
     graphicalui.cpp
     icon.cpp
     iconloader.cpp
@@ -36,6 +38,7 @@ set(MOC_HDRS
     abstractnotificationbackend.h
     action.h
     actioncollection.h
+    bufferhotlistfilter.h
     bufferview.h
     bufferviewfilter.h
     bufferviewoverlayfilter.h
@@ -43,6 +46,7 @@ set(MOC_HDRS
     clickablelabel.h
     colorbutton.h
     contextmenuactionprovider.h
+    flatproxymodel.h
     graphicalui.h
     iconloader.h
     inputline.h

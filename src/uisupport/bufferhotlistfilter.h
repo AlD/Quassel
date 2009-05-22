@@ -18,74 +18,23 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef BUFFERVIEWOVERLAY_H
-#define BUFFERVIEWOVERLAY_H
+#ifndef BUFFERHOTLISTFILTER_H
+#define BUFFERHOTLISTFILTER_H
 
-#include <QObject>
+#include <QSortFilterProxyModel>
 
-#include "types.h"
-
-class BufferViewConfig;
-class ClientBufferViewConfig;
-
-class BufferViewOverlay : public QObject {
+class BufferHotListFilter : public QSortFilterProxyModel {
   Q_OBJECT
 
 public:
-  BufferViewOverlay(QObject *parent = 0);
+  BufferHotListFilter(QAbstractItemModel *source, QObject *parent = 0);
 
-  inline const QSet<int> &bufferViewIds() { return _bufferViewIds; }
-  bool allNetworks();
-
-  const QSet<NetworkId> &networkIds();
-  const QSet<BufferId> &bufferIds();
-  const QSet<BufferId> &removedBufferIds();
-  const QSet<BufferId> &tempRemovedBufferIds();
-
-  bool addBuffersAutomatically();
-  bool hideInactiveBuffers();
-  int allowedBufferTypes();
-  int minimumActivity();
-
-  inline bool isInitialized() { return _uninitializedViewCount == 0; }
-
-public slots:
-  void addView(int viewId);
-  void removeView(int viewId);
-
-  // updates propagated from the actual views
-  void update();
-
-signals:
-  void hasChanged();
-  void initDone();
+  virtual inline int columnCount(const QModelIndex &) const { return 1; }
+//   QVariant data(const QModelIndex &index, int role) const;
 
 protected:
-  virtual void customEvent(QEvent *event);
-
-private slots:
-  void viewInitialized();
-  void viewInitialized(BufferViewConfig *config);
-
-private:
-  void updateHelper();
-  bool _aboutToUpdate;
-
-  QSet<int> _bufferViewIds;
-  int _uninitializedViewCount;
-
-  QSet<NetworkId> _networkIds;
-
-  bool _addBuffersAutomatically;
-  bool _hideInactiveBuffers;
-  int _allowedBufferTypes;
-  int _minimumActivity;
-
-  QSet<BufferId> _buffers;
-  QSet<BufferId> _removedBuffers;
-  QSet<BufferId> _tempRemovedBuffers;
-
-  static const int _updateEventId;
+  virtual bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
+  virtual bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const;
 };
 
-#endif //BUFFERVIEWOVERLAY_H
+#endif //BUFFERHOTLISTFILTER_H
