@@ -26,6 +26,7 @@
 #  include <KMenuBar>
 #  include <KShortcutsDialog>
 #  include <KStatusBar>
+#  include <KToolBar>
 #endif
 
 #ifdef Q_WS_X11
@@ -97,6 +98,7 @@
 #include "settingspages/bufferviewsettingspage.h"
 #include "settingspages/chatmonitorsettingspage.h"
 #include "settingspages/colorsettingspage.h"
+#include "settingspages/connectionsettingspage.h"
 #include "settingspages/generalsettingspage.h"
 #include "settingspages/highlightsettingspage.h"
 #include "settingspages/identitiessettingspage.h"
@@ -133,13 +135,9 @@ MainWin::MainWin(QWidget *parent)
   updateIcon();
 
   installEventFilter(new JumpKeyHandler(this));
-
-  QtUiApplication* app = qobject_cast<QtUiApplication*> qApp;
-  connect(app, SIGNAL(aboutToQuit()), SLOT(aboutToQuit()));
 }
 
 void MainWin::init() {
-  connect(QApplication::instance(), SIGNAL(aboutToQuit()), SLOT(saveLayout()));
   connect(Client::instance(), SIGNAL(networkCreated(NetworkId)), SLOT(clientNetworkCreated(NetworkId)));
   connect(Client::instance(), SIGNAL(networkRemoved(NetworkId)), SLOT(clientNetworkRemoved(NetworkId)));
   connect(Client::messageModel(), SIGNAL(rowsInserted(const QModelIndex &, int, int)),
@@ -183,6 +181,10 @@ void MainWin::init() {
 
   setDisconnectedState();  // Disable menus and stuff
 
+#ifdef HAVE_KDE
+  setAutoSaveSettings();
+#endif
+
   // restore mainwin state
   QtUiSettings s;
   restoreStateFromSettings(s);
@@ -201,9 +203,11 @@ MainWin::~MainWin() {
 
 }
 
-void MainWin::aboutToQuit() {
+void MainWin::quit() {
   QtUiSettings s;
   saveStateToSettings(s);
+  saveLayout();
+  QApplication::quit();
 }
 
 void MainWin::saveStateToSettings(UiSettings &s) {
@@ -213,7 +217,11 @@ void MainWin::saveStateToSettings(UiSettings &s) {
   s.setValue("MainWinGeometry", saveGeometry());
   s.setValue("MainWinMinimized", isMinimized());
   s.setValue("MainWinMaximized", isMaximized());
-  s.setValue("MainWinHidden", _isHidden);
+  s.setValue("MainWinHidden", !isVisible());
+
+#ifdef HAVE_KDE
+  saveAutoSaveSettings();
+#endif
 }
 
 void MainWin::restoreStateFromSettings(UiSettings &s) {
@@ -221,6 +229,7 @@ void MainWin::restoreStateFromSettings(UiSettings &s) {
   _normalPos = s.value("MainWinPos", pos()).toPoint();
   bool maximized = s.value("MainWinMaximized", false).toBool();
 
+#ifndef HAVE_KDE
   restoreGeometry(s.value("MainWinGeometry").toByteArray());
 
   if(maximized) {
@@ -231,7 +240,10 @@ void MainWin::restoreStateFromSettings(UiSettings &s) {
 
   restoreState(s.value("MainWinState").toByteArray());
 
-  _isHidden = false;
+#else
+  move(_normalPos);
+#endif
+
   if(s.value("MainWinHidden").toBool())
     hideToTray();
   else if(s.value("MainWinMinimized").toBool())
@@ -270,7 +282,7 @@ void MainWin::setupActions() {
   coll->addAction("ConfigureNetworks", new Action(SmallIcon("configure"), tr("Configure &Networks..."), coll,
                                               this, SLOT(on_actionConfigureNetworks_triggered())));
   coll->addAction("Quit", new Action(SmallIcon("application-exit"), tr("&Quit"), coll,
-                                      qApp, SLOT(quit()), tr("Ctrl+Q")));
+                                      this, SLOT(quit()), tr("Ctrl+Q")));
 
   // View
   coll->addAction("ConfigureBufferViews", new Action(tr("&Configure Buffer Views..."), coll,
@@ -616,20 +628,18 @@ void MainWin::setupToolBars() {
 #ifdef Q_WS_MAC
   setUnifiedTitleAndToolBarOnMac(true);
 #endif
-  _mainToolBar = addToolBar(tr("Main Toolbar"));
+
+#ifdef HAVE_KDE
+  _mainToolBar = new KToolBar("MainToolBar", this, Qt::TopToolBarArea, false, true, true);
+#else
+  _mainToolBar = new QToolBar(this);
   _mainToolBar->setObjectName("MainToolBar");
+#endif
+  _mainToolBar->setWindowTitle(tr("Main Toolbar"));
+  addToolBar(_mainToolBar);
 
   QtUi::toolBarActionProvider()->addActions(_mainToolBar, ToolBarActionProvider::MainToolBar);
   _toolbarMenu->addAction(_mainToolBar->toggleViewAction());
-
-  //_nickToolBar = addToolBar("User");
-  //_nickToolBar->setObjectName("NickToolBar");
-  //QtUi::toolBarActionProvider()->addActions(_nickToolBar, ToolBarActionProvider::NickToolBar);
-
-#ifdef HAVE_KDE
-  _mainToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-  //_nickToolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-#endif
 }
 
 void MainWin::connectedToCore() {
@@ -803,6 +813,7 @@ void MainWin::showSettingsDlg() {
 
   //Category: Misc
   dlg->registerSettingsPage(new GeneralSettingsPage(dlg));
+  dlg->registerSettingsPage(new ConnectionSettingsPage(dlg));
   dlg->registerSettingsPage(new IdentitiesSettingsPage(dlg));
   dlg->registerSettingsPage(new NetworksSettingsPage(dlg));
   dlg->registerSettingsPage(new AliasesSettingsPage(dlg));
@@ -851,7 +862,7 @@ void MainWin::closeEvent(QCloseEvent *event) {
     event->ignore();
   } else {
     event->accept();
-    QApplication::quit();
+    quit();
   }
 }
 
@@ -871,7 +882,6 @@ void MainWin::hideToTray() {
   }
   hide();
   systemTray()->setIconVisible();
-  _isHidden = true;
 }
 
 void MainWin::toggleMinimizedToTray() {
@@ -913,7 +923,6 @@ void MainWin::forceActivated() {
   show();
   raise();
   activateWindow();
-  _isHidden = false;
 }
 
 void MainWin::messagesInserted(const QModelIndex &parent, int start, int end) {

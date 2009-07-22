@@ -49,8 +49,12 @@ QStringList Quassel::_dataDirPaths;
 bool Quassel::_initialized = false;
 bool Quassel::DEBUG = false;
 QString Quassel::_coreDumpFileName;
+Quassel *Quassel::_instance = 0;
 
 Quassel::Quassel() {
+  Q_ASSERT(!_instance);
+  _instance = this;
+
   // We catch SIGTERM and SIGINT (caused by Ctrl+C) to graceful shutdown Quassel.
   signal(SIGTERM, handleSignal);
   signal(SIGINT, handleSignal);
@@ -110,6 +114,10 @@ bool Quassel::init() {
 
   DEBUG = isOptionSet("debug");
   return true;
+}
+
+void Quassel::quit() {
+  QCoreApplication::quit();
 }
 
 //! Register our custom types with Qt's Meta Object System.
@@ -174,8 +182,7 @@ void Quassel::setupBuildInfo(const QString &generated) {
       _buildInfo.plainVersionString = QString("v%1 (dist-%2)")
                                         .arg(_buildInfo.baseVersion)
                                         .arg(_buildInfo.commitHash.left(7));
-                                        _buildInfo.fancyVersionString
-                                           = QString("v%1 (dist-<a href=\"http://git.quassel-irc.org/?p=quassel.git;a=commit;h=%3\">%2</a>)")
+      _buildInfo.fancyVersionString = QString("v%1 (dist-<a href=\"http://git.quassel-irc.org/?p=quassel.git;a=commit;h=%3\">%2</a>)")
                                         .arg(_buildInfo.baseVersion)
                                         .arg(_buildInfo.commitHash.left(7))
                                         .arg(_buildInfo.commitHash);
@@ -187,13 +194,13 @@ void Quassel::setupBuildInfo(const QString &generated) {
     // analyze what we got from git-describe
     QRegExp rx("(.*)-(\\d+)-g([0-9a-f]+)$");
     if(rx.exactMatch(_buildInfo.generatedVersion)) {
-      QString distance = rx.cap(2) == "0" ? QString() : QString(" [+%1]").arg(rx.cap(2));
-      _buildInfo.plainVersionString = QString("v%1%2 (git-%3%4)")
-                                        .arg(rx.cap(1), distance, rx.cap(3))
+      QString distance = rx.cap(2) == "0" ? QString() : QString("%1+%2 ").arg(rx.cap(1), rx.cap(2));
+      _buildInfo.plainVersionString = QString("v%1 (%2git-%3%4)")
+                                        .arg(_buildInfo.baseVersion, distance, rx.cap(3))
                                         .arg(_buildInfo.isSourceDirty ? "*" : "");
       if(!_buildInfo.commitHash.isEmpty()) {
-        _buildInfo.fancyVersionString = QString("v%1%2 (git-<a href=\"http://git.quassel-irc.org/?p=quassel.git;a=commit;h=%5\">%3</a>%4)")
-                                          .arg(rx.cap(1), distance, rx.cap(3))
+        _buildInfo.fancyVersionString = QString("v%1 (%2git-<a href=\"http://git.quassel-irc.org/?p=quassel.git;a=commit;h=%5\">%3</a>%4)")
+                                          .arg(_buildInfo.baseVersion, distance, rx.cap(3))
                                           .arg(_buildInfo.isSourceDirty ? "*" : "")
                                           .arg(_buildInfo.commitHash);
       }
@@ -211,7 +218,10 @@ void Quassel::handleSignal(int sig) {
   case SIGTERM:
   case SIGINT:
     qWarning("%s", qPrintable(QString("Caught signal %1 - exiting.").arg(sig)));
-    QCoreApplication::quit();
+    if(_instance)
+      _instance->quit();
+    else
+      QCoreApplication::quit();
     break;
   case SIGABRT:
   case SIGSEGV:
