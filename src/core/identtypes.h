@@ -54,8 +54,8 @@ struct IdentData
 };
 
 inline uint qHash(const IdentData& data) {
-  uint hash = qHash(QString(data.localIp).append(data.remoteIp)) ^ (data.localPort + data.remotePort);
-  qWarning() << "Hash:" << QString::number(hash) << "L:" << data.localIp << ":" << QString::number(data.localPort) << "R:" << data.remoteIp << ":" << QString::number(data.remotePort);
+  uint hash = qHash(QString(data.localIp).append(data.remoteIp).append(QString::number(data.localPort)).append(QString::number(data.remotePort)));
+  //qWarning() << "Hash:" << QString::number(hash) << "L:" << data.localIp << ":" << QString::number(data.localPort) << "R:" << data.remoteIp << ":" << QString::number(data.remotePort);
   return hash;
 }
 Q_DECLARE_METATYPE(IdentData)
