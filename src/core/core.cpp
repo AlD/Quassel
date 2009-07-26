@@ -1027,6 +1027,7 @@ void Core::newIdentLookup(const IdentData& data)
   // we'll answer back to that socket through Core::identLookupReturned
   request.identSocket = qobject_cast<IdentSocket*>(sender());
 
+  // store all currently active CoreSessions
   QList<QPointer<QObject> > sessionList;
   foreach(SessionThread* thread, sessions) {
     QPointer<QObject> ptr = thread->session();
@@ -1037,30 +1038,35 @@ void Core::newIdentLookup(const IdentData& data)
   request.sessionList = sessionList;
 
   _pendingIdentRequests[data] = request;
-  quInfo() << "newIdentLookup: sessionList.size(): " << request.sessionList.size();
+  quInfo() << "newIdentLookup: id: " << request.identSocket.data() << " sessions: " << sessionList.size();
   emit requestIdentLookup(data);
 }
 
 void Core::identLookupReturned(IdentData data)
 {
-  quInfo() << "identLookupReturned()";
   IdentRequest request = _pendingIdentRequests.value(data);
-  quInfo() << "###";
+  void* socketId = request.identSocket.data();
+
+  quInfo() << "identLookupReturned: id:" << socketId;
+
   if(request.identSocket.isNull()) {
-    quInfo() << "IdentSocket vanished - dropping reply";
-    _pendingIdentRequests.remove(data);
+    int count = _pendingIdentRequests.remove(data);
+    if(count)
+      quInfo() << socketId << ":IdentSocket vanished - dropping " << QString::number(count) << " request(s)";
+    else
+      quInfo() << socketId << ":Got a reply without a request. Dropping.";
     return;
   }
   int d = request.sessionList.removeAll(sender());
   _pendingIdentRequests[data].sessionList = request.sessionList;
-  quInfo() << "DBG: Removed " << QString::number(d) << " coresession: " << sender()
+  quInfo() << "DBG: " << socketId << ": Removed " << QString::number(d) << " coresession: " << sender()
       << " got userId:" << data.userId;
 
   quInfo() << "sessionList.size():" << request.sessionList.size();
   // if we got an id or no other sessions received our request
   // we answer anyway. The latter state represents a lookup failure.
   if(!data.userId.isEmpty() || request.sessionList.isEmpty()) {
-    quInfo() << "_pendingIdentRequests.remove(data)";
+    quInfo() << "_pendingIdentRequests.remove(data) for id:" << socketId;
     _pendingIdentRequests.remove(data);
     if(!request.identSocket.isNull()) {
       connect(this, SIGNAL(identLookupFinished(IdentData)), request.identSocket, SLOT(localLookupReturned(IdentData)));
