@@ -418,14 +418,6 @@ public:
 
   static const int AddClientEventId;
 
-  //! Register CoreSession object
-  /** This Method is called from CoreSession Ctor to make its address available in Core
-   *  \note This method is threadsafe
-   *
-   * \param session  The CoreSession object
-   */
-  static void registerCoreSession(QObject* session);
-
 public slots:
   //! Make storage data persistent
   /** \note This method is threadsafe.
@@ -500,17 +492,13 @@ private:
   QTcpServer _server, _v6server;
 #endif
   struct IdentRequest {
-    inline IdentRequest() : identSocket(0) {}
-    IdentSocket* identSocket;
-    QList<QObject*> sessionList;
+    inline IdentRequest() {}
+    QPointer<IdentSocket> identSocket;
+    QList<QPointer<QObject> > sessionList;
   };
   IdentServer _identServer, _v6identServer;
   QHash<IdentData, IdentRequest> _pendingIdentRequests;
 
-  // treat threadsafe!
-  QList<QObject*> _coreSessionList;
-
-  QReadWriteLock _readWriteLock;
   void startIdentServer(QHostAddress& ip);
 
 

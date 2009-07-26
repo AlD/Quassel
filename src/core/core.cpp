@@ -1020,21 +1020,21 @@ QVariantMap Core::promptForSettings(const Storage *storage) {
   return settings;
 }
 
-void Core::registerCoreSession(QObject* session)
-{
-  instance()->_readWriteLock.lockForWrite();
-  instance()->_coreSessionList << session;
-  instance()->_readWriteLock.unlock();
-}
-
 void Core::newIdentLookup(const IdentData& data)
 {
   IdentRequest request;
+  // store the socket inside the request.
+  // we'll answer back to that socket through Core::identLookupReturned
   request.identSocket = qobject_cast<IdentSocket*>(sender());
 
-  _readWriteLock.lockForRead();
-  request.sessionList = _coreSessionList;
-  _readWriteLock.unlock();
+  QList<QPointer<QObject> > sessionList;
+  foreach(SessionThread* thread, sessions) {
+    QPointer<QObject> ptr = thread->session();
+    sessionList << ptr;
+  }
+
+  // store the current active CoreSessions in the request
+  request.sessionList = sessionList;
 
   _pendingIdentRequests[data] = request;
   quInfo() << "newIdentLookup: sessionList.size(): " << request.sessionList.size();
@@ -1046,8 +1046,11 @@ void Core::identLookupReturned(IdentData data)
   quInfo() << "identLookupReturned()";
   IdentRequest request = _pendingIdentRequests.value(data);
   quInfo() << "###";
-  if(request.identSocket == 0)
+  if(request.identSocket.isNull()) {
+    quInfo() << "IdentSocket vanished - dropping reply";
+    _pendingIdentRequests.remove(data);
     return;
+  }
   int d = request.sessionList.removeAll(sender());
   _pendingIdentRequests[data].sessionList = request.sessionList;
   quInfo() << "DBG: Removed " << QString::number(d) << " coresession: " << sender()
@@ -1055,11 +1058,17 @@ void Core::identLookupReturned(IdentData data)
 
   quInfo() << "sessionList.size():" << request.sessionList.size();
   // if we got an id or no other sessions received our request
+  // we answer anyway. The latter state represents a lookup failure.
   if(!data.userId.isEmpty() || request.sessionList.isEmpty()) {
     quInfo() << "_pendingIdentRequests.remove(data)";
     _pendingIdentRequests.remove(data);
-    connect(this, SIGNAL(identLookupFinished(IdentData)), request.identSocket, SLOT(localLookupReturned(IdentData)));
-    emit identLookupFinished(data);
+    if(!request.identSocket.isNull()) {
+      connect(this, SIGNAL(identLookupFinished(IdentData)), request.identSocket, SLOT(localLookupReturned(IdentData)));
+      emit identLookupFinished(data);
+    }
+    else {
+      quInfo() << "IdentSocket vanished - dropping reply.";
+    }
   }
 }
 
