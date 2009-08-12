@@ -47,8 +47,7 @@ public:
     Info      = 0x0800,
     Error     = 0x1000,
     DayChange = 0x2000,
-    Topic     = 0x4000,
-    Raw       = 0x8000
+    Topic     = 0x4000
   };
 
   // DO NOT CHANGE without knowing what you do, some of these flags are stored in the database

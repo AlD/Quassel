@@ -387,8 +387,7 @@ void UserInputHandler::handleWhowas(const BufferInfo &bufferInfo, const QString 
 
 void UserInputHandler::defaultHandler(QString cmd, const BufferInfo &bufferInfo, const QString &msg) {
   Q_UNUSED(bufferInfo);
-  emit displayMsg(Message::Raw, BufferInfo::StatusBuffer, "", QString("%1 %2").arg(cmd.toUpper(), msg));
-  emit putCmd(serverEncode(cmd), serverEncode(msg));
+  emit displayMsg(Message::Error, BufferInfo::StatusBuffer, "", QString("Error: %1 %2").arg(cmd).arg(msg));
 }
 
 void UserInputHandler::putPrivmsg(const QByteArray &target, const QByteArray &message) {
