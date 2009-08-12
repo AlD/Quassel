@@ -18,25 +18,48 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "qtuisettings.h"
+#include <QEvent>
+#include <QFontDialog>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QPushButton>
 
-QtUiSettings::QtUiSettings(const QString &subGroup)
-  : UiSettings(QString("QtUi/%1").arg(subGroup))
-{
+#include "fontselector.h"
+
+FontSelector::FontSelector(QWidget *parent) : QWidget(parent) {
+  QHBoxLayout *layout = new QHBoxLayout(this);
+  QPushButton *chooseButton = new QPushButton(tr("Choose..."), this);
+  connect(chooseButton, SIGNAL(clicked()), SLOT(chooseFont()));
+
+  layout->addWidget(_demo = new QLabel("Font"));
+  layout->addWidget(chooseButton);
+  layout->setContentsMargins(0, 0, 0, 0);
+
+  _demo->setFrameStyle(QFrame::StyledPanel);
+  _demo->setFrameShadow(QFrame::Sunken);
+  _demo->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+  _font = font();
 }
 
-QtUiSettings::QtUiSettings()
-  : UiSettings("QtUi")
-{
+void FontSelector::setSelectedFont(const QFont &font) {
+  _font = font;
+  _demo->setText(QString("%1 %2pt").arg(font.family()).arg(font.pointSize()));
+  _demo->setFont(font);
+  emit fontChanged(font);
 }
 
-/***********************************************************************/
-QtUiStyleSettings::QtUiStyleSettings(const QString &subGroup)
-  : UiSettings(QString("QtUiStyle/%1").arg(subGroup))
-{
+void FontSelector::chooseFont() {
+  bool ok;
+  QFont font = QFontDialog::getFont(&ok, _demo->font());
+  if(ok) {
+    setSelectedFont(font);
+  }
 }
 
-QtUiStyleSettings::QtUiStyleSettings()
-  : UiSettings("QtUiStyle")
-{
+void FontSelector::changeEvent(QEvent *e) {
+  if(e->type() == QEvent::StyleChange) {
+    _demo->setFont(_font);
+  }
 }
+
+

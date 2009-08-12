@@ -48,10 +48,11 @@ public:
 
   void initLayoutHelper(QTextLayout *layout, QTextOption::WrapMode, Qt::Alignment = Qt::AlignLeft) const;
   virtual inline void initLayout(QTextLayout *layout) const {
-    initLayoutHelper(layout, QTextOption::WrapAnywhere);
+    initLayoutHelper(layout, QTextOption::NoWrap);
     doLayout(layout);
   }
   virtual void doLayout(QTextLayout *) const;
+  virtual UiStyle::FormatList formatList() const;
 
   virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
   enum { Type = ChatScene::ChatItemType };
@@ -83,8 +84,10 @@ protected:
   virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
   virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
-  virtual QTextLayout::FormatRange selectionFormat() const;
-  virtual inline QVector<QTextLayout::FormatRange> additionalFormats() const { return QVector<QTextLayout::FormatRange>(); }
+  void paintBackground(QPainter *);
+  QVector<QTextLayout::FormatRange> selectionFormats() const;
+  virtual QVector<QTextLayout::FormatRange> additionalFormats() const;
+  void overlayFormat(UiStyle::FormatList &fmtList, int start, int end, quint32 overlayFmt) const;
 
   inline qint16 selectionStart() const { return _selectionStart; }
   inline void setSelectionStart(qint16 start) { _selectionStart = start; }
@@ -171,7 +174,7 @@ public:
   virtual inline int type() const { return Type; }
 
   inline ChatLineModel::ColumnType column() const { return ChatLineModel::ContentsColumn; }
-  inline QFontMetricsF *fontMetrics() const { return _fontMetrics; }
+  QFontMetricsF *fontMetrics() const;
 
 protected:
   virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
@@ -189,6 +192,7 @@ protected:
     doLayout(layout);
   }
   virtual void doLayout(QTextLayout *layout) const;
+  virtual UiStyle::FormatList formatList() const;
 
 private:
   struct Clickable;
@@ -247,7 +251,7 @@ public:
   WrapColumnFinder(const ChatItem *parent);
   ~WrapColumnFinder();
 
-  qint16 nextWrapColumn();
+  qint16 nextWrapColumn(qreal width);
 
 private:
   const ChatItem *item;

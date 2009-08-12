@@ -18,51 +18,36 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef _COLORSETTINGSPAGE_H_
-#define _COLORSETTINGSPAGE_H_
+#ifndef FONTSELECTOR_H_
+#define FONTSELECTOR_H_
 
-#include <QHash>
+#include <QLabel>
+#include <QWidget>
 
-#include "settingspage.h"
-#include "ui_colorsettingspage.h"
-#include "uistyle.h"
-
-class QSignalMapper;
-class ColorButton;
-
-class ColorSettingsPage : public SettingsPage {
+class FontSelector : public QWidget {
   Q_OBJECT
+  Q_PROPERTY(QFont selectedFont READ selectedFont WRITE setSelectedFont)
 
-  public:
-    ColorSettingsPage(QWidget *parent = 0);
+public:
+  FontSelector(QWidget *parent = 0);
 
-    bool hasDefaults() const;
+  inline const QFont &selectedFont() const { return _font; }
 
-  public slots:
-    void save();
-    void load();
-    void defaults();
-    void defaultBufferview();
-    void defaultServerActivity();
-    void defaultUserActivity();
-    void defaultMessage();
-    void defaultMircColorCodes();
-    void defaultNickview();
+public slots:
+  void setSelectedFont(const QFont &font);
 
-  private slots:
-    void widgetHasChanged();
-    void chooseColor(QWidget *button);
+signals:
+  void fontChanged(const QFont &);
 
-  private:
-    Ui::ColorSettingsPage ui;
-    QHash<QString, QVariant> settings;
-    QSignalMapper *mapper;
+protected:
+  void changeEvent(QEvent *e);
 
-    bool testHasChanged();
-    void chatviewPreview();
-    void bufferviewPreview();
-    void saveColor(UiStyle::FormatType formatType, const QColor &foreground, const QColor &background, bool enableBG = true);
-    void saveMircColor(int num, const QColor &color);
+protected slots:
+  void chooseFont();
+
+private:
+  QFont _font;
+  QLabel *_demo;
 };
 
-#endif
+#endif // FONTSELECTOR_H_

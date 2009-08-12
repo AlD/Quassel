@@ -72,6 +72,7 @@
 #include "qtuiapplication.h"
 #include "qtuimessageprocessor.h"
 #include "qtuisettings.h"
+#include "qtuistyle.h"
 #include "settingsdlg.h"
 #include "settingspagedlg.h"
 #include "systemtray.h"
@@ -97,11 +98,12 @@
 #include "settingspages/backlogsettingspage.h"
 #include "settingspages/bufferviewsettingspage.h"
 #include "settingspages/chatmonitorsettingspage.h"
-#include "settingspages/colorsettingspage.h"
+#include "settingspages/chatviewsettingspage.h"
 #include "settingspages/connectionsettingspage.h"
 #include "settingspages/generalsettingspage.h"
 #include "settingspages/highlightsettingspage.h"
 #include "settingspages/identitiessettingspage.h"
+#include "settingspages/itemviewsettingspage.h"
 #include "settingspages/networkssettingspage.h"
 #include "settingspages/notificationssettingspage.h"
 
@@ -318,6 +320,8 @@ void MainWin::setupActions() {
                                        this, SLOT(on_actionDebugHotList_triggered())));
   coll->addAction("DebugLog", new Action(SmallIcon("tools-report-bug"), tr("Debug &Log"), coll,
                                        this, SLOT(on_actionDebugLog_triggered())));
+  coll->addAction("ReloadStyle", new Action(SmallIcon("view-refresh"), tr("Reload Stylesheet"), coll,
+                                       QtUi::style(), SLOT(reload()), QKeySequence::Refresh));
 
   // Navigation
   coll->addAction("JumpHotBuffer", new Action(tr("Jump to hot buffer"), coll,
@@ -382,6 +386,8 @@ void MainWin::setupMenus() {
   _helpDebugMenu->addAction(coll->action("DebugMessageModel"));
   _helpDebugMenu->addAction(coll->action("DebugHotList"));
   _helpDebugMenu->addAction(coll->action("DebugLog"));
+  _helpDebugMenu->addSeparator();
+  _helpDebugMenu->addAction(coll->action("ReloadStyle"));
 }
 
 void MainWin::setupBufferWidget() {
@@ -803,8 +809,9 @@ void MainWin::showSettingsDlg() {
   SettingsDlg *dlg = new SettingsDlg();
 
   //Category: Appearance
-  dlg->registerSettingsPage(new AppearanceSettingsPage(dlg)); //General
-  dlg->registerSettingsPage(new ColorSettingsPage(dlg));
+  dlg->registerSettingsPage(new AppearanceSettingsPage(dlg));
+  dlg->registerSettingsPage(new ChatViewSettingsPage(dlg));
+  dlg->registerSettingsPage(new ItemViewSettingsPage(dlg));
   dlg->registerSettingsPage(new HighlightSettingsPage(dlg));
   dlg->registerSettingsPage(new NotificationsSettingsPage(dlg));
   dlg->registerSettingsPage(new BacklogSettingsPage(dlg));
@@ -939,8 +946,6 @@ void MainWin::messagesInserted(const QModelIndex &parent, int start, int end) {
     Message::Flags flags = (Message::Flags)idx.data(ChatLineModel::FlagsRole).toInt();
     if(flags.testFlag(Message::Backlog) || flags.testFlag(Message::Self))
       continue;
-    flags |= Message::Backlog;  // we only want to trigger a highlight once!
-    Client::messageModel()->setData(idx, (int)flags, ChatLineModel::FlagsRole);
 
     BufferId bufId = idx.data(ChatLineModel::BufferIdRole).value<BufferId>();
     BufferInfo::Type bufType = Client::networkModel()->bufferType(bufId);

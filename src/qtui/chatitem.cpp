@@ -58,6 +58,21 @@ QVariant ChatItem::data(int role) const {
   return model()->data(index, role);
 }
 
+qint16 ChatItem::posToCursor(const QPointF &pos) const {
+  if(pos.y() > height()) return data(MessageModel::DisplayRole).toString().length();
+  if(pos.y() < 0) return 0;
+
+  QTextLayout layout;
+  initLayout(&layout);
+  for(int l = layout.lineCount() - 1; l >= 0; l--) {
+    QTextLine line = layout.lineAt(l);
+    if(pos.y() >= line.y()) {
+      return line.xToCursor(pos.x(), QTextLine::CursorOnCharacter);
+    }
+  }
+  return 0;
+}
+
 void ChatItem::initLayoutHelper(QTextLayout *layout, QTextOption::WrapMode wrapMode, Qt::Alignment alignment) const {
   Q_ASSERT(layout);
 
@@ -69,8 +84,12 @@ void ChatItem::initLayoutHelper(QTextLayout *layout, QTextOption::WrapMode wrapM
   layout->setTextOption(option);
 
   QList<QTextLayout::FormatRange> formatRanges
-         = QtUi::style()->toTextLayoutList(data(MessageModel::FormatRole).value<UiStyle::FormatList>(), layout->text().length());
+         = QtUi::style()->toTextLayoutList(formatList(), layout->text().length(), data(ChatLineModel::MsgLabelRole).toUInt());
   layout->setAdditionalFormats(formatRanges);
+}
+
+UiStyle::FormatList ChatItem::formatList() const {
+  return data(MessageModel::FormatRole).value<UiStyle::FormatList>();
 }
 
 void ChatItem::doLayout(QTextLayout *layout) const {
@@ -83,18 +102,27 @@ void ChatItem::doLayout(QTextLayout *layout) const {
   layout->endLayout();
 }
 
+void ChatItem::paintBackground(QPainter *painter) {
+  painter->setClipRect(boundingRect()); // no idea why QGraphicsItem clipping won't work
+
+  QVariant bgBrush;
+  if(_selectionMode == FullSelection)
+    bgBrush = data(ChatLineModel::SelectedBackgroundRole);
+  else
+    bgBrush = data(ChatLineModel::BackgroundRole);
+  if(bgBrush.isValid())
+    painter->fillRect(boundingRect(), bgBrush.value<QBrush>());
+}
 
 // NOTE: This is not the most time-efficient implementation, but it saves space by not caching unnecessary data
 //       This is a deliberate trade-off. (-> selectFmt creation, data() call)
 void ChatItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
   Q_UNUSED(option); Q_UNUSED(widget);
-  painter->setClipRect(boundingRect()); // no idea why QGraphicsItem clipping won't work
-  QVector<QTextLayout::FormatRange> formats = additionalFormats();
-  QTextLayout::FormatRange selectFmt = selectionFormat();
-  if(selectFmt.format.isValid()) formats.append(selectFmt);
+  paintBackground(painter);
+
   QTextLayout layout;
   initLayout(&layout);
-  layout.draw(painter, QPointF(0,0), formats, boundingRect());
+  layout.draw(painter, QPointF(0,0), additionalFormats(), boundingRect());
 
   //  layout()->draw(painter, QPointF(0,0), formats, boundingRect());
 
@@ -126,19 +154,58 @@ void ChatItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 //   painter->drawRect(_boundingRect.adjusted(0, 0, -1, -1));
 }
 
-qint16 ChatItem::posToCursor(const QPointF &pos) const {
-  if(pos.y() > height()) return data(MessageModel::DisplayRole).toString().length();
-  if(pos.y() < 0) return 0;
+void ChatItem::overlayFormat(UiStyle::FormatList &fmtList, int start, int end, quint32 overlayFmt) const {
+  for(int i = 0; i < fmtList.count(); i++) {
+    int fmtStart = fmtList.at(i).first;
+    int fmtEnd = (i < fmtList.count()-1 ? fmtList.at(i+1).first : data(MessageModel::DisplayRole).toString().length());
 
-  QTextLayout layout;
-  initLayout(&layout);
-  for(int l = layout.lineCount() - 1; l >= 0; l--) {
-    QTextLine line = layout.lineAt(l);
-    if(pos.y() >= line.y()) {
-      return line.xToCursor(pos.x(), QTextLine::CursorOnCharacter);
+    if(fmtEnd <= start)
+      continue;
+    if(fmtStart >= end)
+      break;
+
+    // split the format if necessary
+    if(fmtStart < start) {
+      fmtList.insert(i, fmtList.at(i));
+      fmtList[++i].first = start;
     }
+    if(end < fmtEnd) {
+      fmtList.insert(i, fmtList.at(i));
+      fmtList[i+1].first = end;
+    }
+
+    fmtList[i].second |= overlayFmt;
   }
-  return 0;
+}
+
+QVector<QTextLayout::FormatRange> ChatItem::additionalFormats() const {
+  return selectionFormats();
+}
+
+QVector<QTextLayout::FormatRange> ChatItem::selectionFormats() const {
+  if(!hasSelection())
+    return QVector<QTextLayout::FormatRange>();
+
+  int start, end;
+  if(_selectionMode == FullSelection) {
+    start = 0;
+    end = data(MessageModel::DisplayRole).toString().length();
+  } else {
+    start = qMin(_selectionStart, _selectionEnd);
+    end = qMax(_selectionStart, _selectionEnd);
+  }
+
+  UiStyle::FormatList fmtList = formatList();
+
+  while(fmtList.count() > 1 && fmtList.at(1).first <= start)
+    fmtList.removeFirst();
+
+  fmtList.first().first = start;
+
+  while(fmtList.count() > 1 && fmtList.last().first >= end)
+    fmtList.removeLast();
+
+  return QtUi::style()->toTextLayoutList(fmtList, end, UiStyle::Selected|data(ChatLineModel::MsgLabelRole).toUInt()).toVector();
 }
 
 bool ChatItem::hasSelection() const {
@@ -193,25 +260,6 @@ bool ChatItem::isPosOverSelection(const QPointF &pos) const {
     return cursor >= qMin(_selectionStart, _selectionEnd) && cursor <= qMax(_selectionStart, _selectionEnd);
   }
   return false;
-}
-
-QTextLayout::FormatRange ChatItem::selectionFormat() const {
-  QTextLayout::FormatRange selectFmt;
-  if(_selectionMode != NoSelection) {
-    selectFmt.format.setForeground(QApplication::palette().brush(QPalette::HighlightedText));
-    selectFmt.format.setBackground(QApplication::palette().brush(QPalette::Highlight));
-    if(_selectionMode == PartialSelection) {
-      selectFmt.start = qMin(_selectionStart, _selectionEnd);
-      selectFmt.length = qAbs(_selectionStart - _selectionEnd);
-    } else { // FullSelection
-      selectFmt.start = 0;
-      selectFmt.length = data(MessageModel::DisplayRole).toString().length();
-    }
-  } else {
-    selectFmt.start = -1;
-    selectFmt.length = 0;
-  }
-  return selectFmt;
 }
 
 QList<QRectF> ChatItem::findWords(const QString &searchWord, Qt::CaseSensitivity caseSensitive) {
@@ -298,8 +346,8 @@ void ChatItem::addActionsToMenu(QMenu *menu, const QPointF &pos) {
 
 void SenderChatItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
   Q_UNUSED(option); Q_UNUSED(widget);
+  paintBackground(painter);
 
-  painter->setClipRect(boundingRect()); // no idea why QGraphicsItem clipping won't work
   QTextLayout layout;
   initLayout(&layout);
   qreal layoutWidth = layout.minimumWidth();
@@ -309,15 +357,13 @@ void SenderChatItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
   else
     offset = qMax(layoutWidth - width(), (qreal)0);
 
-  QTextLayout::FormatRange selectFmt = selectionFormat();
-
   if(layoutWidth > width()) {
     // Draw a nice gradient for longer items
     // Qt's text drawing with a gradient brush sucks, so we use an alpha-channeled pixmap instead
     QPixmap pixmap(layout.boundingRect().toRect().size());
     pixmap.fill(Qt::transparent);
     QPainter pixPainter(&pixmap);
-    layout.draw(&pixPainter, QPointF(qMax(offset, (qreal)0), 0), QVector<QTextLayout::FormatRange>() << selectFmt);
+    layout.draw(&pixPainter, QPointF(qMax(offset, (qreal)0), 0), additionalFormats());
     pixPainter.end();
 
     // Create alpha channel mask
@@ -339,7 +385,7 @@ void SenderChatItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     pixmap.setAlphaChannel(mask);
     painter->drawPixmap(0, 0, pixmap);
   } else {
-    layout.draw(painter, QPointF(0,0), QVector<QTextLayout::FormatRange>() << selectFmt, boundingRect());
+    layout.draw(painter, QPointF(0,0), additionalFormats(), boundingRect());
   }
 }
 
@@ -353,11 +399,11 @@ ContentsChatItem::ContentsChatItem(const qreal &width, const QPointF &pos, QGrap
   : ChatItem(0, 0, pos, parent),
     _data(0)
 {
-  const QAbstractItemModel *model_ = model();
-  QModelIndex index = model_->index(row(), column());
-  _fontMetrics = QtUi::style()->fontMetrics(model_->data(index, ChatLineModel::FormatRole).value<UiStyle::FormatList>().at(0).second);
-
   setGeometryByWidth(width);
+}
+
+QFontMetricsF *ContentsChatItem::fontMetrics() const {
+  return QtUi::style()->fontMetrics(data(ChatLineModel::FormatRole).value<UiStyle::FormatList>().at(0).second, 0);
 }
 
 ContentsChatItem::~ContentsChatItem() {
@@ -373,19 +419,22 @@ ContentsChatItemPrivate *ContentsChatItem::privateData() const {
 }
 
 qreal ContentsChatItem::setGeometryByWidth(qreal w) {
-  if(w != width()) {
+  // We use this for reloading layout info as well, so we can't bail out if the width doesn't change
+
+  // compute height
+  int lines = 1;
+  WrapColumnFinder finder(this);
+  while(finder.nextWrapColumn(w) > 0)
+    lines++;
+  qreal h = lines * fontMetrics()->lineSpacing();
+  delete _data;
+  _data = 0;
+
+  if(w != width() || h != height()) {
     prepareGeometryChange();
-    setWidth(w);
-    // compute height
-    int lines = 1;
-    WrapColumnFinder finder(this);
-    while(finder.nextWrapColumn() > 0)
-      lines++;
-    setHeight(lines * fontMetrics()->lineSpacing());
-    delete _data;
-    _data = 0;
+    setGeometry(w, h);
   }
-  return height();
+  return h;
 }
 
 void ContentsChatItem::doLayout(QTextLayout *layout) const {
@@ -400,7 +449,7 @@ void ContentsChatItem::doLayout(QTextLayout *layout) const {
     if(!line.isValid())
       break;
 
-    int col = finder.nextWrapColumn();
+    int col = finder.nextWrapColumn(width());
     line.setNumColumns(col >= 0 ? col - line.textStart() : layout->text().length());
     line.setPosition(QPointF(0, h));
     h += fontMetrics()->lineSpacing();
@@ -490,9 +539,20 @@ ContentsChatItem::Clickable ContentsChatItem::clickableAt(const QPointF &pos) co
   return Clickable();
 }
 
+UiStyle::FormatList ContentsChatItem::formatList() const {
+  UiStyle::FormatList fmtList = ChatItem::formatList();
+  for(int i = 0; i < privateData()->clickables.count(); i++) {
+    Clickable click = privateData()->clickables.at(i);
+    if(click.type == Clickable::Url) {
+      overlayFormat(fmtList, click.start, click.start + click.length, UiStyle::Url);
+    }
+  }
+  return fmtList;
+}
+
 QVector<QTextLayout::FormatRange> ContentsChatItem::additionalFormats() const {
+  QVector<QTextLayout::FormatRange> fmt = ChatItem::additionalFormats();
   // mark a clickable if hovered upon
-  QVector<QTextLayout::FormatRange> fmt;
   if(privateData()->currentClickable.isValid()) {
     Clickable click = privateData()->currentClickable;
     QTextLayout::FormatRange f;
@@ -682,12 +742,12 @@ ContentsChatItem::WrapColumnFinder::WrapColumnFinder(const ChatItem *_item)
 ContentsChatItem::WrapColumnFinder::~WrapColumnFinder() {
 }
 
-qint16 ContentsChatItem::WrapColumnFinder::nextWrapColumn() {
+qint16 ContentsChatItem::WrapColumnFinder::nextWrapColumn(qreal width) {
   if(wordidx >= wrapList.count())
     return -1;
 
   lineCount++;
-  qreal targetWidth = lineCount * item->width() + choppedTrailing;
+  qreal targetWidth = lineCount * width + choppedTrailing;
 
   qint16 start = wordidx;
   qint16 end = wrapList.count() - 1;

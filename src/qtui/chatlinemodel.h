@@ -31,7 +31,9 @@ class ChatLineModel : public MessageModel {
 
 public:
   enum ChatLineRole {
-    WrapListRole = MessageModel::UserRole
+    WrapListRole = MessageModel::UserRole,
+    MsgLabelRole,
+    SelectedBackgroundRole
   };
 
   ChatLineModel(QObject *parent = 0);
@@ -55,6 +57,9 @@ protected:
   virtual inline void removeMessageAt(int i) { _messageList.removeAt(i); }
   virtual inline void removeAllMessages() { _messageList.clear(); }
   virtual Message takeMessageAt(int i);
+
+protected slots:
+  virtual void styleChanged();
 
 private:
   QList<ChatLineModelItem> _messageList;

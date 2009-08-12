@@ -40,7 +40,6 @@ QPointer<QtUi> QtUi::_instance = 0;
 QPointer<MainWin> QtUi::_mainWin = 0;
 QList<AbstractNotificationBackend *> QtUi::_notificationBackends;
 QList<AbstractNotificationBackend::Notification> QtUi::_notifications;
-QtUiStyle *QtUi::_style = 0;
 
 QtUi::QtUi() : GraphicalUi() {
   if(_instance != 0) {
@@ -55,8 +54,8 @@ QtUi::QtUi() : GraphicalUi() {
   QtUiSettings uiSettings;
   Quassel::loadTranslation(uiSettings.value("Locale", QLocale::system()).value<QLocale>());
 
+  setUiStyle(new QtUiStyle(this));
   _mainWin = new MainWin();
-  _style = new QtUiStyle;
 
   setMainWidget(_mainWin);
 
@@ -66,7 +65,6 @@ QtUi::QtUi() : GraphicalUi() {
 
 QtUi::~QtUi() {
   unregisterAllNotificationBackends();
-  delete _style;
   delete _mainWin;
 }
 

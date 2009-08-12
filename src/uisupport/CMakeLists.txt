@@ -18,6 +18,7 @@ set(SOURCES
     colorbutton.cpp
     contextmenuactionprovider.cpp
     flatproxymodel.cpp
+    fontselector.cpp
     graphicalui.cpp
     icon.cpp
     iconloader.cpp
@@ -25,6 +26,7 @@ set(SOURCES
     networkmodelcontroller.cpp
     nickview.cpp
     nickviewfilter.cpp
+    qssparser.cpp
     settingspage.cpp
     tabcompleter.cpp
     toolbaractionprovider.cpp
@@ -47,6 +49,7 @@ set(MOC_HDRS
     colorbutton.h
     contextmenuactionprovider.h
     flatproxymodel.h
+    fontselector.h
     graphicalui.h
     iconloader.h
     inputline.h
@@ -56,12 +59,13 @@ set(MOC_HDRS
     settingspage.h
     tabcompleter.h
     toolbaractionprovider.h
+    uistyle.h
    )
 
 set(HEADERS
     icon.h
+    qssparser.h
     uisettings.h
-    uistyle.h
    )
 
 if(HAVE_KDE)

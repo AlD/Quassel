@@ -18,25 +18,26 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "qtuisettings.h"
+#include "chatviewsettingspage.h"
+#include "colorbutton.h"
+#include "qtui.h"
+#include "qtuistyle.h"
 
-QtUiSettings::QtUiSettings(const QString &subGroup)
-  : UiSettings(QString("QtUi/%1").arg(subGroup))
+ChatViewSettingsPage::ChatViewSettingsPage(QWidget *parent)
+  : SettingsPage(tr("Appearance"), tr("Chat View"), parent)
 {
+  ui.setupUi(this);
+
+#ifndef HAVE_WEBKIT
+  ui.showWebPreview->hide();
+  ui.showWebPreview->setEnabled(false);
+#endif
+
+  initAutoWidgets();
 }
 
-QtUiSettings::QtUiSettings()
-  : UiSettings("QtUi")
-{
-}
-
-/***********************************************************************/
-QtUiStyleSettings::QtUiStyleSettings(const QString &subGroup)
-  : UiSettings(QString("QtUiStyle/%1").arg(subGroup))
-{
-}
-
-QtUiStyleSettings::QtUiStyleSettings()
-  : UiSettings("QtUiStyle")
-{
+void ChatViewSettingsPage::save() {
+  SettingsPage::save();
+  QtUi::style()->generateSettingsQss();
+  QtUi::style()->reload();
 }

@@ -27,7 +27,9 @@
 #include "qtuistyle.h"
 #include "util.h"
 
+#include <QCheckBox>
 #include <QDir>
+#include <QFileDialog>
 #include <QFontDialog>
 #include <QSignalMapper>
 #include <QStyleFactory>
@@ -37,13 +39,9 @@ AppearanceSettingsPage::AppearanceSettingsPage(QWidget *parent)
   _fontsChanged(false)
 {
   ui.setupUi(this);
+  initAutoWidgets();
   initStyleComboBox();
   initLanguageComboBox();
-
-#ifndef HAVE_WEBKIT
-  ui.showWebPreview->hide();
-  ui.showWebPreview->setEnabled(false);
-#endif
 
   foreach(QComboBox *comboBox, findChildren<QComboBox *>()) {
     connect(comboBox, SIGNAL(currentIndexChanged(QString)), this, SLOT(widgetHasChanged()));
@@ -55,13 +53,11 @@ AppearanceSettingsPage::AppearanceSettingsPage(QWidget *parent)
   mapper = new QSignalMapper(this);
   connect(mapper, SIGNAL(mapped(QWidget *)), this, SLOT(chooseFont(QWidget *)));
 
-  connect(ui.chooseChatView, SIGNAL(clicked()), mapper, SLOT(map()));
-  connect(ui.chooseBufferView, SIGNAL(clicked()), mapper, SLOT(map()));
   connect(ui.chooseInputLine, SIGNAL(clicked()), mapper, SLOT(map()));
 
-  mapper->setMapping(ui.chooseChatView, ui.demoChatView);
-  mapper->setMapping(ui.chooseBufferView, ui.demoBufferView);
   mapper->setMapping(ui.chooseInputLine, ui.demoInputLine);
+
+  connect(ui.chooseStyleSheet, SIGNAL(clicked()), SLOT(chooseStyleSheet()));
 }
 
 void AppearanceSettingsPage::initStyleComboBox() {
@@ -90,9 +86,7 @@ void AppearanceSettingsPage::defaults() {
   loadFonts(Settings::Default);
   _fontsChanged = true;
 
-  ui.showWebPreview->setChecked(true);
-  ui.showUserStateIcons->setChecked(true);
-
+  SettingsPage::defaults();
   widgetHasChanged();
 }
 
@@ -120,14 +114,9 @@ void AppearanceSettingsPage::load() {
   ui.languageComboBox->setProperty("storedValue", ui.languageComboBox->currentIndex());
   Quassel::loadTranslation(selectedLocale());
 
-  ChatViewSettings chatViewSettings;
-  SettingsPage::load(ui.showWebPreview, chatViewSettings.showWebPreview());
-
-  BufferSettings bufferSettings;
-  SettingsPage::load(ui.showUserStateIcons, bufferSettings.showUserStateIcons());
-
   loadFonts(Settings::Custom);
 
+  SettingsPage::load();
   setChangedState(false);
 }
 
@@ -138,14 +127,6 @@ void AppearanceSettingsPage::loadFonts(Settings::Mode mode) {
   if(mode == Settings::Custom)
     inputLineFont = s.value("InputLine", QFont()).value<QFont>();
   setFont(ui.demoInputLine, inputLineFont);
-
-  QFont bufferViewFont;
-  if(mode == Settings::Custom)
-    bufferViewFont = s.value("BufferView", QFont()).value<QFont>();
-  setFont(ui.demoBufferView, bufferViewFont);
-
-  QTextCharFormat chatFormat = QtUi::style()->format(UiStyle::None, mode);
-  setFont(ui.demoChatView, chatFormat.font());
 
   _fontsChanged = false;
 }
@@ -165,12 +146,6 @@ void AppearanceSettingsPage::save() {
     uiSettings.setValue("Locale", selectedLocale());
   }
 
-  ChatViewSettings chatViewSettings;
-  chatViewSettings.enableWebPreview(ui.showWebPreview->isChecked());
-
-  BufferSettings bufferSettings;
-  bufferSettings.enableUserStateIcons(ui.showUserStateIcons->isChecked());
-
   // Fonts
   QtUiStyleSettings fontSettings("Fonts");
   if(ui.demoInputLine->font() != QApplication::font())
@@ -178,19 +153,16 @@ void AppearanceSettingsPage::save() {
   else
     fontSettings.setValue("InputLine", "");
 
-  if(ui.demoBufferView->font() != QApplication::font())
-    fontSettings.setValue("BufferView", ui.demoBufferView->font());
-  else
-    fontSettings.setValue("BufferView", "");
-
-  QTextCharFormat chatFormat = QtUi::style()->format(UiStyle::None);
-  chatFormat.setFont(ui.demoChatView->font());
-  QtUi::style()->setFormat(UiStyle::None, chatFormat, Settings::Custom);
-
   _fontsChanged = false;
 
-  load();
+  bool needsStyleReload =
+        ui.useCustomStyleSheet->isChecked() != ui.useCustomStyleSheet->property("storedValue").toBool()
+    || (ui.useCustomStyleSheet->isChecked() && ui.customStyleSheetPath->text() != ui.customStyleSheetPath->property("storedValue").toString());
+
+  SettingsPage::save();
   setChangedState(false);
+  if(needsStyleReload)
+    QtUi::style()->reload();
 }
 
 QLocale AppearanceSettingsPage::selectedLocale() const {
@@ -226,6 +198,12 @@ void AppearanceSettingsPage::chooseFont(QWidget *widget) {
   }
 }
 
+void AppearanceSettingsPage::chooseStyleSheet() {
+  QString name = QFileDialog::getOpenFileName(this, tr("Please choose a stylesheet file"), QString(), "*.qss");
+  if(!name.isEmpty())
+    ui.customStyleSheetPath->setText(name);
+}
+
 void AppearanceSettingsPage::widgetHasChanged() {
   setChangedState(testHasChanged());
 }
@@ -236,9 +214,6 @@ bool AppearanceSettingsPage::testHasChanged() {
   if(ui.styleComboBox->currentIndex() != ui.styleComboBox->property("storedValue").toInt()) return true;
 
   if(selectedLocale() != QLocale()) return true; // QLocale() returns the default locale (manipulated via loadTranslation())
-
-  if(SettingsPage::hasChanged(ui.showWebPreview)) return true;
-  if(SettingsPage::hasChanged(ui.showUserStateIcons)) return true;
 
   return false;
 }

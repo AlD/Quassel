@@ -18,25 +18,37 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "qtuisettings.h"
+#ifndef ITEMVIEWSETTINGSPAGE_H_
+#define ITEMVIEWSETTINGSPAGE_H_
 
-QtUiSettings::QtUiSettings(const QString &subGroup)
-  : UiSettings(QString("QtUi/%1").arg(subGroup))
-{
-}
+#include "settingspage.h"
+#include "ui_itemviewsettingspage.h"
 
-QtUiSettings::QtUiSettings()
-  : UiSettings("QtUi")
-{
-}
+class ColorButton;
+class QSignalMapper;
+class QTreeWidgetItem;
 
-/***********************************************************************/
-QtUiStyleSettings::QtUiStyleSettings(const QString &subGroup)
-  : UiSettings(QString("QtUiStyle/%1").arg(subGroup))
-{
-}
+class ItemViewSettingsPage : public SettingsPage {
+  Q_OBJECT
 
-QtUiStyleSettings::QtUiStyleSettings()
-  : UiSettings("QtUiStyle")
-{
-}
+public:
+  ItemViewSettingsPage(QWidget *parent = 0);
+
+  inline bool hasDefaults() const { return true; }
+
+public slots:
+  void save();
+
+private slots:
+  void updateBufferViewPreview(QWidget *button);
+
+private:
+  Ui::ItemViewSettingsPage ui;
+  QSignalMapper *_mapper;
+  QTreeWidgetItem *_networkItem, *_defaultBufferItem, *_inactiveBufferItem,
+                  *_activeBufferItem, *_unreadBufferItem, *_highlightedBufferItem;
+
+  inline QString settingsKey() const { return QString("ItemViews"); }
+};
+
+#endif
