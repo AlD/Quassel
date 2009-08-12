@@ -324,7 +324,6 @@ void UserInputHandler::issueQuit(const QString &reason) {
 
 void UserInputHandler::handleQuote(const BufferInfo &bufferInfo, const QString &msg) {
   Q_UNUSED(bufferInfo)
-  emit displayMsg(Message::Raw, BufferInfo::StatusBuffer, "", msg);
   emit putRawLine(serverEncode(msg));
 }
 
