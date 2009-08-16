@@ -63,7 +63,6 @@
 #include "flatproxymodel.h"
 #include "iconloader.h"
 #include "inputwidget.h"
-#include "inputline.h"
 #include "irclistmodel.h"
 #include "ircconnectionwizard.h"
 #include "jumpkeyhandler.h"
@@ -287,7 +286,7 @@ void MainWin::setupActions() {
                                       this, SLOT(quit()), tr("Ctrl+Q")));
 
   // View
-  coll->addAction("ConfigureBufferViews", new Action(tr("&Configure Buffer Views..."), coll,
+  coll->addAction("ConfigureBufferViews", new Action(tr("&Configure Chat Lists..."), coll,
                                              this, SLOT(on_actionConfigureViews_triggered())));
 
   QAction *lockAct = coll->addAction("LockLayout", new Action(tr("&Lock Layout"), coll));
@@ -324,7 +323,7 @@ void MainWin::setupActions() {
                                        QtUi::style(), SLOT(reload()), QKeySequence::Refresh));
 
   // Navigation
-  coll->addAction("JumpHotBuffer", new Action(tr("Jump to hot buffer"), coll,
+  coll->addAction("JumpHotBuffer", new Action(tr("Jump to hot chat"), coll,
                                               this, SLOT(on_jumpHotBuffer_triggered()), QKeySequence(Qt::META + Qt::Key_A)));
 }
 
@@ -351,7 +350,7 @@ void MainWin::setupMenus() {
   _fileMenu->addAction(coll->action("Quit"));
 
   _viewMenu = menuBar()->addMenu(tr("&View"));
-  _bufferViewsMenu = _viewMenu->addMenu(tr("&Buffer Views"));
+  _bufferViewsMenu = _viewMenu->addMenu(tr("&Chat Lists"));
   _bufferViewsMenu->addAction(coll->action("ConfigureBufferViews"));
   _toolbarMenu = _viewMenu->addMenu(tr("&Toolbars"));
   _viewMenu->addSeparator();
@@ -411,7 +410,7 @@ void MainWin::addBufferView(ClientBufferViewConfig *config) {
   //create the view and initialize it's filter
   BufferView *view = new BufferView(dock);
   view->setFilteredModel(Client::bufferModel(), config);
-  view->installEventFilter(_inputWidget->inputLine()); // for key presses
+  view->installEventFilter(_inputWidget); // for key presses
   view->show();
 
   Client::bufferModel()->synchronizeView(view);

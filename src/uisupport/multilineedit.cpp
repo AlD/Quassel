@@ -21,15 +21,16 @@
 #include <QApplication>
 #include <QMenu>
 #include <QMessageBox>
+#include <QScrollBar>
 
 #include "bufferview.h"
 #include "graphicalui.h"
-#include "inputline.h"
+#include "multilineedit.h"
 #include "tabcompleter.h"
 
 const int leftMargin = 3;
 
-InputLine::InputLine(QWidget *parent)
+MultiLineEdit::MultiLineEdit(QWidget *parent)
   :
 #ifdef HAVE_KDE
     KTextEdit(parent),
@@ -37,37 +38,109 @@ InputLine::InputLine(QWidget *parent)
     QTextEdit(parent),
 #endif
     idx(0),
-    tabCompleter(new TabCompleter(this))
+    _mode(SingleLine),
+    _wrapMode(QTextOption::NoWrap),
+    _numLines(1),
+    _minHeight(1),
+    _maxHeight(5),
+    _scrollBarsEnabled(true),
+    _lastDocumentHeight(-1)
 {
-  // Make the QTextEdit look like a QLineEdit
 #if QT_VERSION >= 0x040500
   document()->setDocumentMargin(0); // new in Qt 4.5 and we really don't want it here
 #endif
-  setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
   setAcceptRichText(false);
-  setLineWrapMode(NoWrap);
+  setWordWrapMode(QTextOption::NoWrap);
 #ifdef HAVE_KDE
   enableFindReplace(false);
 #endif
-  resetLine();
+
+  setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+  setMode(SingleLine);
+
+  reset();
 
   connect(this, SIGNAL(textChanged()), this, SLOT(on_textChanged()));
-  connect(this, SIGNAL(returnPressed()), this, SLOT(on_returnPressed()));
-  connect(this, SIGNAL(textChanged(QString)), this, SLOT(on_textChanged(QString)));
 }
 
-InputLine::~InputLine() {
+MultiLineEdit::~MultiLineEdit() {
 }
 
-void InputLine::setCustomFont(const QFont &font) {
+void MultiLineEdit::setCustomFont(const QFont &font) {
   setFont(font);
+  updateGeometry();
 }
 
-QSize InputLine::sizeHint() const {
-  // use the style to determine a decent size
+void MultiLineEdit::setMode(Mode mode) {
+  if(mode == _mode)
+    return;
+
+  _mode = mode;
+}
+
+void MultiLineEdit::setWrapMode(QTextOption::WrapMode wrapMode) {
+  if(_wrapMode == wrapMode)
+    return;
+
+  _wrapMode = wrapMode;
+  setWordWrapMode(wrapMode);
+}
+
+void MultiLineEdit::setMinHeight(int lines) {
+  if(lines == _minHeight)
+    return;
+
+  _minHeight = lines;
+  updateGeometry();
+}
+
+void MultiLineEdit::setMaxHeight(int lines) {
+  if(lines == _maxHeight)
+    return;
+
+  _maxHeight = lines;
+  updateGeometry();
+}
+
+void MultiLineEdit::enableScrollBars(bool enable) {
+  if(_scrollBarsEnabled == enable)
+    return;
+
+  _scrollBarsEnabled = enable;
+  if(enable && numLines() > 1) {
+    // the vertical scrollbar must be enabled/disabled manually;
+    // ScrollBarAsNeeded leads to flicker because of the dynamic widget resize
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+  } else {
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  }
+  updateScrollBars();
+}
+
+void MultiLineEdit::updateScrollBars() {
   QFontMetrics fm(font());
-  int h = fm.lineSpacing() + 2 * frameWidth();
+  int _maxPixelHeight = fm.lineSpacing() * _maxHeight;
+  if(_scrollBarsEnabled && document()->size().height() > _maxPixelHeight)
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+  else
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+}
+
+void MultiLineEdit::resizeEvent(QResizeEvent *event) {
+  updateScrollBars();
+  QTextEdit::resizeEvent(event);
+}
+
+QSize MultiLineEdit::sizeHint() const {
+  QFontMetrics fm(font());
+  int _minPixelHeight = fm.lineSpacing() * _minHeight;
+  int _maxPixelHeight = fm.lineSpacing() * _maxHeight;
+
+  // use the style to determine a decent size
+  int h = qMin(qMax((int)document()->size().height(), _minPixelHeight), _maxPixelHeight) + 2 * frameWidth();
   QStyleOptionFrameV2 opt;
   opt.initFrom(this);
   opt.rect = QRect(0, 0, 100, h);
@@ -78,123 +151,146 @@ QSize InputLine::sizeHint() const {
   return s;
 }
 
-QSize InputLine::minimumSizeHint() const {
+QSize MultiLineEdit::minimumSizeHint() const {
   return sizeHint();
 }
 
-bool InputLine::eventFilter(QObject *watched, QEvent *event) {
-  if(event->type() != QEvent::KeyPress)
-    return false;
+void MultiLineEdit::historyMoveBack() {
+  addToHistory(text(), true);
 
-  // keys from BufferView should be sent to (and focus) the input line
-  BufferView *view = qobject_cast<BufferView *>(watched);
-  if(view) {
-    QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
-    if(keyEvent->text().length() == 1 && !(keyEvent->modifiers() & (Qt::ControlModifier ^ Qt::AltModifier)) ) { // normal key press
-      QChar c = keyEvent->text().at(0);
-      if(c.isLetterOrNumber() || c.isSpace() || c.isPunct() || c.isSymbol()) {
-        setFocus();
-        keyPressEvent(keyEvent);
-        return true;
-      } else
-        return false;
-    }
+  if(idx > 0) {
+    idx--;
+    showHistoryEntry();
   }
-  return false;
 }
 
-void InputLine::keyPressEvent(QKeyEvent * event) {
-  if(event->matches(QKeySequence::Find)) {
-    QAction *act = GraphicalUi::actionCollection()->action("ToggleSearchBar");
-    if(act) {
-      act->toggle();
-      event->accept();
-      return;
-    }
-  }
+void MultiLineEdit::historyMoveForward() {
+  addToHistory(text(), true);
 
-  switch(event->key()) {
-  case Qt::Key_Up:
-    event->accept();
-
-    addToHistory(text(), true);
-
-    if(idx > 0) {
-      idx--;
+  if(idx < history.count()) {
+    idx++;
+    if(idx < history.count() || tempHistory.contains(idx)) // tempHistory might have an entry for idx == history.count() + 1
       showHistoryEntry();
-    }
-
-    break;
-
-  case Qt::Key_Down:
-    event->accept();
-
-    addToHistory(text(), true);
-
-    if(idx < history.count()) {
-      idx++;
-      if(idx < history.count() || tempHistory.contains(idx)) // tempHistory might have an entry for idx == history.count() + 1
-        showHistoryEntry();
-      else
-        resetLine();              // equals clear() in this case
-    } else {
-      addToHistory(text());
-      resetLine();
-    }
-
-    break;
-
-  case Qt::Key_Return:
-  case Qt::Key_Enter:
-  case Qt::Key_Select:
-    event->accept();
-    emit returnPressed();
-    break;
-
-  default:
-    QTextEdit::keyPressEvent(event);
+    else
+      reset();              // equals clear() in this case
   }
 }
 
-bool InputLine::addToHistory(const QString &text, bool temporary) {
+bool MultiLineEdit::addToHistory(const QString &text, bool temporary) {
   if(text.isEmpty())
     return false;
 
   Q_ASSERT(0 <= idx && idx <= history.count());
 
-  if(history.isEmpty() || text != history[idx - (int)(idx == history.count())]) {
+  if(temporary) {
     // if an entry of the history is changed, we remember it and show it again at this
     // position until a line was actually sent
     // sent lines get appended to the history
-    if(temporary) {
+    if(history.isEmpty() || text != history[idx - (int)(idx == history.count())]) {
       tempHistory[idx] = text;
-    } else {
+      return true;
+    }
+  } else {
+    if(history.isEmpty() || text != history.last()) {
       history << text;
       tempHistory.clear();
+      return true;
     }
-    return true;
-  } else {
-    return false;
+  }
+  return false;
+}
+
+void MultiLineEdit::keyPressEvent(QKeyEvent *event) {
+  if(event == QKeySequence::InsertLineSeparator) {
+    if(_mode == SingleLine)
+      return;
+#ifdef HAVE_KDE
+    KTextEdit::keyPressEvent(event);
+#else
+    QTextEdit::keyPressEvent(event);
+#endif
+    return;
+  }
+
+  switch(event->key()) {
+  case Qt::Key_Up: {
+    event->accept();
+    if(!(event->modifiers() & Qt::ControlModifier)) {
+      int pos = textCursor().position();
+      moveCursor(QTextCursor::Up);
+      if(pos == textCursor().position()) // already on top line -> history
+        historyMoveBack();
+    } else
+      historyMoveBack();
+    break;
+  }
+
+  case Qt::Key_Down: {
+    event->accept();
+    if(!(event->modifiers() & Qt::ControlModifier)) {
+      int pos = textCursor().position();
+      moveCursor(QTextCursor::Down);
+      if(pos == textCursor().position()) // already on bottom line -> history
+        historyMoveForward();
+    } else
+      historyMoveForward();
+    break;
+  }
+
+  case Qt::Key_Return:
+  case Qt::Key_Enter:
+  case Qt::Key_Select:
+    event->accept();
+    on_returnPressed();
+    break;
+
+  // We don't want to have the tab key react if no completer is installed 
+  case Qt::Key_Tab:
+    event->accept();
+    break;
+
+  default:
+#ifdef HAVE_KDE
+    KTextEdit::keyPressEvent(event);
+#else
+    QTextEdit::keyPressEvent(event);
+#endif
   }
 }
 
-void InputLine::on_returnPressed() {
+void MultiLineEdit::on_returnPressed() {
   if(!text().isEmpty()) {
-    addToHistory(text());
-    foreach(QString newText, text().split(QRegExp("[\\r\\n]+")))
-      emit sendText(newText);
-    resetLine();
+    foreach(const QString &line, text().split('\n', QString::SkipEmptyParts)) {
+      if(line.isEmpty())
+        continue;
+      addToHistory(line);
+      emit textEntered(line);
+    }
+    reset();
+    tempHistory.clear();
   }
 }
 
-void InputLine::on_textChanged(QString newText) {
-  Q_UNUSED(newText);
+void MultiLineEdit::on_textChanged() {
+  QString newText = text();
+  newText.replace("\r\n", "\n");
+  newText.replace('\r', '\n');
+  if(_mode == SingleLine)
+    newText.replace('\n', ' ');
 
-  return;
+  if(document()->size().height() != _lastDocumentHeight) {
+    _lastDocumentHeight = document()->size().height();
+    on_documentHeightChanged(_lastDocumentHeight);
+  }
+  updateGeometry();
 }
 
-void InputLine::resetLine() {
-  // every time the InputLine is cleared we also reset history index
+void MultiLineEdit::on_documentHeightChanged(qreal) {
+  updateScrollBars();
+}
+
+void MultiLineEdit::reset() {
+  // every time the MultiLineEdit is cleared we also reset history index
   idx = history.count();
   clear();
   QTextBlockFormat format = textCursor().blockFormat();
@@ -202,7 +298,7 @@ void InputLine::resetLine() {
   textCursor().setBlockFormat(format);
 }
 
-void InputLine::showHistoryEntry() {
+void MultiLineEdit::showHistoryEntry() {
   // if the user changed the history, display the changed line
   setPlainText(tempHistory.contains(idx) ? tempHistory[idx] : history[idx]);
   QTextCursor cursor = textCursor();
