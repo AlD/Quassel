@@ -1067,7 +1067,10 @@ void Core::identLookupReturned(IdentData data)
   // we answer anyway. The latter state represents a lookup failure.
   if(!data.userId.isEmpty() || request.sessionList.isEmpty()) {
     quInfo() << "_pendingIdentRequests.remove(data) for id:" << socketId;
-    _pendingIdentRequests.remove(data);
+ 
+    d = _pendingIdentRequests.remove(data);
+    quInfo() << "    removed " << QString::number(d) << " pending requests";
+
     if(!request.identSocket.isNull()) {
       connect(this, SIGNAL(identLookupFinished(IdentData)), request.identSocket, SLOT(localLookupReturned(IdentData)));
       emit identLookupFinished(data);
