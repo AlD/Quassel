@@ -39,8 +39,7 @@ MultiLineEdit::MultiLineEdit(QWidget *parent)
 #endif
     idx(0),
     _mode(SingleLine),
-    _wrapMode(QTextOption::NoWrap),
-    _numLines(1),
+    _singleLine(true),
     _minHeight(1),
     _maxHeight(5),
     _scrollBarsEnabled(true),
@@ -51,16 +50,12 @@ MultiLineEdit::MultiLineEdit(QWidget *parent)
 #endif
 
   setAcceptRichText(false);
-  setWordWrapMode(QTextOption::NoWrap);
 #ifdef HAVE_KDE
   enableFindReplace(false);
 #endif
 
-  setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
   setMode(SingleLine);
-
+  setWordWrapEnabled(false);
   reset();
 
   connect(this, SIGNAL(textChanged()), this, SLOT(on_textChanged()));
@@ -71,7 +66,7 @@ MultiLineEdit::~MultiLineEdit() {
 
 void MultiLineEdit::setCustomFont(const QFont &font) {
   setFont(font);
-  updateGeometry();
+  updateSizeHint();
 }
 
 void MultiLineEdit::setMode(Mode mode) {
@@ -81,20 +76,12 @@ void MultiLineEdit::setMode(Mode mode) {
   _mode = mode;
 }
 
-void MultiLineEdit::setWrapMode(QTextOption::WrapMode wrapMode) {
-  if(_wrapMode == wrapMode)
-    return;
-
-  _wrapMode = wrapMode;
-  setWordWrapMode(wrapMode);
-}
-
 void MultiLineEdit::setMinHeight(int lines) {
   if(lines == _minHeight)
     return;
 
   _minHeight = lines;
-  updateGeometry();
+  updateSizeHint();
 }
 
 void MultiLineEdit::setMaxHeight(int lines) {
@@ -102,21 +89,14 @@ void MultiLineEdit::setMaxHeight(int lines) {
     return;
 
   _maxHeight = lines;
-  updateGeometry();
+  updateSizeHint();
 }
 
-void MultiLineEdit::enableScrollBars(bool enable) {
+void MultiLineEdit::setScrollBarsEnabled(bool enable) {
   if(_scrollBarsEnabled == enable)
     return;
 
   _scrollBarsEnabled = enable;
-  if(enable && numLines() > 1) {
-    // the vertical scrollbar must be enabled/disabled manually;
-    // ScrollBarAsNeeded leads to flicker because of the dynamic widget resize
-    setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-  } else {
-    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  }
   updateScrollBars();
 }
 
@@ -127,20 +107,27 @@ void MultiLineEdit::updateScrollBars() {
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
   else
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+  if(!_scrollBarsEnabled || isSingleLine())
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  else
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 }
 
 void MultiLineEdit::resizeEvent(QResizeEvent *event) {
-  updateScrollBars();
   QTextEdit::resizeEvent(event);
+  updateSizeHint();
+  updateScrollBars();
 }
 
-QSize MultiLineEdit::sizeHint() const {
+void MultiLineEdit::updateSizeHint() {
   QFontMetrics fm(font());
-  int _minPixelHeight = fm.lineSpacing() * _minHeight;
-  int _maxPixelHeight = fm.lineSpacing() * _maxHeight;
+  int minPixelHeight = fm.lineSpacing() * _minHeight;
+  int maxPixelHeight = fm.lineSpacing() * _maxHeight;
+  int scrollBarHeight = horizontalScrollBar()->isVisible() ? horizontalScrollBar()->height() : 0;
 
   // use the style to determine a decent size
-  int h = qMin(qMax((int)document()->size().height(), _minPixelHeight), _maxPixelHeight) + 2 * frameWidth();
+  int h = qMin(qMax((int)document()->size().height() + scrollBarHeight, minPixelHeight), maxPixelHeight) + 2 * frameWidth();
   QStyleOptionFrameV2 opt;
   opt.initFrom(this);
   opt.rect = QRect(0, 0, 100, h);
@@ -148,11 +135,35 @@ QSize MultiLineEdit::sizeHint() const {
   opt.midLineWidth = midLineWidth();
   opt.state |= QStyle::State_Sunken;
   QSize s = style()->sizeFromContents(QStyle::CT_LineEdit, &opt, QSize(100, h).expandedTo(QApplication::globalStrut()), this);
-  return s;
+  if(s != _sizeHint) {
+    _sizeHint = s;
+    updateGeometry();
+  }
+}
+
+QSize MultiLineEdit::sizeHint() const {
+  if(!_sizeHint.isValid()) {
+    MultiLineEdit *that = const_cast<MultiLineEdit *>(this);
+    that->updateSizeHint();
+  }
+  return _sizeHint;
 }
 
 QSize MultiLineEdit::minimumSizeHint() const {
   return sizeHint();
+}
+
+void MultiLineEdit::setSpellCheckEnabled(bool enable) {
+#ifdef HAVE_KDE
+  setCheckSpellingEnabled(enable);
+#else
+  Q_UNUSED(enable)
+#endif
+}
+
+void MultiLineEdit::setWordWrapEnabled(bool enable) {
+  setLineWrapMode(enable? WidgetWidth : NoWrap);
+  updateSizeHint();
 }
 
 void MultiLineEdit::historyMoveBack() {
@@ -173,6 +184,9 @@ void MultiLineEdit::historyMoveForward() {
       showHistoryEntry();
     else
       reset();              // equals clear() in this case
+  } else {
+    addToHistory(text());
+    reset();
   }
 }
 
@@ -201,7 +215,18 @@ bool MultiLineEdit::addToHistory(const QString &text, bool temporary) {
 }
 
 void MultiLineEdit::keyPressEvent(QKeyEvent *event) {
+  // Workaround the fact that Qt < 4.5 doesn't know InsertLineSeparator yet
+#if QT_VERSION >= 0x040500
   if(event == QKeySequence::InsertLineSeparator) {
+#else
+
+# ifdef Q_WS_MAC
+  if((event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) && event->modifiers() & Qt::META) {
+# else
+  if((event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) && event->modifiers() & Qt::SHIFT) {
+# endif
+#endif
+
     if(_mode == SingleLine)
       return;
 #ifdef HAVE_KDE
@@ -213,49 +238,58 @@ void MultiLineEdit::keyPressEvent(QKeyEvent *event) {
   }
 
   switch(event->key()) {
-  case Qt::Key_Up: {
-    event->accept();
-    if(!(event->modifiers() & Qt::ControlModifier)) {
-      int pos = textCursor().position();
-      moveCursor(QTextCursor::Up);
-      if(pos == textCursor().position()) // already on top line -> history
+  case Qt::Key_Up:
+    if(event->modifiers() & Qt::ShiftModifier)
+      break;
+    {
+      event->accept();
+      if(!(event->modifiers() & Qt::ControlModifier)) {
+        int pos = textCursor().position();
+        moveCursor(QTextCursor::Up);
+        if(pos == textCursor().position()) // already on top line -> history
+          historyMoveBack();
+      } else
         historyMoveBack();
-    } else
-      historyMoveBack();
-    break;
-  }
+      return;
+    }
 
-  case Qt::Key_Down: {
-    event->accept();
-    if(!(event->modifiers() & Qt::ControlModifier)) {
-      int pos = textCursor().position();
-      moveCursor(QTextCursor::Down);
-      if(pos == textCursor().position()) // already on bottom line -> history
+  case Qt::Key_Down:
+    if(event->modifiers() & Qt::ShiftModifier)
+      break;
+    {
+      event->accept();
+      if(!(event->modifiers() & Qt::ControlModifier)) {
+        int pos = textCursor().position();
+        moveCursor(QTextCursor::Down);
+        if(pos == textCursor().position()) // already on bottom line -> history
+          historyMoveForward();
+      } else
         historyMoveForward();
-    } else
-      historyMoveForward();
-    break;
-  }
+      return;
+    }
 
   case Qt::Key_Return:
   case Qt::Key_Enter:
   case Qt::Key_Select:
     event->accept();
     on_returnPressed();
-    break;
+    return;
 
-  // We don't want to have the tab key react if no completer is installed 
+  // We don't want to have the tab key react even if no completer is installed
   case Qt::Key_Tab:
     event->accept();
-    break;
+    return;
 
   default:
-#ifdef HAVE_KDE
-    KTextEdit::keyPressEvent(event);
-#else
-    QTextEdit::keyPressEvent(event);
-#endif
+    ;
   }
+
+
+#ifdef HAVE_KDE
+  KTextEdit::keyPressEvent(event);
+#else
+  QTextEdit::keyPressEvent(event);
+#endif
 }
 
 void MultiLineEdit::on_returnPressed() {
@@ -278,11 +312,13 @@ void MultiLineEdit::on_textChanged() {
   if(_mode == SingleLine)
     newText.replace('\n', ' ');
 
+  _singleLine = (newText.indexOf('\n') < 0);
+
   if(document()->size().height() != _lastDocumentHeight) {
     _lastDocumentHeight = document()->size().height();
     on_documentHeightChanged(_lastDocumentHeight);
   }
-  updateGeometry();
+  updateSizeHint();
 }
 
 void MultiLineEdit::on_documentHeightChanged(qreal) {
@@ -296,6 +332,7 @@ void MultiLineEdit::reset() {
   QTextBlockFormat format = textCursor().blockFormat();
   format.setLeftMargin(leftMargin); // we want a little space between the frame and the contents
   textCursor().setBlockFormat(format);
+  updateScrollBars();
 }
 
 void MultiLineEdit::showHistoryEntry() {
@@ -307,4 +344,5 @@ void MultiLineEdit::showHistoryEntry() {
   cursor.setBlockFormat(format);
   cursor.movePosition(QTextCursor::End);
   setTextCursor(cursor);
+  updateScrollBars();
 }

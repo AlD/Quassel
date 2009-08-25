@@ -407,13 +407,14 @@ QVariant MessageModelItem::data(int column, int role) const {
     return QVariant();
 
   switch(role) {
-  case MessageModel::MsgIdRole: return QVariant::fromValue<MsgId>(msgId());
-  case MessageModel::BufferIdRole: return QVariant::fromValue<BufferId>(bufferId());
-  case MessageModel::TypeRole: return msgType();
-  case MessageModel::FlagsRole: return (int)msgFlags();
-  case MessageModel::TimestampRole: return timestamp();
-  case MessageModel::RedirectedToRole: return qVariantFromValue<BufferId>(_redirectedTo);
-  default: return QVariant();
+    case MessageModel::MessageRole: return QVariant::fromValue<Message>(message());
+    case MessageModel::MsgIdRole: return QVariant::fromValue<MsgId>(msgId());
+    case MessageModel::BufferIdRole: return QVariant::fromValue<BufferId>(bufferId());
+    case MessageModel::TypeRole: return msgType();
+    case MessageModel::FlagsRole: return (int)msgFlags();
+    case MessageModel::TimestampRole: return timestamp();
+    case MessageModel::RedirectedToRole: return qVariantFromValue<BufferId>(_redirectedTo);
+    default: return QVariant();
   }
 }
 
@@ -421,9 +422,6 @@ bool MessageModelItem::setData(int column, const QVariant &value, int role) {
   Q_UNUSED(column);
 
   switch(role) {
-  case MessageModel::FlagsRole:
-    _msg.setFlags((Message::Flags)value.toUInt());
-    return true;
   case MessageModel::RedirectedToRole:
     _redirectedTo = value.value<BufferId>();
     return true;

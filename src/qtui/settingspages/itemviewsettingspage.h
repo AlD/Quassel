@@ -48,7 +48,7 @@ private:
   QTreeWidgetItem *_networkItem, *_defaultBufferItem, *_inactiveBufferItem,
                   *_activeBufferItem, *_unreadBufferItem, *_highlightedBufferItem;
 
-  inline QString settingsKey() const { return QString("ItemViews"); }
+  inline QString settingsKey() const { return QString("InputLine"); }
 };
 
 #endif

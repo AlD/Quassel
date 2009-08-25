@@ -34,11 +34,12 @@ class MessageModel : public QAbstractItemModel {
   Q_OBJECT
 
 public:
-  enum MessageRole {
+  enum MessageModelRole {
     DisplayRole = Qt::DisplayRole,
     EditRole = Qt::EditRole,
     BackgroundRole = Qt::BackgroundRole,
-    MsgIdRole = Qt::UserRole,
+    MessageRole = Qt::UserRole,
+    MsgIdRole,
     BufferIdRole,
     TypeRole,
     FlagsRole,
@@ -141,7 +142,6 @@ public:
   static bool lessThan(const MessageModelItem *m1, const MessageModelItem *m2);
 
 private:
-  Message _msg;
   BufferId _redirectedTo;
 };
 

@@ -54,6 +54,7 @@
 #include "clientbacklogmanager.h"
 #include "clientbufferviewconfig.h"
 #include "clientbufferviewmanager.h"
+#include "clientignorelistmanager.h"
 #include "coreinfodlg.h"
 #include "coreconnectdlg.h"
 #include "contextmenuactionprovider.h"
@@ -102,6 +103,8 @@
 #include "settingspages/generalsettingspage.h"
 #include "settingspages/highlightsettingspage.h"
 #include "settingspages/identitiessettingspage.h"
+#include "settingspages/ignorelistsettingspage.h"
+#include "settingspages/inputwidgetsettingspage.h"
 #include "settingspages/itemviewsettingspage.h"
 #include "settingspages/networkssettingspage.h"
 #include "settingspages/notificationssettingspage.h"
@@ -807,10 +810,11 @@ void MainWin::awayLogDestroyed() {
 void MainWin::showSettingsDlg() {
   SettingsDlg *dlg = new SettingsDlg();
 
-  //Category: Appearance
+  //Category: Interface
   dlg->registerSettingsPage(new AppearanceSettingsPage(dlg));
   dlg->registerSettingsPage(new ChatViewSettingsPage(dlg));
   dlg->registerSettingsPage(new ItemViewSettingsPage(dlg));
+  dlg->registerSettingsPage(new InputWidgetSettingsPage(dlg));
   dlg->registerSettingsPage(new HighlightSettingsPage(dlg));
   dlg->registerSettingsPage(new NotificationsSettingsPage(dlg));
   dlg->registerSettingsPage(new BacklogSettingsPage(dlg));
@@ -823,6 +827,7 @@ void MainWin::showSettingsDlg() {
   dlg->registerSettingsPage(new IdentitiesSettingsPage(dlg));
   dlg->registerSettingsPage(new NetworksSettingsPage(dlg));
   dlg->registerSettingsPage(new AliasesSettingsPage(dlg));
+  dlg->registerSettingsPage(new IgnoreListSettingsPage(dlg));
 
   dlg->show();
 }
@@ -952,7 +957,8 @@ void MainWin::messagesInserted(const QModelIndex &parent, int start, int end) {
     if(hasFocus && bufId == _bufferWidget->currentBuffer())
       continue;
 
-    if(flags & Message::Highlight || bufType == BufferInfo::QueryBuffer) {
+    if((flags & Message::Highlight || bufType == BufferInfo::QueryBuffer) &&
+       !Client::ignoreListManager()->match(idx.data(MessageModel::MessageRole).value<Message>(), Client::networkModel()->networkName(bufId))) {
       QModelIndex senderIdx = Client::messageModel()->index(i, ChatLineModel::SenderColumn);
       QString sender = senderIdx.data(ChatLineModel::EditRole).toString();
       QString contents = idx.data(ChatLineModel::DisplayRole).toString();

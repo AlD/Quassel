@@ -58,16 +58,20 @@ public:
   inline void insert(const QString &newText) { insertPlainText(newText); }
   inline void backspace() { keyPressEvent(new QKeyEvent(QEvent::KeyPress, Qt::Key_Backspace, Qt::NoModifier)); }
   inline bool hasSelectedText() { return textCursor().hasSelection(); }
+  inline bool isSingleLine() const { return _singleLine; }
 
   virtual QSize sizeHint() const;
   virtual QSize minimumSizeHint() const;
 
 public slots:
   void setMode(Mode mode);
-  void setWrapMode(QTextOption::WrapMode = QTextOption::NoWrap);
   void setMinHeight(int numLines);
   void setMaxHeight(int numLines);
-  void enableScrollBars(bool enable = true);
+  void setScrollBarsEnabled(bool enable = true);
+  void setSpellCheckEnabled(bool enable = true);
+
+  // Note: Enabling wrap will make isSingleLine() not work correctly, so only use this if minHeight() > 1!
+  void setWordWrapEnabled(bool enable = true);
 
 signals:
   void textEntered(const QString &text);
@@ -90,8 +94,7 @@ private:
   QHash<int, QString> tempHistory;
   qint32 idx;
   Mode _mode;
-  QTextOption::WrapMode _wrapMode;
-  int _numLines;
+  bool _singleLine;
   int _minHeight;
   int _maxHeight;
   bool _scrollBarsEnabled;
@@ -102,9 +105,7 @@ private:
   void reset();
   void showHistoryEntry();
   void updateScrollBars();
-
-  inline int numLines() const { return _numLines; }
-  void setNumLines(int);
+  void updateSizeHint();
 };
 
 #endif

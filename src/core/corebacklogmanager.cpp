@@ -24,6 +24,7 @@
 
 #include <QDebug>
 
+INIT_SYNCABLE_OBJECT(CoreBacklogManager)
 CoreBacklogManager::CoreBacklogManager(CoreSession *coreSession)
   : BacklogManager(coreSession),
     _coreSession(coreSession)
@@ -74,7 +75,6 @@ QVariantList CoreBacklogManager::requestBacklog(BufferId bufferId, MsgId first, 
 }
 
 QVariantList CoreBacklogManager::requestBacklogAll(MsgId first, MsgId last, int limit, int additional) {
-  qDebug() << "CoreBacklogManager::requestBacklogAll" << first << last << limit << additional;
   QVariantList backlog;
   QList<Message> msgList;
   msgList = Core::requestAllMsgs(coreSession()->user(), first, last, limit);

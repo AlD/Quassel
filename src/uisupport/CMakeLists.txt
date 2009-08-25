@@ -14,6 +14,7 @@ set(SOURCES
     bufferviewfilter.cpp
     bufferviewoverlayfilter.cpp
     clearablelineedit.cpp
+    clickable.cpp
     clickablelabel.cpp
     colorbutton.cpp
     contextmenuactionprovider.cpp
@@ -27,7 +28,9 @@ set(SOURCES
     nickview.cpp
     nickviewfilter.cpp
     qssparser.cpp
+    resizingstackedwidget.cpp
     settingspage.cpp
+    styledlabel.cpp
     tabcompleter.cpp
     toolbaractionprovider.cpp
     uisettings.cpp
@@ -56,13 +59,16 @@ set(MOC_HDRS
     networkmodelcontroller.h
     nickview.h
     nickviewfilter.h
+    resizingstackedwidget.h
     settingspage.h
+    styledlabel.h
     tabcompleter.h
     toolbaractionprovider.h
     uistyle.h
    )
 
 set(HEADERS
+    clickable.h
     icon.h
     qssparser.h
     uisettings.h
