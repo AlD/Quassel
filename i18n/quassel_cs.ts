@@ -127,18 +127,18 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>AppearanceSettingsPage</name>
     <message>
-        <location filename="../src/qtui/settingspages/appearancesettingspage.cpp" line="32"/>
+        <location filename="../src/qtui/settingspages/appearancesettingspage.cpp" line="34"/>
         <source>Interface</source>
         <translation>Rozhraní</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/appearancesettingspage.cpp" line="51"/>
+        <location filename="../src/qtui/settingspages/appearancesettingspage.cpp" line="53"/>
         <location filename="../src/qtui/settingspages/appearancesettingspage.ui" line="46"/>
         <source>&lt;System Default&gt;</source>
         <translation>&lt;Systémové výchozí&gt;</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/appearancesettingspage.cpp" line="143"/>
+        <location filename="../src/qtui/settingspages/appearancesettingspage.cpp" line="151"/>
         <source>Please choose a stylesheet file</source>
         <translation>Prosím vyberte soubor stylu</translation>
     </message>
@@ -376,12 +376,12 @@ Můžete také vybrat dodatečné zprávy pro získání lepšího přehledu.</t
 <context>
     <name>BufferView</name>
     <message>
-        <location filename="../src/uisupport/bufferview.cpp" line="245"/>
+        <location filename="../src/uisupport/bufferview.cpp" line="248"/>
         <source>Merge buffers permanently?</source>
         <translation>Sloučit trvale záložky?</translation>
     </message>
     <message>
-        <location filename="../src/uisupport/bufferview.cpp" line="246"/>
+        <location filename="../src/uisupport/bufferview.cpp" line="249"/>
         <source>Do you want to merge the buffer &quot;%1&quot; permanently into buffer &quot;%2&quot;?
  This cannot be reversed!</source>
         <translation>Opravdu chcete trvale sloučit záložku &quot;%1&quot; do záložky &quot;%2&quot;?
@@ -409,9 +409,9 @@ Můžete také vybrat dodatečné zprávy pro získání lepšího přehledu.</t
 <context>
     <name>BufferViewFilter</name>
     <message>
-        <location filename="../src/uisupport/bufferviewfilter.cpp" line="51"/>
-        <source>Show / Hide buffers</source>
-        <translation>Zobrazit / Skrýt záložky</translation>
+        <location filename="../src/uisupport/bufferviewfilter.cpp" line="52"/>
+        <source>Show / Hide Chats</source>
+        <translation>Zobrazit / Skrýt rozhovory</translation>
     </message>
 </context>
 <context>
@@ -1257,7 +1257,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>ContentsChatItem</name>
     <message>
-        <location filename="../src/qtui/chatitem.cpp" line="599"/>
+        <location filename="../src/qtui/chatitem.cpp" line="575"/>
         <source>Copy Link Address</source>
         <translation>Kopírovat adresu odkazu</translation>
     </message>
@@ -1286,13 +1286,13 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="40"/>
-        <source>Delete Buffer(s)...</source>
-        <translation>Smazat záložku/y...</translation>
+        <source>Delete Chat(s)...</source>
+        <translation>Smazat rozhovor(y)...</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="41"/>
-        <source>Show Buffer</source>
-        <translation>Zobrazít záložku</translation>
+        <source>Go to Chat</source>
+        <translation>Přejít na rozhovor</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="43"/>
@@ -1416,13 +1416,13 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="72"/>
-        <source>Hide Buffer(s) Temporarily</source>
-        <translation>Skrýt dočasně záložku(y)</translation>
+        <source>Hide Chat(s) Temporarily</source>
+        <translation>Dočasně skrýt zálkožku(y)</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="73"/>
-        <source>Hide Buffer(s) Permanently</source>
-        <translation>Skrýt trvale záložku(y)</translation>
+        <source>Hide Chat(s) Permanently</source>
+        <translation>Trvale skrýt zálkožku(y)</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="74"/>
@@ -3031,18 +3031,12 @@ p, li { white-space: pre-wrap; }
         <translation>Dynamická</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="51"/>
-        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="61"/>
-        <source>strictnessButtonGroup</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="58"/>
+        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="55"/>
         <source>Permanent</source>
         <translation>Trvalá</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="71"/>
+        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="65"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -3059,28 +3053,22 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="86"/>
+        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="80"/>
         <source>Rule Type</source>
         <translation>Typ pravidla</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="92"/>
+        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="86"/>
         <source>Sender</source>
         <translation>Odesílatel</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="95"/>
-        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="105"/>
-        <source>typeButtonGroup</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="102"/>
+        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="93"/>
         <source>Message</source>
         <translation>Zpráva</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="117"/>
+        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="105"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -3103,12 +3091,12 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="138"/>
+        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="126"/>
         <source>Ignore rule</source>
         <translation>Pravidlo ignorance</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="149"/>
+        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="137"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -3124,12 +3112,12 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="163"/>
+        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="151"/>
         <source>Use Regular Expressions</source>
         <translation>Použít regulární výrazy</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="170"/>
+        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="158"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -3141,12 +3129,12 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="180"/>
+        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="168"/>
         <source>Enabled</source>
         <translation>Povoleno</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="192"/>
+        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="180"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -3164,34 +3152,27 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="208"/>
+        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="196"/>
         <source>Scope</source>
         <translation>Rozsah</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="216"/>
+        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="204"/>
         <source>Global</source>
         <translation>Globální</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="219"/>
-        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="229"/>
-        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="239"/>
-        <source>scopeButtonGroup</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="226"/>
+        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="211"/>
         <source>Network</source>
         <translation>Síť</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="236"/>
+        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="218"/>
         <source>Channel</source>
         <translation>Kanál</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="248"/>
+        <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="227"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -3258,12 +3239,12 @@ p, li { white-space: pre-wrap; }
         <translation>Seznam Ignorovaných</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/ignorelistsettingspage.cpp" line="111"/>
+        <location filename="../src/qtui/settingspages/ignorelistsettingspage.cpp" line="112"/>
         <source>Rule already exists</source>
         <translation>Pravidlo již existuje</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/ignorelistsettingspage.cpp" line="112"/>
+        <location filename="../src/qtui/settingspages/ignorelistsettingspage.cpp" line="113"/>
         <source>There is already a rule
 &quot;%1&quot;
 Please choose another rule.</source>
@@ -3296,12 +3277,12 @@ Prosím vyberte jiné pravidlo.
 <context>
     <name>InputWidget</name>
     <message>
-        <location filename="../src/qtui/inputwidget.cpp" line="83"/>
+        <location filename="../src/qtui/inputwidget.cpp" line="88"/>
         <source>Focus Input Line</source>
         <translation>Přepnout na vstupní řádku</translation>
     </message>
     <message>
-        <location filename="../src/qtui/inputwidget.cpp" line="84"/>
+        <location filename="../src/qtui/inputwidget.cpp" line="89"/>
         <source>Ctrl+L</source>
         <translation></translation>
     </message>
@@ -3369,47 +3350,52 @@ Prosím vyberte jiné pravidlo.
         <translation>Víceřádková editace</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="87"/>
+        <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="85"/>
+        <source>EnableMultiLine</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="96"/>
         <source>Show at most</source>
         <translation>Ukázat nejvíce</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="103"/>
+        <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="112"/>
         <source>MaxNumLines</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="113"/>
+        <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="122"/>
         <source>lines</source>
         <translation>řádků</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="135"/>
+        <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="144"/>
         <source>Enable scrollbars</source>
         <translation>Povolit rolovácí proužek</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="141"/>
+        <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="150"/>
         <source>EnableScrollBars</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="154"/>
+        <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="163"/>
         <source>Tab Completion</source>
         <translation>Doplňování tabulátorem</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="162"/>
+        <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="171"/>
         <source>Completion suffix:</source>
         <translation>Zakončení doplňování:</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="175"/>
+        <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="184"/>
         <source>/TabCompletion/CompletionSuffix</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="178"/>
+        <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="187"/>
         <source>: </source>
         <translation></translation>
     </message>
@@ -3876,161 +3862,171 @@ Prosím vyberte jiné pravidlo.
     </message>
     <message>
         <location filename="../src/qtui/mainwin.cpp" line="303"/>
+        <source>Show &amp;Menubar</source>
+        <translation>Zobrazit Hlavní &amp;nabídku</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/mainwin.cpp" line="304"/>
+        <source>Ctrl+M</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/mainwin.cpp" line="306"/>
         <source>Show Status &amp;Bar</source>
         <translation>Zo&amp;brazit stavový řádek</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="307"/>
+        <location filename="../src/qtui/mainwin.cpp" line="310"/>
         <source>&amp;Configure Quassel...</source>
         <translation>&amp;Nastavit Quassel...</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="308"/>
+        <location filename="../src/qtui/mainwin.cpp" line="311"/>
         <source>F7</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="311"/>
+        <location filename="../src/qtui/mainwin.cpp" line="314"/>
         <source>&amp;About Quassel</source>
         <translation>O progr&amp;amu Quassel</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="313"/>
+        <location filename="../src/qtui/mainwin.cpp" line="316"/>
         <source>About &amp;Qt</source>
         <translation>O &amp;Qt</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="315"/>
+        <location filename="../src/qtui/mainwin.cpp" line="318"/>
         <source>Debug &amp;NetworkModel</source>
         <translation>Ladění Sít&amp;ovéhoModelu</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="317"/>
+        <location filename="../src/qtui/mainwin.cpp" line="320"/>
         <source>Debug &amp;BufferViewOverlay</source>
         <translation>Ladění vrstvy P&amp;ohledu na záložky</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="319"/>
+        <location filename="../src/qtui/mainwin.cpp" line="322"/>
         <source>Debug &amp;MessageModel</source>
         <translation>Ladění &amp;ModeluZpráv</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="321"/>
+        <location filename="../src/qtui/mainwin.cpp" line="324"/>
         <source>Debug &amp;HotList</source>
         <translation>Ladění &amp;Seznamů rozhovorů</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="323"/>
+        <location filename="../src/qtui/mainwin.cpp" line="326"/>
         <source>Debug &amp;Log</source>
         <translation>Ladící &amp;Log</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="325"/>
+        <location filename="../src/qtui/mainwin.cpp" line="328"/>
         <source>Reload Stylesheet</source>
         <translation>Přenačíst styl</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="329"/>
+        <location filename="../src/qtui/mainwin.cpp" line="332"/>
         <source>Jump to hot chat</source>
         <translation>Přejít na další aktivní záložku</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="336"/>
+        <location filename="../src/qtui/mainwin.cpp" line="339"/>
         <source>&amp;File</source>
         <translation>S&amp;oubor</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="349"/>
+        <location filename="../src/qtui/mainwin.cpp" line="352"/>
         <source>&amp;Networks</source>
         <translation>&amp;Sítě</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="355"/>
+        <location filename="../src/qtui/mainwin.cpp" line="358"/>
         <source>&amp;View</source>
         <translation>&amp;Záložky</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="356"/>
+        <location filename="../src/qtui/mainwin.cpp" line="359"/>
         <source>&amp;Chat Lists</source>
         <translation>&amp;Seznam pokeců</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="358"/>
+        <location filename="../src/qtui/mainwin.cpp" line="361"/>
         <source>&amp;Toolbars</source>
         <translation>Liš&amp;ty</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="370"/>
+        <location filename="../src/qtui/mainwin.cpp" line="375"/>
         <source>&amp;Settings</source>
         <translation>Na&amp;stavení</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="377"/>
+        <location filename="../src/qtui/mainwin.cpp" line="382"/>
         <source>&amp;Help</source>
         <translation>&amp;Nápověda</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="385"/>
+        <location filename="../src/qtui/mainwin.cpp" line="390"/>
         <source>Debug</source>
         <translation>Debug</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="513"/>
+        <location filename="../src/qtui/mainwin.cpp" line="529"/>
         <source>Nicks</source>
         <translation>Přezdívky</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="522"/>
+        <location filename="../src/qtui/mainwin.cpp" line="538"/>
         <source>Show Nick List</source>
         <translation>Zobrazit seznam přezdívek</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="533"/>
+        <location filename="../src/qtui/mainwin.cpp" line="549"/>
         <source>Chat Monitor</source>
         <translation>Monitor pokecu</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="544"/>
+        <location filename="../src/qtui/mainwin.cpp" line="560"/>
         <source>Show Chat Monitor</source>
         <translation>Zobrazí monitor pokecu</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="548"/>
+        <location filename="../src/qtui/mainwin.cpp" line="564"/>
         <source>Inputline</source>
         <translation>Vstupní řádka</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="557"/>
+        <location filename="../src/qtui/mainwin.cpp" line="573"/>
         <source>Show Input Line</source>
         <translation>Zobrasit řádku se vstupem</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="568"/>
+        <location filename="../src/qtui/mainwin.cpp" line="584"/>
         <source>Topic</source>
         <translation>Téma</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="580"/>
+        <location filename="../src/qtui/mainwin.cpp" line="596"/>
         <source>Show Topic Line</source>
         <translation>Zobrazit řádek s tématem</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="646"/>
+        <location filename="../src/qtui/mainwin.cpp" line="667"/>
         <source>Main Toolbar</source>
         <translation>Hlavní nástrojová lišta</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="685"/>
+        <location filename="../src/qtui/mainwin.cpp" line="706"/>
         <source>Connected to core.</source>
         <translation>Připojen k jádru.</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="719"/>
+        <location filename="../src/qtui/mainwin.cpp" line="740"/>
         <source>Core Lag: %1</source>
         <translation>Spoždění jádra: %1</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="755"/>
+        <location filename="../src/qtui/mainwin.cpp" line="776"/>
         <source>Not connected to core.</source>
         <translation>Nepřipojen k jádru.</translation>
     </message>
@@ -4062,6 +4058,23 @@ Prosím vyberte jiné pravidlo.
         <location filename="../src/qtui/ui/msgprocessorstatuswidget.ui" line="34"/>
         <source>Receiving Backlog</source>
         <translation>Získávám historii</translation>
+    </message>
+</context>
+<context>
+    <name>MultiLineEdit</name>
+    <message numerus="yes">
+        <location filename="../src/uisupport/multilineedit.cpp" line="328"/>
+        <source>Do you really want to paste %n lines?</source>
+        <translation>
+            <numerusform>Opravdu chcete vložit %n řádku?</numerusform>
+            <numerusform>Opravdu chcete vložit %n řádky?</numerusform>
+            <numerusform>Opravdu chcete vložit %n řádek?</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../src/uisupport/multilineedit.cpp" line="337"/>
+        <source>Paste Protection</source>
+        <translation>Ochrana proti náhodnému vložení</translation>
     </message>
 </context>
 <context>
@@ -4653,7 +4666,7 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/uisupport/qssparser.cpp" line="414"/>
         <source>Invalid font property: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Neplatná vlastnost písma: %1</translation>
     </message>
     <message>
         <location filename="../src/uisupport/qssparser.cpp" line="420"/>
@@ -4687,7 +4700,7 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/uisupport/qssparser.cpp" line="605"/>
         <source>Invalid font specification: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Neplatná specifikace písma: %1</translation>
     </message>
     <message>
         <location filename="../src/uisupport/qssparser.cpp" line="644"/>
@@ -5350,14 +5363,6 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
         <location filename="../src/uisupport/toolbaractionprovider.cpp" line="58"/>
         <source>Disconnect from all</source>
         <translation>Odpojit ze všeho</translation>
-    </message>
-</context>
-<context>
-    <name>TopicLabel</name>
-    <message>
-        <location filename="../src/qtui/topiclabel.cpp" line="44"/>
-        <source>Drag to scroll the topic!</source>
-        <translation>Chytněte pro posun v tématu!</translation>
     </message>
 </context>
 <context>
