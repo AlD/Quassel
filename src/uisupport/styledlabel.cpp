@@ -30,7 +30,8 @@ StyledLabel::StyledLabel(QWidget *parent)
 : QFrame(parent),
   _wrapMode(QTextOption::NoWrap),
   _alignment(Qt::AlignVCenter|Qt::AlignLeft),
-  _toolTipEnabled(true)
+  _toolTipEnabled(true),
+  _resizeMode(NoResize)
 {
   setMouseTracking(true);
 
@@ -38,6 +39,12 @@ StyledLabel::StyledLabel(QWidget *parent)
   opt.setWrapMode(_wrapMode);
   opt.setAlignment(_alignment);
   _layout.setTextOption(opt);
+}
+
+void StyledLabel::setCustomFont(const QFont &font) {
+  setFont(font);
+  _layout.setFont(font);
+  setText(_layout.text());
 }
 
 void StyledLabel::setWrapMode(QTextOption::WrapMode mode) {
@@ -62,6 +69,17 @@ void StyledLabel::setAlignment(Qt::Alignment alignment) {
   _layout.setTextOption(opt);
 
   layout();
+}
+
+void StyledLabel::setResizeMode(ResizeMode mode) {
+  if(_resizeMode == mode)
+    return;
+
+  _resizeMode = mode;
+  if(mode == DynamicResize)
+    setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+  else
+    setWrapMode(QTextOption::NoWrap);
 }
 
 void StyledLabel::resizeEvent(QResizeEvent *event) {
@@ -127,7 +145,7 @@ void StyledLabel::updateToolTip() {
 
 void StyledLabel::layout() {
   qreal h = 0;
-  qreal w = frameRect().width() - 2*frameWidth();
+  qreal w = contentsRect().width();
 
   _layout.beginLayout();
   forever {
@@ -145,11 +163,12 @@ void StyledLabel::layout() {
   update();
 }
 
-void StyledLabel::paintEvent(QPaintEvent *) {
+void StyledLabel::paintEvent(QPaintEvent *e) {
+  QFrame::paintEvent(e);
   QPainter painter(this);
 
-  qreal y = (frameRect().height() - _layout.boundingRect().height()) / 2;
-  _layout.draw(&painter, QPointF(0, y), _extraLayoutList);
+  qreal y = contentsRect().y() + (contentsRect().height() - _layout.boundingRect().height()) / 2;
+  _layout.draw(&painter, QPointF(contentsRect().x(), y), _extraLayoutList);
 }
 
 int StyledLabel::posToCursor(const QPointF &pos) {
@@ -175,8 +194,15 @@ void StyledLabel::mouseMoveEvent(QMouseEvent *event) {
   }
 }
 
+void StyledLabel::enterEvent(QEvent *) {
+  if(resizeMode() == ResizeOnHover)
+    setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+}
+
 void StyledLabel::leaveEvent(QEvent *) {
   endHoverMode();
+  if(resizeMode() == ResizeOnHover)
+    setWrapMode(QTextOption::NoWrap);
 }
 
 void StyledLabel::mousePressEvent(QMouseEvent *event) {

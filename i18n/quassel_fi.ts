@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="cs">
+<TS version="2.0" language="fi_FI" sourcelanguage="en_US">
 <context>
     <name>AboutDlg</name>
     <message>
         <location filename="../src/qtui/aboutdlg.cpp" line="32"/>
         <source>&lt;b&gt;Version:&lt;/b&gt; %1&lt;br&gt;&lt;b&gt;Protocol version:&lt;/b&gt; %2&lt;br&gt;&lt;b&gt;Built:&lt;/b&gt; %3</source>
-        <translation>&lt;b&gt;Verze:&lt;/b&gt; %1&lt;br&gt;&lt;b&gt;Verze protokolu:&lt;/b&gt; %2&lt;br&gt;&lt;b&gt;Složení:&lt;/b&gt; %3</translation>
+        <translation>&lt;b&gt;Versio:&lt;/b&gt; %1&lt;br&gt;&lt;b&gt;Protokollan versio:&lt;/b&gt; %2&lt;br&gt;&lt;b&gt;Käännetty:&lt;/b&gt; %3</translation>
     </message>
     <message>
         <location filename="../src/qtui/aboutdlg.cpp" line="46"/>
         <source>&lt;b&gt;A modern, distributed IRC Client&lt;/b&gt;&lt;br&gt;&lt;br&gt;&amp;copy;2005-2009 by the Quassel Project&lt;br&gt;&lt;a href=&quot;http://quassel-irc.org&quot;&gt;http://quassel-irc.org&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;irc://irc.freenode.net/quassel&quot;&gt;#quassel&lt;/a&gt; on &lt;a href=&quot;http://www.freenode.net&quot;&gt;Freenode&lt;/a&gt;&lt;br&gt;&lt;br&gt;Quassel IRC is dual-licensed under &lt;a href=&quot;http://www.gnu.org/licenses/gpl-2.0.txt&quot;&gt;GPLv2&lt;/a&gt; and &lt;a href=&quot;http://www.gnu.org/licenses/gpl-3.0.txt&quot;&gt;GPLv3&lt;/a&gt;.&lt;br&gt;Most icons are &amp;copy; by the &lt;a href=&quot;http://www.oxygen-icons.org&quot;&gt;Oxygen Team&lt;/a&gt; and used under the &lt;a href=&quot;http://www.gnu.org/licenses/lgpl.html&quot;&gt;LGPL&lt;/a&gt;.&lt;br&gt;&lt;br&gt;Please use &lt;a href=&quot;http://bugs.quassel-irc.org&quot;&gt;http://bugs.quassel-irc.org&lt;/a&gt; to report bugs.</source>
-        <translation>&lt;b&gt;A Moderní, distribuovaný IRC Client&lt;/b&gt;&lt;br&gt;&lt;br&gt;Vytvořený &amp;copy;2005-2008 Quassel Project&lt;br&gt;&lt;a href=&quot;http://quassel-irc.org&quot;&gt;http://quassel-irc.org&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;irc://irc.freenode.net/quassel&quot;&gt;#quassel&lt;/a&gt; na &lt;a href=&quot;http://www.freenode.net&quot;&gt;Freenode&lt;/a&gt;&lt;br&gt;&lt;br&gt;Quassel IRC je dualně-licencován pod &lt;a href=&quot;http://www.gnu.org/licenses/gpl-2.0.txt&quot;&gt;GPLv2&lt;/a&gt; a &lt;a href=&quot;http://www.gnu.org/licenses/gpl-3.0.txt&quot;&gt;GPLv3&lt;/a&gt;.&lt;br&gt;Většina ikon náleží &amp;copy; &lt;a href=&quot;http://www.oxygen-icons.org&quot;&gt;Oxygen Team&lt;/a&gt; pod licencí &lt;a href=&quot;http://www.gnu.org/licenses/lgpl.html&quot;&gt;LGPL&lt;/a&gt;.&lt;br&gt;&lt;br&gt;Prosíme použijte &lt;a href=&quot;http://bugs.quassel-irc.org&quot;&gt;http://bugs.quassel-irc.org&lt;/a&gt; pro hlášení chyb.</translation>
+        <translation>&lt;b&gt;Moderni, hajautettu IRC-asiakas&lt;/b&gt;&lt;br&gt;&lt;br&gt;&amp;copy;2005-2009 Quassel Project&lt;br&gt;&lt;a href=&quot;http://quassel-irc.org&quot;&gt;http://quassel-irc.org&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;irc://irc.freenode.net/quassel&quot;&gt;#quassel&lt;/a&gt; verkossa &lt;a href=&quot;http://www.freenode.net&quot;&gt;Freenode&lt;/a&gt;&lt;br&gt;&lt;br&gt;Quassel IRC on kaksois-lisenssoitu &lt;a href=&quot;http://www.gnu.org/licenses/gpl-2.0.txt&quot;&gt;GPLv2&lt;/a&gt;:n ja &lt;a href=&quot;http://www.gnu.org/licenses/gpl-3.0.txt&quot;&gt;GPLv3&lt;/a&gt;:n alaisuudessa.&lt;br&gt;Suurin osa kuvakkeista on &amp;copy; &lt;a href=&quot;http://www.oxygen-icons.org&quot;&gt;Oxygen Team&lt;/a&gt; ja niitä käytetään &lt;a href=&quot;http://www.gnu.org/licenses/lgpl.html&quot;&gt;LGPL&lt;/a&gt; -lisenssin alaisuudessa.&lt;br&gt;&lt;br&gt;Käytä &lt;a href=&quot;http://bugs.quassel-irc.org&quot;&gt;http://bugs.quassel-irc.org&lt;/a&gt; ilmoittaaksesi ohjelmavirheistä.</translation>
     </message>
     <message>
         <location filename="../src/qtui/aboutdlg.cpp" line="62"/>
         <source>Quassel IRC is mainly developed by:</source>
-        <translation>Hlavní vývojáři Quassel IRC:</translation>
+        <translation>Quassel IRC:n pääasialliset kehittäjät ovat:</translation>
     </message>
     <message>
         <location filename="../src/qtui/aboutdlg.cpp" line="77"/>
         <source>We would like to thank the following contributors (in alphabetical order) and everybody we forgot to mention here:</source>
-        <translation>Rádi bychom poděkovali následujícím přispěvatelům (v abecedním pořadí) a také všem, na které jsme zde zapoměli:</translation>
+        <translation>Haluaisimme kiittää seuraavia henkilöitä (aakkosjärjestyksessä), sekä kaikkia ketkä unohdimme mainita tässä:</translation>
     </message>
     <message>
         <location filename="../src/qtui/aboutdlg.cpp" line="116"/>
         <source>Special thanks goes to:&lt;br&gt;&lt;dl&gt;&lt;dt&gt;&lt;img src=&quot;:/pics/quassel-eye.png&quot;&gt;&amp;nbsp;&lt;b&gt;John &quot;nox&quot; Hand&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;for the original Quassel icon - The All-Seeing Eye&lt;/dt&gt;&lt;dt&gt;&lt;img src=&quot;:/pics/oxygen.png&quot;&gt;&amp;nbsp;&lt;b&gt;&lt;a href=&quot;http://www.oxygen-icons.org&quot;&gt;The Oxygen Team&lt;/a&gt;&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;for creating all the artwork you see throughout Quassel&lt;/dd&gt;&lt;dt&gt;&lt;img src=&quot;:/pics/qt-logo-32.png&quot;&gt;&amp;nbsp;&lt;b&gt;&lt;a href=&quot;http://www.trolltech.com&quot;&gt;Qt Software formerly known as Trolltech&lt;/a&gt;&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;for creating Qt and Qtopia, and for sponsoring development of QuasselTopia with Greenphones and more&lt;/dd&gt;&lt;dt&gt;&lt;a href=&quot;http://www.nokia.com&quot;&gt;&lt;img src=&quot;:/pics/nokia.png&quot;&gt;&lt;/a&gt;&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;for keeping Qt alive, and for sponsoring development of Quassel Mobile with N810s&lt;/dd&gt;</source>
-        <translation>Zvláště bychom rádi poděkovali:&lt;br&gt;&lt;dl&gt;&lt;dt&gt;&lt;img src=&quot;:/pics/quassel-eye.png&quot;&gt;&amp;nbsp;&lt;b&gt;Johnu &quot;nox&quot; Handovi&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;pro skvělý artwork a Quassel logo/ikonku&lt;/dt&gt;&lt;dt&gt;&lt;img src=&quot;:/pics/oxygen.png&quot;&gt;&amp;nbsp;&lt;b&gt;&lt;a href=&quot;http://www.oxygen-icons.org&quot;&gt;Oxygen Team&lt;/a&gt;&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;pro vytvoření většiny ostatních skvělých ikon, které můžete vidět všude možně v aplikaci&lt;/dd&gt;&lt;dt&gt;&lt;img src=&quot;:/pics/qt-logo-32.png&quot;&gt;&amp;nbsp;&lt;b&gt;&lt;a href=&quot;http://www.trolltech.com&quot;&gt;Qt Software (dříve znám jako Trolltech)&lt;/a&gt;&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;za vytvoření Qt a Qtopia, a pro sponsorování vývoje QuasselTopia s Greenphones a dalších&lt;/dd&gt;&lt;dt&gt;&lt;b&gt;&lt;a href=&quot;http://www.nokia.com&quot;&gt;&lt;img src=&quot;:/pics/nokia.png&quot;&gt;&lt;/a&gt;&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;pro udržování Qt naživu, a pro sponzorování vývoje Quassel Mobile N810&lt;/dd&gt;</translation>
+        <translation>Erikoiskiitokset:&lt;br&gt;&lt;dl&gt;&lt;dt&gt;&lt;img src=&quot;:/pics/quassel-eye.png&quot;&gt;&amp;nbsp;&lt;b&gt;John &quot;nox&quot; Hand&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;alkuperäisestä Quassel-kuvakkeesta - &quot;The All-Seeing Eye&quot;&lt;/dt&gt;&lt;dt&gt;&lt;img src=&quot;:/pics/oxygen.png&quot;&gt;&amp;nbsp;&lt;b&gt;&lt;a href=&quot;http://www.oxygen-icons.org&quot;&gt;The Oxygen Team&lt;/a&gt;&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;Quasselissa nähtävän grafiikan luomisesta&lt;/dd&gt;&lt;dt&gt;&lt;img src=&quot;:/pics/qt-logo-32.png&quot;&gt;&amp;nbsp;&lt;b&gt;&lt;a href=&quot;http://www.trolltech.com&quot;&gt;Qt Software, tunnettu ennen nimellä Trolltech&lt;/a&gt;&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;Qt:n ja Qtopia:n luonnista, ja QuasselTopia:n luonnin sponsoroinnista Greenphone:illa ja paljon muulla&lt;/dd&gt;&lt;dt&gt;&lt;a href=&quot;http://www.nokia.com&quot;&gt;&lt;img src=&quot;:/pics/nokia.png&quot;&gt;&lt;/a&gt;&lt;/b&gt;&lt;/dt&gt;&lt;dd&gt;Qt:n hengissä pidosta, ja Quassel Mobile:n kehityksen sponsoroinnista N810:illä&lt;/dd&gt;</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/aboutdlg.ui" line="17"/>
         <source>About Quassel</source>
-        <translation>O aplikaci Quassel</translation>
+        <translation>Tietoja Quasselista</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/aboutdlg.ui" line="59"/>
@@ -39,7 +39,10 @@
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:15pt; font-weight:600; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Quassel IRC&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;￼p, li { white-space: pre-wrap; }￼&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:15pt; font-weight:600; font-style:normal;&quot;&gt;￼&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Quassel IRC&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:15pt; font-weight:600; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Quassel IRC&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/aboutdlg.ui" line="75"/>
@@ -47,27 +50,30 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:10pt; font-weight:600; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Version 0.2.0-pre, Build &amp;gt;= 474 (2008-02-08)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;￼p, li { white-space: pre-wrap; }￼&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:10pt; font-weight:600; font-style:normal;&quot;&gt;￼&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Verze 0.2.0-pre, Build &amp;gt;= 474 (2008-02-08)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:10pt; font-weight:600; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Version 0.2.0-pre, Build &amp;gt;= 474 (2008-02-08)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/aboutdlg.ui" line="115"/>
         <source>&amp;About</source>
-        <translation>O &amp;aplikaci</translation>
+        <translation>&amp;Tietoja</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/aboutdlg.ui" line="135"/>
         <source>A&amp;uthors</source>
-        <translation>A&amp;utoři</translation>
+        <translation>T&amp;ekijät</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/aboutdlg.ui" line="155"/>
         <source>&amp;Contributors</source>
-        <translation>Přispěva&amp;telé</translation>
+        <translation>&amp;Avustajat</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/aboutdlg.ui" line="175"/>
         <source>&amp;Thanks To</source>
-        <translation>Podě&amp;kování</translation>
+        <translation>&amp;Kiitokset</translation>
     </message>
 </context>
 <context>
@@ -75,12 +81,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/core/abstractsqlstorage.cpp" line="112"/>
         <source>Installed Schema (version %1) is not up to date. Upgrading to version %2...</source>
-        <translation>Instalované schéma (verze %1) není aktualní. aktualizuji na %2...</translation>
+        <translation>Asennettu malli (versio %1) ei ole ajan tasalla. Päivitetään versioon %2...</translation>
     </message>
     <message>
         <location filename="../src/core/abstractsqlstorage.cpp" line="114"/>
         <source>Upgrade failed...</source>
-        <translation>Aktualizace selhala...</translation>
+        <translation>Päivitys epäonnistui...</translation>
     </message>
 </context>
 <context>
@@ -88,40 +94,40 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/qtui/settingspages/aliasesmodel.cpp" line="170"/>
         <source>Alias</source>
-        <translation>Zkratka</translation>
+        <translation>Alias</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/aliasesmodel.cpp" line="171"/>
         <source>Expansion</source>
-        <translation>Rozšířený výraz</translation>
+        <translation>Laajennos</translation>
     </message>
 </context>
 <context>
     <name>AliasesSettingsPage</name>
     <message>
         <location filename="../src/qtui/settingspages/aliasessettingspage.cpp" line="29"/>
-        <source>Aliases</source>
-        <translation>Zkratky</translation>
+        <source>Misc</source>
+        <translation>Sekalaiset</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/aliasessettingspage.cpp" line="29"/>
-        <source>Misc</source>
-        <translation>Různé</translation>
+        <source>Aliases</source>
+        <translation>Aliakset</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/aliasessettingspage.ui" line="13"/>
         <source>Form</source>
-        <translation></translation>
+        <translation>Lomake</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/aliasessettingspage.ui" line="27"/>
         <source>New</source>
-        <translation>Nová</translation>
+        <translation>Uusi</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/aliasessettingspage.ui" line="41"/>
         <source>Delete</source>
-        <translation>Smazat</translation>
+        <translation>Poista</translation>
     </message>
 </context>
 <context>
@@ -129,73 +135,73 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/qtui/settingspages/appearancesettingspage.cpp" line="34"/>
         <source>Interface</source>
-        <translation>Rozhraní</translation>
+        <translation>Käyttöliittymä</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/appearancesettingspage.cpp" line="53"/>
         <location filename="../src/qtui/settingspages/appearancesettingspage.ui" line="46"/>
         <source>&lt;System Default&gt;</source>
-        <translation>&lt;Systémové výchozí&gt;</translation>
+        <translation>&lt;Järjestelmän oletus&gt;</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/appearancesettingspage.cpp" line="151"/>
         <source>Please choose a stylesheet file</source>
-        <translation>Prosím vyberte soubor stylu</translation>
+        <translation>Valitse tyylisivutiedosto</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/appearancesettingspage.ui" line="14"/>
         <source>Form</source>
-        <translation></translation>
+        <translation>Lomake</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/appearancesettingspage.ui" line="20"/>
         <source>Client Style</source>
-        <translation>Styl klienta</translation>
+        <translation>Asiakkaan tyyli</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/appearancesettingspage.ui" line="26"/>
         <source>Set application style</source>
-        <translation>Zvolte styl aplikace</translation>
+        <translation>Aseta sovelluksen tyyli</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/appearancesettingspage.ui" line="36"/>
         <source>Language</source>
-        <translation>Jazyk</translation>
+        <translation>Kieli</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/appearancesettingspage.ui" line="42"/>
         <source>Set the application language. Requires restart!</source>
-        <translation>Zvolte jazyk aplikace. Vyžaduje restart!</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/appearancesettingspage.ui" line="62"/>
-        <source>Use Custom Stylesheet</source>
-        <translation>Použít upravený soubor stylu</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/appearancesettingspage.ui" line="71"/>
-        <source>/UiStyle/UseCustomStyleSheet</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/appearancesettingspage.ui" line="82"/>
-        <source>Path:</source>
-        <translation>Cesta:</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/appearancesettingspage.ui" line="98"/>
-        <source>/UiStyle/CustomStyleSheetPath</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/appearancesettingspage.ui" line="108"/>
-        <source>...</source>
-        <translation></translation>
+        <translation>Aseta sovelluksen kieli. Vaatii uudelleenkäynnistyksen!</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/appearancesettingspage.ui" line="51"/>
         <source>&lt;Original&gt;</source>
-        <translation>&lt;Původní&gt;</translation>
+        <translation>&lt;Alkuperäinen&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/appearancesettingspage.ui" line="62"/>
+        <source>Use Custom Stylesheet</source>
+        <translation>Käytä omaa tyylisivua</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/appearancesettingspage.ui" line="71"/>
+        <source>/UiStyle/UseCustomStyleSheet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/appearancesettingspage.ui" line="82"/>
+        <source>Path:</source>
+        <translation>Polku:</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/appearancesettingspage.ui" line="98"/>
+        <source>/UiStyle/CustomStyleSheetPath</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/appearancesettingspage.ui" line="108"/>
+        <source>...</source>
+        <translation>...</translation>
     </message>
 </context>
 <context>
@@ -203,117 +209,117 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/qtui/awaylogview.cpp" line="33"/>
         <source>Away Log</source>
-        <translation>Logovaní při nastavení pryč</translation>
+        <translation>Poissa-loki</translation>
     </message>
     <message>
         <location filename="../src/qtui/awaylogview.cpp" line="44"/>
         <source>Show Network Name</source>
-        <translation>Zobrazit název sítě</translation>
+        <translation>Näytä verkon nimi</translation>
     </message>
     <message>
         <location filename="../src/qtui/awaylogview.cpp" line="49"/>
         <source>Show Buffer Name</source>
-        <translation>Zobrazit název záložky</translation>
+        <translation>Näytä puskurin nimi</translation>
     </message>
 </context>
 <context>
     <name>BacklogSettingsPage</name>
     <message>
         <location filename="../src/qtui/settingspages/backlogsettingspage.cpp" line="27"/>
-        <source>Backlog</source>
-        <translation>Historie</translation>
+        <source>Misc</source>
+        <translation>Sekalaiset</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/backlogsettingspage.cpp" line="27"/>
-        <source>Misc</source>
-        <translation>Různé</translation>
+        <source>Backlog</source>
+        <translation>Takaloki</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="14"/>
         <source>Form</source>
-        <translation></translation>
+        <translation>Lomake</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="22"/>
+        <source>Number of messages to be requested from the core when using scrolling up in the buffer view.</source>
+        <translation>Kuinka monta viestiä ytimeltä pyydetään kun puskuria vieritetään ylöspäin.</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="25"/>
+        <source>Dynamic backlog amount:</source>
+        <translation>Dynaamisen takalokin määrä:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="41"/>
         <source>DynamicBacklogAmount</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="138"/>
-        <source>amount of messages per buffer that are requested after the core connection has been established.</source>
-        <translation>množství zpráv za záložku, které jsou vyžádány když bylo navázáno spojení s jádrem.</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="141"/>
-        <source>Initial backlog amount:</source>
-        <translation>Výchozí množství historie:</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="157"/>
-        <source>FixedBacklogAmount</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="354"/>
-        <source>GlobalUnreadBacklogLimit</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="386"/>
-        <source>GlobalUnreadBacklogAdditional</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="216"/>
-        <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="226"/>
-        <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="342"/>
-        <source>Maximum amount of messages to be fetched per buffer.</source>
-        <translation>Maximální množství zpráv, které se stáhnou za záložku.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="75"/>
         <source>Backlog request method:</source>
-        <translation>Metoda požadování historie:</translation>
+        <translation>Takalokin pyyntötapa:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="83"/>
         <source>Fixed amount per chat</source>
-        <translation>Pevné množství za záložku</translation>
+        <translation>Kiinteä määrä per keskustelu</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="88"/>
         <source>Unread messages per chat</source>
-        <translation>Nepřečtené zprávy za záložku</translation>
+        <translation>Lukemattomia viestejä per keskustelu</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="93"/>
         <source>Globally unread messages</source>
-        <translation>Celkově nepřečtené zprávy</translation>
+        <translation>Ohjelmanlaajuisesti lukemattomat viestit</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="123"/>
         <source>The simplest requester. It fetches a fixed amount of lines for each chat window from the backlog.</source>
-        <translation>Nejjednodušší požadavek. Stáhne přesný počet řádků pro každou záložku z historie.</translation>
+        <translation>Yksinkertaisin pyyntötapa. Hakee tietyn määrän rivejä takalokista jokaista keskusteluikkunaa kohti.</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="138"/>
+        <source>amount of messages per buffer that are requested after the core connection has been established.</source>
+        <translation>kuinka monta viestiä per puskuri pyydetään kun yhteys ytimeen on muodostettu.</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="141"/>
+        <source>Initial backlog amount:</source>
+        <translation>Aloitusviestimäärä:</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="157"/>
+        <source>FixedBacklogAmount</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="199"/>
         <source>This requester fetches unread messages for each chat window individually. The amount of lines can be limited per chat.
 
 You can also choose to fetch additional older chatlines to provide a better context.</source>
-        <translation>Tento požadavek stáhne nepřečtené zprávy individuálně pro každou záložku. Množství řádek lze limitovat pro celý rozhovor.
+        <translation>Tämä pyyntötapa hakee jokaista keskusteluikkunaa kohden määrätyn määrän lukemattomia viestejä.
 
-Také můžete vybrat množství dodatečně stahovaných zastaralých zpráv pro lepší srozumitelnost.</translation>
+Voit myös määrittää noudettavaksi vanhempia viestirivejä asiayhteyden selventämiseksi.</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="216"/>
+        <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="226"/>
+        <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="342"/>
+        <source>Maximum amount of messages to be fetched per buffer.</source>
+        <translation>Maksimi määrä noudettuja viestejä per puskuri.</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="219"/>
         <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="335"/>
         <source>Limit:</source>
-        <translation>Omezení:</translation>
+        <translation>Raja:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="238"/>
         <source>PerBufferUnreadBacklogLimit</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="248"/>
@@ -321,18 +327,18 @@ Také můžete vybrat množství dodatečně stahovaných zastaralých zpráv pr
         <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="364"/>
         <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="374"/>
         <source>Amount of messages to be fetched in addition to the unread messages. The Limit does not apply here.</source>
-        <translation>Množství zpráv které se stháhnou dodatečne k nepřečteným zprávám. Omezení zde neplatí.</translation>
+        <translation>Kuinka monta viestiä noudetaan lukemattomien lisäksi. Raja ei päde tässä tapauksessa.</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="251"/>
         <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="367"/>
         <source>Additional Messages:</source>
-        <translation>Dodatečné zprávy:</translation>
+        <translation>Ylimääräiset viestit:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="270"/>
         <source>PerBufferUnreadBacklogAdditional</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="312"/>
@@ -342,27 +348,27 @@ Note: This requester is not recommended if you use hidden chat windows or have i
 It is useful to limit the total amount of the backlog and is probably the fastest.
 
 You can also chose to fetch additional older chatlines to provide a better context.</source>
-        <translation>Tento požadavek stáhne všechny zprávy novější nežli nejstarší nepřečtené zprávy pro všechny záložky.
+        <translation>Tämä pyyntötapa hakee kaikki viestit jotka ovat uudempia kuin kaikkien keskustelujen vanhin lukematon viesti.
 
-Poznámka: Tento požadavek není doporučen pokud používáte skryté, nebo neaktivní, záložky (tedy žádné nepoužívané pokecy ani kanály)
-Je užitečný k omezení celkového získávání historie a je pravděpodobně nejrychlejší.
+Huom: Tätä pyyntötapaa ei suositella jos käytät piilotettuja keskusteluikkunoita tai sinulla on epäaktiivisia keskusteluja.
+Se on hyödyllinen noudettujen rivien määrän vähentämiseksi ja on luutavasti nopein kaikista tavoista.
 
-Můžete také vybrat dodatečné zprávy pro získání lepšího přehledu.</translation>
+Voit myös määrittää noudettavaksi vanhempia viestirivejä asiayhteyden selventämiseksi.</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="332"/>
         <source>Maximum amount of messages to be fetched over all buffers.</source>
-        <translation>Maximální množství zpráv stažené pro všechny záložky.</translation>
+        <translation>Maksimi määrä noudettuja viestejä kaikissa puskureissa yhteensä.</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="22"/>
-        <source>Number of messages to be requested from the core when using scrolling up in the buffer view.</source>
-        <translation>Počet zpráv které se stáhnou z jádra při rolování myší ve zobrazené záložce.</translation>
+        <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="354"/>
+        <source>GlobalUnreadBacklogLimit</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="25"/>
-        <source>Dynamic backlog amount:</source>
-        <translation>Dynamická velikost získávané historie:</translation>
+        <location filename="../src/qtui/settingspages/backlogsettingspage.ui" line="386"/>
+        <source>GlobalUnreadBacklogAdditional</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -378,14 +384,14 @@ Můžete také vybrat dodatečné zprávy pro získání lepšího přehledu.</t
     <message>
         <location filename="../src/uisupport/bufferview.cpp" line="248"/>
         <source>Merge buffers permanently?</source>
-        <translation>Sloučit trvale záložky?</translation>
+        <translation>Yhdistetäänkö puskurit pysyvästi?</translation>
     </message>
     <message>
         <location filename="../src/uisupport/bufferview.cpp" line="249"/>
         <source>Do you want to merge the buffer &quot;%1&quot; permanently into buffer &quot;%2&quot;?
  This cannot be reversed!</source>
-        <translation>Opravdu chcete trvale sloučit záložku &quot;%1&quot; do záložky &quot;%2&quot;?
-￼Tuto operaci nelze zvrátit!</translation>
+        <translation>Haluatko yhdistää puskurin &quot;%1&quot; pysyvästi puskurin &quot;%2&quot; kanssa?
+ Tätä toimintoa ei voi kumota!</translation>
     </message>
 </context>
 <context>
@@ -393,17 +399,17 @@ Můžete také vybrat dodatečné zprávy pro získání lepšího přehledu.</t
     <message>
         <location filename="../src/qtui/settingspages/buffervieweditdlg.ui" line="14"/>
         <source>Dialog</source>
-        <translation></translation>
+        <translation>Valintaikkuna</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/buffervieweditdlg.ui" line="22"/>
         <source>Please enter a name for the chat list:</source>
-        <translation>Prosím zadejte název pro seznam pokeců:</translation>
+        <translation>Anna keskustelulistaukselle nimi:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.cpp" line="520"/>
         <source>Add Chat List</source>
-        <translation>Přidat seznam pokeců</translation>
+        <translation>Lisää keskustelulistaus</translation>
     </message>
 </context>
 <context>
@@ -411,7 +417,7 @@ Můžete také vybrat dodatečné zprávy pro získání lepšího přehledu.</t
     <message>
         <location filename="../src/uisupport/bufferviewfilter.cpp" line="52"/>
         <source>Show / Hide Chats</source>
-        <translation>Zobrazit / Skrýt rozhovory</translation>
+        <translation>Näytä / piilota keskustelut</translation>
     </message>
 </context>
 <context>
@@ -419,125 +425,125 @@ Můžete také vybrat dodatečné zprávy pro získání lepšího přehledu.</t
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.cpp" line="36"/>
         <source>Misc</source>
-        <translation>Různé</translation>
+        <translation>Sekalaiset</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.cpp" line="36"/>
         <source>Custom Chat Lists</source>
-        <translation>Vlastní seznamy rozhovorů</translation>
+        <translation>Omat keskustelulistaukset</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.cpp" line="117"/>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="100"/>
         <source>All</source>
-        <translation>Vše</translation>
+        <translation>Kaikki</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.cpp" line="342"/>
         <source>Delete Chat List?</source>
-        <translation>Smazat seznam rozhovorů?</translation>
+        <translation>Poistetaanko keskustelulistaus?</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.cpp" line="343"/>
         <source>Do you really want to delete the chat list &quot;%1&quot;?</source>
-        <translation>Opravdu chcete smazat seznam rozhovorů &quot;%1&quot;?</translation>
+        <translation>Haluatko varmasti poistaa keskustelulistauksen &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="14"/>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation>Lomake</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="31"/>
         <source>Re&amp;name...</source>
-        <translation>Přejme&amp;novat...</translation>
+        <translation>&amp;Nimeä uudelleen...</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="48"/>
         <source>&amp;Add...</source>
-        <translation>Příd&amp;at...</translation>
+        <translation>&amp;Lisää...</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="71"/>
         <source>De&amp;lete</source>
-        <translation>&amp;Smazat</translation>
+        <translation>&amp;Poista</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="84"/>
+        <source>Chat List Settings</source>
+        <translation>Keskustelulista-asetukset</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="92"/>
         <source>Network:</source>
-        <translation>Síť:</translation>
+        <translation>Verkko:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="110"/>
         <source>This option is not available when all Networks are visible.
 In this mode no separate status buffer is displayed.</source>
-        <translation>Tato možnost není dostupná když jsou viditelné všechny sítě
-V daném režimu nejsou zobrazeny separátní záložky stavu.</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="84"/>
-        <source>Chat List Settings</source>
-        <translation>Nastavení seznamu rozhovorů</translation>
+        <translation>Tämä vaihtoehto ei ole käytettävissä kun kaikki verkot ovat näkyvillä.
+Tässä tilassa erillistä tilapuskuria ei näytetä.</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="114"/>
         <source>Show status window</source>
-        <translation>Zobrazit okno statusu</translation>
+        <translation>Näytä tilaikkuna</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="121"/>
         <source>Show channels</source>
-        <translation>Zobrazit kanály</translation>
+        <translation>Näytä kanavat</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="128"/>
         <source>Show queries</source>
-        <translation>Zobrazit rozhovory</translation>
+        <translation>Näytä yksityiskeskustelut</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="135"/>
         <source>Hide inactive chats</source>
-        <translation>Skrýt neaktivní</translation>
+        <translation>Piilota epäaktiiviset keskustelut</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="142"/>
         <source>Add new chats automatically</source>
-        <translation>Přidávat nové automaticky</translation>
+        <translation>Näytä uudet keskustelut automaattisesti</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="149"/>
         <source>Sort alphabetically</source>
-        <translation>Seřadit abecedně</translation>
+        <translation>Lajittele aakkosjärjestykseen</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="156"/>
         <source>Minimum Activity:</source>
-        <translation>Minimální aktivita:</translation>
+        <translation>Vähimmäistoiminta:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="164"/>
         <source>No Activity</source>
-        <translation>Žádná aktivita</translation>
+        <translation>Ei toimintaa</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="169"/>
         <source>Other Activity</source>
-        <translation>Další aktivity</translation>
+        <translation>Muu toiminta</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="174"/>
         <source>New Message</source>
-        <translation>Nová zpráva</translation>
+        <translation>Uusi viesti</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="179"/>
         <source>Highlight</source>
-        <translation>Zvýraznění</translation>
+        <translation>Korostus</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/bufferviewsettingspage.ui" line="205"/>
         <source>Preview:</source>
-        <translation>Náhled:</translation>
+        <translation>Esikatselu:</translation>
     </message>
 </context>
 <context>
@@ -545,7 +551,7 @@ V daném režimu nejsou zobrazeny separátní záložky stavu.</translation>
     <message>
         <location filename="../src/qtui/ui/bufferviewwidget.ui" line="26"/>
         <source>BufferView</source>
-        <translation>Pohled na záložky</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -553,17 +559,17 @@ V daném režimu nejsou zobrazeny separátní záložky stavu.</translation>
     <message>
         <location filename="../src/qtui/bufferwidget.cpp" line="74"/>
         <source>Zoom In</source>
-        <translation>Přiblížit</translation>
+        <translation>Lähennä</translation>
     </message>
     <message>
         <location filename="../src/qtui/bufferwidget.cpp" line="80"/>
         <source>Zoom Out</source>
-        <translation>Oddálit</translation>
+        <translation>Loitonna</translation>
     </message>
     <message>
         <location filename="../src/qtui/bufferwidget.cpp" line="85"/>
         <source>Actual Size</source>
-        <translation>Současná velikost</translation>
+        <translation>Todellinen koko</translation>
     </message>
 </context>
 <context>
@@ -571,27 +577,27 @@ V daném režimu nejsou zobrazeny separátní záložky stavu.</translation>
     <message>
         <location filename="../src/client/networkmodel.cpp" line="481"/>
         <source>&lt;b&gt;Channel %1&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Kanál %1&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;Kanava %1&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../src/client/networkmodel.cpp" line="484"/>
         <source>&lt;b&gt;Users:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;uživatelé:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;Käyttäjät:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../src/client/networkmodel.cpp" line="488"/>
         <source>&lt;b&gt;Mode:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Mód:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;Tila:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../src/client/networkmodel.cpp" line="499"/>
         <source>&lt;b&gt;Topic:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Téma:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;Aihe:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../src/client/networkmodel.cpp" line="503"/>
         <source>Not active &lt;br /&gt; Double-click to join</source>
-        <translation>Neaktivní &lt;br /&gt; Dvojklikem vstupte</translation>
+        <translation>Epäaktiivinen &lt;br /&gt; Kaksoisnapsauta liittyäksesi</translation>
     </message>
     <message>
         <location filename="../src/client/networkmodel.cpp" line="506"/>
@@ -604,33 +610,34 @@ V daném režimu nejsou zobrazeny separátní záložky stavu.</translation>
     <message>
         <location filename="../src/qtui/ui/channellistdlg.ui" line="13"/>
         <source>Channel List</source>
-        <translation>Seznam Kanálů</translation>
+        <translation>Kanavalista</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/channellistdlg.ui" line="37"/>
         <source>Search Pattern:</source>
-        <translation>Vyhledávaný text:</translation>
+        <translation>Hakulauseke:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/channellistdlg.ui" line="47"/>
         <source>Toggle between simple and advanced mode.
 Advanced mode allows to pass search strings to the IRC Server.</source>
-        <translation>Přepnout mezi jednoduchým a pokročilým módem.￼Pokročilý mód umožňuje předat vyhledávaný řetězec IRC Serveru.</translation>
+        <translation>Vaihda yksinkertaisen ja edistyneen tilan välillä.
+Edistynyt tila sallii hakulausekkeiden antamisen IRC-palvelimelle.</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/channellistdlg.ui" line="61"/>
         <source>Show Channels</source>
-        <translation>Zobrazit kanály</translation>
+        <translation>Näytä kanavat</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/channellistdlg.ui" line="85"/>
         <source>Filter:</source>
-        <translation>Filtr:</translation>
+        <translation>Suodatin:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/channellistdlg.ui" line="97"/>
         <source>Errors Occured:</source>
-        <translation>Nastalé chyby:</translation>
+        <translation>Tapahtuneet virheet:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/channellistdlg.ui" line="131"/>
@@ -640,51 +647,56 @@ p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Lucida Grande&apos;; font-size:13pt;&quot;&gt;SUPER EVIL CATASTROPHIC ERROR!!11&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Lucida Grande&apos;; font-size:13pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;￼&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;￼p, li { white-space: pre-wrap; }￼&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;￼&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Lucida Grande&apos;; font-size:13pt;&quot;&gt;TADY UŽ ANI SVĚCENÁ VODA NEPOMŮŽE!!11&lt;/p&gt;￼&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Lucida Grande&apos;; font-size:13pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Lucida Grande&apos;; font-size:13pt;&quot;&gt;MAAILMANLOPPU!!11&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Lucida Grande&apos;; font-size:13pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
     <name>ChatMonitorSettingsPage</name>
     <message>
         <location filename="../src/qtui/settingspages/chatmonitorsettingspage.cpp" line="35"/>
-        <source>Chat Monitor</source>
-        <translation>Monitor pokecu</translation>
+        <source>Interface</source>
+        <translation>Käyttöliittymä</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatmonitorsettingspage.cpp" line="35"/>
-        <source>Interface</source>
-        <translation>Rozhraní</translation>
+        <source>Chat Monitor</source>
+        <translation>Keskusteluvahti</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatmonitorsettingspage.cpp" line="58"/>
         <source>Opt In</source>
-        <translation></translation>
+        <translation>Mukaanotto</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatmonitorsettingspage.cpp" line="59"/>
         <source>Opt Out</source>
-        <translation></translation>
+        <translation>Poisjättö</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatmonitorsettingspage.cpp" line="236"/>
         <location filename="../src/qtui/settingspages/chatmonitorsettingspage.ui" line="133"/>
         <source>Show:</source>
-        <translation>Zobrazit:</translation>
+        <translation>Näytä:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatmonitorsettingspage.cpp" line="239"/>
         <source>Ignore:</source>
-        <translation>Ignorovat:</translation>
+        <translation>Ohita:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatmonitorsettingspage.ui" line="14"/>
         <source>Form</source>
-        <translation></translation>
+        <translation>Lomake</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatmonitorsettingspage.ui" line="22"/>
         <source>Operation Mode:</source>
-        <translation>Operační režim:</translation>
+        <translation>Toimintatila:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatmonitorsettingspage.ui" line="29"/>
@@ -699,39 +711,39 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Operační režimy:&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;&quot;&gt;&lt;span style=&quot; font-weight:400; text-decoration: underline;&quot;&gt;Opt-In:&lt;/span&gt; &lt;span style=&quot; font-weight:400;&quot;&gt;Monitor pokecu zobrazuje pouze záložky na pravé straně.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;Opt-Out:&lt;/span&gt;Monitor pokecu ignoruje záložky na pravé straně.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Toimintatilat:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;&quot;&gt;&lt;span style=&quot; font-weight:400; text-decoration: underline;&quot;&gt;Mukaanotto:&lt;/span&gt; &lt;span style=&quot; font-weight:400;&quot;&gt;Vain oikealla puolella olevat puskurit näytetään keskusteluvahdissa&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;Poisjättö:&lt;/span&gt; Oikealla puolella olevia puskureita &lt;em&gt;ei&lt;/em&gt; näytetä keskusteluvahdissa&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatmonitorsettingspage.ui" line="61"/>
         <source>Available:</source>
-        <translation>Dostupné:</translation>
+        <translation>Käytettävissä:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatmonitorsettingspage.ui" line="88"/>
         <source>Move selected buffers to the left</source>
-        <translation>Přesune vybrané záložky doleva</translation>
+        <translation>Siirrä valitut puskurit vasemmalle</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatmonitorsettingspage.ui" line="102"/>
         <source>Move selected buffers to the right</source>
-        <translation>Přesune vybrané záložky doprava</translation>
+        <translation>Siirrä valitut puskurit oikealle</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatmonitorsettingspage.ui" line="147"/>
         <source>Show highlights in chatmonitor even if the originating buffer is ignored</source>
-        <translation>Zobrazovat zvýraznění v monitoru pokecu i v případě, že záložka je ignorována</translation>
+        <translation>Näytä korostukset aina, vaikka ne tulisivatkin ohitetusta puskurista</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatmonitorsettingspage.ui" line="150"/>
         <source>Always show highlighted messages</source>
-        <translation>Vždy zobrazovat zvýrazněné zprávy</translation>
+        <translation>Näytä korostetut viestit aina</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatmonitorsettingspage.ui" line="157"/>
         <source>Show own messages</source>
-        <translation>Zobrazovat vlastní zprávy</translation>
+        <translation>Näytä omat viestit</translation>
     </message>
 </context>
 <context>
@@ -739,22 +751,22 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/qtui/chatmonitorview.cpp" line="52"/>
         <source>Show Own Messages</source>
-        <translation>Zobrazit vlastní zprávy</translation>
+        <translation>Näytä omat viestit</translation>
     </message>
     <message>
         <location filename="../src/qtui/chatmonitorview.cpp" line="59"/>
         <source>Show Network Name</source>
-        <translation>Zobrazit název sítě</translation>
+        <translation>Näytä verkon nimi</translation>
     </message>
     <message>
         <location filename="../src/qtui/chatmonitorview.cpp" line="64"/>
         <source>Show Buffer Name</source>
-        <translation>Zobrazit název záložky</translation>
+        <translation>Näytä puskurin nimi</translation>
     </message>
     <message>
         <location filename="../src/qtui/chatmonitorview.cpp" line="71"/>
         <source>Configure...</source>
-        <translation>Nastavit...</translation>
+        <translation>Asetukset...</translation>
     </message>
 </context>
 <context>
@@ -762,7 +774,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/qtui/chatscene.cpp" line="604"/>
         <source>Copy Selection</source>
-        <translation>Kopírovat označené</translation>
+        <translation>Kopioi valinta</translation>
     </message>
 </context>
 <context>
@@ -770,7 +782,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/qtui/ui/chatviewsearchbar.ui" line="13"/>
         <source>Form</source>
-        <translation></translation>
+        <translation>Lomake</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/chatviewsearchbar.ui" line="19"/>
@@ -782,22 +794,22 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/qtui/ui/chatviewsearchbar.ui" line="55"/>
         <source>case sensitive</source>
-        <translation>citlivost na velikost</translation>
+        <translation>sama kirjainkoko</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/chatviewsearchbar.ui" line="62"/>
         <source>search nick</source>
-        <translation>hledat přezdívku</translation>
+        <translation>hae nimimerkistä</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/chatviewsearchbar.ui" line="69"/>
         <source>search message</source>
-        <translation>hledat zprávu</translation>
+        <translation>hae viestistä</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/chatviewsearchbar.ui" line="82"/>
         <source>ignore joins, parts, etc.</source>
-        <translation>Ignorovat vstupy, výstupy, atd.</translation>
+        <translation>ohita liittymiset, poistumiset, jne.</translation>
     </message>
 </context>
 <context>
@@ -805,87 +817,87 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.cpp" line="27"/>
         <source>Interface</source>
-        <translation>Rozhraní</translation>
+        <translation>Käyttöliittymä</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.cpp" line="27"/>
         <source>Chat View</source>
-        <translation>Okno rozhovoru</translation>
+        <translation>Keskustelunäkymä</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="14"/>
         <source>Form</source>
-        <translation></translation>
+        <translation>Lomake</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="22"/>
         <source>Timestamp format:</source>
-        <translation>Formát času:</translation>
+        <translation>Aikaleiman muoto:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="32"/>
         <source>[hh:mm:ss]</source>
-        <translation></translation>
+        <translation>[hh:mm:ss]</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="35"/>
         <source>TimestampFormat</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="59"/>
         <source>Custom chat window font:</source>
-        <translation>Vlastní font v okně rozhovoru:</translation>
+        <translation>Mukautettu keskusteluikkunan fontti:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="65"/>
         <source>/QtUiStyle/Fonts/UseCustomChatViewFont</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="78"/>
         <source>/QtUiStyle/Fonts/ChatView</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="92"/>
         <source>Allow colored text (mIRC color codes)</source>
-        <translation>Povolit barevný text (mIRC kódy barev)</translation>
+        <translation>Salli värillinen teksti (mIRC:n värikoodit)</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="101"/>
         <source>AllowMircColors</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="108"/>
         <source>Show a website preview window when hovering the mouse over a web address</source>
-        <translation>Zobrazit náhledy WWW stránek při podržení myši nad url</translation>
+        <translation>Näytä verkkosivusta esikatselukuva kun hiirtä pidetään linkin päällä</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="111"/>
         <source>Show previews of webpages on URL hover</source>
-        <translation>Zobrazí náhledy WWW stránek při podržení myši nad url</translation>
+        <translation>Näytä verkkosivusta esikatselu kun hiirtä pidetään linkin päällä</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="120"/>
         <source>ShowWebPreview</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="127"/>
         <source>Custom Colors</source>
-        <translation>Vlastní barvy</translation>
+        <translation>Mukautetut värit</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="136"/>
         <source>/QtUiStyle/Colors/UseChatViewColors</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="145"/>
         <source>Action:</source>
-        <translation>Akce:</translation>
+        <translation>Toiminta:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="152"/>
@@ -916,202 +928,202 @@ p, li { white-space: pre-wrap; }
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="676"/>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="704"/>
         <source>...</source>
-        <translation>...</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="155"/>
         <source>/QtUiStyle/Colors/ActionMsg</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="169"/>
         <source>Timestamp:</source>
-        <translation>Časová známka:</translation>
+        <translation>Aikaleima:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="179"/>
         <source>/QtUiStyle/Colors/Timestamp</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="193"/>
         <source>Channel message:</source>
-        <translation>Zpráva kanálu:</translation>
+        <translation>Viesti kanavalle:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="203"/>
         <source>/QtUiStyle/Colors/ChannelMsg</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="230"/>
         <source>Highlight foreground:</source>
-        <translation>Popředí zvýrazněné:</translation>
+        <translation>Korostuksen teksti:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="240"/>
         <source>/QtUiStyle/Colors/Highlight</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="254"/>
         <source>Command message:</source>
-        <translation>Zprava příkazu:</translation>
+        <translation>Komentoviesti:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="264"/>
         <source>/QtUiStyle/Colors/CommandMsg</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="278"/>
         <source>Highlight background:</source>
-        <translation>Pozadí zvýrazněné:</translation>
+        <translation>Korostuksen tausta:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="285"/>
         <source>Server message:</source>
-        <translation>Zpráva serveru:</translation>
+        <translation>Palvelinviesti:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="295"/>
         <source>/QtUiStyle/Colors/ServerMsg</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="309"/>
         <source>Marker line:</source>
-        <translation>Značící řádka:</translation>
+        <translation>Merkkiviiva:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="319"/>
         <source>/QtUiStyle/Colors/MarkerLine</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="333"/>
         <source>Error message:</source>
-        <translation>Chybová zpráva:</translation>
+        <translation>Virhe:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="343"/>
         <source>/QtUiStyle/Colors/ErrorMsg</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="357"/>
         <source>Background:</source>
-        <translation>Pozadí:</translation>
+        <translation>Tausta:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="367"/>
         <source>/QtUiStyle/Colors/ChatViewBackground</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="384"/>
         <source>/QtUiStyle/Colors/HighlightBackground</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="401"/>
         <source>Use Sender Coloring</source>
-        <translation>Používat barvy pro odesílatele</translation>
+        <translation>Käytä lähettäjävärejä</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="410"/>
         <source>/QtUiStyle/Colors/UseSenderColors</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="424"/>
         <source>/QtUiStyle/Colors/Sender00</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="441"/>
         <source>/QtUiStyle/Colors/Sender02</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="458"/>
         <source>/QtUiStyle/Colors/Sender04</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="475"/>
         <source>/QtUiStyle/Colors/Sender05</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="492"/>
         <source>/QtUiStyle/Colors/Sender06</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="509"/>
         <source>/QtUiStyle/Colors/Sender07</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="526"/>
         <source>/QtUiStyle/Colors/Sender08</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="543"/>
         <source>/QtUiStyle/Colors/Sender09</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="560"/>
         <source>/QtUiStyle/Colors/Sender10</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="577"/>
         <source>/QtUiStyle/Colors/Sender11</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="594"/>
         <source>/QtUiStyle/Colors/Sender12</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="611"/>
         <source>/QtUiStyle/Colors/Sender13</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="628"/>
         <source>/QtUiStyle/Colors/Sender14</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="645"/>
         <source>/QtUiStyle/Colors/Sender15</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="662"/>
         <source>/QtUiStyle/Colors/Sender01</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="679"/>
         <source>/QtUiStyle/Colors/Sender03</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="697"/>
         <source>Own messages:</source>
-        <translation>Vlastní zprávy:</translation>
+        <translation>Omat viestit:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/chatviewsettingspage.ui" line="707"/>
         <source>/QtUiStyle/Colors/SenderSelf</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1119,12 +1131,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/client/client.cpp" line="270"/>
         <source>Identity already exists in client!</source>
-        <translation>Identita v klientu již existuje!</translation>
+        <translation>Henkilöllisyys on jo olemassa!</translation>
     </message>
     <message>
         <location filename="../src/client/client.cpp" line="369"/>
         <source>All Chats</source>
-        <translation>Všechny pokecy</translation>
+        <translation>Kaikki keskustelut</translation>
     </message>
 </context>
 <context>
@@ -1132,7 +1144,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/client/clientbacklogmanager.cpp" line="153"/>
         <source>Processed %1 messages in %2 seconds.</source>
-        <translation>Zpracováno %1 zpráv v %2 vteřin.</translation>
+        <translation>Prosessoitiin %1 viestiä %2 sekunnissa.</translation>
     </message>
 </context>
 <context>
@@ -1140,43 +1152,43 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/client/clientsyncer.cpp" line="52"/>
         <source>The Quassel Core you try to connect to is too old! Please consider upgrading.</source>
-        <translation>Jádro ke kterému se připojujete je příliš staré! Prosím zvažte jeho aktualizaci.</translation>
+        <translation>Quassel-ydin johon yrität yhdistää on liian vanha! Harkitse päivittämistä.</translation>
     </message>
     <message>
         <location filename="../src/client/clientsyncer.cpp" line="77"/>
         <source>&lt;b&gt;Invalid data received from core!&lt;/b&gt;&lt;br&gt;Disconnecting.</source>
-        <translation>&lt;b&gt;Od jádra přišla špatná data!&lt;/b&gt;&lt;br&gt;Odpojuji se.</translation>
+        <translation>&lt;b&gt;Ytimeltä vastaanotettuun virheellistä dataa!&lt;/b&gt;&lt;br&gt;Katkaistaan yhteys.</translation>
     </message>
     <message>
         <location filename="../src/client/clientsyncer.cpp" line="102"/>
         <source>No Host to connect to specified.</source>
-        <translation>Nebyl specifikován počítač ke kterému se mám připojit.</translation>
+        <translation>Verkko-osoitetta johon yhdistää ei ole määritelty.</translation>
     </message>
     <message>
         <location filename="../src/client/clientsyncer.cpp" line="111"/>
         <source>&lt;b&gt;This client is built without SSL Support!&lt;/b&gt;&lt;br /&gt;Disable the usage of SSL in the account settings.</source>
-        <translation>&lt;b&gt;Tento klient je sestaven bez podpory SSL!&lt;/b&gt;&lt;br /&gt;Vypněte používání SSL v nastavení účtu.</translation>
+        <translation>&lt;b&gt;Tämä asiakas on käännetty ilman SSL-tukea!&lt;/b&gt;&lt;br /&gt;Kytke SSL:n käyttö pois tilin asetuksista.</translation>
     </message>
     <message>
         <location filename="../src/client/clientsyncer.cpp" line="195"/>
         <source>&lt;b&gt;The Quassel Core you are trying to connect to is too old!&lt;/b&gt;&lt;br&gt;Need at least core/client protocol v%1 to connect.</source>
-        <translation>&lt;b&gt;Jádro ke kterému se připojujete je příliš staré!&lt;/b&gt;&lt;br&gt;Pro připojení je potřeba alespoň protokol jádra/klienta v%1.</translation>
+        <translation>&lt;b&gt;Quassel-ydin johon yrität yhdistää on liian vanha!&lt;/b&gt;Tarvitaan vähintään ydin/asiakas -protokolla v%1 yhdistämiseen.</translation>
     </message>
     <message>
         <location filename="../src/client/clientsyncer.cpp" line="219"/>
         <source>&lt;b&gt;The Quassel Core you are trying to connect to does not support SSL!&lt;/b&gt;&lt;br /&gt;If you want to connect anyways, disable the usage of SSL in the account settings.</source>
-        <translation>&lt;b&gt;Jádro ke kterému se připojujete nepodporuje SSL!&lt;/b&gt;&lt;br /&gt;Pokud se chcete stejne připojit, vypněte používání SSL v nastavení účtu.</translation>
+        <translation>&lt;b&gt;Quassel-ydin johon yrität yhdistää ei tue SSL:ää!&lt;/b&gt;&lt;br /&gt;Jos haluat yhdistää siitä huolimatta, kytke SSL:n käyttö pois tilin asetuksista.</translation>
     </message>
     <message>
         <location filename="../src/client/clientsyncer.cpp" line="248"/>
         <source>Logging in...</source>
-        <translation>Přihlašuji...</translation>
+        <translation>Kirjaudutaan sisään...</translation>
     </message>
     <message>
         <location filename="../src/client/clientsyncer.cpp" line="382"/>
         <location filename="../src/client/clientsyncer.cpp" line="407"/>
         <source>Cert Digest changed! was: %1</source>
-        <translation>Kontrolní součet certifikatu se zmenil! byl: %1</translation>
+        <translation>Varmennetiiviste vaihtunut! oli: %1</translation>
     </message>
 </context>
 <context>
@@ -1184,74 +1196,75 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/qtui/settingspages/connectionsettingspage.cpp" line="27"/>
         <source>Misc</source>
-        <translation>Různé</translation>
+        <translation>Sekalaiset</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/connectionsettingspage.cpp" line="27"/>
         <source>Connection</source>
-        <translation>Spojení</translation>
+        <translation>Yhteys</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/connectionsettingspage.ui" line="14"/>
         <source>Configure the IRC Connection</source>
-        <translation>Nastavení spojení k IRC serveru</translation>
+        <translation>IRC-yhteyden asetukset</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/connectionsettingspage.ui" line="20"/>
         <source>Enable Ping Timeout Detection</source>
-        <translation>Povolit detekci Ping Timeout</translation>
+        <translatorcomment>Ping could be &quot;tiedustelupaketti&quot;, but that would be way too long.</translatorcomment>
+        <translation>Käytä ping -aikakatkaisutunnistusta</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/connectionsettingspage.ui" line="37"/>
         <source>Ping interval:</source>
-        <translation>Interval ping:</translation>
+        <translation>Tarkistusväli:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/connectionsettingspage.ui" line="44"/>
         <location filename="../src/qtui/settingspages/connectionsettingspage.ui" line="155"/>
         <location filename="../src/qtui/settingspages/connectionsettingspage.ui" line="213"/>
         <source> seconds</source>
-        <translation> vteřin</translation>
+        <translation> sekuntia</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/connectionsettingspage.ui" line="80"/>
         <source>Disconnect after</source>
-        <translation>Odpojit po</translation>
+        <translation>Katkaise yhteys</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/connectionsettingspage.ui" line="103"/>
         <source>missed pings</source>
-        <translation>zmeškaných ping</translation>
+        <translation>:n epäonnistuneen pingin jälkeen</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/connectionsettingspage.ui" line="128"/>
         <source>This enables periodic polling of user information using /WHO. This is mostly interesting for tracking users&apos; away status.</source>
-        <translation>Toto nastavení povolí periodické zjišťování informací o uživatelích s použitím příkazu /WHO. Tato funkce je zajímavá pro zjišťování důvodu proč je uživatel pryč.</translation>
+        <translation>Ottaa käyttöön ajoittaisen käyttäjätietojen kyselyn käyttämällä /WHO -komentoa. Suurin tällä saavutettua hyöty on käyttäjien poissaolotilan seuraus.</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/connectionsettingspage.ui" line="131"/>
         <source>Enable Automatic User Information Lookup (/WHO)</source>
-        <translation>Povolit automatické vyhledávání informací o uživatelích (/WHO)</translation>
+        <translation>Käytä automaattista käyttäjätietojen hakua (/WHO)</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/connectionsettingspage.ui" line="148"/>
         <source>Update interval:</source>
-        <translation>Interval aktualizace:</translation>
+        <translation>Päivitysväli:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/connectionsettingspage.ui" line="177"/>
         <source>Ignore channels with more than:</source>
-        <translation>Ignorovat kanály s více než:</translation>
+        <translation>Ohita kanavat joilla on yli:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/connectionsettingspage.ui" line="184"/>
         <source> users</source>
-        <translation> uživately</translation>
+        <translation> käyttäjää</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/connectionsettingspage.ui" line="206"/>
         <source>Minimum delay between requests:</source>
-        <translation>Minimální přestávka mezi požazdavky:</translation>
+        <translation>Vähimmäisiviive pyyntöjen välillä:</translation>
     </message>
 </context>
 <context>
@@ -1259,7 +1272,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/qtui/chatitem.cpp" line="575"/>
         <source>Copy Link Address</source>
-        <translation>Kopírovat adresu odkazu</translation>
+        <translation>Kopioi linkin osoite</translation>
     </message>
 </context>
 <context>
@@ -1267,187 +1280,187 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="35"/>
         <source>Connect</source>
-        <translation>Připojit</translation>
+        <translation>Yhdistä</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="36"/>
         <source>Disconnect</source>
-        <translation>Odpojit</translation>
+        <translation>Katkaise yhteys</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="38"/>
         <source>Join</source>
-        <translation>Vstoupit</translation>
+        <translation>Liity</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="39"/>
         <source>Part</source>
-        <translation>Opustit</translation>
+        <translation>Poistu</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="40"/>
         <source>Delete Chat(s)...</source>
-        <translation>Smazat rozhovor(y)...</translation>
+        <translation>Poista keskustelu(t)...</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="41"/>
         <source>Go to Chat</source>
-        <translation>Přejít na rozhovor</translation>
+        <translation>Mene keskusteluun</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="43"/>
         <source>Joins</source>
-        <translation>Vstupy</translation>
+        <translation>Liittymiset</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="44"/>
         <source>Parts</source>
-        <translation>Opuštění</translation>
+        <translation>Poistumiset</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="45"/>
         <source>Quits</source>
-        <translation>Ukončení</translation>
+        <translation>Lopetukset</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="46"/>
         <source>Nick Changes</source>
-        <translation>Změny přezdívek</translation>
+        <translation>Nimimerkin vaihdot</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="47"/>
         <source>Mode Changes</source>
-        <translation>Změny režimu</translation>
+        <translation>Tilan vaihdot</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="48"/>
         <source>Day Changes</source>
-        <translation>Změny dní</translation>
+        <translation>Päivän vaihdot</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="49"/>
         <source>Topic Changes</source>
-        <translation>Změny tématu</translation>
+        <translation>Aiheen vaihdot</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="50"/>
         <source>Set as Default...</source>
-        <translation>Nastavit jako výchozí...</translation>
+        <translation>Aseta oletukseksi...</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="51"/>
         <source>Use Defaults...</source>
-        <translation>Použít víchozí...</translation>
+        <translation>Käytä oletuksia...</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="53"/>
         <source>Join Channel...</source>
-        <translation>Vstoupit do kanálu...</translation>
+        <translation>Liity kanavalle...</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="55"/>
         <source>Start Query</source>
-        <translation>Zahájit pokec</translation>
+        <translation>Aloita yksityiskeskustelu</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="56"/>
         <source>Show Query</source>
-        <translation>Zobrazit pokec</translation>
+        <translation>Näytä yksityiskeskustelu</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="57"/>
         <source>Whois</source>
-        <translation>Kdo je</translation>
+        <translation>Käyttäjän tiedot (Whois)</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="59"/>
         <source>Version</source>
-        <translation>Verze</translation>
+        <translation>Versio (Version)</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="60"/>
         <source>Time</source>
-        <translation>Čas</translation>
+        <translation>Aika (Time)</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="61"/>
         <source>Ping</source>
-        <translation></translation>
+        <translation>Ping</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="62"/>
         <source>Finger</source>
-        <translation></translation>
+        <translation>Sormenjälki (Finger)</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="64"/>
         <source>Give Operator Status</source>
-        <translation>Přidat práva dozorce</translation>
+        <translation>Anna operaattorioikeudet</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="65"/>
         <source>Take Operator Status</source>
-        <translation>Odebrat status dozorce</translation>
+        <translation>Poista operaattorioikeudet</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="66"/>
         <source>Give Voice</source>
-        <translation>Rozkecat</translation>
+        <translation>Anna puheoikeus</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="67"/>
         <source>Take Voice</source>
-        <translation>Umlčet</translation>
+        <translation>Poista puheoikeus</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="68"/>
         <source>Kick From Channel</source>
-        <translation>Vyhodit z kanálu</translation>
+        <translation>Potki kanavalta</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="69"/>
         <source>Ban From Channel</source>
-        <translation>Zablokovat pro kanál</translation>
+        <translation>Anna porttikielto</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="70"/>
         <source>Kick &amp;&amp; Ban</source>
-        <translation>Vyhodit &amp;&amp; Zablokovat</translation>
+        <translation>Potki &amp;&amp; Anna porttikielto</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="72"/>
         <source>Hide Chat(s) Temporarily</source>
-        <translation>Dočasně skrýt zálkožku(y)</translation>
+        <translation>Piilota keskustelu(t) väliaikaisesti</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="73"/>
         <source>Hide Chat(s) Permanently</source>
-        <translation>Trvale skrýt zálkožku(y)</translation>
+        <translation>Piilota keskustelu(t) pysyvästi</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="74"/>
         <source>Show Channel List</source>
-        <translation>Zobrazit seznam kanálů</translation>
+        <translation>Näytä kanavalista</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="75"/>
         <source>Show Ignore List</source>
-        <translation>Zobrazit seznam ignorovaných</translation>
+        <translation>Näytä ohituslista</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="88"/>
         <source>Hide Events</source>
-        <translation>Skrýt události</translation>
+        <translation>Piilota tapahtumat</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="96"/>
         <source>CTCP</source>
-        <translation></translation>
+        <translation>CTCP</translation>
     </message>
     <message>
         <location filename="../src/uisupport/contextmenuactionprovider.cpp" line="108"/>
         <source>Actions</source>
-        <translation>Akce</translation>
+        <translation>Toiminnot</translation>
     </message>
 </context>
 <context>
@@ -1455,153 +1468,153 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/core/core.cpp" line="172"/>
         <source>Could not initialize any storage backend! Exiting...</source>
-        <translation>Nezdařilo se inicializovat libovolné ukládací rozhraní! Končím...</translation>
+        <translation>Yhtään tietokantamoottoria ei saatu käyntiin! Lopetetaan...</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="173"/>
         <source>Currently, Quassel supports SQLite3 and PostgreSQL. You need to build your
 Qt library with the sqlite or postgres plugin enabled in order for quasselcore
 to work.</source>
-        <translation>V současné chvíli Quassel podporuje SQLite3 a PostgreSQL. Musíte sestavit vaši
-Qt knihovnu s podporou sqlite nebo postgres pluginu aby jádro Quasselu
-moho fungovat.</translation>
+        <translation>Tällä hetkellä Quassel tukee SQLite3 ja PostgreSQL -tietokantoja. Sinun pitää kääntää
+Qt-kirjastosi joko sqlite tai postgres -lisäosan kanssa jotta quasselcore
+voi toimia.</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="222"/>
         <source>Calling restoreState() even though active sessions exist!</source>
-        <translation>Volám restoreState() i kdyz existuje aktivní sezení!</translation>
+        <translation>Kutsutaan restoreState() vaikka aktiivisia istuntoja on olemassa!</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="263"/>
         <source>Admin user or password not set.</source>
-        <translation>Uživatelský účet administrátora, nebo jeho heslo není nastaveno.</translation>
+        <translation>Ylläpitäjän käyttäjänimeä tai salasanaa ei ole määritelty.</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="267"/>
         <source>Could not setup storage!</source>
-        <translation>Nezdařilo se nastavení úložného prostoru!</translation>
+        <translation>Varastoa ei voitu alustaa!</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="271"/>
         <source>Creating admin user...</source>
-        <translation>Vytvářím účet administrátora...</translation>
+        <translation>Luodaan ylläpitokäyttäjää...</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="384"/>
         <source>Invalid listen address %1</source>
-        <translation>Neplatná adresa %1 pro poslech</translation>
+        <translation>Virheellinen kuunteluosoite %1</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="392"/>
         <source>Listening for GUI clients on IPv4 %1 port %2 using protocol version %3</source>
-        <translation>Naslouchám pro GUI klienty na IPv4 %1 portu %2 s použitím protokolu verze %3</translation>
+        <translation>Odotetaan asiakkaita IPv4 %1 portissa %2 käyttäen protokollan versiota %3</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="400"/>
         <source>Could not open IPv4 interface %1:%2: %3</source>
-        <translation>Nezdařilo se otevření IPv4 rozhraní %1:%2: %3</translation>
+        <translation>Ei voitu avata IPv4-rajapintaa %1:%2: %3</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="408"/>
         <source>Listening for GUI clients on IPv6 %1 port %2 using protocol version %3</source>
-        <translation>Naslouchám pro GUI klienty na IPv6 %1 portu %2 s použitím protokolu verze %3</translation>
+        <translation>Odotetaan asiakkaita IPv6 %1 portissa %2 käyttäen protokollan versiota %3</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="419"/>
         <source>Could not open IPv6 interface %1:%2: %3</source>
-        <translation>Nezdařilo se otevření IPv6 rozhraní %1:%2: %3</translation>
+        <translation>Ei voitu avata IPv6-rajapintaa %1:%2: %3</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="427"/>
         <source>Invalid listen address %1, unknown network protocol</source>
-        <translation>Neplatná adresa %1 pro poslech, neznámý síťový protokol</translation>
+        <translation>Virheellinen osoite %1, tuntematon yhteyskäytäntö</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="436"/>
         <source>Could not open any network interfaces to listen on!</source>
-        <translation>Nezdařilo se otevřít síťové rozhraní k poslechu!</translation>
+        <translation>Ei voitu avata yhtään verkkorajapintaa kuuntelua varten!</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="470"/>
         <source>Client connected from</source>
-        <translation>Klient připojen od</translation>
+        <translation>Asiakas yhdistetty</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="473"/>
         <source>Closing server for basic setup.</source>
-        <translation>Uzavírám server pro základní nastavení.</translation>
+        <translation>Suljetaan palvelin perusasetusten tekoa varten.</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="492"/>
         <source>Antique client trying to connect... refusing.</source>
-        <translation>Připojit se pokouší zastaralý klient... odmítam spojení.</translation>
+        <translation>Antiikkinen asiakas yrittää yhdistää... hylätään.</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="504"/>
         <source>&lt;b&gt;Your Quassel Client is too old!&lt;/b&gt;&lt;br&gt;This core needs at least client/core protocol version %1.&lt;br&gt;Please consider upgrading your client.</source>
-        <translation>&lt;b&gt;Váš Quassel Klient je příliš starý!&lt;/b&gt;&lt;br&gt;Toto jádro potřebuje klienta s protokolem alespoň verze %1.&lt;br&gt;Prosíme zvažte aktualizaci vašeho klienta.</translation>
+        <translation>&lt;b&gt;Quassel-asiakkaasi on liian vanha!&lt;/b&gt;&lt;br&gt;Tämä ydin vaatii vähintään asiakas/ydin -prtokollan version %1.&lt;br&gt;Harkitse asiakkaasi päivittämistä.</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="508"/>
         <location filename="../src/core/core.cpp" line="591"/>
         <location filename="../src/core/core.cpp" line="615"/>
         <source>Client</source>
-        <translation>Klient</translation>
+        <translation>Asiakas</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="508"/>
         <source>too old, rejecting.</source>
-        <translation>příliš staré, odmítám.</translation>
+        <translation>liian vanha, hylätään.</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="520"/>
         <source>&lt;b&gt;Quassel Core Version %1&lt;/b&gt;&lt;br&gt;Built: %2&lt;br&gt;Up %3d%4h%5m (since %6)</source>
-        <translation>&lt;b&gt;Verze jádra %1&lt;/b&gt;&lt;br&gt;Sestavení: %2&lt;br&gt;Doba běhu %3d%4h%5m (od %6)</translation>
+        <translation>&lt;b&gt;Quassel-ydin versio:&lt;/b&gt; %1&lt;br&gt;Käännetty: %2&lt;br&gt;Päällä %3d%4h%5m (alkaen %6)</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="571"/>
         <source>Starting TLS for Client:</source>
-        <translation>Zahajuji TLS pro klienta:</translation>
+        <translation>Käynnistetään TLS asiakkaalle:</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="589"/>
         <source>&lt;b&gt;Client not initialized!&lt;/b&gt;&lt;br&gt;You need to send an init message before trying to login.</source>
-        <translation>&lt;b&gt;Klient není inicializován!&lt;/b&gt;&lt;br&gt;Musíte poslat inicializační zprávu před pokusem o přihlášení.</translation>
+        <translation>&lt;b&gt;Asiakasta ei alustettu!&lt;/b&gt;&lt;br&gt;Sinun pitää lähettää alustusviesti ennen sisäänkirjautumisen yrittämistä.</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="591"/>
         <source>did not send an init message before trying to login, rejecting.</source>
-        <translation>neodeslána inicializační zpráva před pokusem o přihlášení, odmítám.</translation>
+        <translation>ei lähettänyt alustusviestiä ennen sisäänkirjautumisen yrittämistä, hylätään.</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="609"/>
         <source>&lt;b&gt;Invalid username or password!&lt;/b&gt;&lt;br&gt;The username/password combination you supplied could not be found in the database.</source>
-        <translation>&lt;b&gt;Neplatné uživatelské jméno či heslo!&lt;/b&gt;&lt;br&gt;Kombinace uživatelského jména a hesla kterou jste zadali nebyla nalezena v databázi.</translation>
+        <translation>&lt;b&gt;Virheellinen käyttäjätunnus tai salasana!&lt;/b&gt;&lt;br&gt;Antamaasi käyttäjätunnus/salasana -yhdistelmää ei löytynyt tietokannasta.</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="615"/>
         <source>initialized and authenticated successfully as &quot;%1&quot; (UserId: %2).</source>
-        <translation>inicializováno a autentifikován jako &quot;%1&quot; (UživId: %2).</translation>
+        <translation>alustettu ja todennettu onnistuneesti tunnuksella &quot;%1&quot; (UserId: %2).</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="626"/>
         <source>Non-authed client disconnected.</source>
-        <translation>Neautorizovaný klient odpojen.</translation>
+        <translation>Yhteys todentamattomaan asiakkaaseen katkaistu.</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="632"/>
         <source>Non-authed client disconnected. (socket allready destroyed)</source>
-        <translation>Neautorizovaný klient odpojen. (socket je již zničen)</translation>
+        <translation>Yhteys todentamattomaan asiakkaaseen katkaistu. (socket jo tuhottu)</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="680"/>
         <source>Could not initialize session for client:</source>
-        <translation>Nezdařilo se zahájit sezení pro klienta:</translation>
+        <translation>Istuntoa ei voitu alustaa asiakkaalle:</translation>
     </message>
     <message>
         <location filename="../src/core/core.cpp" line="702"/>
         <source>Could not find a session for client:</source>
-        <translation>Nepodařilo se nalézt sezení pro klienta:</translation>
+        <translation>Istuntoa ei voitu löytää asiakkaalle:</translation>
     </message>
 </context>
 <context>
@@ -1609,88 +1622,88 @@ moho fungovat.</translation>
     <message>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="522"/>
         <source>Add Core Account</source>
-        <translation>Přidat účet jádra</translation>
+        <translation>Lisää ydintili</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="13"/>
         <source>Edit Core Account</source>
-        <translation>Upravit účet jádra</translation>
+        <translation>Muokkaa ydintiliä</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="21"/>
         <source>Account Details</source>
-        <translation>Detaily účtu</translation>
+        <translation>Tilin tiedot</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="29"/>
         <source>Account Name:</source>
-        <translation>Název účtu:</translation>
+        <translation>Tilin nimi:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="36"/>
         <source>Local Core</source>
-        <translation>Lokální jádro</translation>
+        <translation>Paikallinen ydin</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="47"/>
         <source>Hostname:</source>
-        <translation>Název požítače:</translation>
+        <translation>Verkko-osoite:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="54"/>
         <source>Port:</source>
-        <translation>Port:</translation>
+        <translation>Portti:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="61"/>
         <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="144"/>
         <source>localhost</source>
-        <translation>tento počítač (localhost)</translation>
+        <translation>localhost</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="81"/>
         <source>Use secure connection (SSL)</source>
-        <translation>Použít zabezpečené spojení (SSL)</translation>
+        <translation>Käytä salattua yhteyttä (SSL)</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="97"/>
         <source>Use a proxy:</source>
-        <translation>Použít proxy:</translation>
+        <translation>Käytä välityspalvelinta:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="109"/>
         <source>Proxy Type:</source>
-        <translation>Typ proxy:</translation>
+        <translation>Tyyppi:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="117"/>
         <source>Socks 5</source>
-        <translation>Socks 5</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="122"/>
         <source>HTTP</source>
-        <translation>HTTP</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="130"/>
         <source>Proxy Host:</source>
-        <translation>Počítač:</translation>
+        <translation>Verkko-osoite:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="137"/>
         <source>Proxy Port:</source>
-        <translation>Port:</translation>
+        <translation>Portti:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="170"/>
         <source>Proxy Username:</source>
-        <translation>Uživatelské jméno:</translation>
+        <translation>Käyttäjätunnus:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreaccounteditdlg.ui" line="180"/>
         <source>Proxy Password:</source>
-        <translation>Heslo:</translation>
+        <translation>Salasana:</translation>
     </message>
 </context>
 <context>
@@ -1698,22 +1711,22 @@ moho fungovat.</translation>
     <message>
         <location filename="../src/qtui/coreconfigwizard.cpp" line="60"/>
         <source>Core Configuration Wizard</source>
-        <translation>Průvodce nastavením jádra</translation>
+        <translation>Ohjatut ytimen asetukset</translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconfigwizard.cpp" line="82"/>
         <source>Your core has been successfully configured. Logging you in...</source>
-        <translation>Vaše jádro bylo úspěšně nastaveno. Přihlašuji se...</translation>
+        <translation>Ytimesti asetukset on tehty onnistuneesti. Kirjaudutaan sisään...</translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconfigwizard.cpp" line="93"/>
         <source>Core configuration failed:&lt;br&gt;&lt;b&gt;%1&lt;/b&gt;&lt;br&gt;Press &lt;em&gt;Next&lt;/em&gt; to start over.</source>
-        <translation>Nastavení jádra selhalo:&lt;br&gt;&lt;b&gt;%1&lt;/b&gt;&lt;br&gt;Stiskněte &lt;em&gt;Další&lt;/em&gt; pro opakování.</translation>
+        <translation>Virhe ytimen asetuksissa:&lt;br&gt;&lt;b&gt;%1&lt;/b&gt;&lt;br&gt;Paina &lt;em&gt;Seuraava&lt;/em&gt; aloittaaksesi alusta.</translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconfigwizard.cpp" line="108"/>
         <source>Your are now logged into your freshly configured Quassel Core!&lt;br&gt;Please remember to configure your identities and networks now.</source>
-        <translation>Nyní jste připojeni k čerstvě nastavenému Quassel jádru!&lt;br&gt;Nezapomeňte si nyní nastavit své sítě a identity.</translation>
+        <translation>Olet nyt kirjautunut sisään tuoreeseen Quassel-ytimeesi!&lt;br&gt;Muista tehdä henkilöllisyyksiesi ja verkkojesi asetukset nyt.</translation>
     </message>
 </context>
 <context>
@@ -1721,27 +1734,27 @@ moho fungovat.</translation>
     <message>
         <location filename="../src/qtui/ui/coreconfigwizardadminuserpage.ui" line="13"/>
         <source>Form</source>
-        <translation></translation>
+        <translation>Lomake</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconfigwizardadminuserpage.ui" line="21"/>
         <source>Username:</source>
-        <translation>Uživatelské jméno:</translation>
+        <translation>Käyttäjätunnus:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconfigwizardadminuserpage.ui" line="31"/>
         <source>Password:</source>
-        <translation>Heslo:</translation>
+        <translation>Salasana:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconfigwizardadminuserpage.ui" line="45"/>
         <source>Repeat password:</source>
-        <translation>Heslo znovu:</translation>
+        <translation>Toista salasana:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconfigwizardadminuserpage.ui" line="59"/>
         <source>Remember password</source>
-        <translation>Pamatovat heslo</translation>
+        <translation>Muista salasana</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconfigwizardadminuserpage.ui" line="68"/>
@@ -1755,9 +1768,8 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Lucida Grande&apos;; font-size:13pt;&quot;&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Poznámka: &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Přidávání více uživatelů a změna uživatelského jména a hesla není v současné době uskutečnitelná skrze grafické rozrhaní Quassel.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Lucida Grande&apos;; font-size:10pt;&quot;&gt;
-Pokud některou z těchto činností potřebujete provést vyzkoušejte skript manageusers.py z adresáře /scripts.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Lucida Grande&apos;; font-size:13pt;&quot;&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Huom: &lt;/span&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Quassel-asiakas ei vielä pysty lisäämään käyttäjiä tai vaihtamaan käyttäjätunnusta/salasanaa.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Lucida Grande&apos;; font-size:10pt;&quot;&gt;Kyseiset toiminnot onnistuvat /scripts -kansiosta löytyvän manageusers.py -skriptin avulla.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -1765,12 +1777,12 @@ Pokud některou z těchto činností potřebujete provést vyzkoušejte skript m
     <message>
         <location filename="../src/qtui/ui/coreconfigwizardintropage.ui" line="13"/>
         <source>Form</source>
-        <translation></translation>
+        <translation>Lomake</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconfigwizardintropage.ui" line="19"/>
         <source>This wizard will guide you through the setup of your Quassel Core.</source>
-        <translation>Tento průvodce vás provede skrze nastavení jadra Quassel.</translation>
+        <translation>Tämä ohjattu toiminto avustaa sinua Quassel-ytimesi käyttöönotossa.</translation>
     </message>
 </context>
 <context>
@@ -1778,12 +1790,12 @@ Pokud některou z těchto činností potřebujete provést vyzkoušejte skript m
     <message>
         <location filename="../src/qtui/coreconfigwizard.cpp" line="140"/>
         <source>Create Admin User</source>
-        <translation>Vytvořit účet administrátora</translation>
+        <translation>Luo ylläpitokäyttäjä</translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconfigwizard.cpp" line="141"/>
         <source>First, we will create a user on the core. This first user will have administrator privileges.</source>
-        <translation>Nejprve vytvoříme uživatele jádra. První (tento) uživatel bude mít administrátorská práva.</translation>
+        <translation>Ensiksi luomme ytimeen käyttäjän. Tästä ensimmäisestä käyttäjästä tulee ylläpitäjä.</translation>
     </message>
 </context>
 <context>
@@ -1791,7 +1803,7 @@ Pokud některou z těchto činností potřebujete provést vyzkoušejte skript m
     <message>
         <location filename="../src/qtui/coreconfigwizard.cpp" line="125"/>
         <source>Introduction</source>
-        <translation>Úvod</translation>
+        <translation>Esittely</translation>
     </message>
 </context>
 <context>
@@ -1799,17 +1811,17 @@ Pokud některou z těchto činností potřebujete provést vyzkoušejte skript m
     <message>
         <location filename="../src/qtui/coreconfigwizard.cpp" line="172"/>
         <source>Select Storage Backend</source>
-        <translation>Zvolte skladovací rozhraní</translation>
+        <translation>Valitse tietokantamoottori</translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconfigwizard.cpp" line="173"/>
         <source>Please select a database backend for the Quassel Core storage to store the backlog and other data in.</source>
-        <translation>Prosím zvolte databázové rozhraní pro ukládání dat Quassel jádra.</translation>
+        <translation>Valitse tietokantamoottori jota Quassel-ydin käyttää takalokin ja muun datan tallennukseen.</translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconfigwizard.cpp" line="267"/>
         <source>Connection Properties</source>
-        <translation>Možnosti spojení</translation>
+        <translation>Yhteyden asetukset</translation>
     </message>
 </context>
 <context>
@@ -1817,12 +1829,12 @@ Pokud některou z těchto činností potřebujete provést vyzkoušejte skript m
     <message>
         <location filename="../src/qtui/coreconfigwizard.cpp" line="307"/>
         <source>Storing Your Settings</source>
-        <translation>Ukládám Vaše nastavení</translation>
+        <translation>Asetuksiesi tallennus</translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconfigwizard.cpp" line="308"/>
         <source>Your settings are now stored in the core, and you will be logged in automatically.</source>
-        <translation>Vaše nastavení je nyní uloženo v Jádře a tedy budete automaticky přihlášeni.</translation>
+        <translation>Asetuksesi on nyt tallennettu ytimeen, ja sinut kirjataan sisään automaattisesti.</translation>
     </message>
 </context>
 <context>
@@ -1830,22 +1842,22 @@ Pokud některou z těchto činností potřebujete provést vyzkoušejte skript m
     <message>
         <location filename="../src/qtui/ui/coreconfigwizardstorageselectionpage.ui" line="13"/>
         <source>Form</source>
-        <translation></translation>
+        <translation>Lomake</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconfigwizardstorageselectionpage.ui" line="21"/>
         <source>Storage Backend:</source>
-        <translation>Skladovací rozhraní:</translation>
+        <translation>Tietokantamoottori:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconfigwizardstorageselectionpage.ui" line="56"/>
         <source>Description</source>
-        <translation>Popis</translation>
+        <translation>Kuvaus</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconfigwizardstorageselectionpage.ui" line="62"/>
         <source>Foobar</source>
-        <translation>Blesmrt</translation>
+        <translation>Foobar</translation>
     </message>
 </context>
 <context>
@@ -1853,37 +1865,37 @@ Pokud některou z těchto činností potřebujete provést vyzkoušejte skript m
     <message>
         <location filename="../src/qtui/ui/coreconfigwizardsyncpage.ui" line="13"/>
         <source>Form</source>
-        <translation></translation>
+        <translation>Lomake</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconfigwizardsyncpage.ui" line="19"/>
         <source>Your Choices</source>
-        <translation>Vaše volby</translation>
+        <translation>Valintasi</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconfigwizardsyncpage.ui" line="35"/>
         <source>Admin User:</source>
-        <translation>Administrátor:</translation>
+        <translation>Ylläpitokäyttäjä:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconfigwizardsyncpage.ui" line="42"/>
         <source>foo</source>
-        <translation></translation>
+        <translation>foo</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconfigwizardsyncpage.ui" line="55"/>
         <source>Storage Backend:</source>
-        <translation>Skladovací rozhraní:</translation>
+        <translation>Tietokantamoottori:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconfigwizardsyncpage.ui" line="62"/>
         <source>bar</source>
-        <translation></translation>
+        <translation>bar</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconfigwizardsyncpage.ui" line="102"/>
         <source>Please wait while your settings are being transmitted to the core...</source>
-        <translation>Prosím počkejte dokud se nastavení nepřenese k jádru...</translation>
+        <translation>Asetuksisasi siirretään ytimeen. Odota hetki...</translation>
     </message>
 </context>
 <context>
@@ -1891,105 +1903,105 @@ Pokud některou z těchto činností potřebujete provést vyzkoušejte skript m
     <message>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="190"/>
         <source>Remove Account Settings</source>
-        <translation>Odstranit nastavení účtu</translation>
+        <translation>Poista tilin asetukset</translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="191"/>
         <source>Do you really want to remove your local settings for this Quassel Core account?&lt;br&gt;Note: This will &lt;em&gt;not&lt;/em&gt; remove or change any data on the Core itself!</source>
-        <translation>Opravdu chcete smazat vaše lokální nastavení pro účet jádra?&lt;br&gt;Poznamka: Tato akce &lt;em&gt;neodebere&lt;/em&gt; ani &lt;em&gt;nezmění&lt;/em&gt; přímo data uložena v jádru!</translation>
+        <translation>Haluatko varmasti poistaa tämän Quassel-ytimen paikalliset asetuksesi?&lt;br&gt;Huom: Tämä &lt;em&gt;ei&lt;/em&gt; poista tai muuta ytimessä itsessään sijaitsevaa dataa!</translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="242"/>
         <source>Connect to %1</source>
-        <translation>Spojit s %1</translation>
+        <translation>Yhdistä kohteeseen %1</translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="259"/>
         <source>&lt;div style=color:red;&gt;Connection to %1 failed!&lt;/div&gt;</source>
-        <translation>&lt;div style=color:red;&gt;Připojení k %1 selhalo!&lt;/div&gt;</translation>
+        <translation>&lt;div style=color:red;&gt;Yhdistäminen kohteeseen %1 epäonnistui!&lt;/div&gt;</translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="272"/>
         <source>&lt;div&gt;Errors occurred while connecting to &quot;%1&quot;:&lt;/div&gt;</source>
-        <translation>&lt;div&gt;Při spojení s &quot;%1&quot; nastaly chyby:&lt;/div&gt;</translation>
+        <translation>&lt;div&gt;Kohteeseen &quot;%1&quot; yhdistettäessä tapahtui virhe:&lt;/div&gt;</translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="309"/>
         <source>Not connected to %1.</source>
-        <translation>Nepřipojeno k %1.</translation>
+        <translation>Ei yhdistetty kohteeseen %1.</translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="310"/>
         <source>Looking up %1...</source>
-        <translation>Vyhledávám %1...</translation>
+        <translation>Selvitetään verkkonimeä %1...</translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="311"/>
         <source>Connecting to %1...</source>
-        <translation>Připojuji se %1...</translation>
+        <translation>Yhdistetään kohteeseen %1...</translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="312"/>
         <source>Connected to %1</source>
-        <translation>Připojeno k %1</translation>
+        <translation>Yhdistetty kohteeseen %1</translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="313"/>
         <source>Unknown connection state to %1</source>
-        <translation>Neznámý stav spojení k %1</translation>
+        <translation>Tuntematon yhteyden tila kohteeseen %1</translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="365"/>
         <source>Logging in...</source>
-        <translation>Přihlašuji...</translation>
+        <translation>Kirjaudutaan sisään...</translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="392"/>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="450"/>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="286"/>
         <source>Login</source>
-        <translation>Přihlášení</translation>
+        <translation>Kirjaudu sisään</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="19"/>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="53"/>
         <source>Connect to Quassel Core</source>
-        <translation>Připojit ke Quassel jádru</translation>
+        <translation>Yhdistä Quassel-ytimeen</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="68"/>
         <source>Edit...</source>
-        <translation>Upravit...</translation>
+        <translation>Muokkaa...</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="79"/>
         <source>Add...</source>
-        <translation>Přidat...</translation>
+        <translation>Lisää...</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="90"/>
         <source>Delete</source>
-        <translation>Smazat</translation>
+        <translation>Poista</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="114"/>
         <source>Use internal core</source>
-        <translation>Použít interní jádro</translation>
+        <translation>Käytä sisäistä ydintä</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="128"/>
         <source>Always use this account</source>
-        <translation>Vždy používat tento účet</translation>
+        <translation>Käytä aina tätä tiliä</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="165"/>
         <source>Initializing your connection</source>
-        <translation>Inicializuji Vaše spojení</translation>
+        <translation>Yhteyttäsi alustetaan</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="183"/>
         <source>Connected to apollo.mindpool.net.</source>
-        <translation>Připojeno k apollo.mindpool.net.</translation>
+        <translation>Yhdistetty kohteeseen apollo.mindpool.net.</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="215"/>
@@ -1997,77 +2009,80 @@ Pokud některou z těchto činností potřebujete provést vyzkoušejte skript m
 TO
 RESERVE
 SOME SPACE</source>
-        <translation></translation>
+        <translation>TÄMÄ ON TÄYTETEKSTIÄ
+JOLLA
+VARATAAN
+TILAA</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="294"/>
         <source>User:</source>
-        <translation>Uživatel:</translation>
+        <translation>Käyttäjä:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="308"/>
         <source>Password:</source>
-        <translation>Heslo:</translation>
+        <translation>Salasana:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="322"/>
         <source>Remember</source>
-        <translation>Pamatovat</translation>
+        <translation>Muista</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="356"/>
         <source>view SSL Certificate</source>
-        <translation>Zobrazit SSL Certifikát</translation>
+        <translation>näytä SSL-varmenne</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="393"/>
         <source>add to known hosts</source>
-        <translation>Přidat mezi důvěryhodné</translation>
+        <translation>lisää tunnettuihin palvelimiin</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="413"/>
         <source>Continue connection</source>
-        <translation>Pokračovate ve spojení</translation>
+        <translation>Jatka yhdistämistä</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="456"/>
         <source>Configure your Quassel Core</source>
-        <translation>Nastavit Quassel jádro</translation>
+        <translation>Tee Quassel-ytimesi asetukset</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="462"/>
         <source>The Quassel Core you are connected to is not configured yet. You may now launch a configuration wizard that helps you setting up your Core.</source>
-        <translation>Jádro ke kterému jste připojeni ještě není nastaveno. Měli byste spustit konfiguračního průvodce který vám pomůže jej nastavit.</translation>
+        <translation>Asetuksia ei ole vielä tehty Quassel-ytimellä johon olet yhdistetty. Voit nyt käynnistää ohjatun asetusten tekemisen joka auttaa ytimesi käyttöönotossa.</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="490"/>
         <source>Launch Wizard</source>
-        <translation>Spustit průvodce</translation>
+        <translation>Käynnistä ohjattu toiminto</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="553"/>
         <source>Initializing your session...</source>
-        <translation>Aktivuji vaše sezení...</translation>
+        <translation>Istuntoasi alustetaan...</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="561"/>
         <source>&lt;b&gt;Please be patient while your client synchronizes with the Quassel Core!&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Prosím počkejte dokud se klient nesynchronizuje s jádrem!&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;Asiakastasi synkronoidaan Quassel-ytimen kanssa. Odota hetki...&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="576"/>
         <source>Session state:</source>
-        <translation>Stav sezení:</translation>
+        <translation>Istunnon tila:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="593"/>
         <source>Network states:</source>
-        <translation>Stavy sítě:</translation>
+        <translation>Verkkojen tilat:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreconnectdlg.ui" line="606"/>
         <source>0/0</source>
-        <translation></translation>
+        <translation>0/0</translation>
     </message>
 </context>
 <context>
@@ -2076,65 +2091,64 @@ SOME SPACE</source>
         <location filename="../src/qtui/coreinfodlg.cpp" line="53"/>
         <source>%n Day(s)</source>
         <translation>
-            <numerusform>%n Den</numerusform>
-            <numerusform>%n Dny</numerusform>
-            <numerusform>%n Dnů</numerusform>
+            <numerusform>%n päivä</numerusform>
+            <numerusform>%n päivää</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../src/qtui/coreinfodlg.cpp" line="54"/>
         <source> %1:%2:%3 (since %4)</source>
-        <translation> %1:%2:%3 (od %4)</translation>
+        <translation> %1:%2:%3 (alkaen %4)</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreinfodlg.ui" line="13"/>
         <source>Core Information</source>
-        <translation>Informace o jádru</translation>
+        <translation>Ytimen tiedot</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreinfodlg.ui" line="21"/>
         <source>Version:</source>
-        <translation>Verze:</translation>
+        <translation>Versio:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreinfodlg.ui" line="28"/>
         <source>&lt;core version&gt;</source>
-        <translation>&lt;verze jádra&gt;</translation>
+        <translation>&lt;ytimen versio&gt;</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreinfodlg.ui" line="35"/>
         <source>Uptime:</source>
-        <translation>Čas běhu:</translation>
+        <translation>Päälläoloaika:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreinfodlg.ui" line="42"/>
         <source>Connected Clients:</source>
-        <translation>Připojení klienti:</translation>
+        <translation>Yhdistetyt asiakkaat:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreinfodlg.ui" line="49"/>
         <source>&lt;connected clients&gt;</source>
-        <translation>&lt;připojení klienti&gt;</translation>
+        <translation>&lt;yhdistetyt asiakkaat&gt;</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreinfodlg.ui" line="56"/>
         <source>&lt;core uptime&gt;</source>
-        <translation>&lt;doba běhu jádra&gt;</translation>
+        <translation>&lt;ytimen päälläoloaika&gt;</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreinfodlg.ui" line="63"/>
         <source>Build date:</source>
-        <translation>Datum sestavení:</translation>
+        <translation>Kääntöajankohta:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreinfodlg.ui" line="70"/>
         <source>&lt;build date&gt;</source>
-        <translation>&lt;datum sestavení&gt;</translation>
+        <translation>&lt;kääntöaika&gt;</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/coreinfodlg.ui" line="81"/>
         <source>Close</source>
-        <translation>Zavřít</translation>
+        <translation>Sulje</translation>
     </message>
 </context>
 <context>
@@ -2142,33 +2156,33 @@ SOME SPACE</source>
     <message>
         <location filename="../src/core/corenetwork.cpp" line="153"/>
         <source>Connection failed. Cycling to next Server</source>
-        <translation>Spojení selhalo. Zkouším další server</translation>
+        <translation>Yhteys epäonnistui. Siirrytään seuraavalle palvelimelle</translation>
     </message>
     <message>
         <location filename="../src/core/corenetwork.cpp" line="161"/>
         <location filename="../src/core/corenetwork.cpp" line="162"/>
         <source>Connecting to %1:%2...</source>
-        <translation>Připojuji se k %1:%2...</translation>
+        <translation>Yhdistetään kohteeseen %1:%2...</translation>
     </message>
     <message>
         <location filename="../src/core/corenetwork.cpp" line="211"/>
         <source>Disconnecting. (%1)</source>
-        <translation>Odpojuji. (%1)</translation>
+        <translation>Katkaistaan yhteys. (%1)</translation>
     </message>
     <message>
         <location filename="../src/core/corenetwork.cpp" line="211"/>
         <source>Core Shutdown</source>
-        <translation>Vypnutí jádra</translation>
+        <translation>Ytimen sammutus</translation>
     </message>
     <message>
         <location filename="../src/core/corenetwork.cpp" line="307"/>
         <source>Could not connect to %1 (%2)</source>
-        <translation>Nemohu se spojit s %1 (%2)</translation>
+        <translation>Ei voitu yhdistää kohteeseen %1 (%2)</translation>
     </message>
     <message>
         <location filename="../src/core/corenetwork.cpp" line="309"/>
         <source>Connection failure: %1</source>
-        <translation>Chyba spojení: %1</translation>
+        <translation>Yhteysvirhe: %1</translation>
     </message>
 </context>
 <context>
@@ -2176,22 +2190,22 @@ SOME SPACE</source>
     <message>
         <location filename="../src/core/coresession.cpp" line="192"/>
         <source>Client</source>
-        <translation>Klient</translation>
+        <translation>Asiakas</translation>
     </message>
     <message>
         <location filename="../src/core/coresession.cpp" line="192"/>
         <source>disconnected (UserId: %1).</source>
-        <translation>odpojen (IdUživatele: %1).</translation>
+        <translation>yhteys katkaistu (UserId: %1).</translation>
     </message>
     <message>
         <location filename="../src/core/coresession.cpp" line="384"/>
         <source>CoreSession::createNetwork(): Got invalid networkId from Core when trying to create network %1!</source>
-        <translation>CoreSession::createNetwork(): Obdrženo špatné networkId od jádra při pokusu o vytvoření sítě %1!</translation>
+        <translation>CoreSession::createNetwork(): Sai virheellisen networkId:n ytimeltä yrittäessään luoda verkkoa %1!</translation>
     </message>
     <message>
         <location filename="../src/core/coresession.cpp" line="415"/>
         <source>CoreSession::createNetwork(): Trying to create a network that already exists, updating instead!</source>
-        <translation>CoreSession::createNetwork(): Síť s daným názvem již existuje. Aktualizuji místo duplikace!</translation>
+        <translation>CoreSession::createNetwork(): Yritetään luoda verkkoa joka on jo olemassa, päivitetään sen sijaan!</translation>
     </message>
 </context>
 <context>
@@ -2199,22 +2213,22 @@ SOME SPACE</source>
     <message>
         <location filename="../src/qtui/settingspages/createidentitydlg.ui" line="16"/>
         <source>Create New Identity</source>
-        <translation>Vytvořit novou identitu</translation>
+        <translation>Luo uusi henkilöllisyys</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/createidentitydlg.ui" line="24"/>
         <source>Identity name:</source>
-        <translation>Název identity:</translation>
+        <translation>Henkilöllisyyden nimi:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/createidentitydlg.ui" line="36"/>
         <source>Create blank identity</source>
-        <translation>Vytvořit prázdnou identitu</translation>
+        <translation>Luo tyhjä henkilöllisyys</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/createidentitydlg.ui" line="48"/>
         <source>Duplicate:</source>
-        <translation>Duplikovat:</translation>
+        <translation>Luo kopio:</translation>
     </message>
 </context>
 <context>
@@ -2222,27 +2236,27 @@ SOME SPACE</source>
     <message>
         <location filename="../src/core/ctcphandler.cpp" line="190"/>
         <source>Received CTCP PING request from %1</source>
-        <translation>Obdržen CTCP PING požadavek od %1</translation>
+        <translation>Vastaanotettiin CTCP PING -pyyntö koheelta %1</translation>
     </message>
     <message>
         <location filename="../src/core/ctcphandler.cpp" line="195"/>
         <source>Received CTCP PING answer from %1 with %2 seconds round trip time</source>
-        <translation>Obdržena CTCP PING odpověď od %1 s %2 vteřinovým odstupem</translation>
+        <translation>Vastaanotettiin CTCP PING -vastaus koheelta %1, kesti %2 sekuntia</translation>
     </message>
     <message>
         <location filename="../src/core/ctcphandler.cpp" line="205"/>
         <source>Received CTCP VERSION request by %1</source>
-        <translation>Obdržen CTCP VERSION požadavek od %1</translation>
+        <translation>Vastaanotettiin CTCP VERSION -pyyntö koheelta %1</translation>
     </message>
     <message>
         <location filename="../src/core/ctcphandler.cpp" line="208"/>
         <source>Received CTCP VERSION answer from %1: %2</source>
-        <translation>Obdržena CTCP VERSION odpověď od %1: %2</translation>
+        <translation>Vastaanotettiin CTCP VERSION -vastaus koheelta %1: %2</translation>
     </message>
     <message>
         <location filename="../src/core/ctcphandler.cpp" line="216"/>
         <source>Received unknown CTCP %1 by %2</source>
-        <translation>Obdrženo neznáme CTCP %1 od %2</translation>
+        <translation>Vastaanotettiin tuntematon CTCP %1 kohteelta %2</translation>
     </message>
 </context>
 <context>
@@ -2250,72 +2264,72 @@ SOME SPACE</source>
     <message>
         <location filename="../src/qtui/debugbufferviewoverlay.cpp" line="50"/>
         <source>BufferViews:</source>
-        <translation>Pohledy na záložky:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/debugbufferviewoverlay.cpp" line="51"/>
         <source>All Networks:</source>
-        <translation>Všechny sítě:</translation>
+        <translation>Kaikki verkot:</translation>
     </message>
     <message>
         <location filename="../src/qtui/debugbufferviewoverlay.cpp" line="52"/>
         <source>Networks:</source>
-        <translation>Sítě:</translation>
+        <translation>Verkot:</translation>
     </message>
     <message>
         <location filename="../src/qtui/debugbufferviewoverlay.cpp" line="53"/>
         <source>Buffers:</source>
-        <translation>Záložky:</translation>
+        <translation>Puskurit:</translation>
     </message>
     <message>
         <location filename="../src/qtui/debugbufferviewoverlay.cpp" line="54"/>
         <source>Removed buffers:</source>
-        <translation>Odstraňené záložky:</translation>
+        <translation>Poistetut puskurit:</translation>
     </message>
     <message>
         <location filename="../src/qtui/debugbufferviewoverlay.cpp" line="55"/>
         <source>Temp. removed buffers:</source>
-        <translation>Dočasně odstraňené záložky:</translation>
+        <translation>Väliaik. poistetut puskurit:</translation>
     </message>
     <message>
         <location filename="../src/qtui/debugbufferviewoverlay.cpp" line="57"/>
         <source>Add Bufers Automatically:</source>
-        <translation>Přidávat záložky automaticky:</translation>
+        <translation>Lisää puskurit automaattisesti:</translation>
     </message>
     <message>
         <location filename="../src/qtui/debugbufferviewoverlay.cpp" line="58"/>
         <source>Hide inactive buffers:</source>
-        <translation>Skrýt neaktivní záložky:</translation>
+        <translation>Piilota epäaktiiviset puskurit:</translation>
     </message>
     <message>
         <location filename="../src/qtui/debugbufferviewoverlay.cpp" line="59"/>
         <source>Allowed buffer types:</source>
-        <translation>Povolené typy záložek:</translation>
+        <translation>Sallitut puskurityypit:</translation>
     </message>
     <message>
         <location filename="../src/qtui/debugbufferviewoverlay.cpp" line="60"/>
         <source>Minimum activity:</source>
-        <translation>Minimální aktivita:</translation>
+        <translation>Vähimmäistoiminta:</translation>
     </message>
     <message>
         <location filename="../src/qtui/debugbufferviewoverlay.cpp" line="62"/>
         <source>Is initialized:</source>
-        <translation>Je inicializován:</translation>
+        <translation>On alustettu:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/debugbufferviewoverlay.ui" line="13"/>
         <source>Debug BufferView Overlay</source>
-        <translation>Ladící vrstva záložek</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/debugbufferviewoverlay.ui" line="26"/>
         <source>Overlay View</source>
-        <translation>Pohled vrstvy</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/debugbufferviewoverlay.ui" line="39"/>
         <source>Overlay Properties</source>
-        <translation>Nastavení vrstvy</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2323,22 +2337,22 @@ SOME SPACE</source>
     <message>
         <location filename="../src/qtui/ui/debugconsole.ui" line="13"/>
         <source>Debug Console</source>
-        <translation>Ladící konzole</translation>
+        <translation>Vianjäljityskonsoli</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/debugconsole.ui" line="52"/>
         <source>local</source>
-        <translation>lokální</translation>
+        <translation>paikallinen</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/debugconsole.ui" line="62"/>
         <source>core</source>
-        <translation>jádro</translation>
+        <translation>ydin</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/debugconsole.ui" line="90"/>
         <source>Evaluate!</source>
-        <translation>Posoudit!</translation>
+        <translation>Suorita!</translation>
     </message>
 </context>
 <context>
@@ -2346,12 +2360,12 @@ SOME SPACE</source>
     <message>
         <location filename="../src/qtui/ui/debuglogwidget.ui" line="13"/>
         <source>Debug Log</source>
-        <translation>Ladící log</translation>
+        <translation>Vianjäljitysloki</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/debuglogwidget.ui" line="43"/>
         <source>Close</source>
-        <translation>Zavřít</translation>
+        <translation>Sulje</translation>
     </message>
 </context>
 <context>
@@ -2359,48 +2373,48 @@ SOME SPACE</source>
     <message>
         <location filename="../src/qtui/ui/desktopnotificationconfigwidget.ui" line="13"/>
         <source>Form</source>
-        <translation>Formulář</translation>
+        <translation>Lomake</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/desktopnotificationconfigwidget.ui" line="19"/>
         <source>Desktop Notification (via D-Bus)</source>
-        <translation>Oznamovaní (skrze D-Bus)</translation>
+        <translation>Työpöytäilmoitus (D-Bus:in kautta)</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/desktopnotificationconfigwidget.ui" line="33"/>
         <source>Timeout:</source>
-        <translation>Časová prodleva:</translation>
+        <translation>Aikakatkaisu:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/desktopnotificationconfigwidget.ui" line="46"/>
         <source> s</source>
-        <translation></translation>
+        <translation> s</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/desktopnotificationconfigwidget.ui" line="76"/>
         <source>Position hint:</source>
-        <translation>Pozice oznámení:</translation>
+        <translation>Paikkavihje:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/desktopnotificationconfigwidget.ui" line="86"/>
         <location filename="../src/qtui/ui/desktopnotificationconfigwidget.ui" line="102"/>
         <source> px</source>
-        <translation></translation>
+        <translation> px</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/desktopnotificationconfigwidget.ui" line="89"/>
         <source>X: </source>
-        <translation></translation>
+        <translation>X: </translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/desktopnotificationconfigwidget.ui" line="105"/>
         <source>Y: </source>
-        <translation></translation>
+        <translation>Y: </translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/desktopnotificationconfigwidget.ui" line="130"/>
         <source>Queue unread notifications</source>
-        <translation>Řadit nepřečtená oznámení</translation>
+        <translation>Jonota lukemattomat ilmoitukset</translation>
     </message>
 </context>
 <context>
@@ -2408,32 +2422,32 @@ SOME SPACE</source>
     <message>
         <location filename="../src/client/execwrapper.cpp" line="45"/>
         <source>Invalid command string for /exec: %1</source>
-        <translation>Neplatný příkaz pro /exec: %1</translation>
+        <translation>Virheellinen komentomerkkijono /exec:ille: %1</translation>
     </message>
     <message>
         <location filename="../src/client/execwrapper.cpp" line="53"/>
         <source>Name &quot;%1&quot; is invalid: ../ or ..\ are not allowed!</source>
-        <translation>Název &quot;%1&quot; není platný: ../ nebo ..\ nejsou povoleny!</translation>
+        <translation>Nimi &quot;%1&quot; on virheellinen: ../ tai ..\ eivät ole sallittu!</translation>
     </message>
     <message>
         <location filename="../src/client/execwrapper.cpp" line="64"/>
         <source>Could not find script &quot;%1&quot;</source>
-        <translation>Nemohu najít skript &quot;%1&quot;</translation>
+        <translation>Skriptiä &quot;%1&quot; ei löydetty</translation>
     </message>
     <message>
         <location filename="../src/client/execwrapper.cpp" line="82"/>
         <source>Script &quot;%1&quot; crashed with exit code %2.</source>
-        <translation>Skript &quot;%1&quot; se zbořil s výstupním kódem %2.</translation>
+        <translation>Skripti &quot;%1&quot; kaatui poistumiskoodilla %2.</translation>
     </message>
     <message>
         <location filename="../src/client/execwrapper.cpp" line="98"/>
         <source>Script &quot;%1&quot; could not start.</source>
-        <translation>Skript &quot;%1&quot; se nepodařilo spustit.</translation>
+        <translation>Skripti &quot;%1&quot; ei käynnistynyt.</translation>
     </message>
     <message>
         <location filename="../src/client/execwrapper.cpp" line="100"/>
         <source>Script &quot;%1&quot; caused error %2.</source>
-        <translation>Skript &quot;%1&quot; způsobil chybu %2.</translation>
+        <translation>Skripti &quot;%1&quot; aiheutti virheen %2.</translation>
     </message>
 </context>
 <context>
@@ -2441,197 +2455,197 @@ SOME SPACE</source>
     <message>
         <location filename="../src/uisupport/fontselector.cpp" line="31"/>
         <source>Choose...</source>
-        <translation>Vybrat...</translation>
+        <translation>Valitse...</translation>
     </message>
 </context>
 <context>
     <name>GeneralSettingsPage</name>
     <message>
+        <location filename="../src/qtui/settingspages/generalsettingspage.cpp" line="28"/>
+        <source>Misc</source>
+        <translation>Sekalaiset</translation>
+    </message>
+    <message>
         <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="14"/>
         <source>Form</source>
-        <translation></translation>
+        <translation>Lomake</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="20"/>
         <source>Show System Tray Icon</source>
-        <translation>Zobrazit ikonku v systémové části panelu</translation>
+        <translation>Näytä kuvake ilmoitusalueella</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="29"/>
         <source>Hide to tray on close button</source>
-        <translation>Zkrýt do systémové části panelu při zavření</translation>
+        <translation>Piilota ilmoitusalueelle suljettaessa</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="39"/>
         <source>Tray Icon</source>
-        <translation>Ikonka v systémovém panelu</translation>
+        <translation>Ilmoitusaluekuvake</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="45"/>
         <source>Show system tray icon</source>
-        <translation>Zobrazovat ikonku v systémovém panelu</translation>
+        <translation>Näytä kuvake ilmoitusalueella</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="58"/>
         <source>Message Redirection</source>
-        <translation>Přesměrovaní zpráv</translation>
+        <translation>Viestien uudelleenohjaus</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="64"/>
         <source>User Notices:</source>
-        <translation>Uživatelské zprávy:</translation>
+        <translation>Käyttäjäilmoitukset:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="107"/>
         <source>Server Notices:</source>
-        <translation>Zprávy serveru:</translation>
+        <translation>Palvelinilmoitukset:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="121"/>
         <source>Default Target</source>
-        <translation>Výchozí cíl</translation>
+        <translation>Oletuskohde</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="128"/>
         <source>Status Window</source>
-        <translation>Okno statusu</translation>
+        <translation>Tilaikuna</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="135"/>
         <source>Current Chat</source>
-        <translation>Aktivní pokec</translation>
+        <translation>Nykyinen keskustelu</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/generalsettingspage.ui" line="142"/>
         <source>Errors:</source>
-        <translation>Chyby:</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/generalsettingspage.cpp" line="28"/>
-        <source>Misc</source>
-        <translation>Různé</translation>
+        <translation>Virheet:</translation>
     </message>
 </context>
 <context>
     <name>HighlightSettingsPage</name>
     <message>
         <location filename="../src/qtui/settingspages/highlightsettingspage.cpp" line="30"/>
-        <location filename="../src/qtui/settingspages/highlightsettingspage.ui" line="32"/>
-        <source>Highlight</source>
-        <translation>Zvýraznění</translation>
+        <source>Interface</source>
+        <translation>Käyttöliittymä</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/highlightsettingspage.cpp" line="30"/>
-        <source>Interface</source>
-        <translation>Rozhraní</translation>
+        <location filename="../src/qtui/settingspages/highlightsettingspage.ui" line="32"/>
+        <source>Highlight</source>
+        <translation>Korostus</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/highlightsettingspage.cpp" line="159"/>
         <source>this shouldn&apos;t be empty</source>
-        <translation>toto by nemělo být prázdné</translation>
+        <translation>tämän ei pitäisi olla tyhjä</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/highlightsettingspage.h" line="45"/>
         <source>highlight rule</source>
-        <translation>Pravidla zvýraznění</translation>
+        <translation>korostussääntö</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/highlightsettingspage.ui" line="13"/>
         <source>Form</source>
-        <translation>Formulář</translation>
+        <translation>Lomake</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/highlightsettingspage.ui" line="19"/>
         <source>Custom Highlights</source>
-        <translation>Uživatelská zvýraznění</translation>
+        <translation>Mukautetut korostukset</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/highlightsettingspage.ui" line="37"/>
         <source>RegEx</source>
-        <translation>Regulerní výraz</translation>
+        <translation>RegEx</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/highlightsettingspage.ui" line="42"/>
         <source>CS</source>
-        <translation></translation>
+        <translation>SKK</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/highlightsettingspage.ui" line="47"/>
         <source>Enable</source>
-        <translation>Povolit</translation>
+        <translation>Käytä</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/highlightsettingspage.ui" line="55"/>
         <source>Add</source>
-        <translation>Přidat</translation>
+        <translation>Lisää</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/highlightsettingspage.ui" line="62"/>
         <source>Remove</source>
-        <translation>Odebrat</translation>
+        <translation>Poista</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/highlightsettingspage.ui" line="85"/>
         <source>Highlight Nicks</source>
-        <translation>Zvýrazňované přezdívky</translation>
+        <translation>Korostetut nimimerkit</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/highlightsettingspage.ui" line="91"/>
         <source>All nicks from identity</source>
-        <translation>Všechny přezdívky z identity</translation>
+        <translation>Kaikki henkilöllisyyden nimimerkit</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/highlightsettingspage.ui" line="98"/>
         <source>Current nick</source>
-        <translation>Současnou</translation>
+        <translation>Nykyinen nimimerkki</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/highlightsettingspage.ui" line="108"/>
         <source>None</source>
-        <translation>Žádnou</translation>
+        <translation>Ei mikään</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/highlightsettingspage.ui" line="115"/>
         <source>Case sensitive</source>
-        <translation>Citlivý na velikost písma</translation>
+        <translation>Sama kirjainkoko</translation>
     </message>
 </context>
 <context>
     <name>IdentitiesSettingsPage</name>
     <message>
         <location filename="../src/qtui/settingspages/identitiessettingspage.cpp" line="31"/>
-        <source>Identities</source>
-        <translation>Identity</translation>
+        <source>Misc</source>
+        <translation>Sekalaiset</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identitiessettingspage.cpp" line="31"/>
-        <source>Misc</source>
-        <translation>Různé</translation>
+        <source>Identities</source>
+        <translation>Henkilöllisyydet</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identitiessettingspage.cpp" line="178"/>
         <source>&lt;b&gt;The following problems need to be corrected before your changes can be applied:&lt;/b&gt;&lt;ul&gt;</source>
-        <translation>&lt;b&gt;Následující problémy je třeba odstranit pro uložení změn:&lt;/b&gt;&lt;ul&gt;</translation>
+        <translation>&lt;b&gt;Seuraavat virheet pitää korjata ennen kuin muutoksesi voidaan ottaa käyttöön:&lt;/b&gt;&lt;ul&gt;</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identitiessettingspage.cpp" line="179"/>
         <source>&lt;li&gt;All identities need an identity name set&lt;/li&gt;</source>
-        <translation>&lt;li&gt;Všechny identity potřebují název&lt;/li&gt;</translation>
+        <translation>&lt;li&gt;Jokaisella henkilöllisyydellä pitää olla nimi&lt;/li&gt;</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identitiessettingspage.cpp" line="180"/>
         <source>&lt;li&gt;Every identity needs at least one nickname defined&lt;/li&gt;</source>
-        <translation>&lt;li&gt;Každý identita požaduje alespoň jednu definovanou přezdívku&lt;/li&gt;</translation>
+        <translation>&lt;li&gt;Jokainen henkilöllisyys tarvitsee vähintään yhden nimimerkin&lt;/li&gt;</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identitiessettingspage.cpp" line="181"/>
         <source>&lt;li&gt;You need to specify a real name for every identity&lt;/li&gt;</source>
-        <translation>&lt;li&gt;Pro každou identitu je třeba zadat reálné jméno&lt;/li&gt;</translation>
+        <translation>&lt;li&gt;Oikea nimi pitää olla määritettynä jokaisessa henkilöllisyydessä&lt;/li&gt;</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identitiessettingspage.cpp" line="182"/>
         <source>&lt;li&gt;You need to specify an ident for every identity&lt;/li&gt;</source>
-        <translation>&lt;li&gt;Musíte specifikovat ident pro každou identitu&lt;/li&gt;</translation>
+        <translation>&lt;li&gt;Jokaisella henkilöllisyydellä pitää olla ident&lt;/li&gt;</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identitiessettingspage.cpp" line="183"/>
@@ -2641,28 +2655,28 @@ SOME SPACE</source>
     <message>
         <location filename="../src/qtui/settingspages/identitiessettingspage.cpp" line="184"/>
         <source>One or more identities are invalid</source>
-        <translation>Jedna (či více) identita není validní</translation>
+        <translation>Yksi tai useampi henkilöllisyys on virheellinen</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identitiessettingspage.cpp" line="310"/>
         <source>Delete Identity?</source>
-        <translation>Smazat Identitu?</translation>
+        <translation>Poistetaanko henkilöllisyys?</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identitiessettingspage.cpp" line="311"/>
         <source>Do you really want to delete identity &quot;%1&quot;?</source>
-        <translation>Opravdu chcete smazat identitu &quot;%1&quot;?</translation>
+        <translation>Haluatko varmasti poistaa henkilöllisyyden&quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identitiessettingspage.cpp" line="322"/>
         <location filename="../src/qtui/settingspages/identitiessettingspage.ui" line="31"/>
         <source>Rename Identity</source>
-        <translation>Přejmenovat identitu</translation>
+        <translation>Nimeä henkilöllisyys uudelleen</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identitiessettingspage.cpp" line="323"/>
         <source>Please enter a new name for the identity &quot;%1&quot;!</source>
-        <translation>Prosím zadejte nový název pro identitu &quot;%1&quot;!</translation>
+        <translation>Anna henkilöllisyydelle &quot;%1&quot; uusi nimi!</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identitiessettingspage.ui" line="34"/>
@@ -2673,56 +2687,56 @@ SOME SPACE</source>
     <message>
         <location filename="../src/qtui/settingspages/identitiessettingspage.ui" line="51"/>
         <source>Add Identity</source>
-        <translation>Přidat identitu</translation>
+        <translation>Lisää henkilöllisyys</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identitiessettingspage.ui" line="54"/>
         <source>Add...</source>
-        <translation>Přidat...</translation>
+        <translation>Lisää...</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identitiessettingspage.ui" line="74"/>
         <source>Remove Identity</source>
-        <translation>Odstranit identitu</translation>
+        <translation>Poista henkilöllisyys</translation>
     </message>
 </context>
 <context>
     <name>Identity</name>
     <message>
-        <location filename="../src/common/identity.cpp" line="150"/>
-        <source>&lt;empty&gt;</source>
-        <translation>&lt;prázdné&gt;</translation>
-    </message>
-    <message>
         <location filename="../src/common/identity.cpp" line="122"/>
         <source>Quassel IRC User</source>
-        <translation>Uživatel Qassel IRC</translation>
+        <translation>Quassel IRC -käyttäjä</translation>
+    </message>
+    <message>
+        <location filename="../src/common/identity.cpp" line="150"/>
+        <source>&lt;empty&gt;</source>
+        <translation>&lt;tyhjä&gt;</translation>
     </message>
     <message>
         <location filename="../src/common/identity.cpp" line="156"/>
         <source>Gone fishing.</source>
-        <translation>Šel jsem rybařit.</translation>
+        <translation>Poissa.</translation>
     </message>
     <message>
         <location filename="../src/common/identity.cpp" line="160"/>
         <source>Not here. No, really. not here!</source>
-        <translation>Nejsem tu. Vážně tu nejsem!</translation>
+        <translation>Ei täällä. Muualla. Poissa!</translation>
     </message>
     <message>
         <location filename="../src/common/identity.cpp" line="163"/>
         <source>All Quassel clients vanished from the face of the earth...</source>
-        <translation>Všichni Quassel klienti zmizeli z povrchu země...</translation>
+        <translation>Kaikki maailman Quassel-asiakkaat ovat kadonneet...</translation>
     </message>
     <message>
         <location filename="../src/common/identity.cpp" line="166"/>
         <source>Kindergarten is elsewhere!</source>
-        <translation>Tady opravdu není školka!</translation>
+        <translation>Päiväkoti on muualla!</translation>
     </message>
     <message>
         <location filename="../src/common/identity.cpp" line="167"/>
         <location filename="../src/common/identity.cpp" line="168"/>
         <source>http://quassel-irc.org - Chat comfortably. Anywhere.</source>
-        <translation>http://quassel-irc.org - Pohodlné vykecávání. Odkudkoliv.</translation>
+        <translation>http://quassel-irc.org - Chat comfortably. Anywhere.</translation>
     </message>
 </context>
 <context>
@@ -2731,19 +2745,19 @@ SOME SPACE</source>
         <location filename="../src/qtui/settingspages/identityeditwidget.cpp" line="219"/>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="398"/>
         <source>Advanced</source>
-        <translation>Pokročilé</translation>
+        <translation>Lisäasetukset</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.cpp" line="290"/>
         <source>Load a Key</source>
-        <translation>Načíst klíč</translation>
+        <translation>Lataa avain</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.cpp" line="317"/>
         <location filename="../src/qtui/settingspages/identityeditwidget.cpp" line="328"/>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="604"/>
         <source>No Key loaded</source>
-        <translation>Nebyl načten žádný klíč</translation>
+        <translation>Ei ladattua avainta</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.cpp" line="318"/>
@@ -2751,28 +2765,28 @@ SOME SPACE</source>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="624"/>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="722"/>
         <source>Load</source>
-        <translation>Načíst</translation>
+        <translation>Lataa</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.cpp" line="322"/>
         <source>RSA</source>
-        <translation></translation>
+        <translation>RSA</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.cpp" line="325"/>
         <source>DSA</source>
-        <translation></translation>
+        <translation>DSA</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.cpp" line="330"/>
         <location filename="../src/qtui/settingspages/identityeditwidget.cpp" line="369"/>
         <source>Clear</source>
-        <translation>Vyčistit</translation>
+        <translation>Tyhjennä</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.cpp" line="340"/>
         <source>Load a Certificate</source>
-        <translation>Načist certifikát</translation>
+        <translation>Lataa varmenne</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.cpp" line="363"/>
@@ -2780,62 +2794,62 @@ SOME SPACE</source>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="662"/>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="696"/>
         <source>No Certificate loaded</source>
-        <translation>Nebyl načten žádný certifikát</translation>
+        <translation>Ei ladattua varmennetta</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="29"/>
         <source>General</source>
-        <translation>Obecné</translation>
+        <translation>Yleiset</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="37"/>
         <source>Real Name:</source>
-        <translation>Skutečné jméno:</translation>
+        <translation>Oikea nimi:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="44"/>
         <source>The &quot;Real Name&quot; is shown in /whois.</source>
-        <translation>&quot;Skutečné jméno&quot; je zobrazeno při volání příkazu /whois.</translation>
+        <translation>&quot;Oikea nimi&quot; näytetään /whois:sä.</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="53"/>
         <source>Nicknames</source>
-        <translation>Přezdívky</translation>
+        <translation>Nimimerkit</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="89"/>
         <source>Add Nickname</source>
-        <translation>Přidat přezdívku</translation>
+        <translation>Lisää nimimerkki</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="92"/>
         <source>&amp;Add...</source>
-        <translation>Přid&amp;at...</translation>
+        <translation>&amp;Lisää...</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="115"/>
         <source>Remove Nickname</source>
-        <translation>Odstranit přezdívku</translation>
+        <translation>Poista nimimerkki</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="118"/>
         <source>Remove</source>
-        <translation>Odstranit</translation>
+        <translation>Poista</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="135"/>
         <source>Rename Identity</source>
-        <translation>Přejmenovat identitu</translation>
+        <translation>Nimeä nimimerkki uudelleen</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="138"/>
         <source>Re&amp;name...</source>
-        <translation>Přejme&amp;novat...</translation>
+        <translation>&amp;Nimeä uudelleen...</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="164"/>
         <source>Move upwards in list</source>
-        <translation>Posunout výš v seznamu</translation>
+        <translation>Siirrä listalla ylöspäin</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="167"/>
@@ -2846,141 +2860,141 @@ SOME SPACE</source>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="178"/>
         <source>Move downwards in list</source>
-        <translation>Posunout níž v seznamu</translation>
+        <translation>Siirrä listalla alaspäin</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="226"/>
         <source>A&amp;way</source>
-        <translation>V&amp;zdálen</translation>
+        <translation>&amp;Poissaolo</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="232"/>
         <source>Default Away Settings</source>
-        <translation>Výchozí nastavení Vzdálení</translation>
+        <translation>Oletuspoissaoloasetukset</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="243"/>
         <source>Nick to be used when being away</source>
-        <translation>Přezdívka která se použije pokud jste vzdáleni</translation>
+        <translation>Nimimerkki jota käytetään poissa oltaessa</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="253"/>
         <source>Default away reason</source>
-        <translation>Výchozí důvod proč jste vzdáleni</translation>
+        <translation>Oletuspoissaolosyy</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="260"/>
         <source>Away Nick:</source>
-        <translation>Přezdívka při vzdálení:</translation>
+        <translation>Nimimerkki:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="267"/>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="296"/>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="365"/>
         <source>Away Reason:</source>
-        <translation>Důvod vzdálení:</translation>
+        <translation>Poissaolosyy:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="279"/>
         <source>Set away when all clients have detached from the core</source>
-        <translation>Nastaví vzdálení pokud jsou všichni klienti odpojeni od jádra</translation>
+        <translation>Siirry poissa-tilaan kun kaikki asiakkaat ovat katkaisseet yhteyden ytimeen</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="282"/>
         <source>Away On Detach</source>
-        <translation>Vzdálen při odpojení</translation>
+        <translation>Poissa-tilaan asiakkaitten kadottua</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="314"/>
         <source>Not implemented yet</source>
-        <translation>Ještě jsme to neimplementovali ;]</translation>
+        <translation>Ei vielä toteutettu</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="317"/>
         <source>Away On Idle</source>
-        <translation>Nastavit vzdálen při nicnedělání</translation>
+        <translation>Poissa-tilaan jouten ollessa</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="331"/>
         <source>Set away after</source>
-        <translation>Nastavit vzdálen po</translation>
+        <translation>Siirry poissa-tilaan</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="341"/>
         <source>minutes of being idle</source>
-        <translation>minut nicnedělání</translation>
+        <translation>minuutin joutenolon jälkeen</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="406"/>
         <source>Ident:</source>
-        <translation>Identifikace:</translation>
+        <translation>Ident:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="413"/>
         <source>The &quot;ident&quot; is part of your hostmask and, together with your host, uniquely identifies you within the IRC network.</source>
-        <translation>&quot;Ident&quot; je částí vaší masky a spolu s názvem vašeho počítače vás unikátně označuje pro IRC síť.</translation>
+        <translation>&quot;Ident&quot; on osa verkkomaskiasi ja yhdessä verkko-osoitteesi kanssa yksilöi sinut IRC-verkon sisällä.</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="422"/>
         <source>Messages</source>
-        <translation>Zprávy</translation>
+        <translation>Viestit</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="430"/>
         <source>Part Reason:</source>
-        <translation>Důvod pro opuštění:</translation>
+        <translation>Poistumissyy:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="443"/>
         <source>Quit Reason:</source>
-        <translation>Důvod pro ukončení:</translation>
+        <translation>Lopetussyy:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="453"/>
         <source>Kick Reason:</source>
-        <translation>Důvod pro vyhození:</translation>
+        <translation>Potkimissyy:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="487"/>
         <source>You need an SSL Capable Client to edit your Cores SSL Key and Certificate</source>
-        <translation>Abyste byli schopni měnit nastavení SSL klíče a certifikátu musí váš klient podporovat SSL</translation>
+        <translation>Tarvitset asiakkaan joka kykenee käyttämään SSL-yhteyksiä muuttaaksesi SSL-asetuksia</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="516"/>
         <source>Warning: you are not connected with a secured connection to the Quassel Core!
 Proceeding will cause an unencrypted transfer of your SSL Key and SSL Certificate!</source>
-        <translation>Varování: nejste připojeni k jádru zabezpečeným spojením!
-Pokračování povede k nešifrovanému přenosu vašeho SSL klíče a SSL certifikátu!</translation>
+        <translation>Varoitus: et käytä suojattua yhteyttä Quassel-ytimeesi!
+Jatkamisesta seuraa SSL-avaimesi ja SSL-varmenteesi siirtäminen salaamattomana!</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="545"/>
         <source>Continue</source>
-        <translation>Pokračovat</translation>
+        <translation>Jatka</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="583"/>
         <source>Use SSL Key</source>
-        <translation>Použít SSL Klíč</translation>
+        <translation>Käytä SSL-avainta</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="597"/>
         <source>Key Type:</source>
-        <translation>Typ klíče:</translation>
+        <translation>Avaimen tyyppi:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="636"/>
         <source>Use SSL Certificate</source>
-        <translation>Použít SSL Certifikát</translation>
+        <translation>Käytä SSL-varmennetta</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="655"/>
         <source>Organisation:</source>
-        <translation>Organizace:</translation>
+        <translation>Yritys:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/identityeditwidget.ui" line="689"/>
         <source>CommonName:</source>
-        <translation>Běžné jméno:</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2988,12 +3002,12 @@ Pokračování povede k nešifrovanému přenosu vašeho SSL klíče a SSL certi
     <message>
         <location filename="../src/qtui/ircconnectionwizard.cpp" line="107"/>
         <source>Setup Identity</source>
-        <translation>Nastavení identity</translation>
+        <translation>Määritä henkilöllisyys</translation>
     </message>
     <message>
         <location filename="../src/qtui/ircconnectionwizard.cpp" line="112"/>
         <source>Default Identity</source>
-        <translation>Výchozí Identita</translation>
+        <translation>Oletushenkilöllisyys</translation>
     </message>
 </context>
 <context>
@@ -3001,7 +3015,7 @@ Pokračování povede k nešifrovanému přenosu vašeho SSL klíče a SSL certi
     <message>
         <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="15"/>
         <source>Configure ignore rule</source>
-        <translation>Nastavení pravidel ignorance</translation>
+        <translation>Määritä suodatussääntö</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="27"/>
@@ -3018,22 +3032,34 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;Permanent:&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Messages are filtered before they get stored in the database.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Taso:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;Dynaaminen:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Viestit suodatetaan &quot;lennossa&quot;.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Jos otat suodattimen pois käytöstä tai poistat sen,&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;näytetään viestit jälleen.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;Pysyvä:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Viestit suodatetaan ennen kuin ne tallennetaan tietokantaan.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="42"/>
         <source>Strictness</source>
-        <translation>Přísnost</translation>
+        <translation>Taso</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="48"/>
         <source>Dynamic</source>
-        <translation>Dynamická</translation>
+        <translation>Dynaaminen</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="55"/>
         <source>Permanent</source>
-        <translation>Trvalá</translation>
+        <translation>Pysyvä</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="65"/>
@@ -3050,22 +3076,34 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;By Message:&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The rule is matched against the actual message content&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sääntötyyppi:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;Lähettäjä:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Sääntöä verrataan lähettäjämerkkijonoon &lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&quot;nimimerkki!ident@verkko.osoite&quot;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;Viesti:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Sääntöä verrataan viestin varsinaiseen sisältöön&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="80"/>
         <source>Rule Type</source>
-        <translation>Typ pravidla</translation>
+        <translation>Sääntötyyppi</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="86"/>
         <source>Sender</source>
-        <translation>Odesílatel</translation>
+        <translation>Lähettäjä</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="93"/>
         <source>Message</source>
-        <translation>Zpráva</translation>
+        <translation>Viesti</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="105"/>
@@ -3088,12 +3126,30 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;    &quot;*@foobar.com&quot; matches any sender from host &quot;foobar.com&quot;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;    &quot;stupid!.+&quot; (RegEx) matches any sender with nickname &quot;stupid&quot; from any host&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Suodatussääntö:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Säännön tyypistä riippuen tekstiä verrataan joko:&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- &lt;span style=&quot; text-decoration: underline;&quot;&gt;viestin sisältöön:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Esimerkki:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;    &quot;*foobar*&quot; pätee jokaiseen viestiin joka sisältää sanan &quot;foobar&quot;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- &lt;span style=&quot; text-decoration: underline;&quot;&gt;lähettäjämerkkijonoon &lt;/span&gt;&lt;span style=&quot; font-style:italic; text-decoration: underline;&quot;&gt;nimimerkki!ident@verkko.osoite&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-style:italic; text-decoration: underline;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Esimerkkejä:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;    &quot;*@foobar.com&quot; pätee jokaiseen lähettäjään verkko-osoitteesta &quot;foobar.com&quot;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;    &quot;idiootti!.+&quot; (RegEx) pätee jokaiseen lähettäjään jonka nimimerkki on &quot;idiootti&quot;, mistä tahansa verkko-osoitteesta&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="126"/>
         <source>Ignore rule</source>
-        <translation>Pravidlo ignorance</translation>
+        <translation>Suodatussääntö</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="137"/>
@@ -3109,12 +3165,23 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt; *: represents &quot;any amount of any character&quot;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt; ?: represents &quot;one or none character&quot;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Käytä säännöllisiä ilmauksia (RegEx):&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Jos valittu, säännöt tulkitaan säännöllisinä ilmauksina (RegEx).&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Muuten säännöt voivat sisältää jokerimerkkejä seuraavasti:&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt; *: tarkoittaa &quot;mitä tahansa merkkiä kuinka monta tahansa&quot;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt; ?: tarkoittaa &quot;yksi tai ei yhtään merkkiä&quot;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="151"/>
         <source>Use Regular Expressions</source>
-        <translation>Použít regulární výrazy</translation>
+        <translation>Käytä säännöllisiä ilmauksia (RegEx)</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="158"/>
@@ -3126,12 +3193,19 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-user-state:768;&quot;&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Only enabled rules are filtered.&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-user-state:768;&quot;&gt;For dynamic rules, disabling actually shows the filtered messages again.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Ota käyttöön / poista käytöstä:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-user-state:768;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Vain käytössä olevat säännöt otetaan suodatuksessa huomioon.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; -qt-user-state:768;&quot;&gt;Dynaamisen säännön käytöstä poistaminen näyttää suodatetut viestit jälleen.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="168"/>
         <source>Enabled</source>
-        <translation>Povoleno</translation>
+        <translation>Käytössä</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="180"/>
@@ -3149,27 +3223,40 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;Channel:&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The list below is interpreted as a list of channels for which the rule should match&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Laajuus:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;Globaali:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Sääntö pätee millä vain kanavalla missä tahansa verkossa&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;Verkko:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Alla oleva lista tulkitaan listaksi verkkoja joissa sääntö pätee&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;Kanava:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Alla oleva lista tulkitaan listaksi kanavia joissa sääntö pätee&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="196"/>
         <source>Scope</source>
-        <translation>Rozsah</translation>
+        <translation>Laajuus</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="204"/>
         <source>Global</source>
-        <translation>Globální</translation>
+        <translation>Globaali</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="211"/>
         <source>Network</source>
-        <translation>Síť</translation>
+        <translation>Verkko</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="218"/>
         <source>Channel</source>
-        <translation>Kanál</translation>
+        <translation>Kanava</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelisteditdlg.ui" line="227"/>
@@ -3185,7 +3272,18 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Example:&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&quot;#quassel*; #foobar&quot;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;would match on #foobar and on any channel starting with &quot;#quassel&quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Laajuussääntö:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Laajuussääntö on puolipilkuilla eroteltu lista joko&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;verkkojen tai kanavien nimiä.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Esimerkki:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&quot;#quassel*; #foobar&quot;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;pätisi kanavaan #foobar ja mihin tahansa kanavaan jonka nimi alkaa &quot;#quassel&quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -3193,37 +3291,37 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/qtui/settingspages/ignorelistmodel.cpp" line="69"/>
         <source>&lt;b&gt;Enable / Disable:&lt;/b&gt;&lt;br /&gt;Only enabled rules are filtered.&lt;br /&gt;For dynamic rules, disabling actually shows the filtered messages again</source>
-        <translation>&lt;b&gt;Povolit / Zakázat:&lt;/b&gt;&lt;br /&gt;Pouze povolená pravidla jsou filtrována.&lt;br /&gt;Pro dynamická pravidla jsou jejich vypnutím filtrované zprávy znovu zobrazeny</translation>
+        <translation>&lt;b&gt;Käytä / Älä käytä:&lt;/b&gt;&lt;br /&gt;Vain käytössä olevat säännöt suodattavat.&lt;br /&gt;Dynaamisen säännön käytöstä poistaminen itseasiassa näyttää suodatetut viestit uudelleen</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelistmodel.cpp" line="73"/>
         <source>&lt;b&gt;Ignore rule:&lt;/b&gt;&lt;br /&gt;Depending on the type of the rule, the text is matched against either:&lt;br /&gt;&lt;br /&gt;- &lt;u&gt;the message content:&lt;/u&gt;&lt;br /&gt;&lt;i&gt;Example:&lt;i&gt;&lt;br /&gt;    &quot;*foobar*&quot; matches any text containing the word &quot;foobar&quot;&lt;br /&gt;&lt;br /&gt;- &lt;u&gt;the sender string &lt;i&gt;nick!ident@host.name&lt;i&gt;&lt;/u&gt;&lt;br /&gt;&lt;i&gt;Example:&lt;/i&gt;&lt;br /&gt;    &quot;*@foobar.com&quot; matches any sender from host foobar.com&lt;br /&gt;    &quot;stupid!.+&quot; (RegEx) matches any sender with nickname &quot;stupid&quot; from any host&lt;br /&gt;</source>
-        <translation>&lt;b&gt;Pravidlo ignorance:&lt;/b&gt;&lt;br /&gt;Podle typu pravidla text je porovnáván vůči:&lt;br /&gt;&lt;br /&gt;- &lt;u&gt;obsahu zprávy:&lt;/u&gt;&lt;br /&gt;&lt;i&gt;Příklad:&lt;i&gt;&lt;br /&gt;    &quot;*foobar*&quot; bude platit na jakýkoliv text obsahující &quot;foobar&quot;&lt;br /&gt;&lt;br /&gt;- &lt;u&gt;odesílateli &lt;i&gt;nick!ident@host.name&lt;i&gt;&lt;/u&gt;&lt;br /&gt;&lt;i&gt;Příklad:&lt;/i&gt;&lt;br /&gt;    &quot;*@foobar.com&quot; platí na všechny odesílatele z domény foobar.com&lt;br /&gt;    &quot;stupid!.+&quot; (RegEx) bude pratit na kohokoliv s přezdívkou &quot;stupid&quot; a z libovolné adresy&lt;br /&gt;</translation>
+        <translation>&lt;b&gt;Suodatussääntö:&lt;/b&gt;&lt;br /&gt;Säännön tyypistä riippuen tekstiä verrataan joko:&lt;br /&gt;&lt;br /&gt;- &lt;u&gt;viestin sisältöön:&lt;/u&gt;&lt;br /&gt;&lt;i&gt;Esimerkki:&lt;i&gt;&lt;br /&gt;    &quot;*foobar*&quot; täsmää kaikkeen tekstiin joka sisältää sanan &quot;foobar&quot;&lt;br /&gt;&lt;br /&gt;- &lt;u&gt;lähettäjämerkkijonoon &lt;i&gt;nimimerkki!ident@verkko.osoite&lt;i&gt;&lt;/u&gt;&lt;br /&gt;&lt;i&gt;Esimerkki:&lt;/i&gt;&lt;br /&gt;    &quot;*@foobar.com&quot; täsmää kaikkiin lähettäjiin osoitteesta foobar.com&lt;br /&gt;    &quot;idiootti!.+&quot; (RegEx) täsmää kaikkiin lähettäjjiin nimimerkiltään &quot;idiootti&quot; mistä verkko-osoitteesta tahansa&lt;br /&gt;</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelistmodel.cpp" line="89"/>
         <source>By Sender</source>
-        <translation>Dle odesílatele</translation>
+        <translation>Lähettäjän mukaan</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelistmodel.cpp" line="91"/>
         <source>By Message</source>
-        <translation>Dle zprávy</translation>
+        <translation>Viestin mukaan</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelistmodel.cpp" line="191"/>
         <source>Enabled</source>
-        <translation>Povoleno</translation>
+        <translation>Käytössä</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelistmodel.cpp" line="192"/>
         <source>Type</source>
-        <translation>Typ</translation>
+        <translation>Tyyppi</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelistmodel.cpp" line="193"/>
         <source>Ignore Rule</source>
-        <translation>Pravidlo ignorance</translation>
+        <translation>Suodatussääntö</translation>
     </message>
 </context>
 <context>
@@ -3231,65 +3329,64 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/qtui/settingspages/ignorelistsettingspage.cpp" line="34"/>
         <source>Misc</source>
-        <translation>Různé</translation>
+        <translation>Sekalaiset</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelistsettingspage.cpp" line="34"/>
         <source>Ignorelist</source>
-        <translation>Seznam Ignorovaných</translation>
+        <translation>Suodatuslista</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelistsettingspage.cpp" line="112"/>
         <source>Rule already exists</source>
-        <translation>Pravidlo již existuje</translation>
+        <translation>Sääntö on jo olemassa</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelistsettingspage.cpp" line="113"/>
         <source>There is already a rule
 &quot;%1&quot;
 Please choose another rule.</source>
-        <translation>Pravidlo již existuje
+        <translation>On jo olemassa sääntö
 &quot;%1&quot;
-Prosím vyberte jiné pravidlo.
-</translation>
+Valitse toinen sääntö.</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelistsettingspage.ui" line="14"/>
         <source>Form</source>
-        <translation></translation>
+        <translation>Lomake</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelistsettingspage.ui" line="28"/>
         <source>New</source>
-        <translation>Nová</translation>
+        <translation>Uusi</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelistsettingspage.ui" line="42"/>
         <source>Delete</source>
-        <translation>Smazat</translation>
+        <translation>Poista</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/ignorelistsettingspage.ui" line="56"/>
         <source>&amp;Edit</source>
-        <translation>&amp;Editovat</translation>
+        <translation>&amp;Muokkaa</translation>
     </message>
 </context>
 <context>
     <name>InputWidget</name>
     <message>
-        <location filename="../src/qtui/inputwidget.cpp" line="90"/>
+        <location filename="../src/qtui/inputwidget.cpp" line="88"/>
         <source>Focus Input Line</source>
-        <translation>Přepnout na vstupní řádku</translation>
+        <translation>Kohdista syöterivi</translation>
     </message>
     <message>
-        <location filename="../src/qtui/inputwidget.cpp" line="91"/>
+        <location filename="../src/qtui/inputwidget.cpp" line="89"/>
         <source>Ctrl+L</source>
-        <translation></translation>
+        <translation>Ctrl+L</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/inputwidget.ui" line="20"/>
         <source>Form</source>
-        <translation></translation>
+        <translation>Lomake</translation>
     </message>
 </context>
 <context>
@@ -3297,107 +3394,107 @@ Prosím vyberte jiné pravidlo.
     <message>
         <location filename="../src/qtui/settingspages/inputwidgetsettingspage.cpp" line="23"/>
         <source>Interface</source>
-        <translation>Rozhraní</translation>
+        <translation>Käyttöliittymä</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/inputwidgetsettingspage.cpp" line="23"/>
         <source>Input Widget</source>
-        <translation>Vstupní řádka</translation>
+        <translation>Syöttöelementti</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="14"/>
         <source>Form</source>
-        <translation></translation>
+        <translation>Lomake</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="22"/>
         <source>Custom font:</source>
-        <translation>Vlastní font:</translation>
+        <translation>Mukautettu fontti:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="25"/>
         <source>/UiStyle/Fonts/UseCustomInputWidgetFont</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="38"/>
         <source>/UiStyle/Fonts/InputWidget</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="50"/>
         <source>Enable spell check</source>
-        <translation>Povolit kontrolu pravopisu</translation>
+        <translation>Tarkista oikeinkirjoitus</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="53"/>
         <source>EnableSpellCheck</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="63"/>
         <source>Show nick selector</source>
-        <translation>Zobrazit výběr přezdívek</translation>
+        <translation>Näytä nimimerkinvalitsin</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="69"/>
         <source>ShowNickSelector</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="79"/>
         <source>Multi-Line Editing</source>
-        <translation>Víceřádková editace</translation>
+        <translation>Usean rivin muokkaus</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="85"/>
         <source>EnableMultiLine</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="96"/>
         <source>Show at most</source>
-        <translation>Ukázat nejvíce</translation>
+        <translation>Näytä enintään</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="112"/>
         <source>MaxNumLines</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="122"/>
         <source>lines</source>
-        <translation>řádků</translation>
+        <translation>riviä</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="144"/>
         <source>Enable scrollbars</source>
-        <translation>Povolit rolovácí proužek</translation>
+        <translation>Näytä vierityspalkit</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="150"/>
         <source>EnableScrollBars</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="163"/>
         <source>Tab Completion</source>
-        <translation>Doplňování tabulátorem</translation>
+        <translation>Sarkaintäydennys</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="171"/>
         <source>Completion suffix:</source>
-        <translation>Zakončení doplňování:</translation>
+        <translation>Täydennyksen loppuliite:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="184"/>
         <source>/TabCompletion/CompletionSuffix</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/inputwidgetsettingspage.ui" line="187"/>
         <source>: </source>
-        <translation></translation>
+        <translation>: </translation>
     </message>
 </context>
 <context>
@@ -3405,7 +3502,7 @@ Prosím vyberte jiné pravidlo.
     <message>
         <location filename="../src/qtui/ircconnectionwizard.cpp" line="51"/>
         <source>Save &amp;&amp; Connect</source>
-        <translation>Uložit &amp;&amp; Připojit</translation>
+        <translation>Tallenna &amp;&amp; Yhdistä</translation>
     </message>
 </context>
 <context>
@@ -3413,17 +3510,17 @@ Prosím vyberte jiné pravidlo.
     <message>
         <location filename="../src/client/irclistmodel.cpp" line="59"/>
         <source>Channel</source>
-        <translation>Kanál</translation>
+        <translation>Kanava</translation>
     </message>
     <message>
         <location filename="../src/client/irclistmodel.cpp" line="60"/>
         <source>Users</source>
-        <translation>Uživatelé</translation>
+        <translation>Käyttäjät</translation>
     </message>
     <message>
         <location filename="../src/client/irclistmodel.cpp" line="61"/>
         <source>Topic</source>
-        <translation>Téma</translation>
+        <translation>Aihe</translation>
     </message>
 </context>
 <context>
@@ -3431,17 +3528,17 @@ Prosím vyberte jiné pravidlo.
     <message>
         <location filename="../src/core/ircserverhandler.cpp" line="520"/>
         <source>%1 has changed topic for %2 to: &quot;%3&quot;</source>
-        <translation>%1 změnil téma pro %2 na: &quot;%3&quot;</translation>
+        <translation>%1 vaihto kanavan %2 aiheeksi: &quot;%3&quot;</translation>
     </message>
     <message>
         <location filename="../src/core/ircserverhandler.cpp" line="545"/>
         <source>Received RPL_ISUPPORT (005) without parameters!</source>
-        <translation>Obdrženo RPL_ISUPPORT (005) bez parametrů!</translation>
+        <translation>Vastaanotettiin RPL_ISUPPORT (005) ilman parametreja!</translation>
     </message>
     <message>
         <location filename="../src/core/ircserverhandler.cpp" line="553"/>
         <source>Received non RFC compliant RPL_ISUPPORT: this can lead to unexpected behavior!</source>
-        <translation>Obdržena RFC nekompatibilní RPL_ISUPPORT: což může vést k neočekávanému chování!</translation>
+        <translation>Vastaanotettiin RFC:n vastainen RPL_ISUPPORT: tämä voi johtaa odottamattomaan käytökseen!</translation>
     </message>
     <message>
         <location filename="../src/core/ircserverhandler.cpp" line="570"/>
@@ -3449,18 +3546,18 @@ Prosím vyberte jiné pravidlo.
         <location filename="../src/core/ircserverhandler.cpp" line="584"/>
         <location filename="../src/core/ircserverhandler.cpp" line="591"/>
         <source>%1</source>
-        <translation></translation>
+        <translation type="unfinished">%1</translation>
     </message>
     <message>
         <location filename="../src/core/ircserverhandler.cpp" line="626"/>
         <source>[Whois] %1 is away: &quot;%2&quot;</source>
-        <translation>[Whois] %1 je pryč: &quot;%2&quot;</translation>
+        <translation>[Whois] %1 on poissa: &quot;%2&quot;</translation>
     </message>
     <message>
         <location filename="../src/core/ircserverhandler.cpp" line="632"/>
         <location filename="../src/core/ircserverhandler.cpp" line="637"/>
         <source>%1 is away: &quot;%2&quot;</source>
-        <translation>%1 je fuč: &quot;%2&quot;</translation>
+        <translation>%1 on poissa: &quot;%2&quot;</translation>
     </message>
     <message>
         <location filename="../src/core/ircserverhandler.cpp" line="681"/>
@@ -3470,119 +3567,119 @@ Prosím vyberte jiné pravidlo.
         <location filename="../src/core/ircserverhandler.cpp" line="806"/>
         <location filename="../src/core/ircserverhandler.cpp" line="838"/>
         <source>[Whois] %1</source>
-        <translation></translation>
+        <translation>[Whois] %1</translation>
     </message>
     <message>
         <location filename="../src/core/ircserverhandler.cpp" line="710"/>
         <location filename="../src/core/ircserverhandler.cpp" line="712"/>
         <source>[Whois] %1 is %2 (%3)</source>
-        <translation>[Whois] %1 je %2 (%3)</translation>
+        <translation>[Whois] %1 on %2 (%3)</translation>
     </message>
     <message>
         <location filename="../src/core/ircserverhandler.cpp" line="727"/>
         <source>%1 is online via %2 (%3)</source>
-        <translation>%1 je online skrze %2 (%3)</translation>
+        <translation>%1 yhdistettynä %2 kautta (%3)</translation>
     </message>
     <message>
         <location filename="../src/core/ircserverhandler.cpp" line="731"/>
         <location filename="../src/core/ircserverhandler.cpp" line="1009"/>
         <source>[Whowas] %1</source>
-        <translation></translation>
+        <translation>[Whowas] %1</translation>
     </message>
     <message>
         <location filename="../src/core/ircserverhandler.cpp" line="757"/>
         <source>[Whowas] %1 was %2 (%3)</source>
-        <translation>[Whowas] %1 byl %2 (%3)</translation>
+        <translation>[Whowas] %1 oli %2 (%3)</translation>
     </message>
     <message>
         <location filename="../src/core/ircserverhandler.cpp" line="771"/>
         <source>[Who] End of /WHO list for %1</source>
-        <translation>[Who] Konec /WHO seznamu pro %1</translation>
+        <translation>[Who] /WHO -listauksen loppu kohteelle %1</translation>
     </message>
     <message>
         <location filename="../src/core/ircserverhandler.cpp" line="791"/>
         <source>[Whois] %1 is logged in since %2</source>
-        <translation>[Whois] %1 je přihlášen od %2</translation>
+        <translation>[Whois] %1 on ollut kirjautuneena sisään alkaen %2</translation>
     </message>
     <message>
         <location filename="../src/core/ircserverhandler.cpp" line="793"/>
         <source>[Whois] %1 is idling for %2 (%3)</source>
-        <translation>[Whois] %1 je nečinný po %2 (%3)</translation>
+        <translation>[Whois] %1 on ollut jouten %2 (%3)</translation>
     </message>
     <message>
         <location filename="../src/core/ircserverhandler.cpp" line="796"/>
         <source>[Whois] idle message: %1</source>
-        <translation>[Whois] důvod nečinnosti: %1</translation>
+        <translation>[Whois] joutenoloviesti: %1</translation>
     </message>
     <message>
         <location filename="../src/core/ircserverhandler.cpp" line="828"/>
         <source>[Whois] %1 is a user on channels: %2</source>
-        <translation>[Whois] %1 je uživatelem kanálů: %2</translation>
+        <translation>[Whois] %1 on käyttäjä kanavilla: %2</translation>
     </message>
     <message>
         <location filename="../src/core/ircserverhandler.cpp" line="830"/>
         <source>[Whois] %1 has voice on channels: %2</source>
-        <translation>[Whois] %1 je mluvka na kanálech: %2</translation>
+        <translation>[Whois] %1 on puheoikeutettu kanavilla: %2</translation>
     </message>
     <message>
         <location filename="../src/core/ircserverhandler.cpp" line="832"/>
         <source>[Whois] %1 is an operator on channels: %2</source>
-        <translation>[Whois] %1 je dozorce na kanálech: %2</translation>
+        <translation>[Whois] %1 on operaattori kanavilla: %2</translation>
     </message>
     <message>
         <location filename="../src/core/ircserverhandler.cpp" line="860"/>
         <source>Channel %1 has %2 users. Topic is: %3</source>
-        <translation>Kanál %1 má %2 uživatelů. Tématem je: %3</translation>
+        <translation>Kanavalla %1 on %2 käyttäjää. Aihe on: %3</translation>
     </message>
     <message>
         <location filename="../src/core/ircserverhandler.cpp" line="869"/>
         <source>End of channel list</source>
-        <translation>Konec seznamu s kanály</translation>
+        <translation>Kanavalistauksen loppu</translation>
     </message>
     <message>
         <location filename="../src/core/ircserverhandler.cpp" line="887"/>
         <source>Homepage for %1 is %2</source>
-        <translation>Domovská stránka pro %1 je %2</translation>
+        <translation>Kotisivu kanavalle %1 on %2</translation>
     </message>
     <message>
         <location filename="../src/core/ircserverhandler.cpp" line="905"/>
         <source>Channel %1 created on %2</source>
-        <translation>Kanál %1 byl vytvořen %2</translation>
+        <translation>Kanava %1 on luotu %2</translation>
     </message>
     <message>
         <location filename="../src/core/ircserverhandler.cpp" line="919"/>
         <source>No topic is set for %1.</source>
-        <translation>Pro %1 není nastaveno žádné téma.</translation>
+        <translation>Kanavalle %1 ei ole asetettu aihetta.</translation>
     </message>
     <message>
         <location filename="../src/core/ircserverhandler.cpp" line="934"/>
         <source>Topic for %1 is &quot;%2&quot;</source>
-        <translation>Téma pro %1 je &quot;%2&quot;</translation>
+        <translation>Aihe kanavalle %1 on &quot;%2&quot;</translation>
     </message>
     <message>
         <location filename="../src/core/ircserverhandler.cpp" line="945"/>
         <source>Topic set by %1 on %2</source>
-        <translation>Téma nastavil %1 v %2</translation>
+        <translation>Aiheen no asettanut %1 %2</translation>
     </message>
     <message>
         <location filename="../src/core/ircserverhandler.cpp" line="968"/>
         <source>[Who] %1</source>
-        <translation></translation>
+        <translation>[Who] %1</translation>
     </message>
     <message>
         <location filename="../src/core/ircserverhandler.cpp" line="1027"/>
         <source>Nick %1 contains illegal characters</source>
-        <translation>Přezdívka %1 obsahuje neplatné znaky</translation>
+        <translation>Nimimerkki %1 sisältää epäkelpoja merkkejä</translation>
     </message>
     <message>
         <location filename="../src/core/ircserverhandler.cpp" line="1038"/>
         <source>Nick already in use: %1</source>
-        <translation>Přezdívka se již používá: %1</translation>
+        <translation>Nimimerkki jo käytössä: %1</translation>
     </message>
     <message>
         <location filename="../src/core/ircserverhandler.cpp" line="1095"/>
         <source>No free and valid nicks in nicklist found. use: /nick &lt;othernick&gt; to continue</source>
-        <translation>Nebyla nalezena žádná volná a platná přezdívka ze seznamu přezdívek. Pro pokračování použíjte: /nick &lt;jiná_přezdívka&gt;</translation>
+        <translation>Vapaita ja kelpoja nimimerkkejä ei löytynyt. käytä /nick &lt;nimimerkki&gt; jatkaaksesi</translation>
     </message>
 </context>
 <context>
@@ -3590,17 +3687,17 @@ Prosím vyberte jiné pravidlo.
     <message>
         <location filename="../src/client/networkmodel.cpp" line="799"/>
         <source>idling since %1</source>
-        <translation>nic nedělá od %1</translation>
+        <translation>jouten lähtien %1</translation>
     </message>
     <message>
         <location filename="../src/client/networkmodel.cpp" line="802"/>
         <source>login time: %1</source>
-        <translation>čas přihlášení: %1</translation>
+        <translation>sisäänkirjautumisaika: %1</translation>
     </message>
     <message>
         <location filename="../src/client/networkmodel.cpp" line="805"/>
         <source>server: %1</source>
-        <translation>server: %1</translation>
+        <translation>palvelin: %1</translation>
     </message>
 </context>
 <context>
@@ -3608,113 +3705,112 @@ Prosím vyberte jiné pravidlo.
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.cpp" line="28"/>
         <source>Interface</source>
-        <translation>Rozhraní</translation>
+        <translation>Käyttöliittymä</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.cpp" line="28"/>
         <source>Chat &amp; Nick Lists</source>
-        <translation>Pokec &amp; Seznam přezdívek</translation>
+        <translation>Keskustelu &amp; nimimerkki -listat</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.cpp" line="33"/>
         <source>Network</source>
-        <translation>Síť</translation>
+        <translation>Verkko</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.cpp" line="36"/>
         <source>Inactive</source>
-        <translation>Neaktivní</translation>
+        <translation>Epäaktiivinen</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.cpp" line="37"/>
         <source>Normal</source>
-        <translation>Normální</translation>
+        <translation>Normaali</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.cpp" line="38"/>
         <source>Unread messages</source>
-        <translation>Nepřečtené zprávy</translation>
+        <translation>Lukemattomat viestit</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.cpp" line="39"/>
         <source>Highlight</source>
-        <translation>Zvýraznění</translation>
+        <translation>Korostus</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.cpp" line="40"/>
         <source>Other activity</source>
-        <translation>Jiné činnosti</translation>
+        <translation>Muu toiminta</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="14"/>
         <source>Form</source>
-        <translation></translation>
+        <translation>Lomake</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="22"/>
         <source>Custom font:</source>
-        <translation>Vlastní font:</translation>
+        <translation>Mukautettu fontti:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="25"/>
         <source>/UiStyle/Fonts/UseCustomItemViewFont</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="38"/>
         <source>/UiStyle/Fonts/ItemView</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="50"/>
         <source>Show icons</source>
-        <translation>Zobrazit ikonky</translation>
+        <translation>Näytä kuvakkeet</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="56"/>
         <source>/UiStyle/ShowItemViewIcons</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="66"/>
         <source>Chat List</source>
-        <translation>Seznam pokeců</translation>
+        <translation>Keskustelulista</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="72"/>
         <source>Display topic in tooltip</source>
-        <translatorcomment>WORD TRANSLATION :D</translatorcomment>
-        <translation>Zobrazit téma ve sponce (tooltip :))</translation>
+        <translation>Näytä aihe työkaluohjeessa</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="75"/>
         <source>DisplayTopicInTooltip</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="85"/>
         <source>Mouse wheel changes selected chat</source>
-        <translation>Kolečko myši mění vybraný pokec</translation>
+        <translation>Hiiren rulla vaihtaa valittua keskustelua</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="91"/>
         <source>MouseWheelChangesBuffer</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="101"/>
         <source>Use Custom Colors</source>
-        <translation>Použít vlastní barvy</translation>
+        <translation>Käytä mukautettuja värejä</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="107"/>
         <source>/UiStyle/Colors/UseBufferViewColors</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="118"/>
         <source>Standard:</source>
-        <translation>Standardní:</translation>
+        <translation>Vakio:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="125"/>
@@ -3730,305 +3826,305 @@ Prosím vyberte jiné pravidlo.
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="128"/>
         <source>/UiStyle/Colors/DefaultBuffer</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="142"/>
         <source>Inactive:</source>
-        <translation>Neaktivní:</translation>
+        <translation>Epäaktiivinen:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="152"/>
         <source>/UiStyle/Colors/InactiveBuffer</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="166"/>
         <source>Unread messages:</source>
-        <translation>Nepřečtené zprávy:</translation>
+        <translation>Lukemattomia viestejä:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="176"/>
         <source>/UiStyle/Colors/UnreadBuffer</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="190"/>
         <source>Highlight:</source>
-        <translation>Zvýrazění:</translation>
+        <translation>Korostus:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="200"/>
         <source>/UiStyle/Colors/HighlightedBuffer</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="214"/>
         <source>Other activity:</source>
-        <translation>Jiné činnosti:</translation>
+        <translation>Muu toiminta:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="224"/>
         <source>/UiStyle/Colors/ActiveBuffer</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="272"/>
         <source>1</source>
-        <translation></translation>
+        <translation>1</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="286"/>
         <source>Custom Nick List Colors</source>
-        <translation>Vlastní barvy v seznamu přezdívek</translation>
+        <translation>Mukautetut nimimerkkilistan värit</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="292"/>
         <source>/UiStyle/Colors/UseNickViewColors</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="301"/>
         <source>Online:</source>
-        <translation>Přítomen:</translation>
+        <translation>Paikalla:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="311"/>
         <source>/UiStyle/Colors/OnlineNick</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="338"/>
         <source>Away:</source>
-        <translation>Pryč:</translation>
+        <translation>Poissa:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/itemviewsettingspage.ui" line="348"/>
         <source>/UiStyle/Colors/AwayNick</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MainWin</name>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="281"/>
+        <location filename="../src/qtui/mainwin.cpp" line="280"/>
         <source>&amp;Connect to Core...</source>
-        <translation>Přip&amp;ojit k jádru...</translation>
+        <translation>&amp;Yhdistä ytimeen...</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="283"/>
+        <location filename="../src/qtui/mainwin.cpp" line="282"/>
         <source>&amp;Disconnect from Core</source>
-        <translation>O&amp;dpojit od jádra</translation>
+        <translation>&amp;Katkaise yhteys ytimeen</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="285"/>
+        <location filename="../src/qtui/mainwin.cpp" line="284"/>
         <source>Core &amp;Info...</source>
-        <translation>&amp;Informace jádra...</translation>
+        <translation>Ytimen &amp;tiedot...</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/mainwin.cpp" line="286"/>
+        <source>Configure &amp;Networks...</source>
+        <translation>Määritä &amp;verkot...</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/mainwin.cpp" line="288"/>
+        <source>&amp;Quit</source>
+        <translation>&amp;Lopeta</translation>
     </message>
     <message>
         <location filename="../src/qtui/mainwin.cpp" line="289"/>
-        <source>&amp;Quit</source>
-        <translation>&amp;Ukončit</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/mainwin.cpp" line="290"/>
         <source>Ctrl+Q</source>
-        <translation></translation>
+        <translation>Ctrl+Q</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="293"/>
+        <location filename="../src/qtui/mainwin.cpp" line="292"/>
         <source>&amp;Configure Chat Lists...</source>
-        <translation>&amp;Nastavit seznam pokeců...</translation>
+        <translation>&amp;Keskustelulistausten asetukset...</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="300"/>
-        <source>Show &amp;Search Bar</source>
-        <translation>Zobrazit vy&amp;hledávání</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/mainwin.cpp" line="287"/>
-        <source>Configure &amp;Networks...</source>
-        <translation>Nastavit &amp;sítě...</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/mainwin.cpp" line="296"/>
+        <location filename="../src/qtui/mainwin.cpp" line="295"/>
         <source>&amp;Lock Layout</source>
-        <translation>U&amp;zamknout rozvržení</translation>
+        <translation>&amp;Lukitse asettelu</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="302"/>
+        <location filename="../src/qtui/mainwin.cpp" line="299"/>
+        <source>Show &amp;Search Bar</source>
+        <translation>Näytä &amp;hakupalkki</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/mainwin.cpp" line="301"/>
         <source>Show Away Log</source>
-        <translation>Zobrazit Log pro Pryč</translation>
+        <translation>Näytä poissa-loki</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/mainwin.cpp" line="303"/>
+        <source>Show &amp;Menubar</source>
+        <translation>Näytä &amp;valikkopalkki</translation>
     </message>
     <message>
         <location filename="../src/qtui/mainwin.cpp" line="304"/>
-        <source>Show &amp;Menubar</source>
-        <translation>Zobrazit Hlavní &amp;nabídku</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/mainwin.cpp" line="305"/>
         <source>Ctrl+M</source>
-        <translation></translation>
+        <translation>Ctrl+M</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="307"/>
+        <location filename="../src/qtui/mainwin.cpp" line="306"/>
         <source>Show Status &amp;Bar</source>
-        <translation>Zo&amp;brazit stavový řádek</translation>
+        <translation>Näytä &amp;tilarivi</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/mainwin.cpp" line="310"/>
+        <source>&amp;Configure Quassel...</source>
+        <translation>&amp;Quasselin asetukset...</translation>
     </message>
     <message>
         <location filename="../src/qtui/mainwin.cpp" line="311"/>
-        <source>&amp;Configure Quassel...</source>
-        <translation>&amp;Nastavit Quassel...</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/mainwin.cpp" line="312"/>
         <source>F7</source>
-        <translation></translation>
+        <translation>F7</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="315"/>
+        <location filename="../src/qtui/mainwin.cpp" line="314"/>
         <source>&amp;About Quassel</source>
-        <translation>O progr&amp;amu Quassel</translation>
+        <translation>&amp;Tietoja Quasselista</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="317"/>
+        <location filename="../src/qtui/mainwin.cpp" line="316"/>
         <source>About &amp;Qt</source>
-        <translation>O &amp;Qt</translation>
+        <translation>Tietoja &amp;Qt:stä</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="319"/>
+        <location filename="../src/qtui/mainwin.cpp" line="318"/>
         <source>Debug &amp;NetworkModel</source>
-        <translation>Ladění Sít&amp;ovéhoModelu</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="321"/>
+        <location filename="../src/qtui/mainwin.cpp" line="320"/>
         <source>Debug &amp;BufferViewOverlay</source>
-        <translation>Ladění vrstvy P&amp;ohledu na záložky</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="323"/>
+        <location filename="../src/qtui/mainwin.cpp" line="322"/>
         <source>Debug &amp;MessageModel</source>
-        <translation>Ladění &amp;ModeluZpráv</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="325"/>
+        <location filename="../src/qtui/mainwin.cpp" line="324"/>
         <source>Debug &amp;HotList</source>
-        <translation>Ladění &amp;Seznamů rozhovorů</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="327"/>
+        <location filename="../src/qtui/mainwin.cpp" line="326"/>
         <source>Debug &amp;Log</source>
-        <translation>Ladící &amp;Log</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="329"/>
+        <location filename="../src/qtui/mainwin.cpp" line="328"/>
         <source>Reload Stylesheet</source>
-        <translation>Přenačíst styl</translation>
+        <translation>Lataa tyylisivu uudelleen</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="333"/>
+        <location filename="../src/qtui/mainwin.cpp" line="332"/>
         <source>Jump to hot chat</source>
-        <translation>Přejít na další aktivní záložku</translation>
+        <translation>Hyppää aktiiviseen keskusteluun</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="340"/>
+        <location filename="../src/qtui/mainwin.cpp" line="339"/>
         <source>&amp;File</source>
-        <translation>S&amp;oubor</translation>
+        <translation>&amp;Tiedosto</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="353"/>
+        <location filename="../src/qtui/mainwin.cpp" line="352"/>
         <source>&amp;Networks</source>
-        <translation>&amp;Sítě</translation>
+        <translation>&amp;Verkot</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/mainwin.cpp" line="358"/>
+        <source>&amp;View</source>
+        <translation>&amp;Näytä</translation>
     </message>
     <message>
         <location filename="../src/qtui/mainwin.cpp" line="359"/>
-        <source>&amp;View</source>
-        <translation>&amp;Záložky</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/mainwin.cpp" line="360"/>
         <source>&amp;Chat Lists</source>
-        <translation>&amp;Seznam pokeců</translation>
+        <translation>&amp;Keskustelulistat</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="362"/>
+        <location filename="../src/qtui/mainwin.cpp" line="361"/>
         <source>&amp;Toolbars</source>
-        <translation>Liš&amp;ty</translation>
+        <translation>&amp;Työkalurivit</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="376"/>
+        <location filename="../src/qtui/mainwin.cpp" line="375"/>
         <source>&amp;Settings</source>
-        <translation>Na&amp;stavení</translation>
+        <translation>&amp;Asetukset</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="383"/>
+        <location filename="../src/qtui/mainwin.cpp" line="382"/>
         <source>&amp;Help</source>
-        <translation>&amp;Nápověda</translation>
+        <translation>&amp;Ohje</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="391"/>
+        <location filename="../src/qtui/mainwin.cpp" line="390"/>
         <source>Debug</source>
-        <translation>Debug</translation>
+        <translation>Kehittäjille</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="530"/>
+        <location filename="../src/qtui/mainwin.cpp" line="529"/>
         <source>Nicks</source>
-        <translation>Přezdívky</translation>
+        <translation>Nimimerkit</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="539"/>
+        <location filename="../src/qtui/mainwin.cpp" line="538"/>
         <source>Show Nick List</source>
-        <translation>Zobrazit seznam přezdívek</translation>
+        <translation>Näytä nimimerkkilista</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="550"/>
+        <location filename="../src/qtui/mainwin.cpp" line="549"/>
         <source>Chat Monitor</source>
-        <translation>Monitor pokecu</translation>
+        <translation>Keskusteluvahti</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="561"/>
+        <location filename="../src/qtui/mainwin.cpp" line="560"/>
         <source>Show Chat Monitor</source>
-        <translation>Zobrazí monitor pokecu</translation>
+        <translation>Näytä keskusteluvahti</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="565"/>
+        <location filename="../src/qtui/mainwin.cpp" line="564"/>
         <source>Inputline</source>
-        <translation>Vstupní řádka</translation>
+        <translation>Syöterivi</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="574"/>
+        <location filename="../src/qtui/mainwin.cpp" line="573"/>
         <source>Show Input Line</source>
-        <translation>Zobrasit řádku se vstupem</translation>
+        <translation>Näytä syöterivi</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="585"/>
+        <location filename="../src/qtui/mainwin.cpp" line="584"/>
         <source>Topic</source>
-        <translation>Téma</translation>
+        <translation>Aihe</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="597"/>
+        <location filename="../src/qtui/mainwin.cpp" line="596"/>
         <source>Show Topic Line</source>
-        <translation>Zobrazit řádek s tématem</translation>
+        <translation>Näytä otsikkorivi</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="668"/>
+        <location filename="../src/qtui/mainwin.cpp" line="667"/>
         <source>Main Toolbar</source>
-        <translation>Hlavní nástrojová lišta</translation>
+        <translation>Päätyökalurivi</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="707"/>
+        <location filename="../src/qtui/mainwin.cpp" line="706"/>
         <source>Connected to core.</source>
-        <translation>Připojen k jádru.</translation>
+        <translation>Yhdistetty ytimeen.</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="741"/>
+        <location filename="../src/qtui/mainwin.cpp" line="740"/>
         <source>Core Lag: %1</source>
-        <translation>Spoždění jádra: %1</translation>
+        <translation>Ydinviive: %1</translation>
     </message>
     <message>
-        <location filename="../src/qtui/mainwin.cpp" line="777"/>
+        <location filename="../src/qtui/mainwin.cpp" line="776"/>
         <source>Not connected to core.</source>
-        <translation>Nepřipojen k jádru.</translation>
+        <translation>Ei yhteyttä ytimeen.</translation>
     </message>
 </context>
 <context>
@@ -4036,7 +4132,7 @@ Prosím vyberte jiné pravidlo.
     <message>
         <location filename="../src/common/message.h" line="71"/>
         <source>Day changed to %1</source>
-        <translation>A dnes máme: %1</translation>
+        <translation>Päivä vaihtui %1</translation>
     </message>
 </context>
 <context>
@@ -4044,7 +4140,7 @@ Prosím vyberte jiné pravidlo.
     <message>
         <location filename="../src/client/messagemodel.cpp" line="373"/>
         <source>Requesting %1 messages from backlog for buffer %2:%3</source>
-        <translation>Požaduji %1 zpráv z historie pro záložku %2:%3</translation>
+        <translation>Pyydetään %1 viestiä takalokista puskuriin %2:%3</translation>
     </message>
 </context>
 <context>
@@ -4052,12 +4148,12 @@ Prosím vyberte jiné pravidlo.
     <message>
         <location filename="../src/qtui/ui/msgprocessorstatuswidget.ui" line="19"/>
         <source>Form</source>
-        <translation></translation>
+        <translation>Lomake</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/msgprocessorstatuswidget.ui" line="34"/>
         <source>Receiving Backlog</source>
-        <translation>Získávám historii</translation>
+        <translation>Vastaanotetaan takalokia</translation>
     </message>
 </context>
 <context>
@@ -4066,15 +4162,14 @@ Prosím vyberte jiné pravidlo.
         <location filename="../src/uisupport/multilineedit.cpp" line="328"/>
         <source>Do you really want to paste %n lines?</source>
         <translation>
-            <numerusform>Opravdu chcete vložit %n řádku?</numerusform>
-            <numerusform>Opravdu chcete vložit %n řádky?</numerusform>
-            <numerusform>Opravdu chcete vložit %n řádek?</numerusform>
+            <numerusform>Haluatko varmasti liittää %n rivin?</numerusform>
+            <numerusform>Haluatko varmasti liittää %n riviä?</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../src/uisupport/multilineedit.cpp" line="337"/>
         <source>Paste Protection</source>
-        <translation>Ochrana proti náhodnému vložení</translation>
+        <translation>Liittämissuoja</translation>
     </message>
 </context>
 <context>
@@ -4082,47 +4177,47 @@ Prosím vyberte jiné pravidlo.
     <message>
         <location filename="../src/qtui/settingspages/networkadddlg.ui" line="13"/>
         <source>Add Network</source>
-        <translation>Přidat síť</translation>
+        <translation>Lisää verkko</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkadddlg.ui" line="21"/>
         <source>Use preset:</source>
-        <translation>Použít přednastavené:</translation>
+        <translation>Käytä valmista:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkadddlg.ui" line="56"/>
         <source>Manually specify network settings</source>
-        <translation>Ručně zvolit nastavení sítě</translation>
+        <translation>Määritä verkon asetukset manuaalisesti</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkadddlg.ui" line="66"/>
         <source>Manual Settings</source>
-        <translation>Ruční nastavení</translation>
+        <translation>Manuaaliset asetukset</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkadddlg.ui" line="74"/>
         <source>Network name:</source>
-        <translation>Název síťě:</translation>
+        <translation>Verkon nimi:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkadddlg.ui" line="84"/>
         <source>Server address:</source>
-        <translation>Adresa serveru:</translation>
+        <translation>Palvelimen osoite:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkadddlg.ui" line="94"/>
         <source>Port:</source>
-        <translation>Port:</translation>
+        <translation>Portti:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkadddlg.ui" line="114"/>
         <source>Server password:</source>
-        <translation>Heslo serveru:</translation>
+        <translation>Salasana:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkadddlg.ui" line="130"/>
         <source>Use secure connection</source>
-        <translation>Použít zabezpečené spojení</translation>
+        <translation>Käytä salattua yhteyttä</translation>
     </message>
 </context>
 <context>
@@ -4130,17 +4225,17 @@ Prosím vyberte jiné pravidlo.
     <message>
         <location filename="../src/qtui/settingspages/networkeditdlg.ui" line="13"/>
         <source>Dialog</source>
-        <translation></translation>
+        <translation>Valintaikkuna</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkeditdlg.ui" line="21"/>
         <source>Please enter a network name:</source>
-        <translation>Prosím zadejte název sítě:</translation>
+        <translation>Syötä verkon nimi:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.cpp" line="690"/>
         <source>Add Network</source>
-        <translation>Přidat síť</translation>
+        <translation>Lisää verkko</translation>
     </message>
 </context>
 <context>
@@ -4148,17 +4243,17 @@ Prosím vyberte jiné pravidlo.
     <message>
         <location filename="../src/client/networkmodel.cpp" line="194"/>
         <source>Server: %1</source>
-        <translation>Server: %1</translation>
+        <translation>Palvelin: %1</translation>
     </message>
     <message>
         <location filename="../src/client/networkmodel.cpp" line="195"/>
         <source>Users: %1</source>
-        <translation>Uživatelé: %1</translation>
+        <translation>Käyttäjiä: %1</translation>
     </message>
     <message>
         <location filename="../src/client/networkmodel.cpp" line="198"/>
         <source>Lag: %1 msecs</source>
-        <translation>Zpoždění: %1 msecs</translation>
+        <translation>Viive: %1 msec</translation>
     </message>
 </context>
 <context>
@@ -4166,17 +4261,17 @@ Prosím vyberte jiné pravidlo.
     <message>
         <location filename="../src/client/networkmodel.cpp" line="830"/>
         <source>Chat</source>
-        <translation>Pokec</translation>
+        <translation>Keskustelu</translation>
     </message>
     <message>
         <location filename="../src/client/networkmodel.cpp" line="830"/>
         <source>Topic</source>
-        <translation>Téma</translation>
+        <translation>Aihe</translation>
     </message>
     <message>
         <location filename="../src/client/networkmodel.cpp" line="830"/>
         <source>Nick Count</source>
-        <translation>Počet přezdívek</translation>
+        <translation>Nimimerkkimäärä</translation>
     </message>
 </context>
 <context>
@@ -4185,25 +4280,24 @@ Prosím vyberte jiné pravidlo.
         <location filename="../src/uisupport/networkmodelcontroller.cpp" line="152"/>
         <source>Do you want to delete the following buffer(s) permanently?</source>
         <translation>
-            <numerusform>Opravdu chcete trvale smazat následující záložku(y)?</numerusform>
-            <numerusform>Opravdu chcete trvale smazat následující záložky?</numerusform>
-            <numerusform>Opravdu chcete trvale smazat následující záložky?</numerusform>
+            <numerusform>Haluatko poistaa seuraavan puskurin pysyvästi?</numerusform>
+            <numerusform>Haluatko poistaa seuraavat puskurit pysyvästi?</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../src/uisupport/networkmodelcontroller.cpp" line="157"/>
         <source>&lt;b&gt;Note:&lt;/b&gt; This will delete all related data, including all backlog data, from the core&apos;s database and cannot be undone.</source>
-        <translation>&lt;b&gt;Poznámka:&lt;/b&gt; Tento krop smaže všechna relevantí data, včetně historie, z databáze jádra a nelze jej zvrátit.</translation>
+        <translation>&lt;b&gt;Huom:&lt;/b&gt; Tämä poistaa kaiken aiheeseen liittyvän datan, mukaanlukien takalokit, ytimen tietokannasta, eikä tätä toimintoa voi kumota.</translation>
     </message>
     <message>
         <location filename="../src/uisupport/networkmodelcontroller.cpp" line="159"/>
         <source>&lt;br&gt;Active channel buffers cannot be deleted, please part the channel first.</source>
-        <translation>&lt;br&gt;Aktivní záložky s kanály nelze smazat, nejprve musíte daný kanál opustit.</translation>
+        <translation>&lt;br&gt;Aktiivista kanavapuskuria ei voi poistaa, poistu kanavalta ensin.</translation>
     </message>
     <message>
         <location filename="../src/uisupport/networkmodelcontroller.cpp" line="161"/>
         <source>Remove buffers permanently?</source>
-        <translation>Odstranit trvale záložky?</translation>
+        <translation>Poistetaanko puskurit pysyvästi?</translation>
     </message>
 </context>
 <context>
@@ -4211,17 +4305,17 @@ Prosím vyberte jiné pravidlo.
     <message>
         <location filename="../src/uisupport/networkmodelcontroller.cpp" line="423"/>
         <source>Join Channel</source>
-        <translation>Vstoupit do kanálu</translation>
+        <translation>Liity kanavalle</translation>
     </message>
     <message>
         <location filename="../src/uisupport/networkmodelcontroller.cpp" line="426"/>
         <source>Network:</source>
-        <translation>Síť:</translation>
+        <translation>Verkko:</translation>
     </message>
     <message>
         <location filename="../src/uisupport/networkmodelcontroller.cpp" line="428"/>
         <source>Channel:</source>
-        <translation>Kanál:</translation>
+        <translation>Kanava:</translation>
     </message>
 </context>
 <context>
@@ -4229,30 +4323,30 @@ Prosím vyberte jiné pravidlo.
     <message>
         <location filename="../src/qtui/ircconnectionwizard.cpp" line="148"/>
         <source>Setup Network Connection</source>
-        <translation>Nastavit připojení k síti</translation>
+        <translation>Määritä verkkoyhteys</translation>
     </message>
 </context>
 <context>
     <name>NetworksSettingsPage</name>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.cpp" line="37"/>
-        <source>Networks</source>
-        <translation>Sítě</translation>
+        <source>Misc</source>
+        <translation>Sekalaiset</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.cpp" line="37"/>
-        <source>Misc</source>
-        <translation>Různé</translation>
+        <source>Networks</source>
+        <translation>Verkot</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.cpp" line="160"/>
         <source>&lt;b&gt;The following problems need to be corrected before your changes can be applied:&lt;/b&gt;&lt;ul&gt;</source>
-        <translation>&lt;b&gt;Následující problémy je třeba odstranit pro uložení změn:&lt;/b&gt;&lt;ul&gt;</translation>
+        <translation>&lt;b&gt;Seuraavat virheet pitää korjata ennen kuin muutoksesi voidaan ottaa käyttöön:&lt;/b&gt;&lt;ul&gt;</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.cpp" line="161"/>
         <source>&lt;li&gt;All networks need at least one server defined&lt;/li&gt;</source>
-        <translation>&lt;li&gt;Každá síť potřebuje definovaný alespoň jeden server&lt;/li&gt;</translation>
+        <translation>&lt;li&gt;Jokainen verkko tarvitsee vähintään yhden palvelimen&lt;/li&gt;</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.cpp" line="162"/>
@@ -4262,223 +4356,223 @@ Prosím vyberte jiné pravidlo.
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.cpp" line="163"/>
         <source>Invalid Network Settings</source>
-        <translation>Špatné nastavení sítě</translation>
+        <translation>Virheelliset verkkoasetukset</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.cpp" line="527"/>
         <source>Delete Network?</source>
-        <translation>Smazat síť?</translation>
+        <translation>Poistetaanko verkko?</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.cpp" line="528"/>
         <source>Do you really want to delete the network &quot;%1&quot; and all related settings, including the backlog?</source>
-        <translation>Opravdu chcete smazat síť &quot;%1&quot; a veškeré její nastavení, včetně historie?</translation>
+        <translation>Haluatko varmasti poistaa verkon &quot;%1&quot; ja kaikki siihen liittyvät asetukset, mukaanlukien takalokin?</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="13"/>
         <source>Form</source>
-        <translation></translation>
+        <translation>Lomake</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="47"/>
         <source>Re&amp;name...</source>
-        <translation>Přejme&amp;novat...</translation>
+        <translation>&amp;Nimeä uudelleen...</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="64"/>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="234"/>
         <source>&amp;Add...</source>
-        <translation>Přid&amp;at...</translation>
+        <translation>&amp;Lisää...</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="87"/>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="251"/>
         <source>De&amp;lete</source>
-        <translation>&amp;Smazat</translation>
+        <translation>&amp;Poista</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="123"/>
         <source>Network Details</source>
-        <translation>Detaily sítě</translation>
+        <translation>Verkon tiedot</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="131"/>
         <source>Identity:</source>
-        <translation>Identita:</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="189"/>
-        <source>Servers</source>
-        <translation>Servery</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="192"/>
-        <source>Manage servers for this network</source>
-        <translation>Spravovat servery pro tuto síť</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="216"/>
-        <source>&amp;Edit...</source>
-        <translation>&amp;Editovat...</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="277"/>
-        <source>Move upwards in list</source>
-        <translation>Posunout výš v seznamu</translation>
+        <translation>Henkilöllisyys:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="148"/>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="280"/>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="294"/>
         <source>...</source>
-        <translation></translation>
+        <translation>...</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="189"/>
+        <source>Servers</source>
+        <translation>Palvelimet</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="192"/>
+        <source>Manage servers for this network</source>
+        <translation>Hallitse tämän verkon palvelimia</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="216"/>
+        <source>&amp;Edit...</source>
+        <translation>&amp;Muokkaa...</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="277"/>
+        <source>Move upwards in list</source>
+        <translation>Siirrä listalla ylöspäin</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="291"/>
         <source>Move downwards in list</source>
-        <translation>Posunout níž v seznamu</translation>
+        <translation>Siirrä listalla alaspäin</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="336"/>
+        <source>Commands</source>
+        <translation>Komennot</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="339"/>
         <source>Configure automatic identification or misc. commands to be executed after connecting to a server</source>
-        <translation>Natavit automatickou identifikaci, nebo různé příkazy ke spuštení, po připojení k serveru</translation>
+        <translation>Määritä automaattisia tunnistus tai muita komentoja, jotka suoritetaan palvelimelle yhdistämisen jälkeen</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="345"/>
         <source>Commands to execute on connect:</source>
-        <translation>Příkazy, které se spustí při připojení:</translation>
+        <translation>Yhdistettäessä suoritettavat komennot:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="361"/>
         <source>Specify a list of IRC commands to be executed upon connect.
 Note that Quassel IRC automatically rejoins channels, so /join will rarely be needed here!</source>
-        <translation>Seznam IRC příkazů, které se spustí při připojení.
-Quassel se automaticky připojuje ke kanálům, tedy /join zde s vysokou pravděpodobností nebude třeba!</translation>
+        <translation>Määritä lista IRC-komentoja, jotka suoritetaan yhdistyksen jälkeen.
+Huomioi että Quassel IRC liittyy automaattisesti takaisin kanaville, joten /join -komentoa tuskin tässä tarvitaan!</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="373"/>
+        <source>Connection</source>
+        <translation>Yhteys</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="382"/>
+        <source>Control automatic reconnect to the network</source>
+        <translation>Määritä tämän verkon automaattisen uudelleenyhdistämisen asetukset</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="385"/>
+        <source>Automatic Reconnect</source>
+        <translation>Automaattinen uudelleenyhdistys</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="396"/>
+        <source>Interval:</source>
+        <translation>Väli:</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="403"/>
+        <source> s</source>
+        <translation> s</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="419"/>
+        <source>Retries:</source>
+        <translation>Yrityksiä:</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="439"/>
+        <source>Unlimited</source>
+        <translation>Rajoittamaton</translation>
+    </message>
+    <message>
+        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="464"/>
+        <source>Rejoin all channels on reconnect</source>
+        <translation>Liity takaisin kanaville uudelleenyhdistyksen jälkeen</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="491"/>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="500"/>
         <source>Auto Identify</source>
-        <translation>Automaticky identifikovat</translation>
+        <translation>Automaattitunnistus</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="515"/>
         <source>NickServ</source>
-        <translation></translation>
+        <translation>NickServ</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="532"/>
         <source>Service:</source>
-        <translation>Služba:</translation>
+        <translation>Palvelu:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="542"/>
         <source>Password:</source>
-        <translation>Heslo:</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="569"/>
-        <source>Configure advanced settings such as message encodings and automatic reconnect</source>
-        <translation>Nastavení pokročilých možností, jako kódování a automatické opakování připojení</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="578"/>
-        <source>Control encodings for in- and outgoing messages</source>
-        <translation>Nastavení kódování pro příchozí a odchozí zprávy</translation>
+        <translation>Salasana:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="566"/>
         <source>Encodings</source>
-        <translation>Kódování</translation>
+        <translation>Merkkikoodaukset</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="336"/>
-        <source>Commands</source>
-        <translation>Příkazy</translation>
+        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="569"/>
+        <source>Configure advanced settings such as message encodings and automatic reconnect</source>
+        <translation>Määritä edistyneitä asetuksia, kuten viestien merkkikoodauksia</translation>
     </message>
     <message>
-        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="373"/>
-        <source>Connection</source>
-        <translation>Spojení</translation>
+        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="578"/>
+        <source>Control encodings for in- and outgoing messages</source>
+        <translation>Hallitse sisääntulevien ja uloslähtevien viestien merkkikoodauksia</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="581"/>
         <source>Use Custom Encodings</source>
-        <translation>Používat různá kódování</translation>
+        <translation>Käytä mukautettuja merkkikoodauksia</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="592"/>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="612"/>
         <source>Specify which encoding your messages will be sent in.
 UTF-8 should be a sane choice for most networks.</source>
-        <translation>Specifikuje v jakém kódování budete odesílat zprávy.
-UTF-8 je dosti inteligentní volba pro většinu sítí.</translation>
+        <translation>Määritä millä merkkikoodauksella viestisi lähetetään.
+UTF-8 pitäisi olla hyvä valinta useimmille verkoille.</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="596"/>
         <source>Send messages in:</source>
-        <translation>Odesílat zprávy v:</translation>
+        <translation>Lähetetyt viestit:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="623"/>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="643"/>
         <source>Incoming messages encoded in Utf8 will always be treated as such.
 This setting defines the encoding for messages that are not Utf8.</source>
-        <translation>Příchozí zprávy kódované v UTF8 budou vždy rozpoznány.
-Toto nastavení definuje kódování pro zprávy které nejsou v UTF8.</translation>
+        <translation>Sisääntulevat Utf8 viestit käsitellään aina sellaisenaan.
+Tämä asetus määrittää niiden viestien merkkikoodauksen jotka eivät ole Utf8.</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="627"/>
         <source>Receive fallback:</source>
-        <translation>Záložní kódování:</translation>
+        <translation>Vastaanotetut:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="654"/>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="668"/>
         <source>This specifies how control messages, nicks and servernames are encoded.
 Unless you *really* know what you do, leave this as ISO-8859-1!</source>
-        <translation>Tato volba specifikuje v jakém kódování jsou přezdívky, kontrolní zprávy a názvy serverů.
-Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</translation>
+        <translation>Tämä määrittää miten ohjausviestit, nimimerkit ja palvelinnimet merkkikoodataan.
+Josset *todella* tiedä mitä teet, jätä tämä ISO-8859-1:ksi!</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="658"/>
         <source>Server encoding:</source>
-        <translation>Kódování serveru:</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="382"/>
-        <source>Control automatic reconnect to the network</source>
-        <translation>Nastavení automatického opětovného připojování k síti</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="385"/>
-        <source>Automatic Reconnect</source>
-        <translation>Automaticky znovu připojit</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="396"/>
-        <source>Interval:</source>
-        <translation>Interval:</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="403"/>
-        <source> s</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="419"/>
-        <source>Retries:</source>
-        <translation>Opakování:</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="439"/>
-        <source>Unlimited</source>
-        <translation>Neomezeně</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/networkssettingspage.ui" line="464"/>
-        <source>Rejoin all channels on reconnect</source>
-        <translation>Znovu vstoupit do kanálů při opakovaném spojení</translation>
+        <translation>Palvelin:</translation>
     </message>
 </context>
 <context>
@@ -4486,35 +4580,35 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/qtui/settingspages/identitiessettingspage.cpp" line="420"/>
         <source>Add Nickname</source>
-        <translation>Přidat přezdívku</translation>
+        <translation>Lisää nimimerkki</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/nickeditdlg.ui" line="13"/>
         <source>Edit Nickname</source>
-        <translation>Upravit přezdívku</translation>
+        <translation>Muokkaa nimimerkkiä</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/nickeditdlg.ui" line="19"/>
         <source>Please enter a valid nickname:</source>
-        <translation>Prosím vložte validní přezdívku:</translation>
+        <translation>Syötä kelvollinen nimimerkki:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/nickeditdlg.ui" line="32"/>
         <source>A valid nickname may contain letters from the English alphabet, digits, and the special characters {, }, [, ], \, |, `, ^, _ and -.</source>
-        <translation>Validní přezdívka může obsahovat písmenka anglické abecedy, čísla, a speciální znaky {, }, [, ], \, |, `, ^, _ a -.</translation>
+        <translation>Kelvollinen nimimerkki voi sisältää kirjaimia A-Z, numeroita, sekä erikoismerkkejä {, }, [, ], \, |, `, ^, _ ja -.</translation>
     </message>
 </context>
 <context>
     <name>NotificationsSettingsPage</name>
     <message>
         <location filename="../src/qtui/settingspages/notificationssettingspage.cpp" line="28"/>
-        <source>Notifications</source>
-        <translation>Oznámení</translation>
+        <source>Interface</source>
+        <translation>Käyttöliittymä</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/notificationssettingspage.cpp" line="28"/>
-        <source>Interface</source>
-        <translation>Rozhraní</translation>
+        <source>Notifications</source>
+        <translation>Ilmoitukset</translation>
     </message>
 </context>
 <context>
@@ -4522,7 +4616,7 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/qtui/phononnotificationbackend.cpp" line="142"/>
         <source>Select Audio File</source>
-        <translation>Vyberte zvukový soubor</translation>
+        <translation>Valitse äänitiedosto</translation>
     </message>
 </context>
 <context>
@@ -4530,17 +4624,17 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/qtui/ui/phononnotificationconfigwidget.ui" line="13"/>
         <source>Form</source>
-        <translation></translation>
+        <translation>Lomake</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/phononnotificationconfigwidget.ui" line="19"/>
         <source>Audio Notification (via Phonon)</source>
-        <translation>Zvuková oznámení (skrz Phonon)</translation>
+        <translation>Ilmoitusääni (Phononin kautta)</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/phononnotificationconfigwidget.ui" line="28"/>
         <source>Play File:</source>
-        <translation>Přehrát soubor:</translation>
+        <translation>Toista tiedosto:</translation>
     </message>
 </context>
 <context>
@@ -4548,7 +4642,7 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/core/postgresqlstorage.cpp" line="61"/>
         <source>PostgreSQL Turbo Bomber HD!</source>
-        <translation>PostgreSQL Proste labůžo!</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4556,27 +4650,27 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/client/backlogrequester.cpp" line="82"/>
         <source>Requesting a total of up to %1 backlog messages for %2 buffers</source>
-        <translation>Požaduji %1 zpráv historie pro %2 záložky</translation>
+        <translation>Pyydetään enintään %1 takalokiviestiä %2 puskuriin</translation>
     </message>
     <message>
         <location filename="../src/client/backlogrequester.cpp" line="106"/>
         <source>Requesting up to %1 of all unread backlog messages (plus additional %2)</source>
-        <translation>Požaduji celkem %1 nepřečtených zpráv historie (a navíc ještě %2)</translation>
+        <translation>Pyydetään enintään %1 lukematonta takalokiviestiä (plus ylimääräiset %2)</translation>
     </message>
     <message>
         <location filename="../src/client/backlogrequester.cpp" line="123"/>
         <source>Requesting a total of up to %1 unread backlog messages for %2 buffers</source>
-        <translation>Požaduji celkem %1 nepřečtených zpráv historie pro %2 záložek</translation>
+        <translation>Pyydetään enintään %1 lukematonta takalokiviestiä %2 puskuriin</translation>
     </message>
     <message>
         <location filename="../src/qtui/ircconnectionwizard.cpp" line="56"/>
         <source>Welcome to Quassel IRC</source>
-        <translation>Vítejte v IRC klientu Quassel</translation>
+        <translation>Tervetuloa Quassel IRC:iin</translation>
     </message>
     <message>
         <location filename="../src/qtui/ircconnectionwizard.cpp" line="58"/>
         <source>This wizard will help you to set up your default identity and your IRC network connection.&lt;br&gt;This only covers basic settings. You can cancel this wizard any time and use the settings dialog for more detailed changes.</source>
-        <translation>Tento průvodce vám pomůže nastavit výchozí identitu a spojení k IRC síti.&lt;br&gt;Zaměřuje se pouze na základní nastavení. Můžete ho kdykoliv přerušit a použít nastavení v aplikaci pro podrobnější nastavení/změny.</translation>
+        <translation>Tämä ohjattu toiminto auttaa sinua asettamaan oletushenkilöllisyytesi ja IRC-verkko yhteytesi.&lt;br&gt;Tähän sisältyy vain perusteet. Voit peruuttaa tämän ohjatun toiminnon milloin vain ja käyttää asetusikkunaa yksityiskohtaisempien muutosten tekoon.</translation>
     </message>
 </context>
 <context>
@@ -4586,7 +4680,7 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
         <location filename="../src/uisupport/qssparser.cpp" line="166"/>
         <location filename="../src/uisupport/qssparser.cpp" line="314"/>
         <source>Invalid block declaration: %1</source>
-        <translation>Neplatná deklarace bloku: %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/uisupport/qssparser.cpp" line="140"/>
@@ -4601,22 +4695,22 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/uisupport/qssparser.cpp" line="192"/>
         <source>Invalid subelement name in %1</source>
-        <translation>Neplatný název podelementu v %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/uisupport/qssparser.cpp" line="234"/>
         <source>Invalid message type in %1</source>
-        <translation>Neplatný typ zprávy v %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/uisupport/qssparser.cpp" line="243"/>
         <source>Invalid condition %1</source>
-        <translation>Neplatný stav: %1</translation>
+        <translation>Virheellinen ehto %1</translation>
     </message>
     <message>
         <location filename="../src/uisupport/qssparser.cpp" line="255"/>
         <source>Invalid message label: %1</source>
-        <translation>Neplatný popisek zprávy: %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/uisupport/qssparser.cpp" line="266"/>
@@ -4626,22 +4720,22 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/uisupport/qssparser.cpp" line="270"/>
         <source>Senderhash can be at most &quot;0x0f&quot;!</source>
-        <translation>Hash odesílatele může být maximálně &quot;0x0f&quot;!</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/uisupport/qssparser.cpp" line="285"/>
         <source>Invalid format name: %1</source>
-        <translation>Neplatný název formátu: %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/uisupport/qssparser.cpp" line="292"/>
         <source>Illegal IRC color specification (must be between 00 and 0f): %1</source>
-        <translation>Neplatná specifikace IRC barvy (musí být mezi 00 a 0f): %1</translation>
+        <translation>Kelvoton IRC-värikoodi (pitää olla väliltä 00-0f): %1</translation>
     </message>
     <message>
         <location filename="../src/uisupport/qssparser.cpp" line="300"/>
         <source>Unhandled condition: %1</source>
-        <translation>Neobsloužený stav: %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/uisupport/qssparser.cpp" line="329"/>
@@ -4656,7 +4750,7 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/uisupport/qssparser.cpp" line="364"/>
         <source>Invalid chatlist state %1</source>
-        <translation>Neplatný stav seznamu pokeců %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/uisupport/qssparser.cpp" line="390"/>
@@ -4666,7 +4760,7 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/uisupport/qssparser.cpp" line="414"/>
         <source>Invalid font property: %1</source>
-        <translation>Neplatná vlastnost písma: %1</translation>
+        <translation>Virheellinen fontin ominaisuus: %1</translation>
     </message>
     <message>
         <location filename="../src/uisupport/qssparser.cpp" line="420"/>
@@ -4700,22 +4794,22 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/uisupport/qssparser.cpp" line="605"/>
         <source>Invalid font specification: %1</source>
-        <translation>Neplatná specifikace písma: %1</translation>
+        <translation>Virheellinen fontin määritelmä: %1</translation>
     </message>
     <message>
         <location filename="../src/uisupport/qssparser.cpp" line="644"/>
         <source>Invalid font style specification: %1</source>
-        <translation>Neplatná specifikace stylu písma: %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/uisupport/qssparser.cpp" line="657"/>
         <source>Invalid font weight specification: %1</source>
-        <translation>Neplatná specifikace proporcí písma: %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/uisupport/qssparser.cpp" line="667"/>
         <source>Invalid font size specification: %1</source>
-        <translation>Neplatná specifikce velikosti písma: %1</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4723,12 +4817,12 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/common/util.cpp" line="129"/>
         <source>year</source>
-        <translation>rok</translation>
+        <translation>vuosi</translation>
     </message>
     <message>
         <location filename="../src/common/util.cpp" line="130"/>
         <source>day</source>
-        <translation>den</translation>
+        <translation>päivä</translation>
     </message>
     <message>
         <location filename="../src/common/util.cpp" line="131"/>
@@ -4743,7 +4837,7 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/common/util.cpp" line="133"/>
         <source>sec</source>
-        <translation>sec</translation>
+        <translation>s</translation>
     </message>
 </context>
 <context>
@@ -4751,22 +4845,22 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/client/networkmodel.cpp" line="407"/>
         <source>&lt;b&gt;Query with %1&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Pokec s %1&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;Yksityiskeskustelu henkilön %1 kanssa&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../src/client/networkmodel.cpp" line="425"/>
         <source>idling since %1</source>
-        <translation>nic nedělá od %1</translation>
+        <translation>jouten lähtien %1</translation>
     </message>
     <message>
         <location filename="../src/client/networkmodel.cpp" line="428"/>
         <source>login time: %1</source>
-        <translation>čas přihlášení: %1</translation>
+        <translation>sisäänkirjautumisaika: %1</translation>
     </message>
     <message>
         <location filename="../src/client/networkmodel.cpp" line="431"/>
         <source>server: %1</source>
-        <translation>server: %1</translation>
+        <translation>palvelin: %1</translation>
     </message>
 </context>
 <context>
@@ -4774,17 +4868,17 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/qtui/settingspages/saveidentitiesdlg.ui" line="13"/>
         <source>Sync With Core</source>
-        <translation>Synchronizovat s Jádrem</translation>
+        <translation>Synkronointi ytimen kanssa</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/saveidentitiesdlg.ui" line="21"/>
         <source>Syncing data with core, please wait...</source>
-        <translation>Synchronizuji data s Jádrem, prosím o strpení...</translation>
+        <translation>Synkronoidaan dataa ytimen kanssa, odota hetki...</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/saveidentitiesdlg.ui" line="81"/>
         <source>Abort</source>
-        <translation>Zrušit</translation>
+        <translation>Keskeytä</translation>
     </message>
 </context>
 <context>
@@ -4792,53 +4886,53 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/qtui/settingspages/servereditdlg.ui" line="13"/>
         <source>Dialog</source>
-        <translation></translation>
+        <translation>Valintaikkuna</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/servereditdlg.ui" line="37"/>
         <source>Server Info</source>
-        <translation>Informace o serveru</translation>
+        <translation>Palvelimen tiedot</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/servereditdlg.ui" line="45"/>
         <source>Server address:</source>
-        <translation>Adresa serveru:</translation>
+        <translation>Palvelimen osoite:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/servereditdlg.ui" line="52"/>
         <location filename="../src/qtui/settingspages/servereditdlg.ui" line="242"/>
         <source>Port:</source>
-        <translation>Port:</translation>
+        <translation>Portti:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/servereditdlg.ui" line="79"/>
         <source>Password:</source>
-        <translation>Heslo:</translation>
+        <translation>Salasana:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/servereditdlg.ui" line="101"/>
         <source>Use SSL</source>
-        <translation>Použít SSL</translation>
+        <translation>Käytä SSL:ää</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/servereditdlg.ui" line="134"/>
         <source>Advanced</source>
-        <translation>Pokročilé</translation>
+        <translation>Lisäasetukset</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/servereditdlg.ui" line="155"/>
         <source>SSL Version:</source>
-        <translation>Verze SSL:</translation>
+        <translation>SSL-versio:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/servereditdlg.ui" line="162"/>
         <source>Do not change unless you&apos;re going to connect to a server not supporting SSLv3!</source>
-        <translation>Tuto hodnotu měňte pouze za předpokladu, že se připojujete k serveru nepodporujícímu SSLv3!</translation>
+        <translation>Älä vaihda ellet yhdistä palvelimeen joka ei tue SSLv3:a!</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/servereditdlg.ui" line="166"/>
         <source>SSLv3 (default)</source>
-        <translation>SSLv3 (výchozí)</translation>
+        <translation>SSLv3 (default)</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/servereditdlg.ui" line="171"/>
@@ -4853,12 +4947,12 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/qtui/settingspages/servereditdlg.ui" line="186"/>
         <source>Use a Proxy</source>
-        <translation>Použít proxy</translation>
+        <translation>Käytä välityspalvelinta</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/servereditdlg.ui" line="203"/>
         <source>Proxy Type:</source>
-        <translation>Typ proxy:</translation>
+        <translation>Tyyppi:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/servereditdlg.ui" line="211"/>
@@ -4873,22 +4967,22 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/qtui/settingspages/servereditdlg.ui" line="228"/>
         <source>Proxy Host:</source>
-        <translation>Počítač:</translation>
+        <translation>Verkko-osoite:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/servereditdlg.ui" line="235"/>
         <source>localhost</source>
-        <translation>localhost</translation>
+        <translation type="unfinished">localhost</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/servereditdlg.ui" line="266"/>
         <source>Proxy Username:</source>
-        <translation>Proxy - Uživatelské jméno:</translation>
+        <translation>Käyttäjätunnus:</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspages/servereditdlg.ui" line="276"/>
         <source>Proxy Password:</source>
-        <translation>Proxy - Heslo:</translation>
+        <translation>Salasana:</translation>
     </message>
 </context>
 <context>
@@ -4898,48 +4992,48 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
         <location filename="../src/qtui/ui/settingsdlg.ui" line="34"/>
         <location filename="../src/qtui/ui/settingsdlg.ui" line="49"/>
         <source>Settings</source>
-        <translation>Nastavení</translation>
+        <translation>Asetukset</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingsdlg.cpp" line="87"/>
         <source>Save changes</source>
-        <translation>Uložit změny</translation>
+        <translation>Tallenna muutokset</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingsdlg.cpp" line="88"/>
         <source>There are unsaved changes on the current configuration page. Would you like to apply your changes now?</source>
-        <translation>Na této konfigurační stránce jsou neuložené změny. Přejete si je uložit?</translation>
+        <translation>Nykyisellä asetussivulla on tallentamattomia muutoksia. Haluatko ottaa muutoksesi käyttöön nyt?</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingsdlg.cpp" line="100"/>
         <location filename="../src/qtui/settingsdlg.cpp" line="104"/>
         <source>Configure %1</source>
-        <translation>Nastavit %1</translation>
+        <translation>Asetukset: %1</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingsdlg.cpp" line="171"/>
         <source>Reload Settings</source>
-        <translation>Znovu načíst nastavení</translation>
+        <translation>Lataa asetukset uudelleen</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingsdlg.cpp" line="171"/>
         <source>Do you like to reload the settings, undoing your changes on this page?</source>
-        <translation>Opravdu chcete znovu načíst nastavení (Odstraní všechny změny od posledního uložení)?</translation>
+        <translation>Haluatko ladata asetukset uudelleen, kumoten tällä sivulla tekemäsi muutokset?</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingsdlg.cpp" line="180"/>
         <source>Restore Defaults</source>
-        <translation>Obnovit výchozí</translation>
+        <translation>Palauta oletukset</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingsdlg.cpp" line="180"/>
         <source>Do you like to restore the default values for this page?</source>
-        <translation>Opravdu chcete obnovit výchozí nastavení pro tuto stránku?</translation>
+        <translation>Haluatko palauttaa tämän sivun vakioarvot?</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/settingsdlg.ui" line="13"/>
         <source>Configure Quassel</source>
-        <translation>Nastavit Quassel</translation>
+        <translation>Quasselin asetukset</translation>
     </message>
 </context>
 <context>
@@ -4947,37 +5041,37 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/qtui/settingspagedlg.cpp" line="36"/>
         <source>Configure %1</source>
-        <translation>Nastavit %1</translation>
+        <translation>Asetukset: %1</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspagedlg.cpp" line="104"/>
         <source>Reload Settings</source>
-        <translation>Znovu načíst nastavení</translation>
+        <translation>Lataa asetukset uudelleen</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspagedlg.cpp" line="104"/>
         <source>Do you like to reload the settings, undoing your changes on this page?</source>
-        <translation>Opravdu chcete znovu načíst nastavení (Odstraní všechny změny od posledního uložení)?</translation>
+        <translation>Haluatko ladata asetukset uudelleen, kumoten tällä sivulla tekemäsi muutokset?</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspagedlg.cpp" line="113"/>
         <source>Restore Defaults</source>
-        <translation>Obnovit výchozí</translation>
+        <translation>Palauta oletukset</translation>
     </message>
     <message>
         <location filename="../src/qtui/settingspagedlg.cpp" line="113"/>
         <source>Do you like to restore the default values for this page?</source>
-        <translation>Opravdu chcete obnovit výchozí nastavení pro tuto stránku?</translation>
+        <translation>Haluatko palauttaa tämän sivun vakioarvot?</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/settingspagedlg.ui" line="13"/>
         <source>Configure Quassel</source>
-        <translation>Nastavit Quassel</translation>
+        <translation>Quasselin asetukset</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/settingspagedlg.ui" line="29"/>
         <source>Settings</source>
-        <translation>Nastavení</translation>
+        <translation>Asetukset</translation>
     </message>
 </context>
 <context>
@@ -4985,27 +5079,27 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/common/signalproxy.cpp" line="865"/>
         <source>Peer tried to send package larger than max package size!</source>
-        <translation>Peer se pokusil odeslat balíček větší než je maximální povolená velikost!</translation>
+        <translation>Vertainen yritti lähettää paketin joka on sallittua suurempi!</translation>
     </message>
     <message>
         <location filename="../src/common/signalproxy.cpp" line="870"/>
         <source>Peer tried to send 0 byte package!</source>
-        <translation>Peer se pokusil odeslat balíček s nulovou velikostí!</translation>
+        <translation>Vertainen yritti lähettää 0 tavun paketin!</translation>
     </message>
     <message>
         <location filename="../src/common/signalproxy.cpp" line="887"/>
         <source>Peer sent corrupted compressed data!</source>
-        <translation>Peer odeslal porušená komprimovaná data!</translation>
+        <translation>Vertainen lähetti viallista pakattua dataa!</translation>
     </message>
     <message>
         <location filename="../src/common/signalproxy.cpp" line="902"/>
         <source>Peer sent corrupt data: unable to load QVariant!</source>
-        <translation>Peer odeslal porušená data: nezdařilo se načítaní QVariant!</translation>
+        <translation>Vertainen lähetti viallista dataa: ei voi ladata QVariant:ia!</translation>
     </message>
     <message>
         <location filename="../src/common/signalproxy.cpp" line="1030"/>
         <source>Disconnecting</source>
-        <translation>Odpojuji</translation>
+        <translation>Katkaistaan yhteys</translation>
     </message>
 </context>
 <context>
@@ -5013,57 +5107,57 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/qtui/ui/simplenetworkeditor.ui" line="28"/>
         <source>Network name:</source>
-        <translation>Název sítě:</translation>
+        <translation>Verkon nimi:</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/simplenetworkeditor.ui" line="35"/>
         <source>The name of the IRC network you are configuring</source>
-        <translation>Název IRC sítě kterou nastavujete</translation>
+        <translation>IRC-verkon nimi</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/simplenetworkeditor.ui" line="63"/>
         <source>Servers</source>
-        <translation>Servery</translation>
+        <translation>Palvelimet</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/simplenetworkeditor.ui" line="81"/>
         <source>A list of IRC servers belonging to this network</source>
-        <translation>Seznam IRC serverů patřících do zvolené sítě</translation>
+        <translation>Lista tähän IRC-verkkoon kuuluvista palvelimista</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/simplenetworkeditor.ui" line="96"/>
         <source>Edit this server entry</source>
-        <translation>Upravit nastavení zvoleného serveru</translation>
+        <translation>Muokkaa tätä palvelinta</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/simplenetworkeditor.ui" line="99"/>
         <source>&amp;Edit...</source>
-        <translation>&amp;Editovat...</translation>
+        <translation>&amp;Muokkaa...</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/simplenetworkeditor.ui" line="116"/>
         <source>Add another IRC server</source>
-        <translation>Přidá další IRC server</translation>
+        <translation>Lisää IRC-palvelin</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/simplenetworkeditor.ui" line="119"/>
         <source>&amp;Add...</source>
-        <translation>Přid&amp;at...</translation>
+        <translation>&amp;Lisää...</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/simplenetworkeditor.ui" line="136"/>
         <source>Remove this server entry from the list</source>
-        <translation>Smaže vybraný server ze seznamu</translation>
+        <translation>Poista tämä palvelin listalta</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/simplenetworkeditor.ui" line="139"/>
         <source>De&amp;lete</source>
-        <translation>&amp;Smazat</translation>
+        <translation>&amp;Poista</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/simplenetworkeditor.ui" line="165"/>
         <source>Move upwards in list</source>
-        <translation>Posunout výš v seznamu</translation>
+        <translation>Siirrä listalla ylöspäin</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/simplenetworkeditor.ui" line="168"/>
@@ -5074,17 +5168,17 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/qtui/ui/simplenetworkeditor.ui" line="179"/>
         <source>Move downwards in list</source>
-        <translation>Posunout níž v seznamu</translation>
+        <translation>Siirrä listalla alaspäin</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/simplenetworkeditor.ui" line="226"/>
         <source>Join Channels Automatically</source>
-        <translation>Automaticky vstoupit do</translation>
+        <translation>Liity kanaville automaattisesti</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/simplenetworkeditor.ui" line="250"/>
         <source>A list of IRC channels you will join automatically after connecting to the network</source>
-        <translation>Seznam IRC kanálů ke kterým se automaticky připojíte po připojení do dané sítě</translation>
+        <translation>Lista IRC-kanavista joille liityt automaattisesti yhdistettyäsi verkkoon</translation>
     </message>
 </context>
 <context>
@@ -5092,7 +5186,7 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/core/sqlitestorage.cpp" line="49"/>
         <source>SQLite is a file-based database engine that does not require any setup. It is suitable for small and medium-sized databases that do not require access via network. Use SQLite if your Quassel Core should store its data on the same machine it is running on, and if you only expect a few users to use your core.</source>
-        <translation>SQLite je souborově založený databázový server, který nevyžaduje nastavování. Je vhodný pro malé a střední databáze, které nepotřebují být přístupné přes síť. Použijte jej pokud vaše Quassel jádro ukládá data na stejném stroji na kterém běží a pokud očekáváte pouze pár připojujících se uživatelů k tomuto jádru.</translation>
+        <translation>SQLite on tiedostopohjainen tietokantamoottori joka ei vaadi asennusta. Se on sopiva pieniä ja keskisuuria tietokantoja varten, joihin ei tarvita pääsyä verkon kautta. Käytä SQLiteä jos Quassel-ytimesi on tarkoitus tallentaa data samalle koneelle kuin millä sitä ajetaan, ja jos ydintäsi tulee käyttämään vain muutama käyttäjä.</translation>
     </message>
 </context>
 <context>
@@ -5100,77 +5194,77 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="568"/>
         <source>SSL Certificate used by %1</source>
-        <translation>SSL Certifikát užívaný %1</translation>
+        <translation>SSL-varmenne jota käyttää %1</translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="572"/>
         <source>Issuer Info</source>
-        <translation>Informace o vydavateli</translation>
+        <translation>Myöntäjän tiedot</translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="574"/>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="583"/>
         <source>Organization:</source>
-        <translation>Organizace:</translation>
+        <translation>Yritys:</translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="575"/>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="584"/>
         <source>Locality Name:</source>
-        <translation>Jméno lokality:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="576"/>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="585"/>
         <source>Organizational Unit Name:</source>
-        <translation>Jméno organizační jednotky:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="577"/>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="586"/>
         <source>Country Name:</source>
-        <translation>Název státu:</translation>
+        <translation>Maan nimi:</translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="578"/>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="587"/>
         <source>State or Province Name:</source>
-        <translation>Název státu či provincie:</translation>
+        <translation>Osavaltion tai maakunnan nimi:</translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="581"/>
         <source>Subject Info</source>
-        <translation>Informace o objektu</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="590"/>
         <source>Additional Info</source>
-        <translation>Další informace</translation>
+        <translation>Lisätietoja</translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="592"/>
         <source>Valid From:</source>
-        <translation>Validní od:</translation>
+        <translation>Voimassa alkaen:</translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="593"/>
         <source>Valid To:</source>
-        <translation>Validní do:</translation>
+        <translation>Voimassa asti:</translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="596"/>
         <source>Hostname %1:</source>
-        <translation></translation>
+        <translation>Verkko-osoite %1:</translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="600"/>
         <source>E-Mail Address %1:</source>
-        <translation>E-Mailová adresa %1:</translation>
+        <translation>Sähköpostiosoite %1:</translation>
     </message>
     <message>
         <location filename="../src/qtui/coreconnectdlg.cpp" line="602"/>
         <source>Digest:</source>
-        <translation>Souhrn:</translation>
+        <translation>Tiiviste:</translation>
     </message>
 </context>
 <context>
@@ -5178,7 +5272,7 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/client/networkmodel.h" line="142"/>
         <source>Status Buffer</source>
-        <translation>Záložka stavu</translation>
+        <translation>Tilapuskuri</translation>
     </message>
 </context>
 <context>
@@ -5186,17 +5280,17 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/qtui/systraynotificationbackend.cpp" line="127"/>
         <source>System Tray Icon</source>
-        <translation>Ikonka v systémovém panelu</translation>
+        <translation>Ilmoitusalueen kuvake</translation>
     </message>
     <message>
         <location filename="../src/qtui/systraynotificationbackend.cpp" line="128"/>
         <source>Animate</source>
-        <translation>Animovat</translation>
+        <translation>Animoi</translation>
     </message>
     <message>
         <location filename="../src/qtui/systraynotificationbackend.cpp" line="130"/>
         <source>Show bubble</source>
-        <translation>Zobrazovat bublinu</translation>
+        <translation>Näytä kupla</translation>
     </message>
 </context>
 <context>
@@ -5204,22 +5298,23 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/qtui/taskbarnotificationbackend.cpp" line="67"/>
         <source>Activate dock entry, timeout:</source>
-        <translation>Zpoždění zobrazení v panelu:</translation>
+        <translatorcomment>What is the Mac dock called in Finnish?</translatorcomment>
+        <translation type="unfinished">Merkitse tehtäväpalkissa ajaksi:</translation>
     </message>
     <message>
         <location filename="../src/qtui/taskbarnotificationbackend.cpp" line="69"/>
         <source>Mark taskbar entry, timeout:</source>
-        <translation>Zpoždění zobrazení v panelu:</translation>
+        <translation>Merkitse tehtäväpalkissa ajaksi:</translation>
     </message>
     <message>
         <location filename="../src/qtui/taskbarnotificationbackend.cpp" line="74"/>
         <source>Unlimited</source>
-        <translation>Neomezeně</translation>
+        <translation>Rajoittamaton</translation>
     </message>
     <message>
         <location filename="../src/qtui/taskbarnotificationbackend.cpp" line="75"/>
         <source> s</source>
-        <translation></translation>
+        <translation> s</translation>
     </message>
 </context>
 <context>
@@ -5227,142 +5322,142 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/uisupport/toolbaractionprovider.cpp" line="31"/>
         <source>Connect</source>
-        <translation>Připojit</translation>
+        <translation>Yhdistä</translation>
     </message>
     <message>
         <location filename="../src/uisupport/toolbaractionprovider.cpp" line="31"/>
         <source>Connect to IRC</source>
-        <translation>Připojí k IRC</translation>
+        <translation>Yhdistä IRC:iin</translation>
     </message>
     <message>
         <location filename="../src/uisupport/toolbaractionprovider.cpp" line="32"/>
         <source>Disconnect</source>
-        <translation>Odpojit</translation>
+        <translation>Katkaise yhteys</translation>
     </message>
     <message>
         <location filename="../src/uisupport/toolbaractionprovider.cpp" line="32"/>
         <source>Disconnect from IRC</source>
-        <translation>Odpojí od IRC</translation>
+        <translation>Katkaise yhteys IRC:iin</translation>
     </message>
     <message>
         <location filename="../src/uisupport/toolbaractionprovider.cpp" line="34"/>
         <source>Part</source>
-        <translation>Opustit</translation>
+        <translation>Poistu</translation>
     </message>
     <message>
         <location filename="../src/uisupport/toolbaractionprovider.cpp" line="34"/>
         <source>Leave currently selected channel</source>
-        <translation>Opustí zvýrazněný kanál</translation>
+        <translation>Poistu valitulta kanavalta</translation>
     </message>
     <message>
         <location filename="../src/uisupport/toolbaractionprovider.cpp" line="35"/>
         <source>Join</source>
-        <translation>Vstoupit</translation>
+        <translation>Liity</translation>
     </message>
     <message>
         <location filename="../src/uisupport/toolbaractionprovider.cpp" line="35"/>
         <source>Join a channel</source>
-        <translation>Vstoupí na kanál</translation>
+        <translation>Liity kanavalle</translation>
     </message>
     <message>
         <location filename="../src/uisupport/toolbaractionprovider.cpp" line="37"/>
         <source>Query</source>
-        <translation>Vykecávat</translation>
+        <translation>Yksityiskeskustelu</translation>
     </message>
     <message>
         <location filename="../src/uisupport/toolbaractionprovider.cpp" line="37"/>
         <source>Start a private conversation</source>
-        <translation>Zahájí soukromou konverzaci</translation>
+        <translation>Aloita yksityinen keskustelu</translation>
     </message>
     <message>
         <location filename="../src/uisupport/toolbaractionprovider.cpp" line="38"/>
         <source>Whois</source>
-        <translation>Kdo je</translation>
+        <translation>Käyttäjän tiedot (Whois)</translation>
     </message>
     <message>
         <location filename="../src/uisupport/toolbaractionprovider.cpp" line="38"/>
         <source>Request user information</source>
-        <translation>Vyžádá uživatelské informace</translation>
+        <translation>Pyydä käyttäjän tietoja</translation>
     </message>
     <message>
         <location filename="../src/uisupport/toolbaractionprovider.cpp" line="40"/>
         <source>Op</source>
-        <translation></translation>
+        <translation>Op</translation>
     </message>
     <message>
         <location filename="../src/uisupport/toolbaractionprovider.cpp" line="40"/>
         <source>Give operator privileges to user</source>
-        <translation>Přidá práva dozorce uživateli</translation>
+        <translation>Anna operaattorioikeudet käyttäjälle</translation>
     </message>
     <message>
         <location filename="../src/uisupport/toolbaractionprovider.cpp" line="41"/>
         <source>Deop</source>
-        <translation></translation>
+        <translation>Deop</translation>
     </message>
     <message>
         <location filename="../src/uisupport/toolbaractionprovider.cpp" line="41"/>
         <source>Take operator privileges from user</source>
-        <translation>Odebere práva dozorce uživateli</translation>
+        <translation>Poista operaattorioikeudet käyttäjältä</translation>
     </message>
     <message>
         <location filename="../src/uisupport/toolbaractionprovider.cpp" line="42"/>
         <source>Voice</source>
-        <translation>Rozkecat</translation>
+        <translation>Voice</translation>
     </message>
     <message>
         <location filename="../src/uisupport/toolbaractionprovider.cpp" line="42"/>
         <source>Give voice to user</source>
-        <translation>Nastaví stav mluvky na uživatele</translation>
+        <translation>Anna puheoikeus käyttäjälle</translation>
     </message>
     <message>
         <location filename="../src/uisupport/toolbaractionprovider.cpp" line="43"/>
         <source>Devoice</source>
-        <translation>Umlčet</translation>
+        <translation>Devoice</translation>
     </message>
     <message>
         <location filename="../src/uisupport/toolbaractionprovider.cpp" line="43"/>
         <source>Take voice from user</source>
-        <translation>Odebere stav mluvky od uživatele</translation>
+        <translation>Poista puheoikeus käyttäjältä</translation>
     </message>
     <message>
         <location filename="../src/uisupport/toolbaractionprovider.cpp" line="44"/>
         <source>Kick</source>
-        <translation>Vykopnout</translation>
+        <translation>Potki</translation>
     </message>
     <message>
         <location filename="../src/uisupport/toolbaractionprovider.cpp" line="44"/>
         <source>Remove user from channel</source>
-        <translation>Odstraní uživatele z kanálu</translation>
+        <translation>Poista käyttäjä kanavalta</translation>
     </message>
     <message>
         <location filename="../src/uisupport/toolbaractionprovider.cpp" line="45"/>
         <source>Ban</source>
-        <translation>Zablokovat</translation>
+        <translation>Ban</translation>
     </message>
     <message>
         <location filename="../src/uisupport/toolbaractionprovider.cpp" line="45"/>
         <source>Ban user from channel</source>
-        <translation>Zabrání uživateli v přístupu ke kanálu</translation>
+        <translation>Anna käyttäjälle porttikielto kanavalle</translation>
     </message>
     <message>
         <location filename="../src/uisupport/toolbaractionprovider.cpp" line="46"/>
         <source>Kick/Ban</source>
-        <translation>Vyhodit/Zablokovat</translation>
+        <translation>Kick/Ban</translation>
     </message>
     <message>
         <location filename="../src/uisupport/toolbaractionprovider.cpp" line="46"/>
         <source>Remove and ban user from channel</source>
-        <translation>Odstraní uživatele a zablokuje opětovný přístup uživateli na kanál</translation>
+        <translation>Poista käyttäjä kanavalta ja anna hänelle porttikielto</translation>
     </message>
     <message>
         <location filename="../src/uisupport/toolbaractionprovider.cpp" line="51"/>
         <source>Connect to all</source>
-        <translation>Připojit ke všemu</translation>
+        <translation>Yhdistä kaikki</translation>
     </message>
     <message>
         <location filename="../src/uisupport/toolbaractionprovider.cpp" line="58"/>
         <source>Disconnect from all</source>
-        <translation>Odpojit ze všeho</translation>
+        <translation>Katkaise yhteys kaikkiin</translation>
     </message>
 </context>
 <context>
@@ -5370,213 +5465,16 @@ Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!</tra
     <message>
         <location filename="../src/qtui/ui/topicwidget.ui" line="32"/>
         <source>Form</source>
-        <translation></translation>
+        <translation>Lomake</translation>
     </message>
     <message>
         <location filename="../src/qtui/ui/topicwidget.ui" line="79"/>
         <source>...</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
-    <name>TopicWidgetSettingsPage</name>
-    <message>
-        <location filename="../src/qtui/settingspages/topicwidgetsettingspage.cpp" line="23"/>
-        <source>Interface</source>
-        <translation>Rozhraní</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/topicwidgetsettingspage.cpp" line="23"/>
-        <source>Topic Widget</source>
-        <translation>Rozhraní Tématu</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/topicwidgetsettingspage.ui" line="14"/>
-        <source>Form</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/topicwidgetsettingspage.ui" line="22"/>
-        <source>Custom font:</source>
-        <translation>Vlastní font:</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/topicwidgetsettingspage.ui" line="25"/>
-        <source>/UiStyle/Fonts/UseCustomTopicWidgetFont</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/topicwidgetsettingspage.ui" line="38"/>
-        <source>/UiStyle/Fonts/TopicWidget</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/topicwidgetsettingspage.ui" line="50"/>
-        <source>Resize dynamically to fit contents</source>
-        <translation>Měnit velikost podle obsahu</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/topicwidgetsettingspage.ui" line="56"/>
-        <source>DynamicResize</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/topicwidgetsettingspage.ui" line="84"/>
-        <source>On hover only</source>
-        <translation>Pouze při podržení myši nad tématem</translation>
-    </message>
-    <message>
-        <location filename="../src/qtui/settingspages/topicwidgetsettingspage.ui" line="90"/>
-        <source>ResizeOnHover</source>
-        <translation></translation>
+        <translation>...</translation>
     </message>
 </context>
 <context>
     <name>UiStyle::StyledMessage</name>
-    <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="684"/>
-        <source>&lt;%1&gt;</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="648"/>
-        <location filename="../src/uisupport/uistyle.cpp" line="686"/>
-        <source>[%1]</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="702"/>
-        <source>&lt;-x</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="704"/>
-        <location filename="../src/uisupport/uistyle.cpp" line="706"/>
-        <location filename="../src/uisupport/uistyle.cpp" line="708"/>
-        <location filename="../src/uisupport/uistyle.cpp" line="712"/>
-        <source>*</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="694"/>
-        <source>--&gt;</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="567"/>
-        <source>%DN%1%DN %2</source>
-        <extracomment>Action Message</extracomment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="571"/>
-        <source>You are now known as %DN%1%DN</source>
-        <extracomment>Nick Message</extracomment>
-        <translation>Nyní jste znám jako %DN%1%DN</translation>
-    </message>
-    <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="572"/>
-        <source>%DN%1%DN is now known as %DN%2%DN</source>
-        <translation>%DN%1%DN je nyní znám jako %DN%2%DN</translation>
-    </message>
-    <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="576"/>
-        <source>User mode: %DM%1%DM</source>
-        <extracomment>Mode Message</extracomment>
-        <translation>Uživatelský režim: %DM%1%DM</translation>
-    </message>
-    <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="577"/>
-        <source>Mode %DM%1%DM by %DN%2%DN</source>
-        <translation>Režim %DM%1%DM od %DN%2%DN</translation>
-    </message>
-    <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="581"/>
-        <source>%DN%1%DN %DH(%2@%3)%DH has joined %DC%4%DC</source>
-        <extracomment>Join Message</extracomment>
-        <translation>%DN%1%DN %DH(%2@%3)%DH vlezl do %DC%4%DC</translation>
-    </message>
-    <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="584"/>
-        <source>%DN%1%DN %DH(%2@%3)%DH has left %DC%4%DC</source>
-        <extracomment>Part Message</extracomment>
-        <translation>%DN%1%DN %DH(%2@%3)%DH opustil %DC%4%DC</translation>
-    </message>
-    <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="589"/>
-        <source>%DN%1%DN %DH(%2@%3)%DH has quit</source>
-        <extracomment>Quit Message</extracomment>
-        <translation>%DN%1%DN %DH(%2@%3)%DH to zabalil</translation>
-    </message>
-    <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="596"/>
-        <source>%DN%1%DN has kicked %DN%2%DN from %DC%3%DC</source>
-        <extracomment>Kick Message</extracomment>
-        <translation>%DN%1%DN vykopnul %DN%2%DN z %DC%3%DC</translation>
-    </message>
-    <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="613"/>
-        <source>{Day changed to %1}</source>
-        <extracomment>Day Change Message</extracomment>
-        <translation>{Den: %1}</translation>
-    </message>
-    <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="625"/>
-        <source>Netsplit between %DH%1%DH and %DH%2%DH ended. Users joined: </source>
-        <translation>Netsplit mezi %DH%1%DH a %DH%2%DH zkončil. Vrátili se: </translation>
-    </message>
-    <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="629"/>
-        <location filename="../src/uisupport/uistyle.cpp" line="644"/>
-        <source>%DN%1%DN (%2 more)</source>
-        <translation>%DN%1%DN (%2 více)</translation>
-    </message>
-    <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="639"/>
-        <source>Netsplit between %DH%1%DH and %DH%2%DH. Users quit: </source>
-        <translation>Netsplit mezi %DH%1%DH a %DH%2%DH. Opustili nás: </translation>
-    </message>
-    <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="696"/>
-        <location filename="../src/uisupport/uistyle.cpp" line="698"/>
-        <source>&lt;--</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="700"/>
-        <source>&lt;-*</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="710"/>
-        <source>-</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="714"/>
-        <source>=&gt;</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="716"/>
-        <source>&lt;=</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="690"/>
-        <source>&lt;-&gt;</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="692"/>
-        <source>***</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/uisupport/uistyle.cpp" line="688"/>
-        <source>-*-</source>
-        <translation></translation>
-    </message>
     <message>
         <location filename="../src/uisupport/uistyle.cpp" line="561"/>
         <location filename="../src/uisupport/uistyle.cpp" line="564"/>
@@ -5597,7 +5495,151 @@ Info Message
 Error Message
 ----------
 Topic Message</extracomment>
-        <translation></translation>
+        <translation>%1</translation>
+    </message>
+    <message>
+        <location filename="../src/uisupport/uistyle.cpp" line="567"/>
+        <source>%DN%1%DN %2</source>
+        <extracomment>Action Message</extracomment>
+        <translation>%DN%1%DN %2</translation>
+    </message>
+    <message>
+        <location filename="../src/uisupport/uistyle.cpp" line="571"/>
+        <source>You are now known as %DN%1%DN</source>
+        <extracomment>Nick Message</extracomment>
+        <translation>Nimimerkkisi on nyt %DN%1%DN</translation>
+    </message>
+    <message>
+        <location filename="../src/uisupport/uistyle.cpp" line="572"/>
+        <source>%DN%1%DN is now known as %DN%2%DN</source>
+        <translation>%DN%1%DN on nyt nimimerkiltään %DN%2%DN</translation>
+    </message>
+    <message>
+        <location filename="../src/uisupport/uistyle.cpp" line="576"/>
+        <source>User mode: %DM%1%DM</source>
+        <extracomment>Mode Message</extracomment>
+        <translation>Käyttäjätila: %DM%1%DM</translation>
+    </message>
+    <message>
+        <location filename="../src/uisupport/uistyle.cpp" line="577"/>
+        <source>Mode %DM%1%DM by %DN%2%DN</source>
+        <translation>Tila %DM%1%DM by %DN%2%DN</translation>
+    </message>
+    <message>
+        <location filename="../src/uisupport/uistyle.cpp" line="581"/>
+        <source>%DN%1%DN %DH(%2@%3)%DH has joined %DC%4%DC</source>
+        <extracomment>Join Message</extracomment>
+        <translation>%DN%1%DN %DH(%2@%3)%DH liittyi kanavalle %DC%4%DC</translation>
+    </message>
+    <message>
+        <location filename="../src/uisupport/uistyle.cpp" line="584"/>
+        <source>%DN%1%DN %DH(%2@%3)%DH has left %DC%4%DC</source>
+        <extracomment>Part Message</extracomment>
+        <translation>%DN%1%DN %DH(%2@%3)%DH poistui kanavalta %DC%4%DC</translation>
+    </message>
+    <message>
+        <location filename="../src/uisupport/uistyle.cpp" line="589"/>
+        <source>%DN%1%DN %DH(%2@%3)%DH has quit</source>
+        <extracomment>Quit Message</extracomment>
+        <translation>%DN%1%DN %DH(%2@%3)%DH lopetti</translation>
+    </message>
+    <message>
+        <location filename="../src/uisupport/uistyle.cpp" line="596"/>
+        <source>%DN%1%DN has kicked %DN%2%DN from %DC%3%DC</source>
+        <extracomment>Kick Message</extracomment>
+        <translation>%DN%1%DN potki käyttäjän %DN%2%DN pois kanavalta %DC%3%DC</translation>
+    </message>
+    <message>
+        <location filename="../src/uisupport/uistyle.cpp" line="613"/>
+        <source>{Day changed to %1}</source>
+        <extracomment>Day Change Message</extracomment>
+        <translation>{Päivä vaihtui %1}</translation>
+    </message>
+    <message>
+        <location filename="../src/uisupport/uistyle.cpp" line="625"/>
+        <source>Netsplit between %DH%1%DH and %DH%2%DH ended. Users joined: </source>
+        <translation>Netsplit %DH%1%DH ja %DH%2%DH välillä loppui. Liittyneet käyttäjät: </translation>
+    </message>
+    <message>
+        <location filename="../src/uisupport/uistyle.cpp" line="629"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="644"/>
+        <source>%DN%1%DN (%2 more)</source>
+        <translation>%DN%1%DN (%2 lisää)</translation>
+    </message>
+    <message>
+        <location filename="../src/uisupport/uistyle.cpp" line="639"/>
+        <source>Netsplit between %DH%1%DH and %DH%2%DH. Users quit: </source>
+        <translation>Netsplit %DH%1%DH ja %DH%2%DH välillä. Lopettaneet käyttäjät: </translation>
+    </message>
+    <message>
+        <location filename="../src/uisupport/uistyle.cpp" line="648"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="686"/>
+        <source>[%1]</source>
+        <translation>[%1]</translation>
+    </message>
+    <message>
+        <location filename="../src/uisupport/uistyle.cpp" line="684"/>
+        <source>&lt;%1&gt;</source>
+        <translation>&lt;%1&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/uisupport/uistyle.cpp" line="688"/>
+        <source>-*-</source>
+        <translation>-*-</translation>
+    </message>
+    <message>
+        <location filename="../src/uisupport/uistyle.cpp" line="690"/>
+        <source>&lt;-&gt;</source>
+        <translation>&lt;-&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/uisupport/uistyle.cpp" line="692"/>
+        <source>***</source>
+        <translation>***</translation>
+    </message>
+    <message>
+        <location filename="../src/uisupport/uistyle.cpp" line="694"/>
+        <source>--&gt;</source>
+        <translation>--&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/uisupport/uistyle.cpp" line="696"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="698"/>
+        <source>&lt;--</source>
+        <translation>&lt;--</translation>
+    </message>
+    <message>
+        <location filename="../src/uisupport/uistyle.cpp" line="700"/>
+        <source>&lt;-*</source>
+        <translation>&lt;-*</translation>
+    </message>
+    <message>
+        <location filename="../src/uisupport/uistyle.cpp" line="702"/>
+        <source>&lt;-x</source>
+        <translation>&lt;-x</translation>
+    </message>
+    <message>
+        <location filename="../src/uisupport/uistyle.cpp" line="704"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="706"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="708"/>
+        <location filename="../src/uisupport/uistyle.cpp" line="712"/>
+        <source>*</source>
+        <translation>*</translation>
+    </message>
+    <message>
+        <location filename="../src/uisupport/uistyle.cpp" line="710"/>
+        <source>-</source>
+        <translation>-</translation>
+    </message>
+    <message>
+        <location filename="../src/uisupport/uistyle.cpp" line="714"/>
+        <source>=&gt;</source>
+        <translation>=&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/uisupport/uistyle.cpp" line="716"/>
+        <source>&lt;=</source>
+        <translation>&lt;=</translation>
     </message>
 </context>
 <context>
@@ -5606,54 +5648,48 @@ Topic Message</extracomment>
         <location filename="../src/client/networkmodel.cpp" line="675"/>
         <source>%n Owner(s)</source>
         <translation>
-            <numerusform>%n Vlastník</numerusform>
-            <numerusform>%n Vlastníci</numerusform>
-            <numerusform>%n Vlastníků</numerusform>
+            <numerusform>%n omistaja</numerusform>
+            <numerusform>%n omistajaa</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../src/client/networkmodel.cpp" line="676"/>
         <source>%n Admin(s)</source>
         <translation>
-            <numerusform>%n Správce</numerusform>
-            <numerusform>%n Správci</numerusform>
-            <numerusform>%n Správců</numerusform>
+            <numerusform>%n ylläpitäjä</numerusform>
+            <numerusform>%n ylläpitäjää</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../src/client/networkmodel.cpp" line="677"/>
         <source>%n Operator(s)</source>
         <translation>
-            <numerusform>%n Dozorce</numerusform>
-            <numerusform>%n Dozorci</numerusform>
-            <numerusform>%n Dozorců</numerusform>
+            <numerusform>%n operaattori</numerusform>
+            <numerusform>%n operaattoria</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../src/client/networkmodel.cpp" line="678"/>
         <source>%n Half-Op(s)</source>
         <translation>
-            <numerusform>%n Bachař</numerusform>
-            <numerusform>%n Bachaři</numerusform>
-            <numerusform>%n Bachařů</numerusform>
+            <numerusform>%n puoli-operaattori</numerusform>
+            <numerusform>%n puoli-operaattoria</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../src/client/networkmodel.cpp" line="679"/>
         <source>%n Voiced</source>
         <translation>
-            <numerusform>%n Mluvka</numerusform>
-            <numerusform>%n Mluvky</numerusform>
-            <numerusform>%n Mluvek</numerusform>
+            <numerusform>%n puheoikeutettu</numerusform>
+            <numerusform>%n puheoikeutettua</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../src/client/networkmodel.cpp" line="680"/>
         <source>%n User(s)</source>
         <translation>
-            <numerusform>%n Uživatel</numerusform>
-            <numerusform>%n Uživatelé</numerusform>
-            <numerusform>%n  Uživatelů</numerusform>
+            <numerusform>%n käyttäjä</numerusform>
+            <numerusform>%n käyttäjää</numerusform>
         </translation>
     </message>
 </context>
@@ -5662,12 +5698,12 @@ Topic Message</extracomment>
     <message>
         <location filename="../src/core/userinputhandler.cpp" line="63"/>
         <source>away</source>
-        <translation>pryč</translation>
+        <translation>poissa</translation>
     </message>
     <message>
         <location filename="../src/core/userinputhandler.cpp" line="132"/>
         <source>sending CTCP-%1 request</source>
-        <translation>posílám požadavek CTCP-%1</translation>
+        <translation>lähetetään CTCP-%1 -pyyntö</translation>
     </message>
 </context>
 </TS>
