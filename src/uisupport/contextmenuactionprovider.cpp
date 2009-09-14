@@ -21,6 +21,7 @@
 #include <QInputDialog>
 #include <QMenu>
 #include <QMessageBox>
+#include <QMap>
 
 #include "contextmenuactionprovider.h"
 
@@ -30,6 +31,8 @@
 #include "clientidentity.h"
 #include "network.h"
 #include "util.h"
+#include "client.h"
+#include "clientignorelistmanager.h"
 
 ContextMenuActionProvider::ContextMenuActionProvider(QObject *parent) : NetworkModelController(parent) {
   registerAction(NetworkConnect, SmallIcon("network-connect"), tr("Connect"));
@@ -60,6 +63,17 @@ ContextMenuActionProvider::ContextMenuActionProvider(QObject *parent) : NetworkM
   registerAction(NickCtcpTime, tr("Time"));
   registerAction(NickCtcpPing, tr("Ping"));
   registerAction(NickCtcpFinger, tr("Finger"));
+  registerAction(NickIgnoreCustom, tr("Custom..."));
+
+  // these texts are only dummies! don't think about tr() here!
+  registerAction(NickIgnoreUser, "*!ident@host.domain.tld");
+  registerAction(NickIgnoreHost, "*!*@host.domain.tld");
+  registerAction(NickIgnoreDomain, "*!ident@*.domain.tld");
+  registerAction(NickIgnoreToggleEnabled0, "Enable", true);
+  registerAction(NickIgnoreToggleEnabled1, "Enable", true);
+  registerAction(NickIgnoreToggleEnabled2, "Enable", true);
+  registerAction(NickIgnoreToggleEnabled3, "Enable", true);
+  registerAction(NickIgnoreToggleEnabled4, "Enable", true);
 
   registerAction(NickOp, SmallIcon("irc-operator"), tr("Give Operator Status"));
   registerAction(NickDeop, SmallIcon("irc-remove-operator"), tr("Take Operator Status"));
@@ -107,6 +121,17 @@ ContextMenuActionProvider::ContextMenuActionProvider(QObject *parent) : NetworkM
   nickModeMenu->addAction(action(NickKickBan));
   _nickModeMenuAction = new Action(tr("Actions"), 0);
   _nickModeMenuAction->setMenu(nickModeMenu);
+
+  QMenu *ignoreMenu = new QMenu();
+  _nickIgnoreMenuAction = new Action(tr("Ignore"), 0);
+  _nickIgnoreMenuAction->setMenu(ignoreMenu);
+
+  // These are disabled actions used as descriptions
+  // They don't need any of the Action fancyness so we use plain QActions
+  _ignoreDescriptions << new QAction(tr("Add Ignore Rule"), this);
+  _ignoreDescriptions << new QAction(tr("Existing Rules"), this);
+  foreach(QAction *act, _ignoreDescriptions)
+    act->setEnabled(false);
 }
 
 ContextMenuActionProvider::~ContextMenuActionProvider() {
@@ -116,6 +141,10 @@ ContextMenuActionProvider::~ContextMenuActionProvider() {
   _nickCtcpMenuAction->deleteLater();
   _nickModeMenuAction->menu()->deleteLater();
   _nickModeMenuAction->deleteLater();
+  _nickIgnoreMenuAction->menu()->deleteLater();
+  _nickIgnoreMenuAction->deleteLater();
+  qDeleteAll(_ignoreDescriptions);
+  _ignoreDescriptions.clear();
 }
 
 void ContextMenuActionProvider::addActions(QMenu *menu, BufferId bufId, QObject *receiver, const char *method) {
@@ -286,6 +315,18 @@ void ContextMenuActionProvider::addIrcUserActions(QMenu *menu, const QModelIndex
     NetworkModel::ItemType itemType = static_cast<NetworkModel::ItemType>(index.data(NetworkModel::ItemTypeRole).toInt());
     addAction(_nickModeMenuAction, menu, itemType == NetworkModel::IrcUserItemType);
     addAction(_nickCtcpMenuAction, menu);
+
+    IrcUser *ircUser = qobject_cast<IrcUser *>(index.data(NetworkModel::IrcUserRole).value<QObject *>());
+    if(ircUser) {
+      // ignoreliststuff
+      QString bufferName;
+      BufferInfo bufferInfo = index.data(NetworkModel::BufferInfoRole).value<BufferInfo>();
+      if(bufferInfo.type() == BufferInfo::ChannelBuffer)
+        bufferName = bufferInfo.bufferName();
+      QMap<QString, bool> ignoreMap = Client::ignoreListManager()->matchingRulesForHostmask(ircUser->hostmask(), ircUser->network()->networkName(), bufferName);
+      addIgnoreMenu(menu, ircUser->hostmask(), ignoreMap);
+      // end of ignoreliststuff
+    }
     menu->addSeparator();
     addAction(NickQuery, menu, itemType == NetworkModel::IrcUserItemType && !haveQuery && indexList().count() == 1);
     addAction(NickSwitchTo, menu, itemType == NetworkModel::IrcUserItemType && haveQuery);
@@ -350,4 +391,75 @@ void ContextMenuActionProvider::addHideEventsMenu(QMenu *menu, int filter) {
   action(HideTopic)->setChecked(filter & Message::Topic);
 
   menu->addAction(_hideEventsMenuAction);
+}
+
+void ContextMenuActionProvider::addIgnoreMenu(QMenu *menu, const QString &hostmask, const QMap<QString, bool> &ignoreMap) {
+  QMenu *ignoreMenu = _nickIgnoreMenuAction->menu();
+  ignoreMenu->clear();
+  QString nick = nickFromMask(hostmask);
+  QString ident = userFromMask(hostmask);
+  QString host = hostFromMask(hostmask);
+  QString domain = host;
+  QRegExp domainRx = QRegExp("(\\.[^.]+\\.\\w+)$");
+  if(domainRx.indexIn(host) != -1)
+    domain = domainRx.cap(1);
+  // we can't rely on who-data
+  // if we don't have the data, we skip actions where we would need it
+  bool haveWhoData = !ident.isEmpty() && !host.isEmpty();
+
+  // add "Add Ignore Rule" description
+  ignoreMenu->addAction(_ignoreDescriptions.at(0));
+
+  if(haveWhoData) {
+    QString text;
+    text = QString("*!%1@%2").arg(ident, host);
+    action(NickIgnoreUser)->setText(text);
+    action(NickIgnoreUser)->setProperty("ignoreRule", text);
+
+    text = QString("*!*@%1").arg(host);
+    action(NickIgnoreHost)->setText(text);
+    action(NickIgnoreHost)->setProperty("ignoreRule", text);
+
+    text = domain.at(0) == '.' ? QString("*!%1@*%2").arg(ident, domain)
+                               : QString("*!%1@%2").arg(ident, domain);
+
+    action(NickIgnoreDomain)->setText(text);
+    action(NickIgnoreDomain)->setProperty("ignoreRule", text);
+
+    if(!ignoreMap.contains(action(NickIgnoreUser)->property("ignoreRule").toString()))
+      ignoreMenu->addAction(action(NickIgnoreUser));
+    if(!ignoreMap.contains(action(NickIgnoreHost)->property("ignoreRule").toString()))
+      ignoreMenu->addAction(action(NickIgnoreHost));
+    if(!ignoreMap.contains(action(NickIgnoreDomain)->property("ignoreRule").toString()))
+      ignoreMenu->addAction(action(NickIgnoreDomain));
+  }
+
+  action(NickIgnoreCustom)->setProperty("ignoreRule", hostmask);
+  ignoreMenu->addAction(action(NickIgnoreCustom));
+
+  ignoreMenu->addSeparator();
+
+  if(haveWhoData) {
+    QMap<QString, bool>::const_iterator ruleIter = ignoreMap.begin();
+    int counter = 0;
+    if(!ignoreMap.isEmpty())
+      // add "Existing Rules" description
+      ignoreMenu->addAction(_ignoreDescriptions.at(1));
+    while(ruleIter != ignoreMap.constEnd()) {
+      if(counter < 5) {
+        ActionType type = static_cast<ActionType>(NickIgnoreToggleEnabled0 + counter*0x100000);
+        Action *act = action(type);
+        act->setText(ruleIter.key());
+        act->setProperty("ignoreRule", ruleIter.key());
+        act->setChecked(ruleIter.value());
+        ignoreMenu->addAction(act);
+      }
+      counter++;
+      ruleIter++;
+    }
+    if(counter)
+      ignoreMenu->addSeparator();
+  }
+  ignoreMenu->addAction(action(ShowIgnoreList));
+  addAction(_nickIgnoreMenuAction, menu);
 }
