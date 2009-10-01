@@ -61,14 +61,10 @@ void ChatViewSearchBar::setVisible(bool visible) {
   if(visible) ui.searchEditLine->setFocus();
 }
 
-
-void ChatViewSearchBar::delaySearch()
-{
-  _searchDelayTimer.start(500);
+void ChatViewSearchBar::delaySearch() {
+  _searchDelayTimer.start(300);
 }
 
-
-void ChatViewSearchBar::search()
-{
+void ChatViewSearchBar::search() {
   emit searchChanged(ui.searchEditLine->text());
 }
