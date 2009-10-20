@@ -1,0 +1,43 @@
+#!/bin/sh            
+
+# --- Command line
+refname="$1"      
+oldrev="$2"       
+newrev="$3"       
+
+# --- Safety check
+if [ -z "$GIT_DIR" ]; then
+        echo "Don't run this script from the command line." >&2
+        echo " (if you want, you could supply GIT_DIR then run" >&2
+        echo "  $0 <ref> <oldrev> <newrev>)" >&2
+        exit 1
+fi
+
+if [ -z "$refname" -o -z "$oldrev" -o -z "$newrev" ]; then
+        echo "Usage: $0 <ref> <oldrev> <newrev>" >&2
+        exit 1
+fi
+
+refname="$1"
+oldhead="$2"
+newhead="$3"
+
+case "$refname","$newrev_type" in
+        refs/heads/staging,*)
+                ;;
+        refs/heads/release,*)
+                ;;
+        *)
+                exit 0
+                ;;
+esac
+
+refname="${1#refs/heads/}"
+[ "$refname" = "master" ] && refname=
+
+
+#for merged in $(git-rev-list $newhead ^$oldhead | tac); do
+#only announce topmost commit FIXME
+for merged in $(git-rev-list $newhead ^$oldhead | head -n 1); do
+        /usr/local/bin/ciabot.pl "$merged" "$refname"
+done
