@@ -2,10 +2,9 @@
 # The LINGUAS variable can be used to limit that set
 
 if(QT_LCONVERT_EXECUTABLE)
-  # We always include quassel.po
-  generate_qm(QM quassel)
-  set(qm_files ${QM})
-
+  # get environment variable for translations
+  set(LINGUAS "$ENV{LINGUAS}")
+  string(REGEX REPLACE "[ \t]+" \; output "${LINGUAS}")
   # Find more languages
   file(GLOB avail_pofiles quassel_*.po qt_*.po)
   foreach(PO_FILE ${avail_pofiles})
@@ -62,4 +61,4 @@ else(EMBED_DATA)
   install(FILES ${qm_files} DESTINATION ${DATA_INSTALL_DIR}/quassel/translations)
 endif(EMBED_DATA)
 
-add_custom_target(i18n DEPENDS ${qm_files})
+add_custom_target(po DEPENDS ${qm_files})
