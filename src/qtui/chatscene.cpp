@@ -230,25 +230,11 @@ void ChatScene::rowsInserted(const QModelIndex &index, int start, int end) {
   }
 
   // neither pre- or append means we have to do dirty work: move items...
-  int moveStart = 0;
-  int moveEnd = _lines.count() - 1;
-  qreal offset = h;
   if(!(atTop || atBottom)) {
-    // move top means: moving 0 to end (aka: end + 1)
-    // move top means: moving end + 1 to _lines.count() - 1 (aka: _lines.count() - (end + 1)
-    if(end + 1 < _lines.count() - end - 1) {
-      // move top part
-      moveTop = true;
-      offset = -offset;
-      moveEnd = end;
-    } else {
-      // move bottom part
-      moveStart = end + 1;
-    }
     ChatLine *line = 0;
-    for(int i = moveStart; i <= moveEnd; i++) {
+    for(int i = 0; i <= end; i++) {
       line = _lines.at(i);
-      line->setPos(0, line->pos().y() + offset);
+      line->setPos(0, line->pos().y() - h);
     }
   }
 
@@ -285,7 +271,7 @@ void ChatScene::rowsInserted(const QModelIndex &index, int start, int end) {
     _firstLineRow = -1;
   }
   updateSceneRect();
-  if(atBottom || (!atTop && !moveTop)) {
+  if(atBottom) {
     emit lastLineChanged(_lines.last(), h);
   }
 }
