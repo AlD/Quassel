@@ -170,7 +170,6 @@ void ChatScene::rowsInserted(const QModelIndex &index, int start, int end) {
   qreal width = _sceneRect.width();
   bool atBottom = (start == _lines.count());
   bool atTop = !atBottom && (start == 0);
-  bool moveTop = false;
 
   if(start < _lines.count()) {
     y = _lines.value(start)->y();
@@ -844,7 +843,6 @@ void ChatScene::updateSceneRect(qreal width) {
     ChatLine *firstLine = _lines.at(_firstLineRow);
     ChatLine *lastLine = _lines.last();
     updateSceneRect(QRectF(0, firstLine->pos().y(), width, lastLine->pos().y() + lastLine->height() - firstLine->pos().y()));
-    qDebug() << idString() << "top:" << sceneRect().y() << "height:" << sceneRect().height();
   } else {
     // empty scene rect
     updateSceneRect(QRectF(0, 0, width, 0));
