@@ -47,14 +47,15 @@ CoreAccountSettings::CoreAccountSettings(const QString &subgroup)
 }
 
 void CoreAccountSettings::notify(const QString &key, QObject *receiver, const char *slot) {
-  ClientSettings::notify(QString("%1/%2/%3").arg(Client::currentCoreAccount().toInt()).arg(_subgroup).arg(key), receiver, slot);
+  ClientSettings::notify(QString("%1/%2/%3").arg(Client::currentCoreAccount().accountId().toInt()).arg(_subgroup).arg(key), receiver, slot);
 }
 
 QList<AccountId> CoreAccountSettings::knownAccounts() {
   QList<AccountId> ids;
-  foreach(QString key, localChildGroups()) {
+  foreach(const QString &key, localChildGroups()) {
     AccountId acc = key.toInt();
-    if(acc.isValid()) ids << acc;
+    if(acc.isValid())
+      ids << acc;
   }
   return ids;
 }
@@ -75,22 +76,73 @@ void CoreAccountSettings::setAutoConnectAccount(AccountId account) {
   setLocalValue("AutoConnectAccount", account.toInt());
 }
 
+bool CoreAccountSettings::autoConnectOnStartup() {
+  return localValue("AutoConnectOnStartup", false).toBool();
+}
+
+void CoreAccountSettings::setAutoConnectOnStartup(bool b) {
+  setLocalValue("AutoConnectOnStartup", b);
+}
+
+bool CoreAccountSettings::autoConnectToFixedAccount() {
+  return localValue("AutoConnectToFixedAccount", false).toBool();
+}
+
+void CoreAccountSettings::setAutoConnectToFixedAccount(bool b) {
+  setLocalValue("AutoConnectToFixedAccount", b);
+}
+
 void CoreAccountSettings::storeAccountData(AccountId id, const QVariantMap &data) {
-  setLocalValue(QString("%1/Connection").arg(id.toInt()), data);
+  QString base = QString::number(id.toInt());
+  foreach(const QString &key, data.keys()) {
+    setLocalValue(base + "/" + key, data.value(key));
+  }
+
+  // FIXME Migration from 0.5 -> 0.6
+  removeLocalKey(QString("%1/Connection").arg(base));
 }
 
 QVariantMap CoreAccountSettings::retrieveAccountData(AccountId id) {
-  return localValue(QString("%1/Connection").arg(id.toInt()), QVariant()).toMap();
+  QVariantMap map;
+  QString base = QString::number(id.toInt());
+  foreach(const QString &key, localChildKeys(base)) {
+    map[key] = localValue(base + "/" + key);
+  }
+
+  // FIXME Migration from 0.5 -> 0.6
+  if(!map.contains("Uuid") && map.contains("Connection")) {
+    QVariantMap oldmap = map.value("Connection").toMap();
+    map["AccountName"] = oldmap.value("AccountName");
+    map["HostName"] = oldmap.value("Host");
+    map["Port"] = oldmap.value("Port");
+    map["User"] = oldmap.value("User");
+    map["Password"] = oldmap.value("Password");
+    map["StorePassword"] = oldmap.value("RememberPasswd");
+    map["UseSSL"] = oldmap.value("useSsl");
+    map["UseProxy"] = oldmap.value("useProxy");
+    map["ProxyHostName"] = oldmap.value("proxyHost");
+    map["ProxyPort"] = oldmap.value("proxyPort");
+    map["ProxyUser"] = oldmap.value("proxyUser");
+    map["ProxyPassword"] = oldmap.value("proxyPassword");
+    map["ProxyType"] = oldmap.value("proxyType");
+
+    map["AccountId"] = id.toInt();
+    map["Uuid"] = QUuid::createUuid().toString();
+  }
+
+  return map;
 }
 
 void CoreAccountSettings::setAccountValue(const QString &key, const QVariant &value) {
-  if(!Client::currentCoreAccount().isValid()) return;
-  setLocalValue(QString("%1/%2/%3").arg(Client::currentCoreAccount().toInt()).arg(_subgroup).arg(key), value);
+  if(!Client::currentCoreAccount().isValid())
+    return;
+  setLocalValue(QString("%1/%2/%3").arg(Client::currentCoreAccount().accountId().toInt()).arg(_subgroup).arg(key), value);
 }
 
 QVariant CoreAccountSettings::accountValue(const QString &key, const QVariant &def) {
-  if(!Client::currentCoreAccount().isValid()) return QVariant();
-  return localValue(QString("%1/%2/%3").arg(Client::currentCoreAccount().toInt()).arg(_subgroup).arg(key), def);
+  if(!Client::currentCoreAccount().isValid())
+    return QVariant();
+  return localValue(QString("%1/%2/%3").arg(Client::currentCoreAccount().accountId().toInt()).arg(_subgroup).arg(key), def);
 }
 
 void CoreAccountSettings::setJumpKeyMap(const QHash<int, BufferId> &keyMap) {
@@ -98,18 +150,18 @@ void CoreAccountSettings::setJumpKeyMap(const QHash<int, BufferId> &keyMap) {
   QHash<int, BufferId>::const_iterator mapIter = keyMap.constBegin();
   while(mapIter != keyMap.constEnd()) {
     variants[QString::number(mapIter.key())] = qVariantFromValue(mapIter.value());
-    mapIter++;
+    ++mapIter;
   }
-  setLocalValue("JumpKeyMap", variants);
+  setAccountValue("JumpKeyMap", variants);
 }
 
 QHash<int, BufferId> CoreAccountSettings::jumpKeyMap() {
   QHash<int, BufferId> keyMap;
-  QVariantMap variants = localValue("JumpKeyMap", QVariant()).toMap();
+  QVariantMap variants = accountValue("JumpKeyMap", QVariant()).toMap();
   QVariantMap::const_iterator mapIter = variants.constBegin();
   while(mapIter != variants.constEnd()) {
     keyMap[mapIter.key().toInt()] = mapIter.value().value<BufferId>();
-    mapIter++;
+    ++mapIter;
   }
   return keyMap;
 }
@@ -118,6 +170,10 @@ void CoreAccountSettings::removeAccount(AccountId id) {
   removeLocalKey(QString("%1").arg(id.toInt()));
 }
 
+void CoreAccountSettings::clearAccounts() {
+  foreach(const QString &key, localChildGroups())
+    removeLocalKey(key);
+}
 
 /***********************************************************************************************/
 // NotificationSettings:
@@ -148,44 +204,6 @@ void NotificationSettings::setNicksCaseSensitive(bool cs) {
 bool NotificationSettings::nicksCaseSensitive() {
   return localValue("Highlights/NicksCaseSensitive", false).toBool();
 }
-
-
-// ========================================
-//  KnownHostsSettings
-// ========================================
-KnownHostsSettings::KnownHostsSettings()
-  : ClientSettings("KnownHosts")
-{
-}
-
-QByteArray KnownHostsSettings::knownDigest(const QHostAddress &address) {
-  return localValue(address.toString(), QByteArray()).toByteArray();
-}
-
-void KnownHostsSettings::saveKnownHost(const QHostAddress &address, const QByteArray &certDigest) {
-  setLocalValue(address.toString(), certDigest);
-}
-
-bool KnownHostsSettings::isKnownHost(const QHostAddress &address, const QByteArray &certDigest) {
-  return certDigest == localValue(address.toString(), QByteArray()).toByteArray();
-}
-
-#ifdef HAVE_SSL
-QByteArray KnownHostsSettings::knownDigest(const QSslSocket *socket) {
-  return knownDigest(socket->peerAddress());
-}
-
-void KnownHostsSettings::saveKnownHost(const QSslSocket *socket) {
-  Q_ASSERT(socket);
-  saveKnownHost(socket->peerAddress(), socket->peerCertificate().digest());
-}
-
-bool KnownHostsSettings::isKnownHost(const QSslSocket *socket) {
-  Q_ASSERT(socket);
-  return isKnownHost(socket->peerAddress(), socket->peerCertificate().digest());
-}
-#endif
-
 
 // ========================================
 //  TabCompletionSettings

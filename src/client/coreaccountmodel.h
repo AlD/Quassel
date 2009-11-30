@@ -18,44 +18,69 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef CORECONNECTDLG_H
-#define CORECONNECTDLG_H_
+#ifndef COREACCOUNTMODEL_H_
+#define COREACCOUNTMODEL_H_
 
-#include <QDialog>
+#include <QAbstractListModel>
+#include <QUuid>
 
 #include "coreaccount.h"
 
-#include "ui_coreconnectauthdlg.h"
-
-class CoreAccountSettingsPage;
-
-class CoreConnectDlg : public QDialog {
+class CoreAccountModel : public QAbstractListModel {
   Q_OBJECT
 
 public:
-  CoreConnectDlg(QWidget *parent = 0);
-  AccountId selectedAccount() const;
+  enum {
+    AccountIdRole = Qt::UserRole,
+    UuidRole
+  };
 
-  void accept();
+  CoreAccountModel(QObject *parent = 0);
+  CoreAccountModel(const CoreAccountModel *other, QObject *parent = 0);
+
+  inline int rowCount(const QModelIndex &parent = QModelIndex()) const;
+  virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+
+  CoreAccount account(const QModelIndex &) const;
+  CoreAccount account(AccountId) const;
+  QList<CoreAccount> accounts() const;
+  QList<AccountId> accountIds() const;
+  QModelIndex accountIndex(AccountId id) const;
+
+  inline AccountId internalAccount() const;
+
+  AccountId createOrUpdateAccount(const CoreAccount &newAccountData = CoreAccount());
+  CoreAccount takeAccount(AccountId);
+  void removeAccount(AccountId);
+
+  void update(const CoreAccountModel *other);
+
+  bool operator==(const CoreAccountModel &other) const;
+
+public slots:
+  void save();
+  void load();
+  void clear();
+
+protected:
+  void insertAccount(const CoreAccount &);
+  int findAccountIdx(AccountId) const;
 
 private:
-  CoreAccountSettingsPage *_settingsPage;
+  int listIndex(AccountId);
+
+  QList<CoreAccount> _accounts;
+  QSet<AccountId> _removedAccounts;
+  AccountId _internalAccount;
 };
 
-class CoreConnectAuthDlg : public QDialog {
-  Q_OBJECT
+// Inlines
+int CoreAccountModel::rowCount(const QModelIndex &) const {
+  return _accounts.count();
+}
 
-public:
-  CoreConnectAuthDlg(CoreAccount *account, QWidget *parent = 0);
-
-  void accept();
-
-private slots:
-  void setButtonStates();
-
-private:
-  Ui::CoreConnectAuthDlg ui;
-  CoreAccount *_account;
-};
+AccountId CoreAccountModel::internalAccount() const {
+  return _internalAccount;
+}
 
 #endif

@@ -51,13 +51,15 @@
 #include "chatmonitorview.h"
 #include "chatview.h"
 #include "client.h"
-#include "clientsyncer.h"
 #include "clientbacklogmanager.h"
 #include "clientbufferviewconfig.h"
 #include "clientbufferviewmanager.h"
 #include "clientignorelistmanager.h"
-#include "coreinfodlg.h"
+#include "coreconfigwizard.h"
 #include "coreconnectdlg.h"
+#include "coreconnection.h"
+#include "coreconnectionstatuswidget.h"
+#include "coreinfodlg.h"
 #include "contextmenuactionprovider.h"
 #include "debugbufferviewoverlay.h"
 #include "debuglogwidget.h"
@@ -94,6 +96,10 @@
 #  include "knotificationbackend.h"
 #endif /* HAVE_KDE */
 
+#ifdef HAVE_SSL
+#  include "sslinfodlg.h"
+#endif
+
 #ifdef HAVE_INDICATEQT
   #include "indicatornotificationbackend.h"
 #endif
@@ -105,6 +111,7 @@
 #include "settingspages/chatmonitorsettingspage.h"
 #include "settingspages/chatviewsettingspage.h"
 #include "settingspages/connectionsettingspage.h"
+#include "settingspages/coreaccountsettingspage.h"
 #include "settingspages/generalsettingspage.h"
 #include "settingspages/highlightsettingspage.h"
 #include "settingspages/identitiessettingspage.h"
@@ -122,9 +129,8 @@ MainWin::MainWin(QWidget *parent)
 #else
   : QMainWindow(parent),
 #endif
-    coreLagLabel(new QLabel()),
-    sslLabel(new QLabel()),
-    msgProcessorStatusWidget(new MsgProcessorStatusWidget()),
+    _msgProcessorStatusWidget(new MsgProcessorStatusWidget(this)),
+    _coreConnectionStatusWidget(new CoreConnectionStatusWidget(Client::coreConnection(), this)),
     _titleSetter(this),
     _awayLog(0),
     _layoutLoaded(false)
@@ -155,6 +161,15 @@ void MainWin::init() {
            SLOT(messagesInserted(const QModelIndex &, int, int)));
   connect(GraphicalUi::contextMenuActionProvider(), SIGNAL(showChannelList(NetworkId)), SLOT(showChannelList(NetworkId)));
   connect(GraphicalUi::contextMenuActionProvider(), SIGNAL(showIgnoreList(QString)), SLOT(showIgnoreList(QString)));
+
+  connect(Client::coreConnection(), SIGNAL(startCoreSetup(QVariantList)), SLOT(showCoreConfigWizard(QVariantList)));
+  connect(Client::coreConnection(), SIGNAL(connectionErrorPopup(QString)), SLOT(handleCoreConnectionError(QString)));
+  connect(Client::coreConnection(), SIGNAL(userAuthenticationRequired(CoreAccount *, bool *, QString)), SLOT(userAuthenticationRequired(CoreAccount *, bool *, QString)));
+  connect(Client::coreConnection(), SIGNAL(handleNoSslInClient(bool*)), SLOT(handleNoSslInClient(bool *)));
+  connect(Client::coreConnection(), SIGNAL(handleNoSslInCore(bool*)), SLOT(handleNoSslInCore(bool *)));
+#ifdef HAVE_SSL
+  connect(Client::coreConnection(), SIGNAL(handleSslErrors(const QSslSocket *, bool *, bool *)), SLOT(handleSslErrors(const QSslSocket *, bool *, bool *)));
+#endif
 
   // Setup Dock Areas
   setDockNestingEnabled(true);
@@ -210,10 +225,10 @@ void MainWin::init() {
   // restore locked state of docks
   QtUi::actionCollection("General")->action("LockLayout")->setChecked(s.value("LockLayout", false).toBool());
 
-  if(Quassel::runMode() != Quassel::Monolithic) {
-    showCoreConnectionDlg(true); // autoconnect if appropriate
-  } else {
-    startInternalCore();
+  CoreConnection *conn = Client::coreConnection();
+  if(!conn->connectToCore()) {
+    // No autoconnect selected (or no accounts)
+    showCoreConnectionDlg();
   }
 }
 
@@ -311,9 +326,9 @@ void MainWin::setupActions() {
   connect(lockAct, SIGNAL(toggled(bool)), SLOT(on_actionLockLayout_toggled(bool)));
 
   coll->addAction("ToggleSearchBar", new Action(SmallIcon("edit-find"), tr("Show &Search Bar"), coll,
-						0, 0, QKeySequence::Find))->setCheckable(true);
+                                                0, 0, QKeySequence::Find))->setCheckable(true);
   coll->addAction("ShowAwayLog", new Action(tr("Show Away Log"), coll,
-					    this, SLOT(showAwayLog())));
+                                            this, SLOT(showAwayLog())));
   coll->addAction("ToggleMenuBar", new Action(SmallIcon("show-menu"), tr("Show &Menubar"), coll,
                                                 0, 0, tr("Ctrl+M")))->setCheckable(true);
 
@@ -623,18 +638,11 @@ void MainWin::setupTitleSetter() {
 
 void MainWin::setupStatusBar() {
   // MessageProcessor progress
-  statusBar()->addPermanentWidget(msgProcessorStatusWidget);
+  statusBar()->addPermanentWidget(_msgProcessorStatusWidget);
 
-  // Core Lag:
-  updateLagIndicator();
-  statusBar()->addPermanentWidget(coreLagLabel);
-  coreLagLabel->hide();
-  connect(Client::signalProxy(), SIGNAL(lagUpdated(int)), this, SLOT(updateLagIndicator(int)));
-
-  // SSL indicator
-  sslLabel->setPixmap(QPixmap());
-  statusBar()->addPermanentWidget(sslLabel);
-  sslLabel->hide();
+  // Connection state
+  _coreConnectionStatusWidget->update();
+  statusBar()->addPermanentWidget(_coreConnectionStatusWidget);
 
   QAction *showStatusbar = QtUi::actionCollection("General")->action("ToggleStatusBar");
 
@@ -646,6 +654,8 @@ void MainWin::setupStatusBar() {
 
   connect(showStatusbar, SIGNAL(toggled(bool)), statusBar(), SLOT(setVisible(bool)));
   connect(showStatusbar, SIGNAL(toggled(bool)), this, SLOT(saveStatusBarStatus(bool)));
+
+  connect(Client::coreConnection(), SIGNAL(connectionMsg(QString)), statusBar(), SLOT(showMessage(QString)));
 }
 
 void MainWin::setupHotList() {
@@ -712,11 +722,11 @@ void MainWin::setConnectedState() {
       action->setVisible(!Client::internalCore());
   }
 
-  disconnect(Client::backlogManager(), SIGNAL(updateProgress(int, int)), msgProcessorStatusWidget, SLOT(setProgress(int, int)));
+  disconnect(Client::backlogManager(), SIGNAL(updateProgress(int, int)), _msgProcessorStatusWidget, SLOT(setProgress(int, int)));
   disconnect(Client::backlogManager(), SIGNAL(messagesRequested(const QString &)), this, SLOT(showStatusBarMessage(const QString &)));
   disconnect(Client::backlogManager(), SIGNAL(messagesProcessed(const QString &)), this, SLOT(showStatusBarMessage(const QString &)));
   if(!Client::internalCore()) {
-    connect(Client::backlogManager(), SIGNAL(updateProgress(int, int)), msgProcessorStatusWidget, SLOT(setProgress(int, int)));
+    connect(Client::backlogManager(), SIGNAL(updateProgress(int, int)), _msgProcessorStatusWidget, SLOT(setProgress(int, int)));
     connect(Client::backlogManager(), SIGNAL(messagesRequested(const QString &)), this, SLOT(showStatusBarMessage(const QString &)));
     connect(Client::backlogManager(), SIGNAL(messagesProcessed(const QString &)), this, SLOT(showStatusBarMessage(const QString &)));
   }
@@ -727,14 +737,7 @@ void MainWin::setConnectedState() {
   else
     statusBar()->clearMessage();
 
-  if(Client::signalProxy()->isSecure()) {
-    sslLabel->setPixmap(SmallIcon("security-high"));
-  } else {
-    sslLabel->setPixmap(SmallIcon("security-low"));
-  }
-
-  sslLabel->setVisible(!Client::internalCore());
-  coreLagLabel->setVisible(!Client::internalCore());
+  _coreConnectionStatusWidget->setVisible(!Client::internalCore());
   updateIcon();
   systemTray()->setState(SystemTray::Active);
 
@@ -746,7 +749,7 @@ void MainWin::setConnectedState() {
 
 void MainWin::loadLayout() {
   QtUiSettings s;
-  int accountId = Client::currentCoreAccount().toInt();
+  int accountId = Client::currentCoreAccount().accountId().toInt();
   QByteArray state = s.value(QString("MainWinState-%1").arg(accountId)).toByteArray();
   if(state.isEmpty()) {
     // Make sure that the default bufferview is shown
@@ -761,17 +764,8 @@ void MainWin::loadLayout() {
 
 void MainWin::saveLayout() {
   QtUiSettings s;
-  int accountId = Client::currentCoreAccount().toInt();
+  int accountId = Client::currentCoreAccount().accountId().toInt();
   if(accountId > 0) s.setValue(QString("MainWinState-%1").arg(accountId) , saveState(accountId));
-}
-
-void MainWin::updateLagIndicator(int lag) {
-  QString text = tr("Core Lag: %1");
-  if(lag == -1)
-    text = text.arg('-');
-  else
-    text = text.arg("%1 msec").arg(lag);
-  coreLagLabel->setText(text);
 }
 
 void MainWin::disconnectedFromCore() {
@@ -808,25 +802,93 @@ void MainWin::setDisconnectedState() {
   coll->action("CoreInfo")->setEnabled(false);
   //_viewMenu->setEnabled(false);
   statusBar()->showMessage(tr("Not connected to core."));
-  sslLabel->setPixmap(QPixmap());
-  sslLabel->hide();
-  updateLagIndicator();
-  coreLagLabel->hide();
-  if(msgProcessorStatusWidget)
-    msgProcessorStatusWidget->setProgress(0, 0);
+  if(_msgProcessorStatusWidget)
+    _msgProcessorStatusWidget->setProgress(0, 0);
   updateIcon();
   systemTray()->setState(SystemTray::Inactive);
 }
 
-void MainWin::startInternalCore() {
-  ClientSyncer *syncer = new ClientSyncer();
-  Client::registerClientSyncer(syncer);
-  connect(syncer, SIGNAL(syncFinished()), syncer, SLOT(deleteLater()), Qt::QueuedConnection);
-  syncer->useInternalCore();
+void MainWin::userAuthenticationRequired(CoreAccount *account, bool *valid, const QString &errorMessage) {
+  Q_UNUSED(errorMessage)
+  CoreConnectAuthDlg dlg(account, this);
+  *valid = (dlg.exec() == QDialog::Accepted);
 }
 
-void MainWin::showCoreConnectionDlg(bool autoConnect) {
-  CoreConnectDlg(autoConnect, this).exec();
+void MainWin::handleNoSslInClient(bool *accepted) {
+  QMessageBox box(QMessageBox::Warning, tr("Unencrypted Connection"), tr("<b>Your client does not support SSL encryption</b>"),
+                  QMessageBox::Ignore|QMessageBox::Cancel, this);
+  box.setInformativeText(tr("Sensitive data, like passwords, will be transmitted unencrypted to your Quassel core."));
+  box.setDefaultButton(QMessageBox::Ignore);
+  *accepted = box.exec() == QMessageBox::Ignore;
+}
+
+void MainWin::handleNoSslInCore(bool *accepted) {
+  QMessageBox box(QMessageBox::Warning, tr("Unencrypted Connection"), tr("<b>Your core does not support SSL encryption</b>"),
+                  QMessageBox::Ignore|QMessageBox::Cancel, this);
+  box.setInformativeText(tr("Sensitive data, like passwords, will be transmitted unencrypted to your Quassel core."));
+  box.setDefaultButton(QMessageBox::Ignore);
+  *accepted = box.exec() == QMessageBox::Ignore;
+
+}
+
+#ifdef HAVE_SSL
+
+void MainWin::handleSslErrors(const QSslSocket *socket, bool *accepted, bool *permanently) {
+  QString errorString = "<ul>";
+  foreach(const QSslError error, socket->sslErrors())
+    errorString += QString("<li>%1</li>").arg(error.errorString());
+  errorString += "</ul>";
+
+  QMessageBox box(QMessageBox::Warning,
+                  tr("Untrusted Security Certificate"),
+                  tr("<b>The SSL certificate provided by the core at %1 is untrusted for the following reasons:</b>").arg(socket->peerName()),
+                  QMessageBox::Cancel, this);
+  box.setInformativeText(errorString);
+  box.addButton(tr("Continue"), QMessageBox::AcceptRole);
+  box.setDefaultButton(box.addButton(tr("Show Certificate"), QMessageBox::HelpRole));
+
+  QMessageBox::ButtonRole role;
+  do {
+    box.exec();
+    role = box.buttonRole(box.clickedButton());
+    if(role == QMessageBox::HelpRole) {
+      SslInfoDlg dlg(socket, this);
+      dlg.exec();
+    }
+  } while(role == QMessageBox::HelpRole);
+
+  *accepted = role == QMessageBox::AcceptRole;
+  if(*accepted) {
+    QMessageBox box2(QMessageBox::Warning,
+                     tr("Untrusted Security Certificate"),
+                     tr("Would you like to accept this certificate forever without being prompted?"),
+                     0, this);
+    box2.setDefaultButton(box2.addButton(tr("Current Session Only"), QMessageBox::NoRole));
+    box2.addButton(tr("Forever"), QMessageBox::YesRole);
+    box2.exec();
+    *permanently =  box2.buttonRole(box2.clickedButton()) == QMessageBox::YesRole;
+  }
+}
+
+#endif /* HAVE_SSL */
+
+void MainWin::handleCoreConnectionError(const QString &error) {
+  QMessageBox::critical(this, tr("Core Connection Error"), error, QMessageBox::Ok);
+}
+
+void MainWin::showCoreConnectionDlg() {
+  CoreConnectDlg dlg(this);
+  if(dlg.exec() == QDialog::Accepted) {
+    AccountId accId = dlg.selectedAccount();
+    if(accId.isValid())
+      Client::coreConnection()->connectToCore(accId);
+  }
+}
+
+void MainWin::showCoreConfigWizard(const QVariantList &backends) {
+  CoreConfigWizard *wizard = new CoreConfigWizard(Client::coreConnection(), backends, this);
+
+  wizard->show();
 }
 
 void MainWin::showChannelList(NetworkId netId) {
@@ -892,6 +954,10 @@ void MainWin::showSettingsDlg() {
   dlg->registerSettingsPage(new NetworksSettingsPage(dlg));
   dlg->registerSettingsPage(new AliasesSettingsPage(dlg));
   dlg->registerSettingsPage(new IgnoreListSettingsPage(dlg));
+
+  if(Quassel::runMode() != Quassel::Monolithic) {
+    dlg->registerSettingsPage(new CoreAccountSettingsPage(dlg));
+  }
 
   dlg->show();
 }

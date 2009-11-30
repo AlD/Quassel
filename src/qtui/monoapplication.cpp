@@ -21,7 +21,6 @@
 #include "monoapplication.h"
 #include "coreapplication.h"
 #include "client.h"
-#include "clientsyncer.h"
 #include "core.h"
 #include "qtui.h"
 
@@ -40,12 +39,12 @@ bool MonolithicApplication::init() {
   if(!Quassel::init()) // parse args
     return false;
 
+  connect(Client::coreConnection(), SIGNAL(startInternalCore()), SLOT(startInternalCore()));
+
   if(isOptionSet("port")) {
-    _internal->init();
-    _internalInitDone = true;
+    startInternalCore();
   }
 
-  connect(Client::instance(), SIGNAL(newClientSyncer(ClientSyncer *)), this, SLOT(newClientSyncer(ClientSyncer *)));
   return QtUiApplication::init();
 }
 
@@ -55,16 +54,13 @@ MonolithicApplication::~MonolithicApplication() {
   delete _internal;
 }
 
-void MonolithicApplication::newClientSyncer(ClientSyncer *syncer) {
-  connect(syncer, SIGNAL(startInternalCore(ClientSyncer *)), this, SLOT(startInternalCore(ClientSyncer *)));
-}
-
-void MonolithicApplication::startInternalCore(ClientSyncer *syncer) {
+void MonolithicApplication::startInternalCore() {
   if(!_internalInitDone) {
     _internal->init();
     _internalInitDone = true;
   }
   Core *core = Core::instance();
-  connect(syncer, SIGNAL(connectToInternalCore(SignalProxy *)), core, SLOT(setupInternalClientSession(SignalProxy *)));
-  connect(core, SIGNAL(sessionState(const QVariant &)), syncer, SLOT(internalSessionStateReceived(const QVariant &)));
+  CoreConnection *connection = Client::coreConnection();
+  connect(connection, SIGNAL(connectToInternalCore(SignalProxy *)), core, SLOT(setupInternalClientSession(SignalProxy *)));
+  connect(core, SIGNAL(sessionState(const QVariant &)), connection, SLOT(internalSessionStateReceived(const QVariant &)));
 }

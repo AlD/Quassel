@@ -59,6 +59,12 @@ public:
   void setLastAccount(AccountId);
   AccountId autoConnectAccount();
   void setAutoConnectAccount(AccountId);
+  bool autoConnectOnStartup();
+  void setAutoConnectOnStartup(bool);
+  bool autoConnectToFixedAccount();
+  void setAutoConnectToFixedAccount(bool);
+
+  void clearAccounts();
 
   void storeAccountData(AccountId id, const QVariantMap &data);
   QVariantMap retrieveAccountData(AccountId);
@@ -67,7 +73,6 @@ public:
   void setJumpKeyMap(const QHash<int, BufferId> &keyMap);
   QHash<int, BufferId> jumpKeyMap();
 
-protected:
   void setAccountValue(const QString &key, const QVariant &data);
   QVariant accountValue(const QString &key, const QVariant &def = QVariant());
 
@@ -100,25 +105,6 @@ public:
 
   void setNicksCaseSensitive(bool);
   bool nicksCaseSensitive();
-};
-
-
-// ========================================
-//  KnownHostsSettings
-// ========================================
-class KnownHostsSettings : public ClientSettings {
-public:
-  KnownHostsSettings();
-
-  QByteArray knownDigest(const QHostAddress &address);
-  void saveKnownHost(const QHostAddress &address, const QByteArray &certDigest);
-  bool isKnownHost(const QHostAddress &address, const QByteArray &certDigest);
-
-#ifdef HAVE_SSL
-  QByteArray knownDigest(const QSslSocket *socket);
-  void saveKnownHost(const QSslSocket *socket);
-  bool isKnownHost(const QSslSocket *socket);
-#endif
 };
 
 // ========================================

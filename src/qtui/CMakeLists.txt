@@ -29,6 +29,7 @@ set(SOURCES
     columnhandleitem.cpp
     coreconfigwizard.cpp
     coreconnectdlg.cpp
+    coreconnectionstatuswidget.cpp
     coreinfodlg.cpp
     debugbufferviewoverlay.cpp
     debugconsole.cpp
@@ -74,6 +75,7 @@ set(MOC_HDRS
     columnhandleitem.h
     coreconfigwizard.h
     coreconnectdlg.h
+    coreconnectionstatuswidget.h
     coreinfodlg.h
     debugbufferviewoverlay.h
     debugconsole.h
@@ -113,12 +115,12 @@ set(FORMS
     bufferwidget.ui
     channellistdlg.ui
     chatviewsearchbar.ui
-    coreaccounteditdlg.ui
     coreconfigwizardintropage.ui
     coreconfigwizardadminuserpage.ui
     coreconfigwizardstorageselectionpage.ui
     coreconfigwizardsyncpage.ui
-    coreconnectdlg.ui
+    coreconnectauthdlg.ui
+    coreconnectionstatuswidget.ui
     coreinfodlg.ui
     debugbufferviewoverlay.ui
     debugconsole.ui
@@ -149,6 +151,12 @@ else(HAVE_KDE)
     include_directories(${PHONON_INCLUDES})
   endif(HAVE_PHONON)
 endif(HAVE_KDE)
+
+if(HAVE_SSL)
+  set(SOURCES ${SOURCES} sslinfodlg.cpp)
+  set(MOC_HDRS ${MOC_HDRS} sslinfodlg.h)
+  set(FORMS ${FORMS} sslinfodlg.ui)
+endif(HAVE_SSL)
 
 if(INDICATEQT_FOUND)
   set(SOURCES ${SOURCES} indicatornotificationbackend.cpp)

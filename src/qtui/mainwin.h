@@ -42,6 +42,8 @@ class BufferHotListFilter;
 class BufferView;
 class BufferViewConfig;
 class ClientBufferViewConfig;
+class CoreAccount;
+class CoreConnectionStatusWidget;
 class BufferViewDock;
 class BufferWidget;
 class InputWidget;
@@ -105,7 +107,6 @@ class MainWin
   protected slots:
     void connectedToCore();
     void setConnectedState();
-    void updateLagIndicator(int lag = -1);
     void disconnectedFromCore();
     void setDisconnectedState();
 
@@ -117,8 +118,8 @@ class MainWin
     void messagesInserted(const QModelIndex &parent, int start, int end);
     void showAboutDlg();
     void showChannelList(NetworkId netId = NetworkId());
-    void startInternalCore();
-    void showCoreConnectionDlg(bool autoConnect = false);
+    void showCoreConnectionDlg();
+    void showCoreConfigWizard(const QVariantList &);
     void showCoreInfoDlg();
     void showAwayLog();
     void showSettingsDlg();
@@ -127,6 +128,14 @@ class MainWin
 #ifdef HAVE_KDE
     void showShortcutsDlg();
 #endif
+    void handleCoreConnectionError(const QString &errorMsg);
+    void userAuthenticationRequired(CoreAccount *, bool *valid, const QString &errorMessage);
+    void handleNoSslInClient(bool *accepted);
+    void handleNoSslInCore(bool *accepted);
+#ifdef HAVE_SSL
+    void handleSslErrors(const QSslSocket *socket, bool *accepted, bool *permanently);
+#endif
+
     void on_actionConfigureNetworks_triggered();
     void on_actionConfigureViews_triggered();
     void on_actionLockLayout_toggled(bool lock);
@@ -159,9 +168,8 @@ class MainWin
     KHelpMenu *_kHelpMenu;
 #endif
 
-    QLabel *coreLagLabel;
-    QLabel *sslLabel;
-    MsgProcessorStatusWidget *msgProcessorStatusWidget;
+    MsgProcessorStatusWidget *_msgProcessorStatusWidget;
+    CoreConnectionStatusWidget *_coreConnectionStatusWidget;
 
     TitleSetter _titleSetter;
 

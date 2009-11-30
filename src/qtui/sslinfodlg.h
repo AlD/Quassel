@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-09 by the Quassel Project                          *
+ *   Copyright (C) 2009 by the Quassel Project                             *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,27 +18,34 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef MONOAPPLICATION_H_
-#define MONOAPPLICATION_H_
+#ifndef SSLINFODLG_H
+#define SSLINFODLG_H
 
-#include "qtuiapplication.h"
+#include <QDialog>
 
-class CoreApplicationInternal;
+#include "ui_sslinfodlg.h"
 
-class MonolithicApplication : public QtUiApplication {
+class QSslSocket;
+
+// ========================================
+//  SslInfoDialog
+// ========================================
+
+class QSslCertificate;
+
+class SslInfoDlg : public QDialog {
   Q_OBJECT
-public:
-  MonolithicApplication(int &, char **);
-  ~MonolithicApplication();
 
-  bool init();
+public:
+  SslInfoDlg(const QSslSocket *socket, QWidget *parent = 0);
+  inline const QSslSocket *socket() const { return _socket; }
 
 private slots:
-  void startInternalCore();
+  void setCurrentCert(int index);
 
 private:
-  CoreApplicationInternal *_internal;
-  bool _internalInitDone;
+  Ui::SslInfoDlg ui;
+  const QSslSocket *_socket;
 };
 
 #endif

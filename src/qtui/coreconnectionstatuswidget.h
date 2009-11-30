@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-09 by the Quassel Project                          *
+ *   Copyright (C) 2009 by the Quassel Project                             *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,27 +18,35 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef MONOAPPLICATION_H_
-#define MONOAPPLICATION_H_
+#ifndef CORECONNECTIONSTATUSWIDGET_H
+#define CORECONNECTIONSTATUSWIDGET_H
 
-#include "qtuiapplication.h"
+#include <QWidget>
 
-class CoreApplicationInternal;
+#include "ui_coreconnectionstatuswidget.h"
 
-class MonolithicApplication : public QtUiApplication {
+#include "coreconnection.h"
+
+class CoreConnectionStatusWidget : public QWidget {
   Q_OBJECT
-public:
-  MonolithicApplication(int &, char **);
-  ~MonolithicApplication();
 
-  bool init();
+public:
+  CoreConnectionStatusWidget(CoreConnection *connection, QWidget *parent = 0);
+
+  inline CoreConnection *coreConnection() const { return _coreConnection; }
+
+public slots:
+  void update();
+  void updateLag(int msecs);
 
 private slots:
-  void startInternalCore();
+  void connectionStateChanged(CoreConnection::ConnectionState);
+  void progressRangeChanged(int min, int max);
 
 private:
-  CoreApplicationInternal *_internal;
-  bool _internalInitDone;
+  Ui::CoreConnectionStatusWidget ui;
+
+  CoreConnection *_coreConnection;
 };
 
-#endif
+#endif // CORECONNECTIONSTATUSWIDGET_H

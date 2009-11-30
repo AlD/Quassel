@@ -35,6 +35,8 @@
 #include "clientidentity.h"
 #include "clientignorelistmanager.h"
 #include "clientuserinputhandler.h"
+#include "coreaccountmodel.h"
+#include "coreconnection.h"
 #include "ircchannel.h"
 #include "ircuser.h"
 #include "message.h"
@@ -50,7 +52,6 @@
 #include <stdlib.h>
 
 QPointer<Client> Client::instanceptr = 0;
-AccountId Client::_currentCoreAccount = 0;
 
 /*** Initialization/destruction ***/
 
@@ -95,9 +96,9 @@ Client::Client(QObject *parent)
     _ignoreListManager(0),
     _messageModel(0),
     _messageProcessor(0),
-    _connectedToCore(false),
-    _syncedToCore(false),
-    _internalCore(false),
+    _coreAccountModel(new CoreAccountModel(this)),
+    _coreConnection(new CoreConnection(_coreAccountModel, this)),
+    _connected(false),
     _debugLog(&_debugLogBuffer)
 {
   _signalProxy->synchronize(_ircListHelper);
@@ -108,7 +109,6 @@ Client::~Client() {
 }
 
 void Client::init() {
-  _currentCoreAccount = 0;
   _networkModel = new NetworkModel(this);
 
   connect(this, SIGNAL(networkRemoved(NetworkId)),
@@ -138,8 +138,6 @@ void Client::init() {
   p->attachSlot(SIGNAL(networkCreated(NetworkId)), this, SLOT(coreNetworkCreated(NetworkId)));
   p->attachSlot(SIGNAL(networkRemoved(NetworkId)), this, SLOT(coreNetworkRemoved(NetworkId)));
 
-  connect(p, SIGNAL(disconnected()), this, SLOT(disconnectedFromCore()));
-
   //connect(mainUi(), SIGNAL(connectToCore(const QVariantMap &)), this, SLOT(connectToCore(const QVariantMap &)));
   connect(mainUi(), SIGNAL(disconnectFromCore()), this, SLOT(disconnectFromCore()));
   connect(this, SIGNAL(connected()), mainUi(), SLOT(connectedToCore()));
@@ -148,6 +146,11 @@ void Client::init() {
   // attach backlog manager
   p->synchronize(backlogManager());
   connect(backlogManager(), SIGNAL(messagesReceived(BufferId, int)), _messageModel, SLOT(messagesReceived(BufferId, int)));
+
+  coreAccountModel()->load();
+
+  connect(coreConnection(), SIGNAL(stateChanged(CoreConnection::ConnectionState)), SLOT(connectionStateChanged(CoreConnection::ConnectionState)));
+  coreConnection()->init();
 }
 
 /*** public static methods ***/
@@ -156,20 +159,12 @@ AbstractUi *Client::mainUi() {
   return instance()->_mainUi;
 }
 
-AccountId Client::currentCoreAccount() {
-  return _currentCoreAccount;
-}
-
-void Client::setCurrentCoreAccount(AccountId id) {
-  _currentCoreAccount = id;
-}
-
 bool Client::isConnected() {
-  return instance()->_connectedToCore;
+  return instance()->_connected;
 }
 
-bool Client::isSynced() {
-  return instance()->_syncedToCore;
+bool Client::internalCore() {
+  return currentCoreAccount().isInternal();
 }
 
 /*** Network handling ***/
@@ -298,16 +293,17 @@ void Client::sendBufferedUserInput() {
 
 /*** core connection stuff ***/
 
-void Client::setConnectedToCore(AccountId id, QIODevice *socket) {
-  if(socket) { // external core
-    // if the socket is an orphan, the signalProxy adopts it.
-    // -> we don't need to care about it anymore
-    socket->setParent(0);
-    signalProxy()->addPeer(socket);
+void Client::connectionStateChanged(CoreConnection::ConnectionState state) {
+  switch(state) {
+  case CoreConnection::Disconnected:
+    setDisconnectedFromCore();
+    break;
+  case CoreConnection::Synchronized:
+    setSyncedToCore();
+    break;
+  default:
+    break;
   }
-  _internalCore = !socket;
-  _connectedToCore = true;
-  setCurrentCoreAccount(id);
 }
 
 void Client::setSyncedToCore() {
@@ -346,7 +342,7 @@ void Client::setSyncedToCore() {
   // trigger backlog request once all active bufferviews are initialized
   connect(bufferViewOverlay(), SIGNAL(initDone()), this, SLOT(requestInitialBacklog()));
 
-  _syncedToCore = true;
+  _connected = true;
   emit connected();
   emit coreConnectionStateChanged(true);
 }
@@ -373,15 +369,14 @@ void Client::createDefaultBufferView() {
 }
 
 void Client::disconnectFromCore() {
-  if(!isConnected())
+  if(!coreConnection()->isConnected())
     return;
 
-  signalProxy()->removeAllPeers();
+  coreConnection()->disconnectFromCore();
 }
 
-void Client::disconnectedFromCore() {
-  _connectedToCore = false;
-  _syncedToCore = false;
+void Client::setDisconnectedFromCore() {
+  _connected = false;
   emit disconnected();
   emit coreConnectionStateChanged(false);
 
@@ -389,7 +384,6 @@ void Client::disconnectedFromCore() {
   messageProcessor()->reset();
 
   // Clear internal data. Hopefully nothing relies on it at this point.
-  setCurrentCoreAccount(0);
 
   if(_bufferSyncer) {
     _bufferSyncer->deleteLater();
