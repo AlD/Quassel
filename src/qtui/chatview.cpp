@@ -58,7 +58,7 @@ ChatView::ChatView(MessageFilter *filter, QWidget *parent)
 void ChatView::init(MessageFilter *filter) {
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-  setAlignment(Qt::AlignBottom);
+  setAlignment(Qt::AlignLeft|Qt::AlignBottom);
   setInteractive(true);
   //setOptimizationFlags(QGraphicsView::DontClipPainter | QGraphicsView::DontAdjustForAntialiasing);
   // setOptimizationFlags(QGraphicsView::DontAdjustForAntialiasing);
@@ -127,40 +127,15 @@ void ChatView::resizeEvent(QResizeEvent *event) {
   verticalScrollBar()->setValue(verticalScrollBar()->maximum());
 }
 
-// Workaround for QTBUG-6322
-// The viewport rect gets some margins where it shouldn't, resulting in scrollbars to appear
 void ChatView::adjustSceneRect() {
-  static qreal voffset = 0;
-  static bool offsetStable = false;
+  // Workaround for QTBUG-6322
+  // If the viewport's sceneRect() is (almost) as wide as as the viewport itself,
+  // Qt wants to reserve space for scrollbars even if they're turned off, resulting in
+  // an ugly white space at the bottom of the ChatView.
+  // Since the view's scene's width actually doesn't matter at all, we just adjust it
+  // by some hopefully large enough value to avoid this problem.
 
-  QRectF rect = scene()->sceneRect();
-  if(rect.height() <= viewport()->height()) {
-    setSceneRect(rect);
-    return;
-  }
-  if(offsetStable && rect.height() > viewport()->height())
-    setSceneRect(rect.adjusted(0, 0, 0, voffset));
-  else {
-    setSceneRect(rect);
-
-    QScrollBar *vbar = verticalScrollBar();
-    qreal sceneHeight = rect.height();
-    qreal viewHeight = vbar->maximum() + viewport()->height() - vbar->minimum();
-    if(sceneHeight != viewHeight) {
-      voffset = sceneHeight - viewHeight;
-      // qDebug() << "Adjusting ChatView offset to" << voffset << "(QTBUG-6322)";
-      if(sceneHeight + voffset <= viewport()->height()) {
-        setSceneRect(rect.adjusted(0, -voffset, 0, 0));
-        offsetStable = false;
-        return;
-      } else
-        setSceneRect(rect.adjusted(0, 0, 0, voffset));
-    }
-    if(vbar->maximum() + viewport()->height() - vbar->minimum() != sceneHeight)
-      qWarning() << "Workaround for QTBUG-6322 failed!1!!" << vbar->maximum() + viewport()->height() - vbar->minimum() << sceneHeight;
-    else
-      offsetStable = true;
-  }
+  setSceneRect(scene()->sceneRect().adjusted(0, 0, -25 ,0));
 }
 
 void ChatView::mouseMoveWhileSelecting(const QPointF &scenePos) {
