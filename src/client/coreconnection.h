@@ -84,6 +84,7 @@ signals:
   void stateChanged(CoreConnection::ConnectionState);
   void encrypted(bool isEncrypted = true);
   void synchronized();
+  void lagUpdated(int msecs);
 
   void connectionError(const QString &errorMsg);
   void connectionErrorPopup(const QString &errorMsg);
@@ -175,7 +176,7 @@ private:
   QTimer _reconnectTimer;
   bool _wantReconnect;
 
-  QSet<Network *> _netsToSync;
+  QSet<QObject *> _netsToSync;
   int _numNetsToSync;
   int _progressMinimum, _progressMaximum, _progressValue;
   QString _progressText;

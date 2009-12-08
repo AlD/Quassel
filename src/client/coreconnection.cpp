@@ -45,6 +45,12 @@ CoreConnection::CoreConnection(CoreAccountModel *model, QObject *parent)
   _progressValue(-1)
 {
   qRegisterMetaType<ConnectionState>("CoreConnection::ConnectionState");
+}
+
+void CoreConnection::init() {
+  Client::signalProxy()->setHeartBeatInterval(30);
+  connect(Client::signalProxy(), SIGNAL(disconnected()), SLOT(coreSocketDisconnected()));
+  connect(Client::signalProxy(), SIGNAL(lagUpdated(int)), SIGNAL(lagUpdated(int)));
 
   _reconnectTimer.setSingleShot(true);
   connect(&_reconnectTimer, SIGNAL(timeout()), SLOT(reconnectTimeout()));
@@ -53,11 +59,6 @@ CoreConnection::CoreConnection(CoreAccountModel *model, QObject *parent)
   connect(Solid::Networking::notifier(), SIGNAL(statusChanged(Solid::Networking::Status)),
           SLOT(solidNetworkStatusChanged(Solid::Networking::Status)));
 #endif
-}
-
-void CoreConnection::init() {
-  Client::signalProxy()->setHeartBeatInterval(30);
-  connect(Client::signalProxy(), SIGNAL(disconnected()), SLOT(coreSocketDisconnected()));
 
   CoreConnectionSettings s;
   s.initAndNotify("PingTimeoutInterval", this, SLOT(pingTimeoutIntervalChanged(QVariant)), 60);
@@ -100,35 +101,6 @@ void CoreConnection::updateProgress(int value, int max) {
     emit progressRangeChanged(_progressMinimum, _progressMaximum);
   }
   setProgressValue(value);
-}
-
-void CoreConnection::resetConnection(bool wantReconnect) {
-  _wantReconnect = wantReconnect;
-
-  if(_socket) {
-    disconnect(_socket, 0, this, 0);
-    _socket->deleteLater();
-    _socket = 0;
-  }
-  _blockSize = 0;
-
-  _coreMsgBuffer.clear();
-
-  _netsToSync.clear();
-  _numNetsToSync = 0;
-
-  setProgressMaximum(-1); // disable
-  setState(Disconnected);
-
-  emit connectionMsg(tr("Disconnected from core."));
-  emit encrypted(false);
-
-  // initiate if a reconnect if appropriate
-  CoreConnectionSettings s;
-  if(wantReconnect && s.autoReconnect()) {
-    _reconnectTimer.start();
-    //reconnectToCore();
-  }
 }
 
 void CoreConnection::reconnectTimeout() {
@@ -283,7 +255,6 @@ void CoreConnection::coreSocketError(QAbstractSocket::SocketError) {
 }
 
 void CoreConnection::coreSocketDisconnected() {
-  emit disconnected();
   qDebug() << Q_FUNC_INFO;
   resetConnection(true);
   // FIXME handle disconnects gracefully
@@ -347,6 +318,35 @@ void CoreConnection::disconnectFromCore(const QString &errorString, bool wantRec
 
   Client::signalProxy()->removeAllPeers();
   resetConnection(wantReconnect);
+}
+
+void CoreConnection::resetConnection(bool wantReconnect) {
+  _wantReconnect = wantReconnect;
+
+  if(_socket) {
+    disconnect(_socket, 0, this, 0);
+    _socket->deleteLater();
+    _socket = 0;
+  }
+  _blockSize = 0;
+
+  _coreMsgBuffer.clear();
+
+  _netsToSync.clear();
+  _numNetsToSync = 0;
+
+  setProgressMaximum(-1); // disable
+  setState(Disconnected);
+  emit lagUpdated(-1);
+
+  emit connectionMsg(tr("Disconnected from core."));
+  emit encrypted(false);
+
+  // initiate if a reconnect if appropriate
+  CoreConnectionSettings s;
+  if(wantReconnect && s.autoReconnect()) {
+    _reconnectTimer.start();
+  }
 }
 
 void CoreConnection::reconnectToCore() {
@@ -670,8 +670,9 @@ void CoreConnection::syncToCore(const QVariantMap &sessionState) {
   checkSyncState();
 }
 
+// this is also called for destroyed networks!
 void CoreConnection::networkInitDone() {
-  Network *net = qobject_cast<Network *>(sender());
+  QObject *net = sender();
   Q_ASSERT(net);
   disconnect(net, 0, this, 0);
   _netsToSync.remove(net);
@@ -680,7 +681,7 @@ void CoreConnection::networkInitDone() {
 }
 
 void CoreConnection::checkSyncState() {
-  if(_netsToSync.isEmpty()) {
+  if(_netsToSync.isEmpty() && state() >= Synchronizing) {
     setState(Synchronized);
     setProgressText(tr("Synchronized to %1").arg(currentAccount().accountName()));
     setProgressMaximum(-1);
