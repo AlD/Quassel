@@ -255,6 +255,14 @@ void Quassel::logFatalMessage(const char *msg) {
 #endif
 }
 
+Quassel::Features Quassel::features() {
+  Features feats = 0;
+  for(int i = 1; i <= NumFeatures; i<<=1)
+    feats |= (Feature) i;
+
+  return feats;
+}
+
 const QString &Quassel::coreDumpFileName() {
   if(_coreDumpFileName.isEmpty()) {
     QDir configDir(configDirPath());
@@ -421,5 +429,5 @@ void Quassel::loadTranslation(const QLocale &locale) {
   bool success = qtTranslator->load(QString("qt_%1").arg(locale.name()), translationDirPath());
   if(!success)
     qtTranslator->load(QString("qt_%1").arg(locale.name()), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-  quasselTranslator->load(QString("quassel_%1").arg(locale.name()), translationDirPath());
+  quasselTranslator->load(QString("%1").arg(locale.name()), translationDirPath());
 }

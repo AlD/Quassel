@@ -26,6 +26,7 @@
 
 #include "bufferinfo.h"
 #include "coreconnection.h"
+#include "quassel.h"
 #include "types.h"
 
 class Message;
@@ -118,6 +119,7 @@ public:
   static inline CoreAccountModel *coreAccountModel() { return instance()->_coreAccountModel; }
   static inline CoreConnection *coreConnection() { return instance()->_coreConnection; }
   static inline CoreAccount currentCoreAccount() { return coreConnection()->currentAccount(); }
+  static inline Quassel::Features coreFeatures() { return _coreFeatures; }
 
   static bool isConnected();
   static bool internalCore();
@@ -125,6 +127,7 @@ public:
   static void userInput(const BufferInfo &bufferInfo, const QString &message);
 
   static void setBufferLastSeenMsg(BufferId id, const MsgId &msgId); // this is synced to core and other clients
+  static void setBufferMarkerLine(BufferId id, const MsgId &msgId); // this is synced to core and other clients
   static void removeBuffer(BufferId id);
   static void renameBuffer(BufferId bufferId, const QString &newName);
   static void mergeBuffersPermanently(BufferId bufferId1, BufferId bufferId2);
@@ -200,6 +203,7 @@ private:
   void init();
 
   static void addNetwork(Network *);
+  static void setCoreFeatures(Quassel::Features);
   static inline BufferSyncer *bufferSyncer() { return instance()->_bufferSyncer; }
 
   static QPointer<Client> instanceptr;
@@ -230,6 +234,7 @@ private:
   QHash<IdentityId, Identity *> _identities;
 
   bool _connected;
+  static Quassel::Features _coreFeatures;
 
   QString _debugLogBuffer;
   QTextStream _debugLog;
