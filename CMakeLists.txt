@@ -21,7 +21,8 @@
 
 project(QuasselIRC)
 
-cmake_minimum_required(VERSION 2.6.0 FATAL_ERROR)
+# cmake 2.6.2 is required for KDE >=4.2 and should be widespread enough now
+cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
 
 if(COMMAND cmake_policy)
    cmake_policy(SET CMP0003 NEW)
@@ -302,13 +303,7 @@ if(WIN32)
 endif(WIN32)
 
 if(INDICATEQT_FOUND)
-  if(WANT_QTCLIENT)
-    set(DESKTOP_FILE ${XDG_APPS_INSTALL_DIR}/quasselclient.desktop)
-  endif(WANT_QTCLIENT)
-  if(WANT_MONO)
-    set(DESKTOP_FILE ${XDG_APPS_INSTALL_DIR}/quassel.desktop)
-  endif(WANT_MONO)
-  add_definitions(-DDESKTOP_FILE=${DESKTOP_FILE})
+  add_definitions(-DXDG_APPS_INSTALL_DIR=${XDG_APPS_INSTALL_DIR})
 endif(INDICATEQT_FOUND)
 
 # We need to create a version.gen

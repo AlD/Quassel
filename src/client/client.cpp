@@ -52,6 +52,7 @@
 #include <stdlib.h>
 
 QPointer<Client> Client::instanceptr = 0;
+Quassel::Features Client::_coreFeatures = 0;
 
 /*** Initialization/destruction ***/
 
@@ -157,6 +158,10 @@ void Client::init() {
 
 AbstractUi *Client::mainUi() {
   return instance()->_mainUi;
+}
+
+void Client::setCoreFeatures(Quassel::Features features) {
+  _coreFeatures = features;
 }
 
 bool Client::isConnected() {
@@ -311,6 +316,7 @@ void Client::setSyncedToCore() {
   Q_ASSERT(!_bufferSyncer);
   _bufferSyncer = new BufferSyncer(this);
   connect(bufferSyncer(), SIGNAL(lastSeenMsgSet(BufferId, MsgId)), _networkModel, SLOT(setLastSeenMsgId(BufferId, MsgId)));
+  connect(bufferSyncer(), SIGNAL(markerLineSet(BufferId,MsgId)), _networkModel, SLOT(setMarkerLineMsgId(BufferId,MsgId)));
   connect(bufferSyncer(), SIGNAL(bufferRemoved(BufferId)), this, SLOT(bufferRemoved(BufferId)));
   connect(bufferSyncer(), SIGNAL(bufferRenamed(BufferId, QString)), this, SLOT(bufferRenamed(BufferId, QString)));
   connect(bufferSyncer(), SIGNAL(buffersPermanentlyMerged(BufferId, BufferId)), this, SLOT(buffersPermanentlyMerged(BufferId, BufferId)));
@@ -377,6 +383,8 @@ void Client::disconnectFromCore() {
 
 void Client::setDisconnectedFromCore() {
   _connected = false;
+  _coreFeatures = 0;
+
   emit disconnected();
   emit coreConnectionStateChanged(false);
 
@@ -461,9 +469,13 @@ void Client::recvMessage(const Message &msg) {
 }
 
 void Client::setBufferLastSeenMsg(BufferId id, const MsgId &msgId) {
-  if(!bufferSyncer())
-    return;
-  bufferSyncer()->requestSetLastSeenMsg(id, msgId);
+  if(bufferSyncer())
+    bufferSyncer()->requestSetLastSeenMsg(id, msgId);
+}
+
+void Client::setBufferMarkerLine(BufferId id, const MsgId &msgId) {
+  if(bufferSyncer())
+    bufferSyncer()->requestSetMarkerLine(id, msgId);
 }
 
 void Client::removeBuffer(BufferId id) {

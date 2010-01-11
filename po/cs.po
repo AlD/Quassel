@@ -1,2353 +1,2270 @@
-#, fuzzy
+# Copyright (C) 2009
+# This file is distributed under the same license as the Quassel package.
+#
+# Tomáš Chvátal <scarabeus@gentoo.org>, 2009, 2010.
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-01-10 13:33+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2010-01-10 13:47+0100\n"
+"Last-Translator: Tomáš Chvátal <scarabeus@gentoo.org>\n"
+"Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 1.5.1\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Lokalize 1.0\n"
+"X-Language: cs\n"
 
 #: AboutDlg#1
 msgid "About Quassel"
-msgstr ""
+msgstr "O aplikaci Quassel"
 
 #: AboutDlg#2
 msgid ""
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'DejaVu Sans'; font-size:15pt; "
-"font-weight:600; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\">Quassel "
-"IRC</p></body></html>"
-msgstr ""
+"</style></head><body style=\" font-family:'DejaVu Sans'; font-size:15pt; font-weight:600; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Quassel IRC</p></body></html>"
+msgstr "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">￼p, li { white-space: pre-wrap; }￼</style></head><body style=\" font-family:'DejaVu Sans'; font-size:15pt; font-weight:600; font-style:normal;\">￼<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Quassel IRC</p></body></html>"
 
 #: AboutDlg#3
 msgid ""
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'DejaVu Sans'; font-size:10pt; "
-"font-weight:600; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\">Version 0.2.0-pre, Build "
-"&gt;= 474 (2008-02-08)</p></body></html>"
-msgstr ""
+"</style></head><body style=\" font-family:'DejaVu Sans'; font-size:10pt; font-weight:600; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Version 0.2.0-pre, Build &gt;= 474 (2008-02-08)</p></body></html>"
+msgstr "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">￼p, li { white-space: pre-wrap; }￼</style></head><body style=\" font-family:'DejaVu Sans'; font-size:10pt; font-weight:600; font-style:normal;\">￼<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Verze 0.2.0-pre, Build &gt;= 474 (2008-02-08)</p></body></html>"
 
 #: AboutDlg#4
 msgid "&About"
-msgstr ""
+msgstr "O &aplikaci"
 
 #: AboutDlg#5
 msgid "A&uthors"
-msgstr ""
+msgstr "A&utoři"
 
 #: AboutDlg#6
 msgid "&Contributors"
-msgstr ""
+msgstr "Přispěva&telé"
 
 #: AboutDlg#7
 msgid "&Thanks To"
-msgstr ""
+msgstr "Podě&kování"
 
 #: AboutDlg#8
 msgid "<b>Version:</b> %1<br><b>Protocol version:</b> %2<br><b>Built:</b> %3"
-msgstr ""
+msgstr "<b>Verze:</b> %1<br><b>Verze protokolu:</b> %2<br><b>Složení:</b> %3"
 
 #: AboutDlg#9
-msgid ""
-"<b>A modern, distributed IRC Client</b><br><br>&copy;2005-2009 by the "
-"Quassel Project<br><a href=\"http://quassel-irc.org\">http://quassel-"
-"irc.org</a><br><a href=\"irc://irc.freenode.net/quassel\">#quassel</a> on <a "
-"href=\"http://www.freenode.net\">Freenode</a><br><br>Quassel IRC is dual-"
-"licensed under <a href=\"http://www.gnu.org/licenses/gpl-2.0.txt\">GPLv2</a> "
-"and <a href=\"http://www.gnu.org/licenses/gpl-3.0.txt\">GPLv3</a>.<br>Most "
-"icons are &copy; by the <a href=\"http://www.oxygen-icons.org\">Oxygen "
-"Team</a> and used under the <a "
-"href=\"http://www.gnu.org/licenses/lgpl.html\">LGPL</a>.<br><br>Please use <a "
-"href=\"http://bugs.quassel-irc.org\">http://bugs.quassel-irc.org</a> to report "
-"bugs."
-msgstr ""
+msgid "<b>A modern, distributed IRC Client</b><br><br>&copy;2005-2009 by the Quassel Project<br><a href=\"http://quassel-irc.org\">http://quassel-irc.org</a><br><a href=\"irc://irc.freenode.net/quassel\">#quassel</a> on <a href=\"http://www.freenode.net\">Freenode</a><br><br>Quassel IRC is dual-licensed under <a href=\"http://www.gnu.org/licenses/gpl-2.0.txt\">GPLv2</a> and <a href=\"http://www.gnu.org/licenses/gpl-3.0.txt\">GPLv3</a>.<br>Most icons are &copy; by the <a href=\"http://www.oxygen-icons.org\">Oxygen Team</a> and used under the <a href=\"http://www.gnu.org/licenses/lgpl.html\">LGPL</a>.<br><br>Please use <a href=\"http://bugs.quassel-irc.org\">http://bugs.quassel-irc.org</a> to report bugs."
+msgstr "<b>A Moderní, distribuovaný IRC Client</b><br><br>Vytvořený &copy;2005-2008 Quassel Project<br><a href=\"http://quassel-irc.org\">http://quassel-irc.org</a><br><a href=\"irc://irc.freenode.net/quassel\">#quassel</a> na <a href=\"http://www.freenode.net\">Freenode</a><br><br>Quassel IRC je duálně-licencován pod <a href=\"http://www.gnu.org/licenses/gpl-2.0.txt\">GPLv2</a> a <a href=\"http://www.gnu.org/licenses/gpl-3.0.txt\">GPLv3</a>.<br>Většina ikon náleží &copy; <a href=\"http://www.oxygen-icons.org\">Oxygen Team</a>u pod licencí <a href=\"http://www.gnu.org/licenses/lgpl.html\">LGPL</a>.<br><br>Prosíme použijte <a href=\"http://bugs.quassel-irc.org\">http://bugs.quassel-irc.org</a> pro hlášení chyb."
 
 #: AboutDlg#10
 msgid "Quassel IRC is mainly developed by:"
-msgstr ""
+msgstr "Hlavní vývojáři Quassel IRC:"
 
 #: AboutDlg#11
-msgid ""
-"We would like to thank the following contributors (in alphabetical order) "
-"and everybody we forgot to mention here:"
-msgstr ""
+msgid "We would like to thank the following contributors (in alphabetical order) and everybody we forgot to mention here:"
+msgstr "Rádi bychom poděkovali následujícím přispěvatelům (v abecedním pořadí) a také všem, na které jsme zde zapomněli:"
 
 #: AboutDlg#12
-msgid ""
-"Special thanks goes to:<br><dl><dt><img src=\":/pics/quassel-"
-"eye.png\">&nbsp;<b>John \"nox\" Hand</b></dt><dd>for the original Quassel icon "
-"- The All-Seeing Eye</dt><dt><img src=\":/pics/oxygen.png\">&nbsp;<b><a "
-"href=\"http://www.oxygen-icons.org\">The Oxygen Team</a></b></dt><dd>for "
-"creating all the artwork you see throughout Quassel</dd><dt><img src=\":/pics"
-"/qt-logo-32.png\">&nbsp;<b><a href=\"http://www.trolltech.com\">Qt Software "
-"formerly known as Trolltech</a></b></dt><dd>for creating Qt and Qtopia, and "
-"for sponsoring development of QuasselTopia with Greenphones and "
-"more</dd><dt><a href=\"http://www.nokia.com\"><img "
-"src=\":/pics/nokia.png\"></a></b></dt><dd>for keeping Qt alive, and for "
-"sponsoring development of Quassel Mobile with N810s</dd>"
-msgstr ""
+msgid "Special thanks goes to:<br><dl><dt><img src=\":/pics/quassel-eye.png\">&nbsp;<b>John \"nox\" Hand</b></dt><dd>for the original Quassel icon - The All-Seeing Eye</dt><dt><img src=\":/pics/oxygen.png\">&nbsp;<b><a href=\"http://www.oxygen-icons.org\">The Oxygen Team</a></b></dt><dd>for creating all the artwork you see throughout Quassel</dd><dt><img src=\":/pics/qt-logo-32.png\">&nbsp;<b><a href=\"http://www.trolltech.com\">Qt Software formerly known as Trolltech</a></b></dt><dd>for creating Qt and Qtopia, and for sponsoring development of QuasselTopia with Greenphones and more</dd><dt><a href=\"http://www.nokia.com\"><img src=\":/pics/nokia.png\"></a></b></dt><dd>for keeping Qt alive, and for sponsoring development of Quassel Mobile with N810s</dd>"
+msgstr "Zvláště bychom rádi poděkovali:<br><dl><dt><img src=\":/pics/quassel-eye.png\">&nbsp;<b>Johnu \"nox\" Handovi</b></dt><dd>pro skvělý artwork a Quassel logo/ikonku</dt><dt><img src=\":/pics/oxygen.png\">&nbsp;<b><a href=\"http://www.oxygen-icons.org\">Oxygen Team</a></b></dt><dd>pro vytvoření většiny ostatních skvělých ikon, které můžete vidět všude možně v aplikaci</dd><dt><img src=\":/pics/qt-logo-32.png\">&nbsp;<b><a href=\"http://www.trolltech.com\">Qt Software (dříve znám jako Trolltech)</a></b></dt><dd>za vytvoření Qt a Qtopia, a pro sponzorování vývoje QuasselTopia s Greenphones a dalších</dd><dt><b><a href=\"http://www.nokia.com\"><img src=\":/pics/nokia.png\"></a></b></dt><dd>pro udržování Qt naživu, a pro sponzorování vývoje Quassel Mobile N810</dd>"
 
 #: AbstractSqlStorage#1
-msgid ""
-"Installed Schema (version %1) is not up to date. Upgrading to version %2..."
-msgstr ""
+msgid "Installed Schema (version %1) is not up to date. Upgrading to version %2..."
+msgstr "Instalované schéma (verze %1) není aktuální. aktualizuji na %2..."
 
 #: AbstractSqlStorage#2
 msgid "Upgrade failed..."
-msgstr ""
+msgstr "Aktualizace selhala..."
 
 #: AliasesModel#1
-msgid ""
-"<b>The shortcut for the alias</b><br />It can be used as a regular slash "
-"command.<br /><br /><b>Example:</b> \"foo\" can be used per /foo"
-msgstr ""
+msgid "<b>The shortcut for the alias</b><br />It can be used as a regular slash command.<br /><br /><b>Example:</b> \"foo\" can be used per /foo"
+msgstr "<b>Zkratka pro alternativu</b><br />Lze ji použít jako běžný lomítkový příkaz.<br /><br /><b>Příklad:</b> \"foo\" lze zavolat pomocí /foo"
 
 #: AliasesModel#2
-msgid ""
-"<b>The string the shortcut will be expanded to</b><br /><b>special "
-"variables:</b><br /> - <b>$i</b> represents the i'th parameter.<br /> - "
-"<b>$i..j</b> represents the i'th to j'th parameter separated by spaces.<br "
-"/> - <b>$i..</b> represents all parameters from i on separated by spaces.<br "
-"/> - <b>$i:hostname</b> represents the hostname of the user identified by "
-"the i'th parameter or a * if unknown.<br /> - <b>$0</b> the whole string.<br "
-"/> - <b>$nick</b> your current nickname<br /> - <b>$channel</b> the name of "
-"the selected channel<br /><br />Multiple commands can be separated with "
-"semicolons<br /><br /><b>Example:</b> \"Test $1; Test $2; Test All $0\" will "
-"be expanded to three separate messages \"Test 1\", \"Test 2\" and \"Test All 1 2 "
-"3\" when called like /test 1 2 3"
-msgstr ""
+msgid "<b>The string the shortcut will be expanded to</b><br /><b>special variables:</b><br /> - <b>$i</b> represents the i'th parameter.<br /> - <b>$i..j</b> represents the i'th to j'th parameter separated by spaces.<br /> - <b>$i..</b> represents all parameters from i on separated by spaces.<br /> - <b>$i:hostname</b> represents the hostname of the user identified by the i'th parameter or a * if unknown.<br /> - <b>$0</b> the whole string.<br /> - <b>$nick</b> your current nickname<br /> - <b>$channel</b> the name of the selected channel<br /><br />Multiple commands can be separated with semicolons<br /><br /><b>Example:</b> \"Test $1; Test $2; Test All $0\" will be expanded to three separate messages \"Test 1\", \"Test 2\" and \"Test All 1 2 3\" when called like /test 1 2 3"
+msgstr "<b>Text na jaký bude převedena zkratka</b><br /><b>Speciální hodnoty:</b><br /> - <b>$i</b> reprezentuje i-tý parametr.<br /> - <b>$i..j</b> reprezentuje i-tý až j-tý parametr oddělený mezerami.<br /> - <b>$i..</b> reprezentuje všechny parametry od i-tého, oddělené mezerami.<br /> - <b>$i:hostname</b> reprezentuje název počítače uživatele identifikovaného i-tým parametrem nebo * pokud je neznámý.<br /> - <b>$0</b> celý text.<br /> - <b>$nick</b> vaše současná přezdívka<br /> - <b>$channel</b> název vybraného kanálu<br /><br />Oddělení více příkazů je umožněno pomocí středníku<br /><br /><b>Příklad:</b> \"Test $1; Test $2; Test All $0\" bude interpretováno jako \"Test 1\", \"Test 2\" and \"Test All 1 2 3\" when called like /test 1 2 3"
 
 #: AliasesModel#3
 msgid "Alias"
-msgstr ""
+msgstr "Alternativa"
 
 #: AliasesModel#4
 msgid "Expansion"
-msgstr ""
+msgstr "Rozšířený výraz"
 
 #: AliasesSettingsPage#1
 msgctxt "AliasesSettingsPage#1"
 msgid "Form"
-msgstr ""
+msgstr "Form"
 
 #: AliasesSettingsPage#2
 msgctxt "AliasesSettingsPage#2"
 msgid "New"
-msgstr ""
+msgstr "Nová"
 
 #: AliasesSettingsPage#3
 msgctxt "AliasesSettingsPage#3"
 msgid "Delete"
-msgstr ""
+msgstr "Smazat"
 
 #: AliasesSettingsPage#4
 msgctxt "AliasesSettingsPage#4"
 msgid "IRC"
-msgstr ""
+msgstr "IRC"
 
 #: AliasesSettingsPage#5
 msgid "Aliases"
-msgstr ""
+msgstr "Alternativy"
 
 #: AppearanceSettingsPage#1
 msgctxt "AppearanceSettingsPage#1"
 msgid "Form"
-msgstr ""
+msgstr "Form"
 
 #: AppearanceSettingsPage#2
 msgid "Client style:"
-msgstr ""
+msgstr "Styl klienta:"
 
 #: AppearanceSettingsPage#3
 msgid "Set application style"
-msgstr ""
+msgstr "Zvolte styl aplikace"
 
 #: AppearanceSettingsPage#4
 msgid "Language:"
-msgstr ""
+msgstr "Jazyk:"
 
 #: AppearanceSettingsPage#5
 msgid "Set the application language. Requires restart!"
-msgstr ""
+msgstr "Zvolte jazyk aplikace. Vyžaduje restart!"
 
 #: AppearanceSettingsPage#6
 msgid "<System Default>"
-msgstr ""
+msgstr "<Systémové výchozí>"
 
 #: AppearanceSettingsPage#7
 msgid "<Original>"
-msgstr ""
+msgstr "<Původní>"
 
 #: AppearanceSettingsPage#8
 msgid "Use custom stylesheet"
-msgstr ""
+msgstr "Používat vlastní soubor stylu"
 
 #: AppearanceSettingsPage#9
 msgid "Path:"
-msgstr ""
+msgstr "Cesta:"
 
 #: AppearanceSettingsPage#10
 msgctxt "AppearanceSettingsPage#10"
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #: AppearanceSettingsPage#11
 msgid "Show system tray icon"
-msgstr ""
+msgstr "Zobrazovat ikonu v systémové části panelu"
 
 #: AppearanceSettingsPage#12
 msgid "Hide to tray on close button"
-msgstr ""
+msgstr "Při zavření skrýt do systémové části panelu"
 
 #: AppearanceSettingsPage#13
 msgid "Message Redirection"
-msgstr ""
+msgstr "Přesměrování zpráv"
 
 #: AppearanceSettingsPage#14
 msgid "User Notices:"
-msgstr ""
+msgstr "Uživatelská oznámení:"
 
 #: AppearanceSettingsPage#15
 msgid "Server Notices:"
-msgstr ""
+msgstr "Oznámení serveru:"
 
 #: AppearanceSettingsPage#16
 msgid "Default Target"
-msgstr ""
+msgstr "Výchozí cíl"
 
 #: AppearanceSettingsPage#17
 msgid "Status Window"
-msgstr ""
+msgstr "Okno stavu"
 
 #: AppearanceSettingsPage#18
 msgid "Current Chat"
-msgstr ""
+msgstr "Aktuální rozhovor"
 
 #: AppearanceSettingsPage#19
 msgid "Errors:"
-msgstr ""
+msgstr "Chyby:"
 
 #: AppearanceSettingsPage#20
 msgctxt "AppearanceSettingsPage#20"
 msgid "Interface"
-msgstr ""
+msgstr "Rozhraní"
 
 #: AppearanceSettingsPage#21
 msgid "Please choose a stylesheet file"
-msgstr ""
+msgstr "Prosím vyberte soubor stylu"
 
 #: AwayLogView#1
 msgid "Away Log"
-msgstr ""
+msgstr "Logovaní při nastavení pryč"
 
 #: AwayLogView#2
 msgctxt "AwayLogView#2"
 msgid "Show Network Name"
-msgstr ""
+msgstr "Zobrazit název sítě"
 
 #: AwayLogView#3
 msgctxt "AwayLogView#3"
 msgid "Show Buffer Name"
-msgstr ""
+msgstr "Zobrazit název záložky"
 
 #: BacklogSettingsPage#1
 msgctxt "BacklogSettingsPage#1"
 msgid "Form"
-msgstr ""
+msgstr "Form"
 
 #: BacklogSettingsPage#2
-msgid ""
-"Number of messages to be requested from the core when using scrolling up in "
-"the buffer view."
-msgstr ""
+msgid "Number of messages to be requested from the core when using scrolling up in the buffer view."
+msgstr "Počet zpráv které se stáhnou z jádra při rolování myší ve zobrazené záložce."
 
 #: BacklogSettingsPage#3
 msgid "Dynamic backlog amount:"
-msgstr ""
+msgstr "Dynamická velikost získávané historie:"
 
 #: BacklogSettingsPage#4
 msgid "Backlog request method:"
-msgstr ""
+msgstr "Metoda požadování historie:"
 
 #: BacklogSettingsPage#5
 msgid "Fixed amount per chat"
-msgstr ""
+msgstr "Pevné množství za záložku"
 
 #: BacklogSettingsPage#6
 msgid "Unread messages per chat"
-msgstr ""
+msgstr "Nepřečtené zprávy za záložku"
 
 #: BacklogSettingsPage#7
 msgid "Globally unread messages"
-msgstr ""
+msgstr "Celkově nepřečtené zprávy"
 
 #: BacklogSettingsPage#8
-msgid ""
-"The simplest requester. It fetches a fixed amount of lines for each chat "
-"window from the backlog."
-msgstr ""
+msgid "The simplest requester. It fetches a fixed amount of lines for each chat window from the backlog."
+msgstr "Nejjednodušší požadavek. Stáhne přesný počet řádků pro každou záložku z historie."
 
 #: BacklogSettingsPage#9
-msgid ""
-"amount of messages per buffer that are requested after the core connection "
-"has been established."
-msgstr ""
+msgid "amount of messages per buffer that are requested after the core connection has been established."
+msgstr "množství zpráv za záložku, které jsou vyžádány když bylo navázáno spojení s jádrem."
 
 #: BacklogSettingsPage#10
 msgid "Initial backlog amount:"
-msgstr ""
+msgstr "Výchozí množství historie:"
 
 #: BacklogSettingsPage#11
 msgid ""
-"This requester fetches unread messages for each chat window individually. "
-"The amount of lines can be limited per chat.\n"
+"This requester fetches unread messages for each chat window individually. The amount of lines can be limited per chat.\n"
 "\n"
-"You can also choose to fetch additional older chatlines to provide a better "
-"context."
+"You can also choose to fetch additional older chatlines to provide a better context."
 msgstr ""
+"Tento požadavek stáhne nepřečtené zprávy individuálně pro každou záložku. Množství řádek lze limitovat pro celý rozhovor.\n"
+"\n"
+"Také můžete vybrat množství dodatečně stahovaných zastaralých zpráv pro lepší srozumitelnost."
 
 #: BacklogSettingsPage#12
 msgid "Maximum amount of messages to be fetched per buffer."
-msgstr ""
+msgstr "Maximální množství zpráv, které se stáhnou za záložku."
 
 #: BacklogSettingsPage#13
 msgid "Limit:"
-msgstr ""
+msgstr "Omezení:"
 
 #: BacklogSettingsPage#14
 msgctxt "BacklogSettingsPage#14"
 msgid "Unlimited"
-msgstr ""
+msgstr "Neomezeně"
 
 #: BacklogSettingsPage#15
-msgid ""
-"Amount of messages to be fetched in addition to the unread messages. The "
-"Limit does not apply here."
-msgstr ""
+msgid "Amount of messages to be fetched in addition to the unread messages. The Limit does not apply here."
+msgstr "Množství zpráv které se stáhnou dodatečně k nepřečteným zprávám. Omezení zde neplatí."
 
 #: BacklogSettingsPage#16
 msgid "Additional Messages:"
-msgstr ""
+msgstr "Dodatečné zprávy:"
 
 #: BacklogSettingsPage#17
 msgid ""
-"This requester fetches all messages newer than the oldest unread message for "
-"all chats.\n"
+"This requester fetches all messages newer than the oldest unread message for all chats.\n"
 "\n"
-"Note: This requester is not recommended if you use hidden chat windows or "
-"have inactive chats (i.e.: no stale queries or channels).\n"
-"It is useful to limit the total amount of the backlog and is probably the "
-"fastest.\n"
+"Note: This requester is not recommended if you use hidden chat windows or have inactive chats (i.e.: no stale queries or channels).\n"
+"It is useful to limit the total amount of the backlog and is probably the fastest.\n"
 "\n"
-"You can also chose to fetch additional older chatlines to provide a better "
-"context."
+"You can also chose to fetch additional older chatlines to provide a better context."
 msgstr ""
+"Tento požadavek stáhne všechny zprávy novější nežli nejstarší nepřečtené zprávy pro všechny záložky.\n"
+"\n"
+"Poznámka: Tento požadavek není doporučen pokud používáte skryté, nebo neaktivní, záložky (tedy žádné nepoužívané pokecy ani kanály)\n"
+"Je užitečný k omezení celkového získávání historie a je pravděpodobně nejrychlejší.\n"
+"\n"
+"Můžete také vybrat dodatečné zprávy pro získání lepšího přehledu."
 
 #: BacklogSettingsPage#18
 msgid "Maximum amount of messages to be fetched over all buffers."
-msgstr ""
+msgstr "Maximální množství zpráv stažené pro všechny záložky."
 
 #: BacklogSettingsPage#19
 msgctxt "BacklogSettingsPage#19"
 msgid "Interface"
-msgstr ""
+msgstr "Rozhraní"
 
 #: BacklogSettingsPage#20
 msgid "Backlog Fetching"
-msgstr ""
+msgstr "Stahování historie"
 
 #: BufferItem#1
 msgid "<p> %1 - %2 </p>"
-msgstr ""
+msgstr "<p> %1 - %2 </p>"
 
 #: BufferView#1
 msgid "Merge buffers permanently?"
-msgstr ""
+msgstr "Sloučit trvale záložky?"
 
 #: BufferView#2
 msgid ""
 "Do you want to merge the buffer \"%1\" permanently into buffer \"%2\"?\n"
 " This cannot be reversed!"
 msgstr ""
+"Opravdu chcete trvale sloučit záložku \"%1\" do záložky \"%2\"?\n"
+"￼Tuto operaci nelze zvrátit!"
 
 #: BufferViewEditDlg#1
 msgctxt "BufferViewEditDlg#1"
 msgid "Dialog"
-msgstr ""
+msgstr "Dialog"
 
 #: BufferViewEditDlg#2
 msgid "Please enter a name for the chat list:"
-msgstr ""
+msgstr "Prosím zadejte název pro seznam pokeců:"
 
 #: BufferViewEditDlg#3
 msgid "Add Chat List"
-msgstr ""
+msgstr "Přidat seznam pokeců"
 
 #: BufferViewFilter#1
 msgid "Show / Hide Chats"
-msgstr ""
+msgstr "Zobrazit / Skrýt rozhovory"
 
 #: BufferViewSettingsPage#1
 msgctxt "BufferViewSettingsPage#1"
 msgid "Form"
-msgstr ""
+msgstr "Form"
 
 #: BufferViewSettingsPage#2
 msgctxt "BufferViewSettingsPage#2"
 msgid "Re&name..."
-msgstr ""
+msgstr "Přejme&novat..."
 
 #: BufferViewSettingsPage#3
 msgctxt "BufferViewSettingsPage#3"
 msgid "&Add..."
-msgstr ""
+msgstr "Přid&at..."
 
 #: BufferViewSettingsPage#4
 msgctxt "BufferViewSettingsPage#4"
 msgid "De&lete"
-msgstr ""
+msgstr "&Smazat"
 
 #: BufferViewSettingsPage#5
 msgid "Chat List Settings"
-msgstr ""
+msgstr "Nastavení seznamu rozhovorů"
 
 #: BufferViewSettingsPage#6
 msgctxt "BufferViewSettingsPage#6"
 msgid "Network:"
-msgstr ""
+msgstr "Síť:"
 
 #: BufferViewSettingsPage#7
 msgid "All"
-msgstr ""
+msgstr "Vše"
 
 #: BufferViewSettingsPage#8
 msgid ""
 "This option is not available when all Networks are visible.\n"
 "In this mode no separate status buffer is displayed."
 msgstr ""
+"Tato možnost není dostupná když jsou viditelné všechny sítě\n"
+"V daném režimu nejsou zobrazeny separátní záložky stavu."
 
 #: BufferViewSettingsPage#9
 msgid "Show status window"
-msgstr ""
+msgstr "Zobrazit okno statusu"
 
 #: BufferViewSettingsPage#10
 msgid "Show channels"
-msgstr ""
+msgstr "Zobrazit kanály"
 
 #: BufferViewSettingsPage#11
 msgid "Show queries"
-msgstr ""
+msgstr "Zobrazit rozhovory"
 
 #: BufferViewSettingsPage#12
 msgid "Hide inactive chats"
-msgstr ""
+msgstr "Skrýt neaktivní"
 
 #: BufferViewSettingsPage#13
 msgid "Add new chats automatically"
-msgstr ""
+msgstr "Přidávat nové automaticky"
 
 #: BufferViewSettingsPage#14
 msgid "Sort alphabetically"
-msgstr ""
+msgstr "Seřadit abecedně"
 
 #: BufferViewSettingsPage#15
 msgid "Minimum Activity:"
-msgstr ""
+msgstr "Minimální aktivita:"
 
 #: BufferViewSettingsPage#16
 msgid "No Activity"
-msgstr ""
+msgstr "Žádná aktivita"
 
 #: BufferViewSettingsPage#17
 msgid "Other Activity"
-msgstr ""
+msgstr "Další aktivity"
 
 #: BufferViewSettingsPage#18
 msgid "New Message"
-msgstr ""
+msgstr "Nová zpráva"
 
 #: BufferViewSettingsPage#19
 msgctxt "BufferViewSettingsPage#19"
 msgid "Highlight"
-msgstr ""
+msgstr "Zvýraznění"
 
 #: BufferViewSettingsPage#20
 msgid "Preview:"
-msgstr ""
+msgstr "Náhled:"
 
 #: BufferViewSettingsPage#21
 msgctxt "BufferViewSettingsPage#21"
 msgid "Interface"
-msgstr ""
+msgstr "Rozhraní"
 
 #: BufferViewSettingsPage#22
 msgid "Custom Chat Lists"
-msgstr ""
+msgstr "Vlastní seznamy rozhovorů"
 
 #: BufferViewSettingsPage#23
 msgid "Delete Chat List?"
-msgstr ""
+msgstr "Smazat seznam rozhovorů?"
 
 #: BufferViewSettingsPage#24
 msgid "Do you really want to delete the chat list \"%1\"?"
-msgstr ""
+msgstr "Opravdu chcete smazat seznam rozhovorů \"%1\"?"
 
 #: BufferViewWidget#1
 msgid "BufferView"
-msgstr ""
+msgstr "Pohled na záložky"
 
 #: BufferWidget#1
 msgid "Zoom In"
-msgstr ""
+msgstr "Přiblížit"
 
 #: BufferWidget#2
 msgid "Zoom Out"
-msgstr ""
+msgstr "Oddálit"
 
 #: BufferWidget#3
 msgid "Actual Size"
-msgstr ""
+msgstr "Současná velikost"
 
 #: ChannelBufferItem#1
 msgid "<b>Channel %1</b>"
-msgstr ""
+msgstr "<b>Kanál %1</b>"
 
 #: ChannelBufferItem#2
 msgid "<b>Users:</b> %1"
-msgstr ""
+msgstr "<b>uživatelé:</b> %1"
 
 #: ChannelBufferItem#3
 msgid "<b>Mode:</b> %1"
-msgstr ""
+msgstr "<b>Mód:</b> %1"
 
 #: ChannelBufferItem#4
 msgid "<b>Topic:</b> %1"
-msgstr ""
+msgstr "<b>Téma:</b> %1"
 
 #: ChannelBufferItem#5
 msgid "Not active <br /> Double-click to join"
-msgstr ""
+msgstr "Neaktivní <br /> Dvojklikem vstupte"
 
 #: ChannelBufferItem#6
 msgid "<p> %1 </p>"
-msgstr ""
+msgstr "<p> %1 </p>"
 
 #: ChannelListDlg#1
 msgid "Channel List"
-msgstr ""
+msgstr "Seznam Kanálů"
 
 #: ChannelListDlg#2
 msgid "Search Pattern:"
-msgstr ""
+msgstr "Vyhledávaný text:"
 
 #: ChannelListDlg#3
 msgid ""
 "Toggle between simple and advanced mode.\n"
 "Advanced mode allows to pass search strings to the IRC Server."
-msgstr ""
+msgstr "Přepnout mezi jednoduchým a pokročilým módem.￼Pokročilý mód umožňuje předat vyhledávaný řetězec IRC Serveru."
 
 #: ChannelListDlg#4
 msgid "Show Channels"
-msgstr ""
+msgstr "Zobrazit kanály"
 
 #: ChannelListDlg#5
 msgid "Filter:"
-msgstr ""
+msgstr "Filtr:"
 
 #: ChannelListDlg#6
 msgid "Errors Occured:"
-msgstr ""
+msgstr "Nastalé chyby:"
 
 #: ChannelListDlg#7
 msgid ""
-"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-"
-"html40/strict.dtd\">\n"
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'DejaVu Sans'; font-size:8pt; font-"
-"weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-"family:'Lucida Grande'; font-size:13pt;\">SUPER EVIL CATASTROPHIC "
-"ERROR!!11</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
-"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; "
-"font-family:'Lucida Grande'; font-size:13pt;\"></p></body></html>"
+"</style></head><body style=\" font-family:'DejaVu Sans'; font-size:8pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Lucida Grande'; font-size:13pt;\">SUPER EVIL CATASTROPHIC ERROR!!11</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Lucida Grande'; font-size:13pt;\"></p></body></html>"
 msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'DejaVu Sans'; font-size:8pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Lucida Grande'; font-size:13pt;\">ZOMG POLARNI LEDY OPRAVDU ROZTALY, TOHLE QUASSEL NEUSTOJI!!11</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Lucida Grande'; font-size:13pt;\"></p></body></html>"
 
 #: ChatMonitorSettingsPage#1
 msgctxt "ChatMonitorSettingsPage#1"
 msgid "Form"
-msgstr ""
+msgstr "Form"
 
 #: ChatMonitorSettingsPage#2
 msgid "Operation Mode:"
-msgstr ""
+msgstr "Operační režim:"
 
 #: ChatMonitorSettingsPage#3
 msgid ""
-"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-"
-"html40/strict.dtd\">\n"
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'DejaVu Sans'; font-size:9pt; font-"
-"weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
-"weight:600;\">Operation modes:</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;\"><span "
-"style=\" font-weight:400; text-decoration: underline;\">Opt-In:</span> <span "
-"style=\" font-weight:400;\">Only buffers on the right side are shown in "
-"chatmonitor</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-"
-"decoration: underline;\">Opt-Out:</span> Buffers on the right side will be "
-"ignored in chatmonitor</p></body></html>"
+"</style></head><body style=\" font-family:'DejaVu Sans'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Operation modes:</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;\"><span style=\" font-weight:400; text-decoration: underline;\">Opt-In:</span> <span style=\" font-weight:400;\">Only buffers on the right side are shown in chatmonitor</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">Opt-Out:</span> Buffers on the right side will be ignored in chatmonitor</p></body></html>"
 msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'DejaVu Sans'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Operační režimy:</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;\"><span style=\" font-weight:400; text-decoration: underline;\">Opt-In:</span> <span style=\" font-weight:400;\">Monitor pokecu zobrazuje pouze záložky na pravé straně.</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" text-decoration: underline;\">Opt-Out:</span>Monitor pokecu ignoruje záložky na pravé straně.</p></body></html>"
 
 #: ChatMonitorSettingsPage#4
 msgid "Available:"
-msgstr ""
+msgstr "Dostupné:"
 
 #: ChatMonitorSettingsPage#5
 msgid "Move selected buffers to the left"
-msgstr ""
+msgstr "Přesune vybrané záložky doleva"
 
 #: ChatMonitorSettingsPage#6
 msgid "Move selected buffers to the right"
-msgstr ""
+msgstr "Přesune vybrané záložky doprava"
 
 #: ChatMonitorSettingsPage#7
 msgid "Show:"
-msgstr ""
+msgstr "Zobrazit:"
 
 #: ChatMonitorSettingsPage#8
-msgid ""
-"Show highlights in chatmonitor even if the originating buffer is ignored"
-msgstr ""
+msgid "Show highlights in chatmonitor even if the originating buffer is ignored"
+msgstr "Zobrazovat zvýraznění v monitoru pokecu i v případě, že záložka je ignorována"
 
 #: ChatMonitorSettingsPage#9
 msgid "Always show highlighted messages"
-msgstr ""
+msgstr "Vždy zobrazovat zvýrazněné zprávy"
 
 #: ChatMonitorSettingsPage#10
 msgid "Show own messages"
-msgstr ""
+msgstr "Zobrazovat vlastní zprávy"
 
 #: ChatMonitorSettingsPage#11
 msgctxt "ChatMonitorSettingsPage#11"
 msgid "Interface"
-msgstr ""
+msgstr "Rozhraní"
 
 #: ChatMonitorSettingsPage#12
 msgctxt "ChatMonitorSettingsPage#12"
 msgid "Chat Monitor"
-msgstr ""
+msgstr "Monitor pokecu"
 
 #: ChatMonitorSettingsPage#13
 msgid "Opt In"
-msgstr ""
+msgstr "Opt In"
 
 #: ChatMonitorSettingsPage#14
 msgid "Opt Out"
-msgstr ""
+msgstr "Opt Out"
 
 #: ChatMonitorSettingsPage#15
 msgid "Ignore:"
-msgstr ""
+msgstr "Ignorovat:"
 
 #: ChatMonitorView#1
 msgid "Show Own Messages"
-msgstr ""
+msgstr "Zobrazit vlastní zprávy"
 
 #: ChatMonitorView#2
 msgctxt "ChatMonitorView#2"
 msgid "Show Network Name"
-msgstr ""
+msgstr "Zobrazit název sítě"
 
 #: ChatMonitorView#3
 msgctxt "ChatMonitorView#3"
 msgid "Show Buffer Name"
-msgstr ""
+msgstr "Zobrazit název záložky"
 
 #: ChatMonitorView#4
 msgid "Configure..."
-msgstr ""
+msgstr "Nastavit..."
 
 #: ChatScene#1
 msgid "Copy Selection"
-msgstr ""
+msgstr "Kopírovat označené"
 
 #: ChatViewSearchBar#1
 msgctxt "ChatViewSearchBar#1"
 msgid "Form"
-msgstr ""
+msgstr "Form"
 
 #: ChatViewSearchBar#2
 msgctxt "ChatViewSearchBar#2"
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #: ChatViewSearchBar#3
 msgid "case sensitive"
-msgstr ""
+msgstr "citlivost na velikost"
 
 #: ChatViewSearchBar#4
 msgid "search nick"
-msgstr ""
+msgstr "hledat přezdívku"
 
 #: ChatViewSearchBar#5
 msgid "search message"
-msgstr ""
+msgstr "hledat zprávu"
 
 #: ChatViewSearchBar#6
 msgid "ignore joins, parts, etc."
-msgstr ""
+msgstr "Ignorovat vstupy, výstupy, atd."
 
 #: ChatViewSettingsPage#1
 msgctxt "ChatViewSettingsPage#1"
 msgid "Form"
-msgstr ""
+msgstr "Form"
 
 #: ChatViewSettingsPage#2
 msgid "Timestamp format:"
-msgstr ""
+msgstr "Formát času:"
 
 #: ChatViewSettingsPage#3
 msgid "[hh:mm:ss]"
-msgstr ""
+msgstr "[hh:mm:ss]"
 
 #: ChatViewSettingsPage#4
 msgid "Custom chat window font:"
-msgstr ""
+msgstr "Vlastní font v okně rozhovoru:"
 
 #: ChatViewSettingsPage#5
 msgid "Allow colored text (mIRC color codes)"
-msgstr ""
+msgstr "Povolit barevný text (mIRC kódy barev)"
 
 #: ChatViewSettingsPage#6
-msgid ""
-"Show a website preview window when hovering the mouse over a web address"
-msgstr ""
+msgid "Show a website preview window when hovering the mouse over a web address"
+msgstr "Zobrazit náhledy WWW stránek při podržení myši nad URL"
 
 #: ChatViewSettingsPage#7
 msgid "Show previews of webpages on URL hover"
-msgstr ""
+msgstr "Zobrazí náhledy WWW stránek při podržení myši nad URL"
 
 #: ChatViewSettingsPage#8
 msgid "Custom Colors"
-msgstr ""
+msgstr "Vlastní barvy"
 
 #: ChatViewSettingsPage#9
 msgid "Action:"
-msgstr ""
+msgstr "Akce:"
 
 #: ChatViewSettingsPage#10
 msgctxt "ChatViewSettingsPage#10"
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #: ChatViewSettingsPage#11
 msgid "Timestamp:"
-msgstr ""
+msgstr "Časová známka:"
 
 #: ChatViewSettingsPage#12
 msgid "Channel message:"
-msgstr ""
+msgstr "Zpráva kanálu:"
 
 #: ChatViewSettingsPage#13
 msgid "Highlight foreground:"
-msgstr ""
+msgstr "Popředí zvýrazněné:"
 
 #: ChatViewSettingsPage#14
 msgid "Command message:"
-msgstr ""
+msgstr "Zprava příkazu:"
 
 #: ChatViewSettingsPage#15
 msgid "Highlight background:"
-msgstr ""
+msgstr "Pozadí zvýrazněné:"
 
 #: ChatViewSettingsPage#16
 msgid "Server message:"
-msgstr ""
+msgstr "Zpráva serveru:"
 
 #: ChatViewSettingsPage#17
 msgid "Marker line:"
-msgstr ""
+msgstr "Značící řádka:"
 
 #: ChatViewSettingsPage#18
 msgid "Error message:"
-msgstr ""
+msgstr "Chybová zpráva:"
 
 #: ChatViewSettingsPage#19
 msgid "Background:"
-msgstr ""
+msgstr "Pozadí:"
 
 #: ChatViewSettingsPage#20
 msgid "Use Sender Coloring"
-msgstr ""
+msgstr "Používat barvy pro odesílatele"
 
 #: ChatViewSettingsPage#21
 msgid "Own messages:"
-msgstr ""
+msgstr "Vlastní zprávy:"
 
 #: ChatViewSettingsPage#22
 msgctxt "ChatViewSettingsPage#22"
 msgid "Interface"
-msgstr ""
+msgstr "Rozhraní"
 
 #: ChatViewSettingsPage#23
 msgid "Chat View"
-msgstr ""
+msgstr "Okno rozhovoru"
 
 #: Client#1
 msgid "Identity already exists in client!"
-msgstr ""
+msgstr "Identita v klientu již existuje!"
 
 #: Client#2
 msgid "All Chats"
-msgstr ""
+msgstr "Všechny pokecy"
 
 #: ClientBacklogManager#1
 msgid "Processed %1 messages in %2 seconds."
-msgstr ""
+msgstr "Zpracováno %1 zpráv v %2 vteřin."
 
 #: ConnectionSettingsPage#1
 msgid "Configure the IRC Connection"
-msgstr ""
+msgstr "Nastavení spojení k IRC serveru"
 
 #: ConnectionSettingsPage#2
 msgid "Enable Ping Timeout Detection"
-msgstr ""
+msgstr "Povolit detekci Ping Timeout"
 
 #: ConnectionSettingsPage#3
 msgid "Ping interval:"
-msgstr ""
+msgstr "Interval ping:"
 
 #: ConnectionSettingsPage#4
 msgctxt "ConnectionSettingsPage#4"
 msgid " seconds"
-msgstr ""
+msgstr " vteřin"
 
 #: ConnectionSettingsPage#5
 msgid "Disconnect after"
-msgstr ""
+msgstr "Odpojit po"
 
 #: ConnectionSettingsPage#6
 msgid "missed pings"
-msgstr ""
+msgstr "zmeškaných ping"
 
 #: ConnectionSettingsPage#7
-msgid ""
-"This enables periodic polling of user information using /WHO. This is mostly "
-"interesting for tracking users' away status."
-msgstr ""
+msgid "This enables periodic polling of user information using /WHO. This is mostly interesting for tracking users' away status."
+msgstr "Toto nastavení povolí periodické zjišťování informací o uživatelích s použitím příkazu /WHO. Tato funkce je zajímavá pro zjišťování důvodu proč je uživatel pryč."
 
 #: ConnectionSettingsPage#8
 msgid "Enable Automatic User Information Lookup (/WHO)"
-msgstr ""
+msgstr "Povolit automatické vyhledávání informací o uživatelích (/WHO)"
 
 #: ConnectionSettingsPage#9
 msgid "Update interval:"
-msgstr ""
+msgstr "Interval aktualizace:"
 
 #: ConnectionSettingsPage#10
 msgid "Ignore channels with more than:"
-msgstr ""
+msgstr "Ignorovat kanály s více než:"
 
 #: ConnectionSettingsPage#11
 msgid " users"
-msgstr ""
+msgstr "uživatelé"
 
 #: ConnectionSettingsPage#12
 msgid "Minimum delay between requests:"
-msgstr ""
+msgstr "Minimální přestávka mezi požadavky:"
 
 #: ConnectionSettingsPage#13
 msgctxt "ConnectionSettingsPage#13"
 msgid "IRC"
-msgstr ""
+msgstr "IRC"
 
 #: ContentsChatItem#1
 msgid "Copy Link Address"
-msgstr ""
+msgstr "Kopírovat adresu odkazu"
 
 #: ContextMenuActionProvider#1
 msgctxt "ContextMenuActionProvider#1"
 msgid "Connect"
-msgstr ""
+msgstr "Připojit"
 
 #: ContextMenuActionProvider#2
 msgctxt "ContextMenuActionProvider#2"
 msgid "Disconnect"
-msgstr ""
+msgstr "Odpojit"
 
 #: ContextMenuActionProvider#3
 msgctxt "ContextMenuActionProvider#3"
 msgid "Join"
-msgstr ""
+msgstr "Vstoupit"
 
 #: ContextMenuActionProvider#4
 msgctxt "ContextMenuActionProvider#4"
 msgid "Part"
-msgstr ""
+msgstr "Opustit"
 
 #: ContextMenuActionProvider#5
 msgid "Delete Chat(s)..."
-msgstr ""
+msgstr "Smazat rozhovor(y)..."
 
 #: ContextMenuActionProvider#6
 msgid "Go to Chat"
-msgstr ""
+msgstr "Přejít na rozhovor"
 
 #: ContextMenuActionProvider#7
 msgid "Joins"
-msgstr ""
+msgstr "Vstupy"
 
 #: ContextMenuActionProvider#8
 msgid "Parts"
-msgstr ""
+msgstr "Opuštění"
 
 #: ContextMenuActionProvider#9
 msgid "Quits"
-msgstr ""
+msgstr "Ukončení"
 
 #: ContextMenuActionProvider#10
 msgid "Nick Changes"
-msgstr ""
+msgstr "Změny přezdívek"
 
 #: ContextMenuActionProvider#11
 msgid "Mode Changes"
-msgstr ""
+msgstr "Změny režimu"
 
 #: ContextMenuActionProvider#12
 msgid "Day Changes"
-msgstr ""
+msgstr "Změny dní"
 
 #: ContextMenuActionProvider#13
 msgid "Topic Changes"
-msgstr ""
+msgstr "Změny tématu"
 
 #: ContextMenuActionProvider#14
 msgid "Set as Default..."
-msgstr ""
+msgstr "Nastavit jako výchozí..."
 
 #: ContextMenuActionProvider#15
 msgid "Use Defaults..."
-msgstr ""
+msgstr "Použít výchozí..."
 
 #: ContextMenuActionProvider#16
 msgid "Join Channel..."
-msgstr ""
+msgstr "Vstoupit do kanálu..."
 
 #: ContextMenuActionProvider#17
 msgid "Start Query"
-msgstr ""
+msgstr "Zahájit pokec"
 
 #: ContextMenuActionProvider#18
 msgid "Show Query"
-msgstr ""
+msgstr "Zobrazit pokec"
 
 #: ContextMenuActionProvider#19
 msgctxt "ContextMenuActionProvider#19"
 msgid "Whois"
-msgstr ""
+msgstr "Kdo je"
 
 #: ContextMenuActionProvider#20
 msgid "Version"
-msgstr ""
+msgstr "Verze"
 
 #: ContextMenuActionProvider#21
 msgid "Time"
-msgstr ""
+msgstr "Čas"
 
 #: ContextMenuActionProvider#22
 msgid "Ping"
-msgstr ""
+msgstr "Ping"
 
 #: ContextMenuActionProvider#23
 msgid "Finger"
-msgstr ""
+msgstr "Finger"
 
 #: ContextMenuActionProvider#24
 msgid "Custom..."
-msgstr ""
+msgstr "Vlastní..."
 
 #: ContextMenuActionProvider#25
 msgid "Give Operator Status"
-msgstr ""
+msgstr "Přidat práva dozorce"
 
 #: ContextMenuActionProvider#26
 msgid "Take Operator Status"
-msgstr ""
+msgstr "Odebrat status dozorce"
 
 #: ContextMenuActionProvider#27
 msgid "Give Voice"
-msgstr ""
+msgstr "Rozkecat"
 
 #: ContextMenuActionProvider#28
 msgid "Take Voice"
-msgstr ""
+msgstr "Umlčet"
 
 #: ContextMenuActionProvider#29
 msgid "Kick From Channel"
-msgstr ""
+msgstr "Vyhodit z kanálu"
 
 #: ContextMenuActionProvider#30
 msgid "Ban From Channel"
-msgstr ""
+msgstr "Zablokovat pro kanál"
 
 #: ContextMenuActionProvider#31
 msgid "Kick && Ban"
-msgstr ""
+msgstr "Vyhodit && Zablokovat"
 
 #: ContextMenuActionProvider#32
 msgid "Hide Chat(s) Temporarily"
-msgstr ""
+msgstr "Dočasně skrýt záložku(y)"
 
 #: ContextMenuActionProvider#33
 msgid "Hide Chat(s) Permanently"
-msgstr ""
+msgstr "Trvale skrýt záložku(y)"
 
 #: ContextMenuActionProvider#34
 msgid "Show Channel List"
-msgstr ""
+msgstr "Zobrazit seznam kanálů"
 
 #: ContextMenuActionProvider#35
 msgid "Show Ignore List"
-msgstr ""
+msgstr "Zobrazit seznam ignorovaných"
 
 #: ContextMenuActionProvider#36
 msgid "Hide Events"
-msgstr ""
+msgstr "Skrýt události"
 
 #: ContextMenuActionProvider#37
 msgid "CTCP"
-msgstr ""
+msgstr "CTCP"
 
 #: ContextMenuActionProvider#38
 msgid "Actions"
-msgstr ""
+msgstr "Akce"
 
 #: ContextMenuActionProvider#39
 msgid "Ignore"
-msgstr ""
+msgstr "Ignorovat"
 
 #: ContextMenuActionProvider#40
 msgid "Add Ignore Rule"
-msgstr ""
+msgstr "Přidat pravidlo ignorování"
 
 #: ContextMenuActionProvider#41
 msgid "Existing Rules"
-msgstr ""
+msgstr "Existující pravidla"
 
 #: Core#1
 msgid "Could not initialize any storage backend! Exiting..."
-msgstr ""
+msgstr "Nezdařilo se inicializovat libovolné ukládací rozhraní! Končím..."
 
 #: Core#2
 msgid ""
 "Currently, Quassel supports SQLite3 and PostgreSQL. You need to build your\n"
-"Qt library with the sqlite or postgres plugin enabled in order for "
-"quasselcore\n"
+"Qt library with the sqlite or postgres plugin enabled in order for quasselcore\n"
 "to work."
 msgstr ""
+"V současné chvíli Quassel podporuje SQLite3 a PostgreSQL. Musíte sestavit vaši\n"
+"Qt knihovnu s podporou sqlite nebo postgres pluginu aby jádro Quasselu\n"
+"mohlo fungovat."
 
 #: Core#3
 msgid "Calling restoreState() even though active sessions exist!"
-msgstr ""
+msgstr "Volám restoreState() i když existuje aktivní sezení!"
 
 #: Core#4
 msgid "Admin user or password not set."
-msgstr ""
+msgstr "Uživatelský účet administrátora, nebo jeho heslo není nastaveno."
 
 #: Core#5
 msgid "Could not setup storage!"
-msgstr ""
+msgstr "Nezdařilo se nastavení úložného prostoru!"
 
 #: Core#6
 msgid "Creating admin user..."
-msgstr ""
+msgstr "Vytvářím účet administrátora..."
 
 #: Core#7
 msgid "Invalid listen address %1"
-msgstr ""
+msgstr "Neplatná adresa %1 pro poslech"
 
 #: Core#8
 msgid "Listening for GUI clients on IPv4 %1 port %2 using protocol version %3"
-msgstr ""
+msgstr "Naslouchám pro GUI klienty na IPv4 %1 portu %2 s použitím protokolu verze %3"
 
 #: Core#9
 msgid "Could not open IPv4 interface %1:%2: %3"
-msgstr ""
+msgstr "Nezdařilo se otevření IPv4 rozhraní %1:%2: %3"
 
 #: Core#10
 msgid "Listening for GUI clients on IPv6 %1 port %2 using protocol version %3"
-msgstr ""
+msgstr "Naslouchám pro GUI klienty na IPv6 %1 portu %2 s použitím protokolu verze %3"
 
 #: Core#11
 msgid "Could not open IPv6 interface %1:%2: %3"
-msgstr ""
+msgstr "Nezdařilo se otevření IPv6 rozhraní %1:%2: %3"
 
 #: Core#12
 msgid "Invalid listen address %1, unknown network protocol"
-msgstr ""
+msgstr "Neplatná adresa %1 pro poslech, neznámý síťový protokol"
 
 #: Core#13
 msgid "Could not open any network interfaces to listen on!"
-msgstr ""
+msgstr "Nezdařilo se otevřít síťové rozhraní k poslechu!"
 
 #: Core#14
 msgid "Client connected from"
-msgstr ""
+msgstr "Klient připojen od"
 
 #: Core#15
 msgid "Closing server for basic setup."
-msgstr ""
+msgstr "Uzavírám server pro základní nastavení."
 
 #: Core#16
 msgid "Antique client trying to connect... refusing."
-msgstr ""
+msgstr "Připojit se pokouší zastaralý klient... odmítám spojení."
 
 #: Core#17
-msgid ""
-"<b>Your Quassel Client is too old!</b><br>This core needs at least "
-"client/core protocol version %1.<br>Please consider upgrading your client."
-msgstr ""
+msgid "<b>Your Quassel Client is too old!</b><br>This core needs at least client/core protocol version %1.<br>Please consider upgrading your client."
+msgstr "<b>Váš Quassel Klient je příliš starý!</b><br>Toto jádro potřebuje klienta s protokolem alespoň verze %1.<br>Prosíme zvažte aktualizaci vašeho klienta."
 
 #: Core#18
 msgctxt "Core#18"
 msgid "Client"
-msgstr ""
+msgstr "Klient"
 
 #: Core#19
 msgid "too old, rejecting."
-msgstr ""
+msgstr "příliš staré, odmítám."
 
 #: Core#20
 msgid "<b>Quassel Core Version %1</b><br>Built: %2<br>Up %3d%4h%5m (since %6)"
-msgstr ""
+msgstr "<b>Verze jádra %1</b><br>Sestavení: %2<br>Doba běhu %3d%4h%5m (od %6)"
 
 #: Core#21
 msgid "Starting TLS for Client:"
-msgstr ""
+msgstr "Zahajuji TLS pro klienta:"
 
 #: Core#22
-msgid ""
-"<b>Client not initialized!</b><br>You need to send an init message before "
-"trying to login."
-msgstr ""
+msgid "<b>Client not initialized!</b><br>You need to send an init message before trying to login."
+msgstr "<b>Klient není inicializován!</b><br>Musíte poslat inicializační zprávu před pokusem o přihlášení."
 
 #: Core#23
 msgid "did not send an init message before trying to login, rejecting."
-msgstr ""
+msgstr "neodeslána inicializační zpráva před pokusem o přihlášení, odmítám."
 
 #: Core#24
-msgid ""
-"<b>Invalid username or password!</b><br>The username/password combination "
-"you supplied could not be found in the database."
-msgstr ""
+msgid "<b>Invalid username or password!</b><br>The username/password combination you supplied could not be found in the database."
+msgstr "<b>Neplatné uživatelské jméno či heslo!</b><br>Kombinace uživatelského jména a hesla kterou jste zadali nebyla nalezena v databázi."
 
 #: Core#25
 msgid "initialized and authenticated successfully as \"%1\" (UserId: %2)."
-msgstr ""
+msgstr "inicializováno a přihlášen jako \"%1\" (Uživ-Id: %2)."
 
 #: Core#26
 msgid "Non-authed client disconnected."
-msgstr ""
+msgstr "Neautorizovaný klient odpojen."
 
 #: Core#27
 msgid "Non-authed client disconnected. (socket allready destroyed)"
-msgstr ""
+msgstr "Neautorizovaný klient odpojen. (socket je již zničen)"
 
 #: Core#28
 msgid "Could not initialize session for client:"
-msgstr ""
+msgstr "Nezdařilo se zahájit sezení pro klienta:"
 
 #: Core#29
 msgid "Could not find a session for client:"
-msgstr ""
+msgstr "Nepodařilo se nalézt sezení pro klienta:"
 
 #: CoreAccount#1
 msgctxt "CoreAccount#1"
 msgid "Internal Core"
-msgstr ""
+msgstr "Interní jádro"
 
 #: CoreAccountEditDlg#1
 msgid "Edit Core Account"
-msgstr ""
+msgstr "Upravit účet jádra"
 
 #: CoreAccountEditDlg#2
 msgid "Account Details"
-msgstr ""
+msgstr "Detaily účtu"
 
 #: CoreAccountEditDlg#3
 msgid "Account Name:"
-msgstr ""
+msgstr "Název účtu:"
 
 #: CoreAccountEditDlg#4
 msgid "Local Core"
-msgstr ""
+msgstr "Lokální jádro"
 
 #: CoreAccountEditDlg#5
 msgid "Hostname:"
-msgstr ""
+msgstr "Název počítače:"
 
 #: CoreAccountEditDlg#6
 msgctxt "CoreAccountEditDlg#6"
 msgid "localhost"
-msgstr ""
+msgstr "tento počítač (localhost)"
 
 #: CoreAccountEditDlg#7
 msgctxt "CoreAccountEditDlg#7"
 msgid "Port:"
-msgstr ""
+msgstr "Port:"
 
 #: CoreAccountEditDlg#8
 msgid "User:"
-msgstr ""
+msgstr "Uživatel:"
 
 #: CoreAccountEditDlg#9
 msgctxt "CoreAccountEditDlg#9"
 msgid "Password:"
-msgstr ""
+msgstr "Heslo:"
 
 #: CoreAccountEditDlg#10
 msgid "Remember"
-msgstr ""
+msgstr "Pamatovat"
 
 #: CoreAccountEditDlg#11
 msgctxt "CoreAccountEditDlg#11"
 msgid "Use a Proxy"
-msgstr ""
+msgstr "Používat proxy"
 
 #: CoreAccountEditDlg#12
 msgctxt "CoreAccountEditDlg#12"
 msgid "Proxy Type:"
-msgstr ""
+msgstr "Typ proxy:"
 
 #: CoreAccountEditDlg#13
 msgctxt "CoreAccountEditDlg#13"
 msgid "Socks 5"
-msgstr ""
+msgstr "Socks 5"
 
 #: CoreAccountEditDlg#14
 msgctxt "CoreAccountEditDlg#14"
 msgid "HTTP"
-msgstr ""
+msgstr "HTTP"
 
 #: CoreAccountEditDlg#15
 msgid "Add Core Account"
-msgstr ""
+msgstr "Přidat účet jádra"
 
 #: CoreAccountModel#1
 msgctxt "CoreAccountModel#1"
 msgid "Internal Core"
-msgstr ""
+msgstr "Interní jádro"
 
 #: CoreAccountSettingsPage#1
 msgid "Connect to Quassel Core"
-msgstr ""
+msgstr "Připojit k jádru Quassel"
 
 #: CoreAccountSettingsPage#2
 msgid "Core Accounts"
-msgstr ""
+msgstr "Účty jádra"
 
 #: CoreAccountSettingsPage#3
 msgid "Edit..."
-msgstr ""
+msgstr "Editovat..."
 
 #: CoreAccountSettingsPage#4
 msgctxt "CoreAccountSettingsPage#4"
 msgid "Add..."
-msgstr ""
+msgstr "Přidat..."
 
 #: CoreAccountSettingsPage#5
 msgctxt "CoreAccountSettingsPage#5"
 msgid "Delete"
-msgstr ""
+msgstr "Smazat"
 
 #: CoreAccountSettingsPage#6
 msgid "Automatically connect on startup"
-msgstr ""
+msgstr "Automaticky připojit při spuštění"
 
 #: CoreAccountSettingsPage#7
 msgid "Connect to last account used"
-msgstr ""
+msgstr "Připojit k naposledy použitému účtu"
 
 #: CoreAccountSettingsPage#8
 msgid "Always connect to"
-msgstr ""
+msgstr "Vždy připojit k"
 
 #: CoreAccountSettingsPage#9
 msgctxt "CoreAccountSettingsPage#9"
 msgid "Remote Cores"
-msgstr ""
+msgstr "Vzdálená jádra"
 
 #: CoreConfigWizard#1
 msgid "Core Configuration Wizard"
-msgstr ""
+msgstr "Průvodce nastavením jádra"
 
 #: CoreConfigWizard#2
 msgid "Your core has been successfully configured. Logging you in..."
-msgstr ""
+msgstr "Vaše jádro bylo úspěšně nastaveno. Přihlašuji se..."
 
 #: CoreConfigWizard#3
-msgid ""
-"Core configuration failed:<br><b>%1</b><br>Press <em>Next</em> to start "
-"over."
-msgstr ""
+msgid "Core configuration failed:<br><b>%1</b><br>Press <em>Next</em> to start over."
+msgstr "Nastavení jádra selhalo:<br><b>%1</b><br>Stiskněte <em>Další</em> pro opakování."
 
 #: CoreConfigWizard#4
-msgid ""
-"Your are now logged into your freshly configured Quassel Core!<br>Please "
-"remember to configure your identities and networks now."
-msgstr ""
+msgid "Your are now logged into your freshly configured Quassel Core!<br>Please remember to configure your identities and networks now."
+msgstr "Nyní jste připojeni k čerstvě nastavenému Quassel jádru!<br>Nezapomeňte si nyní nastavit své sítě a identity."
 
 #: CoreConfigWizardAdminUserPage#1
 msgctxt "CoreConfigWizardAdminUserPage#1"
 msgid "Form"
-msgstr ""
+msgstr "Form"
 
 #: CoreConfigWizardAdminUserPage#2
 msgctxt "CoreConfigWizardAdminUserPage#2"
 msgid "Username:"
-msgstr ""
+msgstr "Uživatelské jméno:"
 
 #: CoreConfigWizardAdminUserPage#3
 msgctxt "CoreConfigWizardAdminUserPage#3"
 msgid "Password:"
-msgstr ""
+msgstr "Heslo:"
 
 #: CoreConfigWizardAdminUserPage#4
 msgid "Repeat password:"
-msgstr ""
+msgstr "Heslo znovu:"
 
 #: CoreConfigWizardAdminUserPage#5
 msgctxt "CoreConfigWizardAdminUserPage#5"
 msgid "Remember password"
-msgstr ""
+msgstr "Pamatovat heslo"
 
 #: CoreConfigWizardAdminUserPage#6
 msgid ""
-"<b>Note:</b> Adding more users and changing your username/password is not "
-"possible via Quassel's client interface yet.\n"
-"If you need to do these things, please run \"<tt><nobr>quasselcore "
-"--help</nobr></tt>\"."
+"<b>Note:</b> Adding more users and changing your username/password is not possible via Quassel's client interface yet.\n"
+"If you need to do these things, please run \"<tt><nobr>quasselcore --help</nobr></tt>\"."
 msgstr ""
+"<b>Poznámka:</b> Přidávání více uživatelů a změny uživatelského jména a hesla prozatím nejsou proveditelné skrze grafické rozhraní Quassel klienta.\n"
+"Pokud dané operace potřebujete provést, prosíme spusťte \"<tt><nobr>quasselcore --help</nobr></tt>\"."
 
 #: CoreConfigWizardIntroPage#1
 msgctxt "CoreConfigWizardIntroPage#1"
 msgid "Form"
-msgstr ""
+msgstr "Form"
 
 #: CoreConfigWizardIntroPage#2
 msgid "This wizard will guide you through the setup of your Quassel Core."
-msgstr ""
+msgstr "Tento průvodce vás provede skrze nastavení jádra Quassel."
 
 #: CoreConfigWizardPages::AdminUserPage#1
 msgid "Create Admin User"
-msgstr ""
+msgstr "Vytvořit účet administrátora"
 
 #: CoreConfigWizardPages::AdminUserPage#2
-msgid ""
-"First, we will create a user on the core. This first user will have "
-"administrator privileges."
-msgstr ""
+msgid "First, we will create a user on the core. This first user will have administrator privileges."
+msgstr "Nejprve vytvoříme uživatele jádra. První (tento) uživatel bude mít administrátorská práva."
 
 #: CoreConfigWizardPages::IntroPage#1
 msgid "Introduction"
-msgstr ""
+msgstr "Úvod"
 
 #: CoreConfigWizardPages::StorageSelectionPage#1
 msgid "Select Storage Backend"
-msgstr ""
+msgstr "Zvolte skladovací rozhraní"
 
 #: CoreConfigWizardPages::StorageSelectionPage#2
-msgid ""
-"Please select a database backend for the Quassel Core storage to store the "
-"backlog and other data in."
-msgstr ""
+msgid "Please select a database backend for the Quassel Core storage to store the backlog and other data in."
+msgstr "Prosím zvolte databázové rozhraní pro ukládání dat Quassel jádra."
 
 #: CoreConfigWizardPages::StorageSelectionPage#3
 msgid "Connection Properties"
-msgstr ""
+msgstr "Možnosti spojení"
 
 #: CoreConfigWizardPages::SyncPage#1
 msgid "Storing Your Settings"
-msgstr ""
+msgstr "Ukládám Vaše nastavení"
 
 #: CoreConfigWizardPages::SyncPage#2
-msgid ""
-"Your settings are now stored in the core, and you will be logged in "
-"automatically."
-msgstr ""
+msgid "Your settings are now stored in the core, and you will be logged in automatically."
+msgstr "Vaše nastavení je nyní uloženo v Jádře a tedy budete automaticky přihlášeni."
 
 #: CoreConfigWizardStorageSelectionPage#1
 msgctxt "CoreConfigWizardStorageSelectionPage#1"
 msgid "Form"
-msgstr ""
+msgstr "Form"
 
 #: CoreConfigWizardStorageSelectionPage#2
 msgctxt "CoreConfigWizardStorageSelectionPage#2"
 msgid "Storage Backend:"
-msgstr ""
+msgstr "Skladovací rozhraní:"
 
 #: CoreConfigWizardStorageSelectionPage#3
 msgid "Description"
-msgstr ""
+msgstr "Popis"
 
 #: CoreConfigWizardStorageSelectionPage#4
 msgid "Foobar"
-msgstr ""
+msgstr "Foobar"
 
 #: CoreConfigWizardSyncPage#1
 msgctxt "CoreConfigWizardSyncPage#1"
 msgid "Form"
-msgstr ""
+msgstr "Form"
 
 #: CoreConfigWizardSyncPage#2
 msgid "Your Choices"
-msgstr ""
+msgstr "Vaše volby"
 
 #: CoreConfigWizardSyncPage#3
 msgid "Admin User:"
-msgstr ""
+msgstr "Administrátor:"
 
 #: CoreConfigWizardSyncPage#4
 msgid "foo"
-msgstr ""
+msgstr "foo"
 
 #: CoreConfigWizardSyncPage#5
 msgctxt "CoreConfigWizardSyncPage#5"
 msgid "Storage Backend:"
-msgstr ""
+msgstr "Skladovací rozhraní:"
 
 #: CoreConfigWizardSyncPage#6
 msgid "bar"
-msgstr ""
+msgstr "bar"
 
 #: CoreConfigWizardSyncPage#7
 msgid "Please wait while your settings are being transmitted to the core..."
-msgstr ""
+msgstr "Prosím vyčkejte dokud se nastavení nepřenese k jádru..."
 
 #: CoreConnectAuthDlg#1
 msgid "Authentication Required"
-msgstr ""
+msgstr "Autenifikace vyžadována"
 
 #: CoreConnectAuthDlg#2
 msgid "Please enter your account data:"
-msgstr ""
+msgstr "Prosím zadejte údaje vašeho účtu:"
 
 #: CoreConnectAuthDlg#3
 msgctxt "CoreConnectAuthDlg#3"
 msgid "Password:"
-msgstr ""
+msgstr "Heslo:"
 
 #: CoreConnectAuthDlg#4
 msgctxt "CoreConnectAuthDlg#4"
 msgid "Username:"
-msgstr ""
+msgstr "Uživatelské jméno:"
 
 #: CoreConnectAuthDlg#5
 msgctxt "CoreConnectAuthDlg#5"
 msgid "Remember password"
-msgstr ""
+msgstr "Pamatovat heslo"
 
 #: CoreConnectAuthDlg#6
 msgid "Please enter your credentials for %1:"
-msgstr ""
+msgstr "Prosím zadejte vaše pověření pro %1:"
 
 #: CoreConnectDlg#1
 msgid "Connect to Core"
-msgstr ""
+msgstr "Připojit k jádru"
 
 #: CoreConnection#1
 msgid "Network is down"
-msgstr ""
+msgstr "Síť je mimo provoz"
 
 #: CoreConnection#2
 msgid "Disconnected"
-msgstr ""
+msgstr "Odpojeno"
 
 #: CoreConnection#3
 msgid "Looking up %1..."
-msgstr ""
+msgstr "Vyhledávám %1..."
 
 #: CoreConnection#4
 msgid "Connecting to %1..."
-msgstr ""
+msgstr "Připojuji se k %1..."
 
 #: CoreConnection#5
 msgid "Connected to %1"
-msgstr ""
+msgstr "Připojeno k %1..."
 
 #: CoreConnection#6
 msgid "Disconnecting from %1..."
-msgstr ""
+msgstr "Odpojeno od %1..."
 
 #: CoreConnection#7
-msgid ""
-"The Quassel Core you try to connect to is too old! Please consider "
-"upgrading."
-msgstr ""
+msgid "The Quassel Core you try to connect to is too old! Please consider upgrading."
+msgstr "Jádro Quasselu, ke kterému se snazíte připojit, je příliš staré! Prosíme zvažte jeho aktualizaci."
 
 #: CoreConnection#8
 msgid "Invalid data received from core"
-msgstr ""
+msgstr "Přijata neplatná data od jádra"
 
 #: CoreConnection#9
 msgid "Disconnected from core."
-msgstr ""
+msgstr "Odpojit od jádra."
 
 #: CoreConnection#10
 msgid "Unencrypted connection canceled"
-msgstr ""
+msgstr "Nešifrované spojení zrušeno"
 
 #: CoreConnection#11
 msgid "Synchronizing to core..."
-msgstr ""
+msgstr "Synchronizace s jádrem..."
 
 #: CoreConnection#12
-msgid ""
-"<b>The Quassel Core you are trying to connect to is too old!</b><br>Need at "
-"least core/client protocol v%1 to connect."
-msgstr ""
+msgid "<b>The Quassel Core you are trying to connect to is too old!</b><br>Need at least core/client protocol v%1 to connect."
+msgstr "<b>Jádro Quasselu, ke kterému se snažíte připojit, je příliš staré!</b><br> Požadovaný je protokol verze %1 pro spojení."
 
 #: CoreConnection#13
 msgid "Logging in..."
-msgstr ""
+msgstr "Probíhá přihlášení..."
 
 #: CoreConnection#14
 msgid "Login canceled"
-msgstr ""
+msgstr "Přihlášení zrušeno"
 
 #: CoreConnection#15
 msgid "Receiving session state"
-msgstr ""
+msgstr "Příjem stavu sezení"
 
 #: CoreConnection#16
 msgid "Synchronizing to %1..."
-msgstr ""
+msgstr "Synchronizace s %1..."
 
 #: CoreConnection#17
 msgid "Receiving network states"
-msgstr ""
+msgstr "Příjem stavů sítí"
 
 #: CoreConnection#18
 msgid "Synchronized to %1"
-msgstr ""
+msgstr "Synchronizováno s %1"
 
 #: CoreConnectionSettingsPage#1
 msgctxt "CoreConnectionSettingsPage#1"
 msgid "Form"
-msgstr ""
+msgstr "Form"
 
 #: CoreConnectionSettingsPage#2
 msgid "Network Status Detection"
-msgstr ""
+msgstr "Detekce stavu sítě"
 
 #: CoreConnectionSettingsPage#3
-msgid ""
-"Rely on KDE's hardware layer to detect if we're online. Recommended for most "
-"KDE users"
-msgstr ""
+msgid "Rely on KDE's hardware layer to detect if we're online. Recommended for most KDE users"
+msgstr "Při detekci stavu spoléhat na hardwarovou vrstvu KDE. Doporučeno pro většinu KDE uživatelů"
 
 #: CoreConnectionSettingsPage#4
 msgid "Use KDE's network status detection (via Solid)"
-msgstr ""
+msgstr "Použít detekci stavu sítě KDE (skrze Solid)"
 
 #: CoreConnectionSettingsPage#5
-msgid ""
-"Actively ping the remote core and disconnect if we didn't get a reply after "
-"a certain time"
-msgstr ""
+msgid "Actively ping the remote core and disconnect if we didn't get a reply after a certain time"
+msgstr "Aktivně pinkat vzdálené jádro a odpojit pokud neobdržíme odpověď po určitém časovém intervalu"
 
 #: CoreConnectionSettingsPage#6
 msgid "Ping timeout after"
-msgstr ""
+msgstr "Vypršení časového limitu po"
 
 #: CoreConnectionSettingsPage#7
 msgctxt "CoreConnectionSettingsPage#7"
 msgid " seconds"
-msgstr ""
+msgstr " vteřin"
 
 #: CoreConnectionSettingsPage#8
-msgid ""
-"Only disconnect if the network socket gets closed by the operating system. "
-"This may take a long time after actually losing connectivity"
-msgstr ""
+msgid "Only disconnect if the network socket gets closed by the operating system. This may take a long time after actually losing connectivity"
+msgstr "Odpojit pouze pokud bude síťový socket uzavřen operačním systémem. Může trvat poněkud déle nežli uzavře spojení po ztracení připojení"
 
 #: CoreConnectionSettingsPage#9
 msgid "Never time out actively"
-msgstr ""
+msgstr "Aktivně neodpojovat"
 
 #: CoreConnectionSettingsPage#10
 msgid "Automatically reconnect on network failures"
-msgstr ""
+msgstr "Automaticky připojit při síťových výpadcích"
 
 #: CoreConnectionSettingsPage#11
 msgid "Retry every"
-msgstr ""
+msgstr "Zkusit vše"
 
 #: CoreConnectionSettingsPage#12
 msgctxt "CoreConnectionSettingsPage#12"
 msgid "Remote Cores"
-msgstr ""
+msgstr "Vzdálená jádra"
 
 #: CoreConnectionSettingsPage#13
 msgctxt "CoreConnectionSettingsPage#13"
 msgid "Connection"
-msgstr ""
+msgstr "Spojení"
 
 #: CoreConnectionStatusWidget#1
 msgctxt "CoreConnectionStatusWidget#1"
 msgid "Form"
-msgstr ""
+msgstr "Form"
 
 #: CoreConnectionStatusWidget#2
 msgctxt "CoreConnectionStatusWidget#2"
 msgid "Message"
-msgstr ""
+msgstr "Zpráva"
 
-# seconds
 #: CoreConnectionStatusWidget#3
 msgid "s"
-msgstr ""
+msgstr "s"
 
-# milliseconds
 #: CoreConnectionStatusWidget#4
 msgid "ms"
-msgstr ""
+msgstr "ms"
 
 #: CoreConnectionStatusWidget#5
 msgid "(Lag: %1 %2)"
-msgstr ""
+msgstr "(Zpoždění: %1 %2)"
 
 #: CoreConnectionStatusWidget#6
 msgid "The connection to your core is encrypted with SSL."
-msgstr ""
+msgstr "Spojení k vašemu jádru není šifrované pomocí SSL."
 
 #: CoreConnectionStatusWidget#7
 msgid "The connection to your core is not encrypted."
-msgstr ""
+msgstr "Spojení k vašemu jádru není šifrované."
 
 #: CoreInfoDlg#1
 msgid "Core Information"
-msgstr ""
+msgstr "Informace o jádru"
 
 #: CoreInfoDlg#2
 msgid "Version:"
-msgstr ""
+msgstr "Verze:"
 
 #: CoreInfoDlg#3
 msgid "<core version>"
-msgstr ""
+msgstr "<verze jádra>"
 
 #: CoreInfoDlg#4
 msgid "Uptime:"
-msgstr ""
+msgstr "Doba běhu:"
 
 #: CoreInfoDlg#5
 msgid "Connected Clients:"
-msgstr ""
+msgstr "Připojení klienti:"
 
 #: CoreInfoDlg#6
 msgid "<connected clients>"
-msgstr ""
+msgstr "<připojení klienti>"
 
 #: CoreInfoDlg#7
 msgid "<core uptime>"
-msgstr ""
+msgstr "<doba běhu jádra>"
 
 #: CoreInfoDlg#8
 msgid "Build date:"
-msgstr ""
+msgstr "Datum sestavení:"
 
 #: CoreInfoDlg#9
 msgid "<build date>"
-msgstr ""
+msgstr "<datum sestavení>"
 
 #: CoreInfoDlg#10
 msgctxt "CoreInfoDlg#10"
 msgid "Close"
-msgstr ""
+msgstr "Zavřít"
 
 #: CoreInfoDlg#11
-#, fuzzy
 msgid "%n Day(s)"
-msgstr ""
-"\n"
-"            \n"
-"        "
+msgstr "%n Den"
 
 #: CoreInfoDlg#12
 msgid " %1:%2:%3 (since %4)"
-msgstr ""
+msgstr " %1:%2:%3 (od %4)"
 
 #: CoreNetwork#1
 msgid "Connection failed. Cycling to next Server"
-msgstr ""
+msgstr "Spojení selhalo. Zkouším další server"
 
 #: CoreNetwork#2
 msgid "Connecting to %1:%2..."
-msgstr ""
+msgstr "Připojuji se k %1:%2..."
 
 #: CoreNetwork#3
 msgid "Disconnecting. (%1)"
-msgstr ""
+msgstr "Odpojuji. (%1)"
 
 #: CoreNetwork#4
 msgid "Core Shutdown"
-msgstr ""
+msgstr "Vypnutí jádra"
 
 #: CoreNetwork#5
 msgid "Could not connect to %1 (%2)"
-msgstr ""
+msgstr "Nemohu se spojit s %1 (%2)"
 
 #: CoreNetwork#6
 msgid "Connection failure: %1"
-msgstr ""
+msgstr "Chyba spojení: %1"
 
 #: CoreSession#1
 msgctxt "CoreSession#1"
 msgid "Client"
-msgstr ""
+msgstr "Klient"
 
 #: CoreSession#2
 msgid "disconnected (UserId: %1)."
-msgstr ""
+msgstr "odpojen (Id-Uživatele: %1)."
 
 #: CoreSession#3
-msgid ""
-"CoreSession::createNetwork(): Got invalid networkId from Core when trying to "
-"create network %1!"
-msgstr ""
+msgid "CoreSession::createNetwork(): Got invalid networkId from Core when trying to create network %1!"
+msgstr "CoreSession::createNetwork(): Obdrženo špatné networkId od jádra při pokusu o vytvoření sítě %1!"
 
 #: CoreSession#4
-msgid ""
-"CoreSession::createNetwork(): Trying to create a network that already "
-"exists, updating instead!"
-msgstr ""
+msgid "CoreSession::createNetwork(): Trying to create a network that already exists, updating instead!"
+msgstr "CoreSession::createNetwork(): Síť s daným názvem již existuje. Aktualizuji místo duplikace!"
 
 #: CoreUserInputHandler#1
 msgid "away"
-msgstr ""
+msgstr "pryč"
 
 #: CoreUserInputHandler#2
 msgid "sending CTCP-%1 request"
-msgstr ""
+msgstr "posílám požadavek CTCP-%1"
 
 #: CreateIdentityDlg#1
 msgid "Create New Identity"
-msgstr ""
+msgstr "Vytvořit novou identitu"
 
 #: CreateIdentityDlg#2
 msgid "Identity name:"
-msgstr ""
+msgstr "Název identity:"
 
 #: CreateIdentityDlg#3
 msgid "Create blank identity"
-msgstr ""
+msgstr "Vytvořit prázdnou identitu"
 
 #: CreateIdentityDlg#4
 msgid "Duplicate:"
-msgstr ""
+msgstr "Duplikovat:"
 
 #: CtcpHandler#1
 msgid "Received CTCP PING request from %1"
-msgstr ""
+msgstr "Obdržen CTCP PING požadavek od %1"
 
 #: CtcpHandler#2
 msgid "Received CTCP PING answer from %1 with %2 seconds round trip time"
-msgstr ""
+msgstr "Obdržena CTCP PING odpověď od %1 s %2 vteřinovým odstupem"
 
 #: CtcpHandler#3
 msgid "Received CTCP VERSION request by %1"
-msgstr ""
+msgstr "Obdržen CTCP VERSION požadavek od %1"
 
 #: CtcpHandler#4
 msgid "Received CTCP VERSION answer from %1: %2"
-msgstr ""
+msgstr "Obdržena CTCP VERSION odpověď od %1: %2"
 
 #: CtcpHandler#5
 msgid "Received unknown CTCP %1 by %2"
-msgstr ""
+msgstr "Obdrženo neznáme CTCP %1 od %2"
 
 #: DebugBufferViewOverlay#1
 msgid "Debug BufferView Overlay"
-msgstr ""
+msgstr "Ladící vrstva záložek"
 
 #: DebugBufferViewOverlay#2
 msgid "Overlay View"
-msgstr ""
+msgstr "Pohled vrstvy"
 
 #: DebugBufferViewOverlay#3
 msgid "Overlay Properties"
-msgstr ""
+msgstr "Nastavení vrstvy"
 
 #: DebugBufferViewOverlay#4
 msgid "BufferViews:"
-msgstr ""
+msgstr "Pohledy na záložky:"
 
 #: DebugBufferViewOverlay#5
 msgid "All Networks:"
-msgstr ""
+msgstr "Všechny sítě:"
 
 #: DebugBufferViewOverlay#6
 msgid "Networks:"
-msgstr ""
+msgstr "Sítě:"
 
 #: DebugBufferViewOverlay#7
 msgid "Buffers:"
-msgstr ""
+msgstr "Záložky:"
 
 #: DebugBufferViewOverlay#8
 msgid "Removed buffers:"
-msgstr ""
+msgstr "Odstraněné záložky:"
 
 #: DebugBufferViewOverlay#9
 msgid "Temp. removed buffers:"
-msgstr ""
+msgstr "Dočasně odstraněné záložky:"
 
 #: DebugBufferViewOverlay#10
 msgid "Add Buffers Automatically:"
-msgstr ""
+msgstr "Přidávat záložky automaticky:"
 
 #: DebugBufferViewOverlay#11
 msgid "Hide inactive buffers:"
-msgstr ""
+msgstr "Skrýt neaktivní záložky:"
 
 #: DebugBufferViewOverlay#12
 msgid "Allowed buffer types:"
-msgstr ""
+msgstr "Povolené typy záložek:"
 
 #: DebugBufferViewOverlay#13
 msgid "Minimum activity:"
-msgstr ""
+msgstr "Minimální aktivita:"
 
 #: DebugBufferViewOverlay#14
 msgid "Is initialized:"
-msgstr ""
+msgstr "Je inicializován:"
 
 #: DebugConsole#1
 msgid "Debug Console"
-msgstr ""
+msgstr "Ladící konzole"
 
 #: DebugConsole#2
 msgid "local"
-msgstr ""
+msgstr "lokální"
 
 #: DebugConsole#3
 msgid "core"
-msgstr ""
+msgstr "jádro"
 
 #: DebugConsole#4
 msgid "Evaluate!"
-msgstr ""
+msgstr "Posoudit!"
 
 #: DebugLogWidget#1
 msgid "Debug Log"
-msgstr ""
+msgstr "Ladící log"
 
 #: DebugLogWidget#2
 msgctxt "DebugLogWidget#2"
 msgid "Close"
-msgstr ""
+msgstr "Zavřít"
 
 #: DesktopNotificationConfigWidget#1
 msgctxt "DesktopNotificationConfigWidget#1"
 msgid "Form"
-msgstr ""
+msgstr "Form"
 
 #: DesktopNotificationConfigWidget#2
 msgid "Desktop Notification (via D-Bus)"
-msgstr ""
+msgstr "Oznamovaní (skrze D-Bus)"
 
 #: DesktopNotificationConfigWidget#3
 msgid "Timeout:"
-msgstr ""
+msgstr "Časová prodleva:"
 
 #: DesktopNotificationConfigWidget#4
 msgctxt "DesktopNotificationConfigWidget#4"
 msgid " s"
-msgstr ""
+msgstr " s"
 
 #: DesktopNotificationConfigWidget#5
 msgid "Position hint:"
-msgstr ""
+msgstr "Pozice oznámení:"
 
 #: DesktopNotificationConfigWidget#6
 msgid " px"
-msgstr ""
+msgstr " px"
 
 #: DesktopNotificationConfigWidget#7
 msgid "X: "
-msgstr ""
+msgstr "X: "
 
 #: DesktopNotificationConfigWidget#8
 msgid "Y: "
-msgstr ""
+msgstr "Y: "
 
 #: DesktopNotificationConfigWidget#9
 msgid "Queue unread notifications"
-msgstr ""
+msgstr "Řadit nepřečtená oznámení"
 
 #: ExecWrapper#1
 msgid "Invalid command string for /exec: %1"
-msgstr ""
+msgstr "Neplatný příkaz pro /exec: %1"
 
 #: ExecWrapper#2
 msgid "Name \"%1\" is invalid: ../ or ..\\ are not allowed!"
-msgstr ""
+msgstr "Název \"%1\" není platný: ../ nebo ..\\ nejsou povoleny!"
 
 #: ExecWrapper#3
 msgid "Could not find script \"%1\""
-msgstr ""
+msgstr "Nemohu najít skript \"%1\""
 
 #: ExecWrapper#4
 msgid "Script \"%1\" crashed with exit code %2."
-msgstr ""
+msgstr "Skript \"%1\" se zbořil s výstupním kódem %2."
 
 #: ExecWrapper#5
 msgid "Script \"%1\" could not start."
-msgstr ""
+msgstr "Skript \"%1\" se nepodařilo spustit."
 
 #: ExecWrapper#6
 msgid "Script \"%1\" caused error %2."
-msgstr ""
+msgstr "Skript \"%1\" způsobil chybu %2."
 
 #: FontSelector#1
 msgid "Choose..."
-msgstr ""
+msgstr "Vybrat..."
 
 #: HighlightSettingsPage#1
 msgctxt "HighlightSettingsPage#1"
 msgid "Form"
-msgstr ""
+msgstr "Form"
 
 #: HighlightSettingsPage#2
 msgid "Custom Highlights"
-msgstr ""
+msgstr "Uživatelská zvýraznění"
 
 #: HighlightSettingsPage#3
 msgctxt "HighlightSettingsPage#3"
 msgid "Highlight"
-msgstr ""
+msgstr "Zvýraznění"
 
 #: HighlightSettingsPage#4
 msgid "RegEx"
-msgstr ""
+msgstr "Regulérní výraz"
 
 #: HighlightSettingsPage#5
 msgid "CS"
-msgstr ""
+msgstr "CV"
 
 #: HighlightSettingsPage#6
 msgid "Enable"
-msgstr ""
+msgstr "Povolit"
 
 #: HighlightSettingsPage#7
 msgid "Add"
-msgstr ""
+msgstr "Přidat"
 
 #: HighlightSettingsPage#8
 msgctxt "HighlightSettingsPage#8"
 msgid "Remove"
-msgstr ""
+msgstr "Odebrat"
 
 #: HighlightSettingsPage#9
 msgid "Highlight Nicks"
-msgstr ""
+msgstr "Zvýrazňované přezdívky"
 
 #: HighlightSettingsPage#10
 msgid "All nicks from identity"
-msgstr ""
+msgstr "Všechny přezdívky z identity"
 
 #: HighlightSettingsPage#11
 msgid "Current nick"
-msgstr ""
+msgstr "Současnou"
 
 #: HighlightSettingsPage#12
 msgid "None"
-msgstr ""
+msgstr "Žádnou"
 
 #: HighlightSettingsPage#13
 msgid "Case sensitive"
-msgstr ""
+msgstr "Citlivý na velikost písma"
 
 #: HighlightSettingsPage#14
 msgctxt "HighlightSettingsPage#14"
 msgid "Interface"
-msgstr ""
+msgstr "Rozhraní"
 
 #: HighlightSettingsPage#15
 msgid "this shouldn't be empty"
-msgstr ""
+msgstr "toto by nemělo být prázdné"
 
 #: HighlightSettingsPage#16
 msgid "highlight rule"
-msgstr ""
+msgstr "Pravidla zvýraznění"
 
 #: IdentitiesSettingsPage#1
 msgctxt "IdentitiesSettingsPage#1"
 msgid "Rename Identity"
-msgstr ""
+msgstr "Přejmenovat identitu"
 
 #: IdentitiesSettingsPage#2
 msgctxt "IdentitiesSettingsPage#2"
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #: IdentitiesSettingsPage#3
 msgid "Add Identity"
-msgstr ""
+msgstr "Přidat identitu"
 
 #: IdentitiesSettingsPage#4
 msgctxt "IdentitiesSettingsPage#4"
 msgid "Add..."
-msgstr ""
+msgstr "Přidat..."
 
 #: IdentitiesSettingsPage#5
 msgid "Remove Identity"
-msgstr ""
+msgstr "Odstranit identitu"
 
 #: IdentitiesSettingsPage#6
 msgctxt "IdentitiesSettingsPage#6"
 msgid "IRC"
-msgstr ""
+msgstr "IRC"
 
 #: IdentitiesSettingsPage#7
 msgid "Identities"
-msgstr ""
+msgstr "Identity"
 
 #: IdentitiesSettingsPage#8
 msgctxt "IdentitiesSettingsPage#8"
-msgid ""
-"<b>The following problems need to be corrected before your changes can be "
-"applied:</b><ul>"
-msgstr ""
+msgid "<b>The following problems need to be corrected before your changes can be applied:</b><ul>"
+msgstr "<b>Následující problémy je třeba odstranit pro uložení změn:</b><ul>"
 
 #: IdentitiesSettingsPage#9
 msgid "<li>All identities need an identity name set</li>"
-msgstr ""
+msgstr "<li>Všechny identity potřebují název</li>"
 
 #: IdentitiesSettingsPage#10
 msgid "<li>Every identity needs at least one nickname defined</li>"
-msgstr ""
+msgstr "<li>Každý identita požaduje alespoň jednu definovanou přezdívku</li>"
 
 #: IdentitiesSettingsPage#11
 msgid "<li>You need to specify a real name for every identity</li>"
-msgstr ""
+msgstr "<li>Pro každou identitu je třeba zadat reálné jméno</li>"
 
 #: IdentitiesSettingsPage#12
 msgid "<li>You need to specify an ident for every identity</li>"
-msgstr ""
+msgstr "<li>Musíte specifikovat ident pro každou identitu</li>"
 
 #: IdentitiesSettingsPage#13
 msgctxt "IdentitiesSettingsPage#13"
 msgid "</ul>"
-msgstr ""
+msgstr "</ul>"
 
 #: IdentitiesSettingsPage#14
 msgid "One or more identities are invalid"
-msgstr ""
+msgstr "Jedna (či více) identita není validní"
 
 #: IdentitiesSettingsPage#15
 msgid "Delete Identity?"
-msgstr ""
+msgstr "Smazat Identitu?"
 
 #: IdentitiesSettingsPage#16
 msgid "Do you really want to delete identity \"%1\"?"
-msgstr ""
+msgstr "Opravdu chcete smazat identitu \"%1\"?"
 
 #: IdentitiesSettingsPage#17
 msgid "Please enter a new name for the identity \"%1\"!"
-msgstr ""
+msgstr "Prosím zadejte nový název pro identitu \"%1\"!"
 
 #: Identity#1
 msgid "Quassel IRC User"
-msgstr ""
+msgstr "Uživatel Quassel IRC"
 
 #: Identity#2
 msgid "<empty>"
-msgstr ""
+msgstr "<prázdné>"
 
 #: Identity#3
 msgid "Gone fishing."
-msgstr ""
+msgstr "Šel jsem rybařit."
 
 #: Identity#4
 msgid "Not here. No, really. not here!"
-msgstr ""
+msgstr "Nejsem tu. Vážně tu nejsem!"
 
 #: Identity#5
 msgid "All Quassel clients vanished from the face of the earth..."
-msgstr ""
+msgstr "Všichni Quassel klienti zmizeli z povrchu země..."
 
 #: Identity#6
 msgid "Kindergarten is elsewhere!"
-msgstr ""
+msgstr "Tady opravdu není školka!"
 
 #: Identity#7
 msgid "http://quassel-irc.org - Chat comfortably. Anywhere."
-msgstr ""
+msgstr "http://quassel-irc.org - Pohodlné vykecávání. Odkudkoliv."
 
 #: IdentityEditWidget#1
 msgid "General"
-msgstr ""
+msgstr "Obecné"
 
 #: IdentityEditWidget#2
 msgid "Real Name:"
-msgstr ""
+msgstr "Skutečné jméno:"
 
 #: IdentityEditWidget#3
 msgid "The \"Real Name\" is shown in /whois."
-msgstr ""
+msgstr "\"Skutečné jméno\" je zobrazeno při volání příkazu /whois."
 
 #: IdentityEditWidget#4
 msgid "Nicknames"
-msgstr ""
+msgstr "Přezdívky"
 
 #: IdentityEditWidget#5
 msgctxt "IdentityEditWidget#5"
 msgid "Add Nickname"
-msgstr ""
+msgstr "Přidat přezdívku"
 
 #: IdentityEditWidget#6
 msgctxt "IdentityEditWidget#6"
 msgid "&Add..."
-msgstr ""
+msgstr "Přid&at..."
 
 #: IdentityEditWidget#7
 msgid "Remove Nickname"
-msgstr ""
+msgstr "Odstranit přezdívku"
 
 #: IdentityEditWidget#8
 msgctxt "IdentityEditWidget#8"
 msgid "Remove"
-msgstr ""
+msgstr "Odebrat"
 
 #: IdentityEditWidget#9
 msgctxt "IdentityEditWidget#9"
 msgid "Rename Identity"
-msgstr ""
+msgstr "Přejmenovat identitu"
 
 #: IdentityEditWidget#10
 msgctxt "IdentityEditWidget#10"
 msgid "Re&name..."
-msgstr ""
+msgstr "Přejme&novat..."
 
 #: IdentityEditWidget#11
 msgctxt "IdentityEditWidget#11"
 msgid "Move upwards in list"
-msgstr ""
+msgstr "Posunout výš v seznamu"
 
 #: IdentityEditWidget#12
 msgctxt "IdentityEditWidget#12"
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #: IdentityEditWidget#13
 msgctxt "IdentityEditWidget#13"
 msgid "Move downwards in list"
-msgstr ""
+msgstr "Posunout níž v seznamu"
 
 #: IdentityEditWidget#14
 msgid "A&way"
-msgstr ""
+msgstr "V&zdálen"
 
 #: IdentityEditWidget#15
 msgid "Default Away Settings"
-msgstr ""
+msgstr "Výchozí nastavení Vzdálení"
 
 #: IdentityEditWidget#16
 msgid "Nick to be used when being away"
-msgstr ""
+msgstr "Přezdívka která se použije pokud jste vzdáleni"
 
 #: IdentityEditWidget#17
 msgid "Default away reason"
-msgstr ""
+msgstr "Výchozí důvod proč jste vzdáleni"
 
 #: IdentityEditWidget#18
 msgid "Away Nick:"
-msgstr ""
+msgstr "Přezdívka při vzdálení:"
 
 #: IdentityEditWidget#19
 msgid "Away Reason:"
-msgstr ""
+msgstr "Důvod vzdálení:"
 
 #: IdentityEditWidget#20
 msgid "Set away when all clients have detached from the core"
-msgstr ""
+msgstr "Nastaví vzdálení pokud jsou všichni klienti odpojeni od jádra"
 
 #: IdentityEditWidget#21
 msgid "Away On Detach"
-msgstr ""
+msgstr "Vzdálen při odpojení"
 
 #: IdentityEditWidget#22
 msgid "Not implemented yet"
-msgstr ""
+msgstr "Ještě jsme to neimplementovali ;]"
 
 #: IdentityEditWidget#23
 msgid "Away On Idle"
-msgstr ""
+msgstr "Nastavit vzdálen při nicnedělání"
 
 #: IdentityEditWidget#24
 msgid "Set away after"
-msgstr ""
+msgstr "Nastavit vzdálen po"
 
 #: IdentityEditWidget#25
 msgid "minutes of being idle"
-msgstr ""
+msgstr "minut nicnedělání"
 
 #: IdentityEditWidget#26
 msgctxt "IdentityEditWidget#26"
 msgid "Advanced"
-msgstr ""
+msgstr "Pokročilé"
 
 #: IdentityEditWidget#27
 msgid "Ident:"
-msgstr ""
+msgstr "Identifikace:"
 
 #: IdentityEditWidget#28
-msgid ""
-"The \"ident\" is part of your hostmask and, together with your host, uniquely "
-"identifies you within the IRC network."
-msgstr ""
+msgid "The \"ident\" is part of your hostmask and, together with your host, uniquely identifies you within the IRC network."
+msgstr "\"Ident\" je částí vaší masky a spolu s názvem vašeho počítače vás unikátně označuje pro IRC síť."
 
 #: IdentityEditWidget#29
 msgid "Messages"
-msgstr ""
+msgstr "Zprávy"
 
 #: IdentityEditWidget#30
 msgid "Part Reason:"
-msgstr ""
+msgstr "Důvod pro opuštění:"
 
 #: IdentityEditWidget#31
 msgid "Quit Reason:"
-msgstr ""
+msgstr "Důvod pro ukončení:"
 
 #: IdentityEditWidget#32
 msgid "Kick Reason:"
-msgstr ""
+msgstr "Důvod pro vyhození:"
 
 #: IdentityEditWidget#33
-msgid ""
-"You need an SSL Capable Client to edit your Cores SSL Key and Certificate"
-msgstr ""
+msgid "You need an SSL Capable Client to edit your Cores SSL Key and Certificate"
+msgstr "Abyste byli schopni měnit nastavení SSL klíče a certifikátu musí váš klient podporovat SSL"
 
 #: IdentityEditWidget#34
 msgid ""
-"Warning: you are not connected with a secured connection to the Quassel "
-"Core!\n"
-"Proceeding will cause an unencrypted transfer of your SSL Key and SSL "
-"Certificate!"
+"Warning: you are not connected with a secured connection to the Quassel Core!\n"
+"Proceeding will cause an unencrypted transfer of your SSL Key and SSL Certificate!"
 msgstr ""
+"Varování: nejste připojeni k jádru zabezpečeným spojením!\n"
+"Pokračování povede k nešifrovanému přenosu vašeho SSL klíče a SSL certifikátu!"
 
 #: IdentityEditWidget#35
 msgctxt "IdentityEditWidget#35"
 msgid "Continue"
-msgstr ""
+msgstr "Pokračovat"
 
 #: IdentityEditWidget#36
 msgid "Use SSL Key"
-msgstr ""
+msgstr "Použít SSL Klíč"
 
 #: IdentityEditWidget#37
 msgid "Key Type:"
-msgstr ""
+msgstr "Typ klíče:"
 
 #: IdentityEditWidget#38
 msgid "No Key loaded"
-msgstr ""
+msgstr "Nebyl načten žádný klíč"
 
 #: IdentityEditWidget#39
 msgid "Load"
-msgstr ""
+msgstr "Načíst"
 
 #: IdentityEditWidget#40
 msgid "Use SSL Certificate"
-msgstr ""
+msgstr "Použít SSL Certifikát"
 
 #: IdentityEditWidget#41
 msgid "Organisation:"
-msgstr ""
+msgstr "Organizace:"
 
 #: IdentityEditWidget#42
 msgid "No Certificate loaded"
-msgstr ""
+msgstr "Nebyl načten žádný certifikát"
 
 #: IdentityEditWidget#43
 msgid "CommonName:"
-msgstr ""
+msgstr "Běžné jméno:"
 
 #: IdentityEditWidget#44
 msgid "Load a Key"
-msgstr ""
+msgstr "Načíst klíč"
 
 #: IdentityEditWidget#45
 msgid "RSA"
-msgstr ""
+msgstr "RSA"
 
 #: IdentityEditWidget#46
 msgid "DSA"
-msgstr ""
+msgstr "DSA"
 
 #: IdentityEditWidget#47
 msgid "Clear"
-msgstr ""
+msgstr "Vyčistit"
 
 #: IdentityEditWidget#48
 msgid "Load a Certificate"
-msgstr ""
+msgstr "Načíst certifikát"
 
 #: IdentityPage#1
 msgid "Setup Identity"
-msgstr ""
+msgstr "Nastavení identity"
 
 #: IdentityPage#2
 msgid "Default Identity"
-msgstr ""
+msgstr "Výchozí Identita"
 
 #: IgnoreListEditDlg#1
 msgid "Configure Ignore Rule"
-msgstr ""
+msgstr "Nastavit pravidlo ignorování"
 
 #: IgnoreListEditDlg#2
 msgid ""
 "<p><b>Strictness:</b></p>\n"
 "<p><u>Dynamic:</u></p>\n"
 "<p>Messages are filtered \"on the fly\".\n"
-"Whenever you disable/delete the ignore rule, the messages are shown "
-"again.</p>\n"
+"Whenever you disable/delete the ignore rule, the messages are shown again.</p>\n"
 "<p><u>Permanent:</u></p>\n"
 "<p>Messages are filtered before they get stored in the database.</p>"
 msgstr ""
+"<p><b>Přísnost:</b></p>\n"
+"<p><u>Dynamická:</u></p>\n"
+"<p>Zprávy jsou filtrovány \"za běhu\".\n"
+"Pokud je pravidlo zakázáno, zprávy se znovu objeví.</p>\n"
+"<p><u>Permanentní:</u></p>\n"
+"<p>Zprávy jsou filtrovány ještě před uložením do databáze.</p>"
 
 #: IgnoreListEditDlg#3
 msgid "Strictness"
-msgstr ""
+msgstr "Přísnost"
 
 #: IgnoreListEditDlg#4
 msgid "Dynamic"
-msgstr ""
+msgstr "Dynamická"
 
 #: IgnoreListEditDlg#5
 msgid "Permanent"
-msgstr ""
+msgstr "Trvalá"
 
 #: IgnoreListEditDlg#6
 msgid ""
@@ -2358,25 +2275,30 @@ msgid ""
 "<p><u>Message:</u></p>\n"
 "<p>The rule is matched against the actual message content</p>"
 msgstr ""
+"<p><b>Typ pravidla:</b></p>\n"
+"<p><u>Odesílatel:</u></p>\n"
+"<p>Pravidlo je porovnáváno vůči odesílateli\n"
+"<i>přezdívka!ident@jméno.počítače<i></p>\n"
+"<p><u>Zpráva:</u></p>\n"
+"<p>Pravidlo je porovnáváno vůči obsahu dané zprávy</p>"
 
 #: IgnoreListEditDlg#7
 msgid "Rule Type"
-msgstr ""
+msgstr "Typ pravidla"
 
 #: IgnoreListEditDlg#8
 msgid "Sender"
-msgstr ""
+msgstr "Odesílatel"
 
 #: IgnoreListEditDlg#9
 msgctxt "IgnoreListEditDlg#9"
 msgid "Message"
-msgstr ""
+msgstr "Zpráva"
 
 #: IgnoreListEditDlg#10
 msgid ""
 "<p><b>Ignore rule:</b></p>\n"
-"<p>Depending on the type of the rule, the text is matched against "
-"either:</p>\n"
+"<p>Depending on the type of the rule, the text is matched against either:</p>\n"
 "<p><u>- the message content:</u></p>\n"
 "<p><i>Example:</i>\n"
 "<br />\n"
@@ -2386,29 +2308,45 @@ msgid ""
 "<br />\n"
 "- <i>*@foobar.com</i> matches any sender from host <i>foobar.com</i>\n"
 "<br />\n"
-"- <i>stupid!.+</i> (RegEx) matches any sender with nickname <i>stupid</i> "
-"from any host</p>"
+"- <i>stupid!.+</i> (RegEx) matches any sender with nickname <i>stupid</i> from any host</p>"
 msgstr ""
+"<p><b>Pravidlo ignorance:</b></p>\n"
+"<p>Podle typu pravidla je text kontrolován proti:</p>\n"
+"<p><u>- obsahu zprávy:</u></p>\n"
+"<p><i>Příklad:</i>\n"
+"<br />\n"
+"<i>*foobar*</i> platí pro libovolný text obsahující <i>foobar</i></p>\n"
+"<p><u>- textu odesílatele</u>  <i>(přezdívka!ident@název.počítače)</i></p>\n"
+"<p><i>Příklad:</i>\n"
+"<br />\n"
+"- <i>*@foobar.com</i> bude platit pro každý počítač z domény <i>foobar.com</i>\n"
+"<br />\n"
+"- <i>hlupec!.+</i> (RegEx) platí pro každého uživatele s přezdívkou <i>hlupec</i>, který se může připojovat z libovolného počítače</p>"
 
 #: IgnoreListEditDlg#11
 msgctxt "IgnoreListEditDlg#11"
 msgid "Ignore Rule"
-msgstr ""
+msgstr "Pravidlo ignorance"
 
 #: IgnoreListEditDlg#12
 msgid ""
 "<p><b>Use regular expressions:</b></p>\n"
 "<p>If enabled, rules follow regular expression syntax.</p>\n"
-"<p>Otherwise rules allow wildcard matching with the following special "
-"characters:</p>\n"
+"<p>Otherwise rules allow wildcard matching with the following special characters:</p>\n"
 "<p> *: representing \"any amount of any character\"\n"
 "<br />\n"
 "?: representing \"exactly one character\"</p>"
 msgstr ""
+"<p><b>Používat regulární výrazy:</b></p>\n"
+"<p>Při povolení je pravidlo zpracováno jako regulární výraz.</p>\n"
+"<p>V opačném případě pravidla povolují tyto speciální znaky:</p>\n"
+"<p> *: reprezentuje \"libovolné množství znaků\"\n"
+"<br />\n"
+"?: reprezentuje \"právě jeden znak\"</p>"
 
 #: IgnoreListEditDlg#13
 msgid "Regular expression"
-msgstr ""
+msgstr "Regulární výrazy"
 
 #: IgnoreListEditDlg#14
 msgid ""
@@ -2416,42 +2354,53 @@ msgid ""
 "<p><u>Global:</u></p>\n"
 "<p>The rule is active for any channel on any network</p>\n"
 "<p><u>Network:</u></p>\n"
-"<p>The list below is interpreted as a list of networks for which the rule "
-"should match</p>\n"
+"<p>The list below is interpreted as a list of networks for which the rule should match</p>\n"
 "<p><u>Channel:</u></p>\n"
-"<p>The list below is interpreted as a list of channels for which the rule "
-"should match</p>"
+"<p>The list below is interpreted as a list of channels for which the rule should match</p>"
 msgstr ""
+"<p><b>Rozsah:</b></p>\n"
+"<p><u>Globální:</u></p>\n"
+"<p>Pravidlo je platné pro všechny sítě a na všech kanálech</p>\n"
+"<p><u>Síť:</u></p>\n"
+"<p>Seznam je interpretován jako seznam sítí, kde je pravidlo platné</p>\n"
+"<p><u>Kanál:</u></p>\n"
+"<p>Seznam je interpretován jako seznam kanálů, kde je pravidlo platné</p>"
 
 #: IgnoreListEditDlg#15
 msgid "Scope"
-msgstr ""
+msgstr "Rozsah"
 
 #: IgnoreListEditDlg#16
 msgid "Global"
-msgstr ""
+msgstr "Globální"
 
 #: IgnoreListEditDlg#17
 msgctxt "IgnoreListEditDlg#17"
 msgid "Network"
-msgstr ""
+msgstr "Síť"
 
 #: IgnoreListEditDlg#18
 msgctxt "IgnoreListEditDlg#18"
 msgid "Channel"
-msgstr ""
+msgstr "Kanál"
 
 #: IgnoreListEditDlg#19
 msgid ""
 "<p><b>Scope rule:</b></p>\n"
-"<p>A scope rule is a semicolon separated list of either <i>network</i> or "
-"<i>channel</i> names.</p>\n"
+"<p>A scope rule is a semicolon separated list of either <i>network</i> or <i>channel</i> names.</p>\n"
 "<p><i>Example:</i>\n"
 "<br />\n"
 "<i>#quassel*; #foobar</i>\n"
 "<br />\n"
 "would match on #foobar and on any channel starting with <i>#quassel</i></p>"
 msgstr ""
+"<p><b>Rozsah pravidla:</b></p>\n"
+"<p>Jedná se o seznam středníkem oddělených hodnot obsahujících seznam názvů <i>sítí</i> nebo <i>kanálů</i>.</p>\n"
+"<p><i>Příklad:</i>\n"
+"<br />\n"
+"<i>#quassel*; #foobar</i>\n"
+"<br />\n"
+"bude platit na #foobar a na každý kanál začínající <i>#quassel</i></p>"
 
 #: IgnoreListEditDlg#20
 msgid ""
@@ -2460,80 +2409,75 @@ msgid ""
 "<br />\n"
 "For dynamic rules, disabling actually shows the filtered messages again.</p>"
 msgstr ""
+"<p><b>Povolit / Zakázat:</b></p>\n"
+"<p>Pouze povolená pravidla jsou filtrována.\n"
+"<br />\n"
+"Pro dynamická pravidla vypnutí opětovně zobrazí dříve filtrované zprávy.</p>"
 
 #: IgnoreListEditDlg#21
 msgid "Rule is enabled"
-msgstr ""
+msgstr "Povolit pravidlo"
 
 #: IgnoreListModel#1
-msgid ""
-"<b>Enable / Disable:</b><br />Only enabled rules are filtered.<br />For "
-"dynamic rules, disabling actually shows the filtered messages again"
-msgstr ""
+msgid "<b>Enable / Disable:</b><br />Only enabled rules are filtered.<br />For dynamic rules, disabling actually shows the filtered messages again"
+msgstr "<b>Povolit / Zakázat:</b><br />Pouze povolená pravidla jsou filtrována.<br />Pro dynamická pravidla jsou jejich vypnutím filtrované zprávy znovu zobrazeny"
 
 #: IgnoreListModel#2
-msgid ""
-"<b>Ignore rule:</b><br />Depending on the type of the rule, the text is "
-"matched against either:<br /><br />- <u>the message content:</u><br "
-"/><i>Example:<i><br />    \"*foobar*\" matches any text containing the word "
-"\"foobar\"<br /><br />- <u>the sender string <i>nick!ident@host.name<i></u><br "
-"/><i>Example:</i><br />    \"*@foobar.com\" matches any sender from host "
-"foobar.com<br />    \"stupid!.+\" (RegEx) matches any sender with nickname "
-"\"stupid\" from any host<br />"
-msgstr ""
+msgid "<b>Ignore rule:</b><br />Depending on the type of the rule, the text is matched against either:<br /><br />- <u>the message content:</u><br /><i>Example:<i><br />    \"*foobar*\" matches any text containing the word \"foobar\"<br /><br />- <u>the sender string <i>nick!ident@host.name<i></u><br /><i>Example:</i><br />    \"*@foobar.com\" matches any sender from host foobar.com<br />    \"stupid!.+\" (RegEx) matches any sender with nickname \"stupid\" from any host<br />"
+msgstr "<b>Pravidlo ignorance:</b><br />Podle typu pravidla text je porovnáván vůči:<br /><br />- <u>obsahu zprávy:</u><br /><i>Příklad:<i><br />    \"*foobar*\" bude platit na jakýkoliv text obsahující \"foobar\"<br /><br />- <u>odesílateli <i>nick!ident@host.name<i></u><br /><i>Příklad:</i><br />    \"*@foobar.com\" platí na všechny odesílatele z domény foobar.com<br />    \"stupid!.+\" (RegEx) bude platit na kohokoliv s přezdívkou \"stupid\" a z libovolné adresy<br />"
 
 #: IgnoreListModel#3
 msgid "By Sender"
-msgstr ""
+msgstr "Dle odesílatele"
 
 #: IgnoreListModel#4
 msgid "By Message"
-msgstr ""
+msgstr "Dle zprávy"
 
 #: IgnoreListModel#5
 msgid "Enabled"
-msgstr ""
+msgstr "Povoleno"
 
 #: IgnoreListModel#6
 msgid "Type"
-msgstr ""
+msgstr "Typ"
 
 #: IgnoreListModel#7
 msgctxt "IgnoreListModel#7"
 msgid "Ignore Rule"
-msgstr ""
+msgstr "Pravidlo ignorance"
 
 #: IgnoreListSettingsPage#1
 msgctxt "IgnoreListSettingsPage#1"
 msgid "Form"
-msgstr ""
+msgstr "Form"
 
 #: IgnoreListSettingsPage#2
 msgctxt "IgnoreListSettingsPage#2"
 msgid "New"
-msgstr ""
+msgstr "Nová"
 
 #: IgnoreListSettingsPage#3
 msgctxt "IgnoreListSettingsPage#3"
 msgid "Delete"
-msgstr ""
+msgstr "Smazat"
 
 #: IgnoreListSettingsPage#4
 msgid "&Edit"
-msgstr ""
+msgstr "&Editovat"
 
 #: IgnoreListSettingsPage#5
 msgctxt "IgnoreListSettingsPage#5"
 msgid "IRC"
-msgstr ""
+msgstr "IRC"
 
 #: IgnoreListSettingsPage#6
 msgid "Ignore List"
-msgstr ""
+msgstr "Seznam Ignorovaných"
 
 #: IgnoreListSettingsPage#7
 msgid "Rule already exists"
-msgstr ""
+msgstr "Pravidlo již existuje"
 
 #: IgnoreListSettingsPage#8
 msgid ""
@@ -2541,1856 +2485,1801 @@ msgid ""
 "\"%1\"\n"
 "Please choose another rule."
 msgstr ""
+"Pravidlo již existuje\n"
+"\"%1\"\n"
+"Prosím vyberte jiné pravidlo."
 
 #: IndicatorNotificationConfigWidget#1
 msgctxt "IndicatorNotificationConfigWidget#1"
 msgid "Form"
-msgstr ""
+msgstr "Form"
 
 #: IndicatorNotificationConfigWidget#2
 msgid "Show messages in indicator"
-msgstr ""
+msgstr "Zobrazovat zprávy v indikátoru"
 
 #: InputWidget#1
 msgctxt "InputWidget#1"
 msgid "Form"
-msgstr ""
+msgstr "Form"
 
 #: InputWidget#2
 msgid "Focus Input Line"
-msgstr ""
+msgstr "Přepnout na vstupní řádku"
 
 #: InputWidget#3
 msgid "Ctrl+L"
-msgstr ""
+msgstr "Ctrl+L"
 
 #: InputWidgetSettingsPage#1
 msgctxt "InputWidgetSettingsPage#1"
 msgid "Form"
-msgstr ""
+msgstr "Form"
 
 #: InputWidgetSettingsPage#2
 msgctxt "InputWidgetSettingsPage#2"
 msgid "Custom font:"
-msgstr ""
+msgstr "Vlastní font:"
 
 #: InputWidgetSettingsPage#3
 msgid "Enable spell check"
-msgstr ""
+msgstr "Povolit kontrolu pravopisu"
 
 #: InputWidgetSettingsPage#4
 msgid "Show nick selector"
-msgstr ""
+msgstr "Zobrazit výběr přezdívek"
 
 #: InputWidgetSettingsPage#5
 msgid "Multi-Line Editing"
-msgstr ""
+msgstr "Víceřádková editace"
 
 #: InputWidgetSettingsPage#6
 msgid "Show at most"
-msgstr ""
+msgstr "Ukázat nejvíce"
 
 #: InputWidgetSettingsPage#7
 msgid "lines"
-msgstr ""
+msgstr "řádků"
 
 #: InputWidgetSettingsPage#8
 msgid "Enable scrollbars"
-msgstr ""
+msgstr "Povolit rolovací proužek"
 
 #: InputWidgetSettingsPage#9
 msgid "Tab Completion"
-msgstr ""
+msgstr "Doplňování tabulátorem"
 
 #: InputWidgetSettingsPage#10
 msgid "Completion suffix:"
-msgstr ""
+msgstr "Zakončení doplňování:"
 
 #: InputWidgetSettingsPage#11
 msgid ": "
-msgstr ""
+msgstr ": "
 
 #: InputWidgetSettingsPage#12
 msgctxt "InputWidgetSettingsPage#12"
 msgid "Interface"
-msgstr ""
+msgstr "Rozhraní"
 
 #: InputWidgetSettingsPage#13
 msgid "Input Widget"
-msgstr ""
+msgstr "Vstupní řádka"
 
 #: IrcConnectionWizard#1
 msgid "Save && Connect"
-msgstr ""
+msgstr "Uložit && Připojit"
 
 #: IrcListModel#1
 msgctxt "IrcListModel#1"
 msgid "Channel"
-msgstr ""
+msgstr "Kanál"
 
 #: IrcListModel#2
 msgid "Users"
-msgstr ""
+msgstr "Uživatelé"
 
 #: IrcListModel#3
 msgctxt "IrcListModel#3"
 msgid "Topic"
-msgstr ""
+msgstr "Téma"
 
 #: IrcServerHandler#1
 msgid "%1 has changed topic for %2 to: \"%3\""
-msgstr ""
+msgstr "%1 změnil téma pro %2 na: \"%3\""
 
 #: IrcServerHandler#2
 msgid "Received RPL_ISUPPORT (005) without parameters!"
-msgstr ""
+msgstr "Obdrženo RPL_ISUPPORT (005) bez parametrů!"
 
 #: IrcServerHandler#3
-msgid ""
-"Received non RFC compliant RPL_ISUPPORT: this can lead to unexpected "
-"behavior!"
-msgstr ""
+msgid "Received non RFC compliant RPL_ISUPPORT: this can lead to unexpected behavior!"
+msgstr "Obdržena RFC nekompatibilní RPL_ISUPPORT: což může vést k neočekávanému chování!"
 
 #: IrcServerHandler#4
 msgctxt "IrcServerHandler#4"
 msgid "%1"
-msgstr ""
+msgstr "%1"
 
 #: IrcServerHandler#5
 msgid "[Whois] %1 is away: \"%2\""
-msgstr ""
+msgstr "[Whois] %1 je pryč: \"%2\""
 
 #: IrcServerHandler#6
 msgid "%1 is away: \"%2\""
-msgstr ""
+msgstr "%1 je fuč: \"%2\""
 
 #: IrcServerHandler#7
 msgid "[Whois] %1"
-msgstr ""
+msgstr "[Whois] %1"
 
 #: IrcServerHandler#8
 msgid "[Whois] %1 is %2 (%3)"
-msgstr ""
+msgstr "[Whois] %1 je %2 (%3)"
 
 #: IrcServerHandler#9
 msgid "%1 is online via %2 (%3)"
-msgstr ""
+msgstr "%1 je online skrze %2 (%3)"
 
 #: IrcServerHandler#10
 msgid "[Whowas] %1"
-msgstr ""
+msgstr "[Whowas] %1"
 
 #: IrcServerHandler#11
 msgid "[Whowas] %1 was %2 (%3)"
-msgstr ""
+msgstr "[Whowas] %1 byl %2 (%3)"
 
 #: IrcServerHandler#12
 msgid "[Who] End of /WHO list for %1"
-msgstr ""
+msgstr "[Who] Konec /WHO seznamu pro %1"
 
 #: IrcServerHandler#13
 msgid "[Whois] %1 is logged in since %2"
-msgstr ""
+msgstr "[Whois] %1 je přihlášen od %2"
 
 #: IrcServerHandler#14
 msgid "[Whois] %1 is idling for %2 (%3)"
-msgstr ""
+msgstr "[Whois] %1 je nečinný po %2 (%3)"
 
 #: IrcServerHandler#15
 msgid "[Whois] idle message: %1"
-msgstr ""
+msgstr "[Whois] důvod nečinnosti: %1"
 
 #: IrcServerHandler#16
 msgid "[Whois] %1 is a user on channels: %2"
-msgstr ""
+msgstr "[Whois] %1 je uživatelem kanálů: %2"
 
 #: IrcServerHandler#17
 msgid "[Whois] %1 has voice on channels: %2"
-msgstr ""
+msgstr "[Whois] %1 je mluvka na kanálech: %2"
 
 #: IrcServerHandler#18
 msgid "[Whois] %1 is an operator on channels: %2"
-msgstr ""
+msgstr "[Whois] %1 je dozorce na kanálech: %2"
 
 #: IrcServerHandler#19
 msgid "Channel %1 has %2 users. Topic is: %3"
-msgstr ""
+msgstr "Kanál %1 má %2 uživatelů. Tématem je: %3"
 
 #: IrcServerHandler#20
 msgid "End of channel list"
-msgstr ""
+msgstr "Konec seznamu s kanály"
 
 #: IrcServerHandler#21
 msgid "Homepage for %1 is %2"
-msgstr ""
+msgstr "Domovská stránka pro %1 je %2"
 
 #: IrcServerHandler#22
 msgid "Channel %1 created on %2"
-msgstr ""
+msgstr "Kanál %1 byl vytvořen %2"
 
 #: IrcServerHandler#23
 msgid "No topic is set for %1."
-msgstr ""
+msgstr "Pro %1 není nastaveno žádné téma."
 
 #: IrcServerHandler#24
 msgid "Topic for %1 is \"%2\""
-msgstr ""
+msgstr "Téma pro %1 je \"%2\""
 
 #: IrcServerHandler#25
 msgid "Topic set by %1 on %2"
-msgstr ""
+msgstr "Téma nastavil %1 v %2"
 
 #: IrcServerHandler#26
 msgid "[Who] %1"
-msgstr ""
+msgstr "[Who] %1"
 
 #: IrcServerHandler#27
 msgid "Nick %1 contains illegal characters"
-msgstr ""
+msgstr "Přezdívka %1 obsahuje neplatné znaky"
 
 #: IrcServerHandler#28
 msgid "Nick already in use: %1"
-msgstr ""
+msgstr "Přezdívka se již používá: %1"
 
 #: IrcServerHandler#29
-msgid ""
-"No free and valid nicks in nicklist found. use: /nick <othernick> to "
-"continue"
-msgstr ""
+msgid "No free and valid nicks in nicklist found. use: /nick <othernick> to continue"
+msgstr "Nebyla nalezena žádná volná a platná přezdívka ze seznamu přezdívek. Pro pokračování použijte: /nick <jiná_přezdívka>"
 
 #: IrcUserItem#1
 msgctxt "IrcUserItem#1"
 msgid "idling since %1"
-msgstr ""
+msgstr "nic nedělá od %1"
 
 #: IrcUserItem#2
 msgctxt "IrcUserItem#2"
 msgid "login time: %1"
-msgstr ""
+msgstr "čas přihlášení: %1"
 
 #: IrcUserItem#3
 msgctxt "IrcUserItem#3"
 msgid "server: %1"
-msgstr ""
+msgstr "server: %1"
 
 #: ItemViewSettingsPage#1
 msgctxt "ItemViewSettingsPage#1"
 msgid "Form"
-msgstr ""
+msgstr "Form"
 
 #: ItemViewSettingsPage#2
 msgctxt "ItemViewSettingsPage#2"
 msgid "Custom font:"
-msgstr ""
+msgstr "Vlastní font:"
 
 #: ItemViewSettingsPage#3
 msgid "Show icons"
-msgstr ""
+msgstr "Zobrazit ikonky"
 
 #: ItemViewSettingsPage#4
 msgid "Chat List"
-msgstr ""
+msgstr "Seznam pokeců"
 
+# WORD TRANSLATION :D
 #: ItemViewSettingsPage#5
 msgid "Display topic in tooltip"
-msgstr ""
+msgstr "Zobrazit téma ve sponce (tooltip :))"
 
 #: ItemViewSettingsPage#6
 msgid "Mouse wheel changes selected chat"
-msgstr ""
+msgstr "Kolečko myši mění vybraný pokec"
 
 #: ItemViewSettingsPage#7
 msgid "Use Custom Colors"
-msgstr ""
+msgstr "Použít vlastní barvy"
 
 #: ItemViewSettingsPage#8
 msgid "Standard:"
-msgstr ""
+msgstr "Standardní:"
 
 #: ItemViewSettingsPage#9
 msgctxt "ItemViewSettingsPage#9"
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #: ItemViewSettingsPage#10
 msgid "Inactive:"
-msgstr ""
+msgstr "Neaktivní:"
 
 #: ItemViewSettingsPage#11
 msgid "Unread messages:"
-msgstr ""
+msgstr "Nepřečtené zprávy:"
 
 #: ItemViewSettingsPage#12
 msgid "Highlight:"
-msgstr ""
+msgstr "Zvýraznění:"
 
 #: ItemViewSettingsPage#13
 msgid "Other activity:"
-msgstr ""
+msgstr "Jiné činnosti:"
 
 #: ItemViewSettingsPage#14
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: ItemViewSettingsPage#15
 msgid "Custom Nick List Colors"
-msgstr ""
+msgstr "Vlastní barvy v seznamu přezdívek"
 
 #: ItemViewSettingsPage#16
 msgid "Online:"
-msgstr ""
+msgstr "Přítomen:"
 
 #: ItemViewSettingsPage#17
 msgid "Away:"
-msgstr ""
+msgstr "Pryč:"
 
 #: ItemViewSettingsPage#18
 msgctxt "ItemViewSettingsPage#18"
 msgid "Interface"
-msgstr ""
+msgstr "Rozhraní"
 
 #: ItemViewSettingsPage#19
 msgid "Chat & Nick Lists"
-msgstr ""
+msgstr "Pokec & Seznam přezdívek"
 
 #: ItemViewSettingsPage#20
 msgctxt "ItemViewSettingsPage#20"
 msgid "Network"
-msgstr ""
+msgstr "Síť"
 
 #: ItemViewSettingsPage#21
 msgid "Inactive"
-msgstr ""
+msgstr "Neaktivní"
 
 #: ItemViewSettingsPage#22
 msgid "Normal"
-msgstr ""
+msgstr "Normální"
 
 #: ItemViewSettingsPage#23
 msgid "Unread messages"
-msgstr ""
+msgstr "Nepřečtené zprávy"
 
 #: ItemViewSettingsPage#24
 msgctxt "ItemViewSettingsPage#24"
 msgid "Highlight"
-msgstr ""
+msgstr "Zvýraznění"
 
 #: ItemViewSettingsPage#25
 msgid "Other activity"
-msgstr ""
+msgstr "Jiné činnosti"
 
 #: MainWin#1
 msgid "&Connect to Core..."
-msgstr ""
+msgstr "Přip&ojit k jádru..."
 
 #: MainWin#2
 msgid "&Disconnect from Core"
-msgstr ""
+msgstr "O&dpojit od jádra"
 
 #: MainWin#3
 msgid "Core &Info..."
-msgstr ""
+msgstr "&Informace jádra..."
 
 #: MainWin#4
 msgid "Configure &Networks..."
-msgstr ""
+msgstr "Nastavit &sítě..."
 
 #: MainWin#5
 msgid "&Quit"
-msgstr ""
+msgstr "&Ukončit"
 
 #: MainWin#6
 msgid "Ctrl+Q"
-msgstr ""
+msgstr "Ctrl+Q"
 
 #: MainWin#7
 msgid "&Configure Chat Lists..."
-msgstr ""
+msgstr "&Nastavit seznam pokeců..."
 
 #: MainWin#8
 msgid "&Lock Layout"
-msgstr ""
+msgstr "U&zamknout rozvržení"
 
 #: MainWin#9
 msgid "Show &Search Bar"
-msgstr ""
+msgstr "Zobrazit vy&hledávání"
 
 #: MainWin#10
 msgid "Show Away Log"
-msgstr ""
+msgstr "Zobrazit Log pro Pryč"
 
 #: MainWin#11
 msgid "Show &Menubar"
-msgstr ""
+msgstr "Zobrazit Hlavní &nabídku"
 
 #: MainWin#12
 msgid "Ctrl+M"
-msgstr ""
+msgstr "Ctrl+M"
 
 #: MainWin#13
 msgid "Show Status &Bar"
-msgstr ""
+msgstr "Zo&brazit stavový řádek"
 
 #: MainWin#14
 msgid "&Configure Quassel..."
-msgstr ""
+msgstr "&Nastavit Quassel..."
 
 #: MainWin#15
 msgid "F7"
-msgstr ""
+msgstr "F7"
 
 #: MainWin#16
 msgid "&About Quassel"
-msgstr ""
+msgstr "O progr&amu Quassel"
 
 #: MainWin#17
 msgid "About &Qt"
-msgstr ""
+msgstr "O &Qt"
 
 #: MainWin#18
 msgid "Debug &NetworkModel"
-msgstr ""
+msgstr "Ladění Sít&ového-Modelu"
 
 #: MainWin#19
 msgid "Debug &BufferViewOverlay"
-msgstr ""
+msgstr "Ladění vrstvy P&ohledu na záložky"
 
 #: MainWin#20
 msgid "Debug &MessageModel"
-msgstr ""
+msgstr "Ladění &Modelu-Zpráv"
 
 #: MainWin#21
 msgid "Debug &HotList"
-msgstr ""
+msgstr "Ladění &Seznamů rozhovorů"
 
 #: MainWin#22
 msgid "Debug &Log"
-msgstr ""
+msgstr "Ladící &Log"
 
 #: MainWin#23
 msgid "Reload Stylesheet"
-msgstr ""
+msgstr "Pře-načíst styl"
 
 #: MainWin#24
 msgid "Jump to hot chat"
-msgstr ""
+msgstr "Přejít na další aktivní záložku"
 
 #: MainWin#25
 msgid "&File"
-msgstr ""
+msgstr "S&oubor"
 
 #: MainWin#26
 msgid "&Networks"
-msgstr ""
+msgstr "&Sítě"
 
 #: MainWin#27
 msgid "&View"
-msgstr ""
+msgstr "&Záložky"
 
 #: MainWin#28
 msgid "&Chat Lists"
-msgstr ""
+msgstr "&Seznam pokeců"
 
 #: MainWin#29
 msgid "&Toolbars"
-msgstr ""
+msgstr "Liš&ty"
 
 #: MainWin#30
 msgid "&Settings"
-msgstr ""
+msgstr "Na&stavení"
 
 #: MainWin#31
 msgid "&Help"
-msgstr ""
+msgstr "&Nápověda"
 
 #: MainWin#32
 msgid "Debug"
-msgstr ""
+msgstr "Debug"
 
 #: MainWin#33
 msgid "Nicks"
-msgstr ""
+msgstr "Přezdívky"
 
 #: MainWin#34
 msgid "Show Nick List"
-msgstr ""
+msgstr "Zobrazit seznam přezdívek"
 
 #: MainWin#35
 msgctxt "MainWin#35"
 msgid "Chat Monitor"
-msgstr ""
+msgstr "Monitor pokecu"
 
 #: MainWin#36
 msgid "Show Chat Monitor"
-msgstr ""
+msgstr "Zobrazí monitor pokecu"
 
 #: MainWin#37
 msgid "Inputline"
-msgstr ""
+msgstr "Vstupní řádka"
 
 #: MainWin#38
 msgid "Show Input Line"
-msgstr ""
+msgstr "Zobrazit řádku se vstupem"
 
 #: MainWin#39
 msgctxt "MainWin#39"
 msgid "Topic"
-msgstr ""
+msgstr "Téma"
 
 #: MainWin#40
 msgid "Show Topic Line"
-msgstr ""
+msgstr "Zobrazit řádek s tématem"
 
 #: MainWin#41
 msgid "Main Toolbar"
-msgstr ""
+msgstr "Hlavní nástrojová lišta"
 
 #: MainWin#42
 msgid "Connected to core."
-msgstr ""
+msgstr "Připojen k jádru."
 
 #: MainWin#43
 msgid "Not connected to core."
-msgstr ""
+msgstr "Nepřipojen k jádru."
 
 #: MainWin#44
 msgid "Unencrypted Connection"
-msgstr ""
+msgstr "Nešifrované spojení"
 
 #: MainWin#45
 msgid "<b>Your client does not support SSL encryption</b>"
-msgstr ""
+msgstr "<b>Váš klient nepodporuje šifrování skrze SSL</b>"
 
 #: MainWin#46
-msgid ""
-"Sensitive data, like passwords, will be transmitted unencrypted to your "
-"Quassel core."
-msgstr ""
+msgid "Sensitive data, like passwords, will be transmitted unencrypted to your Quassel core."
+msgstr "Citlivá data, například hesla, budou přenášena k jádru Quasselu bez použití šifrování."
 
 #: MainWin#47
 msgid "<b>Your core does not support SSL encryption</b>"
-msgstr ""
+msgstr "<b>Vaše jádro nepodporuje šifrování skrze SSL</b>"
 
 #: MainWin#48
 msgid "Untrusted Security Certificate"
-msgstr ""
+msgstr "Nedůvěryhodný bezpečnostní certifikát"
 
 #: MainWin#49
-msgid ""
-"<b>The SSL certificate provided by the core at %1 is untrusted for the "
-"following reasons:</b>"
-msgstr ""
+msgid "<b>The SSL certificate provided by the core at %1 is untrusted for the following reasons:</b>"
+msgstr "<b>SSL certifikát poskytnutý jádrem %1 je nedůvěryhodný z následujících důvodů:</b>"
 
 #: MainWin#50
 msgctxt "MainWin#50"
 msgid "Continue"
-msgstr ""
+msgstr "Pokračovat"
 
 #: MainWin#51
 msgid "Show Certificate"
-msgstr ""
+msgstr "Zobrazit certifikát"
 
 #: MainWin#52
-msgid ""
-"Would you like to accept this certificate forever without being prompted?"
-msgstr ""
+msgid "Would you like to accept this certificate forever without being prompted?"
+msgstr "Chcete tento certifikát přijmout na trvalo a vyhnout se opětovnému schvalování?"
 
 #: MainWin#53
 msgid "Current Session Only"
-msgstr ""
+msgstr "Pouze současné sezení"
 
 #: MainWin#54
 msgid "Forever"
-msgstr ""
+msgstr "Navždy"
 
 #: MainWin#55
 msgid "Core Connection Error"
-msgstr ""
+msgstr "Chyba spojení s jádrem"
 
 #: MessageModel#1
 msgid "Requesting %1 messages from backlog for buffer %2:%3"
-msgstr ""
+msgstr "Požaduji %1 zpráv z historie pro záložku %2:%3"
 
 #: MsgProcessorStatusWidget#1
 msgctxt "MsgProcessorStatusWidget#1"
 msgid "Form"
-msgstr ""
+msgstr "Form"
 
 #: MsgProcessorStatusWidget#2
 msgid "Receiving Backlog"
-msgstr ""
+msgstr "Získávám historii"
 
 #: MultiLineEdit#1
-#, fuzzy
 msgid "Do you really want to paste %n lines?"
-msgstr ""
-"\n"
-"            \n"
-"        "
+msgstr "Opravdu chcete vložit %n řádku?"
 
 #: MultiLineEdit#2
 msgid "Paste Protection"
-msgstr ""
+msgstr "Ochrana proti náhodnému vložení"
 
 #: NetworkAddDlg#1
 msgctxt "NetworkAddDlg#1"
 msgid "Add Network"
-msgstr ""
+msgstr "Přidat síť"
 
 #: NetworkAddDlg#2
 msgid "Use preset:"
-msgstr ""
+msgstr "Použít přednastavené:"
 
 #: NetworkAddDlg#3
 msgid "Manually specify network settings"
-msgstr ""
+msgstr "Ručně zvolit nastavení sítě"
 
 #: NetworkAddDlg#4
 msgid "Manual Settings"
-msgstr ""
+msgstr "Ruční nastavení"
 
 #: NetworkAddDlg#5
 msgctxt "NetworkAddDlg#5"
 msgid "Network name:"
-msgstr ""
+msgstr "Název sítě:"
 
 #: NetworkAddDlg#6
 msgctxt "NetworkAddDlg#6"
 msgid "Server address:"
-msgstr ""
+msgstr "Adresa serveru:"
 
 #: NetworkAddDlg#7
 msgctxt "NetworkAddDlg#7"
 msgid "Port:"
-msgstr ""
+msgstr "Port:"
 
 #: NetworkAddDlg#8
 msgid "Server password:"
-msgstr ""
+msgstr "Heslo serveru:"
 
 #: NetworkAddDlg#9
 msgid "Use secure connection"
-msgstr ""
+msgstr "Použít zabezpečené spojení"
 
 #: NetworkEditDlg#1
 msgctxt "NetworkEditDlg#1"
 msgid "Dialog"
-msgstr ""
+msgstr "Dialog"
 
 #: NetworkEditDlg#2
 msgid "Please enter a network name:"
-msgstr ""
+msgstr "Prosím zadejte název sítě:"
 
 #: NetworkEditDlg#3
 msgctxt "NetworkEditDlg#3"
 msgid "Add Network"
-msgstr ""
+msgstr "Přidat síť"
 
 #: NetworkItem#1
 msgid "Server: %1"
-msgstr ""
+msgstr "Server: %1"
 
 #: NetworkItem#2
 msgid "Users: %1"
-msgstr ""
+msgstr "Uživatelé: %1"
 
 #: NetworkItem#3
 msgid "Lag: %1 msecs"
-msgstr ""
+msgstr "Zpoždění: %1 msecs"
 
 #: NetworkModel#1
 msgid "Chat"
-msgstr ""
+msgstr "Pokec"
 
 #: NetworkModel#2
 msgctxt "NetworkModel#2"
 msgid "Topic"
-msgstr ""
+msgstr "Téma"
 
 #: NetworkModel#3
 msgid "Nick Count"
-msgstr ""
+msgstr "Počet přezdívek"
 
 #: NetworkModelController#1
-#, fuzzy
 msgid "Do you want to delete the following buffer(s) permanently?"
-msgstr ""
-"\n"
-"            \n"
-"        "
+msgstr "Opravdu chcete trvale smazat následující záložku(y)?"
 
 #: NetworkModelController#2
-msgid ""
-"<b>Note:</b> This will delete all related data, including all backlog data, "
-"from the core's database and cannot be undone."
-msgstr ""
+msgid "<b>Note:</b> This will delete all related data, including all backlog data, from the core's database and cannot be undone."
+msgstr "<b>Poznámka:</b> Tento krok smaže všechna relevantní data, včetně historie, z databáze jádra a nelze jej zvrátit."
 
 #: NetworkModelController#3
-msgid ""
-"<br>Active channel buffers cannot be deleted, please part the channel first."
-msgstr ""
+msgid "<br>Active channel buffers cannot be deleted, please part the channel first."
+msgstr "<br>Aktivní záložky s kanály nelze smazat, nejprve musíte daný kanál opustit."
 
 #: NetworkModelController#4
 msgid "Remove buffers permanently?"
-msgstr ""
+msgstr "Odstranit trvale záložky?"
 
 #: NetworkModelController::JoinDlg#1
 msgid "Join Channel"
-msgstr ""
+msgstr "Vstoupit do kanálu"
 
 #: NetworkModelController::JoinDlg#2
 msgctxt "NetworkModelController::JoinDlg#2"
 msgid "Network:"
-msgstr ""
+msgstr "Síť:"
 
 #: NetworkModelController::JoinDlg#3
 msgid "Channel:"
-msgstr ""
+msgstr "Kanál:"
 
 #: NetworkPage#1
 msgid "Setup Network Connection"
-msgstr ""
+msgstr "Nastavit připojení k síti"
 
 #: NetworksSettingsPage#1
 msgctxt "NetworksSettingsPage#1"
 msgid "Form"
-msgstr ""
+msgstr "Form"
 
 #: NetworksSettingsPage#2
 msgctxt "NetworksSettingsPage#2"
 msgid "Re&name..."
-msgstr ""
+msgstr "Přejme&novat..."
 
 #: NetworksSettingsPage#3
 msgctxt "NetworksSettingsPage#3"
 msgid "&Add..."
-msgstr ""
+msgstr "Přid&at..."
 
 #: NetworksSettingsPage#4
 msgctxt "NetworksSettingsPage#4"
 msgid "De&lete"
-msgstr ""
+msgstr "&Smazat"
 
 #: NetworksSettingsPage#5
 msgid "Network Details"
-msgstr ""
+msgstr "Detaily sítě"
 
 #: NetworksSettingsPage#6
 msgid "Identity:"
-msgstr ""
+msgstr "Identita:"
 
 #: NetworksSettingsPage#7
 msgctxt "NetworksSettingsPage#7"
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #: NetworksSettingsPage#8
 msgctxt "NetworksSettingsPage#8"
 msgid "Servers"
-msgstr ""
+msgstr "Servery"
 
 #: NetworksSettingsPage#9
 msgid "Manage servers for this network"
-msgstr ""
+msgstr "Spravovat servery pro tuto síť"
 
 #: NetworksSettingsPage#10
 msgctxt "NetworksSettingsPage#10"
 msgid "&Edit..."
-msgstr ""
+msgstr "&Editovat..."
 
 #: NetworksSettingsPage#11
 msgctxt "NetworksSettingsPage#11"
 msgid "Move upwards in list"
-msgstr ""
+msgstr "Posunout výš v seznamu"
 
 #: NetworksSettingsPage#12
 msgctxt "NetworksSettingsPage#12"
 msgid "Move downwards in list"
-msgstr ""
+msgstr "Posunout níž v seznamu"
 
 #: NetworksSettingsPage#13
 msgid "Commands"
-msgstr ""
+msgstr "Příkazy"
 
 #: NetworksSettingsPage#14
-msgid ""
-"Configure automatic identification or misc. commands to be executed after "
-"connecting to a server"
-msgstr ""
+msgid "Configure automatic identification or misc. commands to be executed after connecting to a server"
+msgstr "Natavit automatickou identifikaci, nebo různé příkazy ke spuštění, po připojení k serveru"
 
 #: NetworksSettingsPage#15
 msgid "Commands to execute on connect:"
-msgstr ""
+msgstr "Příkazy, které se spustí při připojení:"
 
 #: NetworksSettingsPage#16
 msgid ""
 "Specify a list of IRC commands to be executed upon connect.\n"
-"Note that Quassel IRC automatically rejoins channels, so /join will rarely "
-"be needed here!"
+"Note that Quassel IRC automatically rejoins channels, so /join will rarely be needed here!"
 msgstr ""
+"Seznam IRC příkazů, které se spustí při připojení.\n"
+"Quassel se automaticky připojuje ke kanálům, tedy /join zde s vysokou pravděpodobností nebude třeba!"
 
 #: NetworksSettingsPage#17
 msgctxt "NetworksSettingsPage#17"
 msgid "Connection"
-msgstr ""
+msgstr "Spojení"
 
 #: NetworksSettingsPage#18
 msgid "Control automatic reconnect to the network"
-msgstr ""
+msgstr "Nastavení automatického opětovného připojování k síti"
 
 #: NetworksSettingsPage#19
 msgid "Automatic Reconnect"
-msgstr ""
+msgstr "Automaticky znovu připojit"
 
 #: NetworksSettingsPage#20
 msgid "Interval:"
-msgstr ""
+msgstr "Interval:"
 
 #: NetworksSettingsPage#21
 msgctxt "NetworksSettingsPage#21"
 msgid " s"
-msgstr ""
+msgstr " s"
 
 #: NetworksSettingsPage#22
 msgid "Retries:"
-msgstr ""
+msgstr "Opakování:"
 
 #: NetworksSettingsPage#23
 msgctxt "NetworksSettingsPage#23"
 msgid "Unlimited"
-msgstr ""
+msgstr "Neomezeně"
 
 #: NetworksSettingsPage#24
 msgid "Rejoin all channels on reconnect"
-msgstr ""
+msgstr "Znovu vstoupit do kanálů při opakovaném spojení"
 
 #: NetworksSettingsPage#25
 msgid "Auto Identify"
-msgstr ""
+msgstr "Automaticky identifikovat"
 
 #: NetworksSettingsPage#26
 msgid "NickServ"
-msgstr ""
+msgstr "NickServ"
 
 #: NetworksSettingsPage#27
 msgid "Service:"
-msgstr ""
+msgstr "Služba:"
 
 #: NetworksSettingsPage#28
 msgctxt "NetworksSettingsPage#28"
 msgid "Password:"
-msgstr ""
+msgstr "Heslo:"
 
 #: NetworksSettingsPage#29
 msgid "Encodings"
-msgstr ""
+msgstr "Kódování"
 
 #: NetworksSettingsPage#30
-msgid ""
-"Configure advanced settings such as message encodings and automatic "
-"reconnect"
-msgstr ""
+msgid "Configure advanced settings such as message encodings and automatic reconnect"
+msgstr "Nastavení pokročilých možností, jako kódování a automatické opakování připojení"
 
 #: NetworksSettingsPage#31
 msgid "Control encodings for in- and outgoing messages"
-msgstr ""
+msgstr "Nastavení kódování pro příchozí a odchozí zprávy"
 
 #: NetworksSettingsPage#32
 msgid "Use Custom Encodings"
-msgstr ""
+msgstr "Používat různá kódování"
 
 #: NetworksSettingsPage#33
 msgid ""
 "Specify which encoding your messages will be sent in.\n"
 "UTF-8 should be a sane choice for most networks."
 msgstr ""
+"Specifikuje v jakém kódování budete odesílat zprávy.\n"
+"UTF-8 je dosti inteligentní volba pro většinu sítí."
 
 #: NetworksSettingsPage#34
 msgid "Send messages in:"
-msgstr ""
+msgstr "Odesílat zprávy v:"
 
 #: NetworksSettingsPage#35
 msgid ""
 "Incoming messages encoded in Utf8 will always be treated as such.\n"
 "This setting defines the encoding for messages that are not Utf8."
 msgstr ""
+"Příchozí zprávy kódované v UTF8 budou vždy rozpoznány.\n"
+"Toto nastavení definuje kódování pro zprávy které nejsou v UTF8."
 
 #: NetworksSettingsPage#36
 msgid "Receive fallback:"
-msgstr ""
+msgstr "Záložní kódování:"
 
 #: NetworksSettingsPage#37
 msgid ""
 "This specifies how control messages, nicks and servernames are encoded.\n"
 "Unless you *really* know what you do, leave this as ISO-8859-1!"
 msgstr ""
+"Tato volba specifikuje v jakém kódování jsou přezdívky, kontrolní zprávy a názvy serverů.\n"
+"Pokud FAKTICKY nevíte co děláte radši ponechte nastaveno na ISO-8859-1!"
 
 #: NetworksSettingsPage#38
 msgid "Server encoding:"
-msgstr ""
+msgstr "Kódování serveru:"
 
 #: NetworksSettingsPage#39
 msgctxt "NetworksSettingsPage#39"
 msgid "IRC"
-msgstr ""
+msgstr "IRC"
 
 #: NetworksSettingsPage#40
 msgid "Networks"
-msgstr ""
+msgstr "Sítě"
 
 #: NetworksSettingsPage#41
 msgctxt "NetworksSettingsPage#41"
-msgid ""
-"<b>The following problems need to be corrected before your changes can be "
-"applied:</b><ul>"
-msgstr ""
+msgid "<b>The following problems need to be corrected before your changes can be applied:</b><ul>"
+msgstr "<b>Následující problémy je třeba odstranit pro uložení změn:</b><ul>"
 
 #: NetworksSettingsPage#42
 msgid "<li>All networks need at least one server defined</li>"
-msgstr ""
+msgstr "<li>Každá síť potřebuje definovaný alespoň jeden server</li>"
 
 #: NetworksSettingsPage#43
 msgctxt "NetworksSettingsPage#43"
 msgid "</ul>"
-msgstr ""
+msgstr "</ul>"
 
 #: NetworksSettingsPage#44
 msgid "Invalid Network Settings"
-msgstr ""
+msgstr "Špatné nastavení sítě"
 
 #: NetworksSettingsPage#45
 msgid "Delete Network?"
-msgstr ""
+msgstr "Smazat síť?"
 
 #: NetworksSettingsPage#46
-msgid ""
-"Do you really want to delete the network \"%1\" and all related settings, "
-"including the backlog?"
-msgstr ""
+msgid "Do you really want to delete the network \"%1\" and all related settings, including the backlog?"
+msgstr "Opravdu chcete smazat síť \"%1\" a veškeré její nastavení, včetně historie?"
 
 #: NickEditDlg#1
 msgid "Edit Nickname"
-msgstr ""
+msgstr "Upravit přezdívku"
 
 #: NickEditDlg#2
 msgid "Please enter a valid nickname:"
-msgstr ""
+msgstr "Prosím vložte validní přezdívku:"
 
 #: NickEditDlg#3
-msgid ""
-"A valid nickname may contain letters from the English alphabet, digits, and "
-"the special characters {, }, [, ], \\, |, `, ^, _ and -."
-msgstr ""
+msgid "A valid nickname may contain letters from the English alphabet, digits, and the special characters {, }, [, ], \\, |, `, ^, _ and -."
+msgstr "Validní přezdívka může obsahovat písmenka anglické abecedy, čísla, a speciální znaky {, }, [, ], \\, |, `, ^, _ a -."
 
 #: NickEditDlg#4
 msgctxt "NickEditDlg#4"
 msgid "Add Nickname"
-msgstr ""
+msgstr "Přidat přezdívku"
 
 #: NotificationsSettingsPage#1
 msgctxt "NotificationsSettingsPage#1"
 msgid "Interface"
-msgstr ""
+msgstr "Rozhraní"
 
 #: NotificationsSettingsPage#2
 msgid "Notifications"
-msgstr ""
+msgstr "Oznámení"
 
 #: PhononNotificationBackend::ConfigWidget#1
 msgid "Select Audio File"
-msgstr ""
+msgstr "Vyberte zvukový soubor"
 
 #: PhononNotificationConfigWidget#1
 msgctxt "PhononNotificationConfigWidget#1"
 msgid "Form"
-msgstr ""
+msgstr "Form"
 
 #: PhononNotificationConfigWidget#2
 msgid "Audio Notification (via Phonon)"
-msgstr ""
+msgstr "Zvuková oznámení (skrz Phonon)"
 
 #: PhononNotificationConfigWidget#3
 msgid "Play File:"
-msgstr ""
+msgstr "Přehrát soubor:"
 
 #: PostgreSqlStorage#1
 msgid "PostgreSQL Turbo Bomber HD!"
-msgstr ""
+msgstr "PostgreSQL Proste labůžo!"
 
 #: QObject#1
 msgid "Requesting a total of up to %1 backlog messages for %2 buffers"
-msgstr ""
+msgstr "Požaduji %1 zpráv historie pro %2 záložky"
 
 #: QObject#2
 msgid "Requesting up to %1 of all unread backlog messages (plus additional %2)"
-msgstr ""
+msgstr "Požaduji celkem %1 nepřečtených zpráv historie (a navíc ještě %2)"
 
 #: QObject#3
 msgid "Requesting a total of up to %1 unread backlog messages for %2 buffers"
-msgstr ""
+msgstr "Požaduji celkem %1 nepřečtených zpráv historie pro %2 záložek"
 
 #: QObject#4
 msgid "Welcome to Quassel IRC"
-msgstr ""
+msgstr "Vítejte v IRC klientu Quassel"
 
 #: QObject#5
-msgid ""
-"This wizard will help you to set up your default identity and your IRC "
-"network connection.<br>This only covers basic settings. You can cancel this "
-"wizard any time and use the settings dialog for more detailed changes."
-msgstr ""
+msgid "This wizard will help you to set up your default identity and your IRC network connection.<br>This only covers basic settings. You can cancel this wizard any time and use the settings dialog for more detailed changes."
+msgstr "Tento průvodce vám pomůže nastavit výchozí identitu a spojení k IRC síti.<br>Zaměřuje se pouze na základní nastavení. Můžete ho kdykoliv přerušit a použít nastavení v aplikaci pro podrobnější nastavení/změny."
 
 #: QssParser#1
 msgid "Invalid block declaration: %1"
-msgstr ""
+msgstr "Neplatná deklarace bloku: %1"
 
 #: QssParser#2
 msgid "Invalid palette role assignment: %1"
-msgstr ""
+msgstr "Neplatné přiřazení role palety: %1"
 
 #: QssParser#3
 msgid "Unknown palette role name: %1"
-msgstr ""
+msgstr "Neznámý název role palety: %1"
 
 #: QssParser#4
 msgid "Invalid subelement name in %1"
-msgstr ""
+msgstr "Neplatný název pod-elementu v %1"
 
 #: QssParser#5
 msgid "Invalid message type in %1"
-msgstr ""
+msgstr "Neplatný typ zprávy v %1"
 
 #: QssParser#6
 msgid "Invalid condition %1"
-msgstr ""
+msgstr "Neplatný stav: %1"
 
 #: QssParser#7
 msgid "Invalid message label: %1"
-msgstr ""
+msgstr "Neplatný popisek zprávy: %1"
 
 #: QssParser#8
 msgid "Invalid senderhash specification: %1"
-msgstr ""
+msgstr "Neplatná specifikace hash odesílatele: %1"
 
 #: QssParser#9
 msgid "Senderhash can be at most \"0x0f\"!"
-msgstr ""
+msgstr "Hash odesílatele může být maximálně \"0x0f\"!"
 
 #: QssParser#10
 msgid "Invalid format name: %1"
-msgstr ""
+msgstr "Neplatný název formátu: %1"
 
 #: QssParser#11
 msgid "Illegal IRC color specification (must be between 00 and 0f): %1"
-msgstr ""
+msgstr "Neplatná specifikace IRC barvy (musí být mezi 00 a 0f): %1"
 
 #: QssParser#12
 msgid "Unhandled condition: %1"
-msgstr ""
+msgstr "Neobsloužený stav: %1"
 
 #: QssParser#13
 msgid "Invalid proplist %1"
-msgstr ""
+msgstr "Neplatný seznam vlastností: %1"
 
 #: QssParser#14
 msgid "Invalid chatlist item type %1"
-msgstr ""
+msgstr "Neplatný typ položky seznamu rozhovorů: %1"
 
 #: QssParser#15
 msgid "Invalid chatlist state %1"
-msgstr ""
+msgstr "Neplatný stav seznamu pokeců %1"
 
 #: QssParser#16
 msgid "Invalid property declaration: %1"
-msgstr ""
+msgstr "Neplatná deklarace vlastnosti: %1"
 
 #: QssParser#17
 msgid "Invalid font property: %1"
-msgstr ""
+msgstr "Neplatná vlastnost písma: %1"
 
 #: QssParser#18
 msgid "Unknown ChatLine property: %1"
-msgstr ""
+msgstr "Neznámá vlastnost ChatLine: %1"
 
 #: QssParser#19
 msgid "Invalid palette color role specification: %1"
-msgstr ""
+msgstr "Neplatná specifikace role barevné palety: %1"
 
 #: QssParser#20
 msgid "Unknown palette color role: %1"
-msgstr ""
+msgstr "Neznámá role barevné palety: %1"
 
 #: QssParser#21
 msgid "Invalid gradient declaration: %1"
-msgstr ""
+msgstr "Neplatná deklarace gradientu: %1"
 
 #: QssParser#22
 msgid "Invalid gradient stops list: %1"
-msgstr ""
+msgstr "Neplatný seznam zastavení gradientu: %1"
 
 #: QssParser#23
 msgid "Invalid font specification: %1"
-msgstr ""
+msgstr "Neplatná specifikace písma: %1"
 
 #: QssParser#24
 msgid "Invalid font style specification: %1"
-msgstr ""
+msgstr "Neplatná specifikace stylu písma: %1"
 
 #: QssParser#25
 msgid "Invalid font weight specification: %1"
-msgstr ""
+msgstr "Neplatná specifikace proporcí písma: %1"
 
 #: QssParser#26
 msgid "Invalid font size specification: %1"
-msgstr ""
+msgstr "Neplatná specifikace velikosti písma: %1"
 
 #: Quassel::secondsToString()#1
 msgid "year"
-msgstr ""
+msgstr "rok"
 
 #: Quassel::secondsToString()#2
 msgid "day"
-msgstr ""
+msgstr "den"
 
 #: Quassel::secondsToString()#3
 msgid "h"
-msgstr ""
+msgstr "h"
 
 #: Quassel::secondsToString()#4
 msgid "min"
-msgstr ""
+msgstr "min"
 
 #: Quassel::secondsToString()#5
 msgid "sec"
-msgstr ""
+msgstr "sec"
 
 #: QueryBufferItem#1
 msgid "<b>Query with %1</b>"
-msgstr ""
+msgstr "<b>Pokec s %1</b>"
 
 #: QueryBufferItem#2
 msgctxt "QueryBufferItem#2"
 msgid "idling since %1"
-msgstr ""
+msgstr "nic nedělá od %1"
 
 #: QueryBufferItem#3
 msgctxt "QueryBufferItem#3"
 msgid "login time: %1"
-msgstr ""
+msgstr "čas přihlášení: %1"
 
 #: QueryBufferItem#4
 msgctxt "QueryBufferItem#4"
 msgid "server: %1"
-msgstr ""
+msgstr "server: %1"
 
 #: SaveIdentitiesDlg#1
 msgid "Sync With Core"
-msgstr ""
+msgstr "Synchronizovat s Jádrem"
 
 #: SaveIdentitiesDlg#2
 msgid "Syncing data with core, please wait..."
-msgstr ""
+msgstr "Synchronizuji data s Jádrem, prosím o strpení..."
 
 #: SaveIdentitiesDlg#3
 msgid "Abort"
-msgstr ""
+msgstr "Zrušit"
 
 #: ServerEditDlg#1
 msgctxt "ServerEditDlg#1"
 msgid "Dialog"
-msgstr ""
+msgstr "Dialog"
 
 #: ServerEditDlg#2
 msgid "Server Info"
-msgstr ""
+msgstr "Informace o serveru"
 
 #: ServerEditDlg#3
 msgctxt "ServerEditDlg#3"
 msgid "Server address:"
-msgstr ""
+msgstr "Adresa serveru:"
 
 #: ServerEditDlg#4
 msgctxt "ServerEditDlg#4"
 msgid "Port:"
-msgstr ""
+msgstr "Port:"
 
 #: ServerEditDlg#5
 msgctxt "ServerEditDlg#5"
 msgid "Password:"
-msgstr ""
+msgstr "Heslo:"
 
 #: ServerEditDlg#6
 msgid "Use SSL"
-msgstr ""
+msgstr "Použít SSL"
 
 #: ServerEditDlg#7
 msgctxt "ServerEditDlg#7"
 msgid "Advanced"
-msgstr ""
+msgstr "Pokročilé"
 
 #: ServerEditDlg#8
 msgid "SSL Version:"
-msgstr ""
+msgstr "Verze SSL:"
 
 #: ServerEditDlg#9
-msgid ""
-"Do not change unless you're going to connect to a server not supporting "
-"SSLv3!"
-msgstr ""
+msgid "Do not change unless you're going to connect to a server not supporting SSLv3!"
+msgstr "Tuto hodnotu měňte pouze za předpokladu, že se připojujete k serveru nepodporujícímu SSLv3!"
 
 #: ServerEditDlg#10
 msgid "SSLv3 (default)"
-msgstr ""
+msgstr "SSLv3 (výchozí)"
 
 #: ServerEditDlg#11
 msgid "SSLv2"
-msgstr ""
+msgstr "SSLv2"
 
 #: ServerEditDlg#12
 msgid "TLSv1"
-msgstr ""
+msgstr "TLSv1"
 
 #: ServerEditDlg#13
 msgctxt "ServerEditDlg#13"
 msgid "Use a Proxy"
-msgstr ""
+msgstr "Používat proxy"
 
 #: ServerEditDlg#14
 msgctxt "ServerEditDlg#14"
 msgid "Proxy Type:"
-msgstr ""
+msgstr "Typ proxy:"
 
 #: ServerEditDlg#15
 msgctxt "ServerEditDlg#15"
 msgid "Socks 5"
-msgstr ""
+msgstr "Socks 5"
 
 #: ServerEditDlg#16
 msgctxt "ServerEditDlg#16"
 msgid "HTTP"
-msgstr ""
+msgstr "HTTP"
 
 #: ServerEditDlg#17
 msgid "Proxy Host:"
-msgstr ""
+msgstr "Počítač:"
 
 #: ServerEditDlg#18
 msgctxt "ServerEditDlg#18"
 msgid "localhost"
-msgstr ""
+msgstr "tento počítač (localhost)"
 
 #: ServerEditDlg#19
 msgid "Proxy Username:"
-msgstr ""
+msgstr "Proxy - Uživatelské jméno:"
 
 #: ServerEditDlg#20
 msgid "Proxy Password:"
-msgstr ""
+msgstr "Proxy - Heslo:"
 
 #: SettingsDlg#1
 msgctxt "SettingsDlg#1"
 msgid "Configure Quassel"
-msgstr ""
+msgstr "Nastavit Quassel"
 
 #: SettingsDlg#2
 msgctxt "SettingsDlg#2"
 msgid "Settings"
-msgstr ""
+msgstr "Nastavení"
 
 #: SettingsDlg#3
 msgid "Save changes"
-msgstr ""
+msgstr "Uložit změny"
 
 #: SettingsDlg#4
-msgid ""
-"There are unsaved changes on the current configuration page. Would you like "
-"to apply your changes now?"
-msgstr ""
+msgid "There are unsaved changes on the current configuration page. Would you like to apply your changes now?"
+msgstr "Na této konfigurační stránce jsou neuložené změny. Přejete si je uložit?"
 
 #: SettingsDlg#5
 msgctxt "SettingsDlg#5"
 msgid "Configure %1"
-msgstr ""
+msgstr "Nastavit %1"
 
 #: SettingsDlg#6
 msgctxt "SettingsDlg#6"
 msgid "Reload Settings"
-msgstr ""
+msgstr "Znovu načíst nastavení"
 
 #: SettingsDlg#7
 msgctxt "SettingsDlg#7"
 msgid "Do you like to reload the settings, undoing your changes on this page?"
-msgstr ""
+msgstr "Opravdu chcete znovu načíst nastavení (Odstraní všechny změny od posledního uložení)?"
 
 #: SettingsDlg#8
 msgctxt "SettingsDlg#8"
 msgid "Restore Defaults"
-msgstr ""
+msgstr "Obnovit výchozí"
 
 #: SettingsDlg#9
 msgctxt "SettingsDlg#9"
 msgid "Do you like to restore the default values for this page?"
-msgstr ""
+msgstr "Opravdu chcete obnovit výchozí nastavení pro tuto stránku?"
 
 #: SettingsPageDlg#1
 msgctxt "SettingsPageDlg#1"
 msgid "Configure Quassel"
-msgstr ""
+msgstr "Nastavit Quassel"
 
 #: SettingsPageDlg#2
 msgctxt "SettingsPageDlg#2"
 msgid "Settings"
-msgstr ""
+msgstr "Nastavení"
 
 #: SettingsPageDlg#3
 msgctxt "SettingsPageDlg#3"
 msgid "Configure %1"
-msgstr ""
+msgstr "Nastavit %1"
 
 #: SettingsPageDlg#4
 msgctxt "SettingsPageDlg#4"
 msgid "Reload Settings"
-msgstr ""
+msgstr "Znovu načíst nastavení"
 
 #: SettingsPageDlg#5
 msgctxt "SettingsPageDlg#5"
 msgid "Do you like to reload the settings, undoing your changes on this page?"
-msgstr ""
+msgstr "Opravdu chcete znovu načíst nastavení (Odstraní všechny změny od posledního uložení)?"
 
 #: SettingsPageDlg#6
 msgctxt "SettingsPageDlg#6"
 msgid "Restore Defaults"
-msgstr ""
+msgstr "Obnovit výchozí"
 
 #: SettingsPageDlg#7
 msgctxt "SettingsPageDlg#7"
 msgid "Do you like to restore the default values for this page?"
-msgstr ""
+msgstr "Opravdu chcete obnovit výchozí nastavení pro tuto stránku?"
 
 #: SignalProxy#1
 msgid "Peer tried to send package larger than max package size!"
-msgstr ""
+msgstr "Peer se pokusil odeslat balíček větší než je maximální povolená velikost!"
 
 #: SignalProxy#2
 msgid "Peer tried to send 0 byte package!"
-msgstr ""
+msgstr "Peer se pokusil odeslat balíček s nulovou velikostí!"
 
 #: SignalProxy#3
 msgid "Peer sent corrupted compressed data!"
-msgstr ""
+msgstr "Peer odeslal porušená komprimovaná data!"
 
 #: SignalProxy#4
 msgid "Peer sent corrupt data: unable to load QVariant!"
-msgstr ""
+msgstr "Peer odeslal porušená data: nezdařilo se načítaní QVariant!"
 
 #: SignalProxy#5
 msgid "Disconnecting"
-msgstr ""
+msgstr "Odpojuji"
 
 #: SimpleNetworkEditor#1
 msgctxt "SimpleNetworkEditor#1"
 msgid "Network name:"
-msgstr ""
+msgstr "Název sítě:"
 
 #: SimpleNetworkEditor#2
 msgid "The name of the IRC network you are configuring"
-msgstr ""
+msgstr "Název IRC sítě kterou nastavujete"
 
 #: SimpleNetworkEditor#3
 msgctxt "SimpleNetworkEditor#3"
 msgid "Servers"
-msgstr ""
+msgstr "Servery"
 
 #: SimpleNetworkEditor#4
 msgid "A list of IRC servers belonging to this network"
-msgstr ""
+msgstr "Seznam IRC serverů patřících do zvolené sítě"
 
 #: SimpleNetworkEditor#5
 msgid "Edit this server entry"
-msgstr ""
+msgstr "Upravit nastavení zvoleného serveru"
 
 #: SimpleNetworkEditor#6
 msgctxt "SimpleNetworkEditor#6"
 msgid "&Edit..."
-msgstr ""
+msgstr "&Editovat..."
 
 #: SimpleNetworkEditor#7
 msgid "Add another IRC server"
-msgstr ""
+msgstr "Přidá další IRC server"
 
 #: SimpleNetworkEditor#8
 msgctxt "SimpleNetworkEditor#8"
 msgid "&Add..."
-msgstr ""
+msgstr "Přid&at..."
 
 #: SimpleNetworkEditor#9
 msgid "Remove this server entry from the list"
-msgstr ""
+msgstr "Smaže vybraný server ze seznamu"
 
 #: SimpleNetworkEditor#10
 msgctxt "SimpleNetworkEditor#10"
 msgid "De&lete"
-msgstr ""
+msgstr "&Smazat"
 
 #: SimpleNetworkEditor#11
 msgctxt "SimpleNetworkEditor#11"
 msgid "Move upwards in list"
-msgstr ""
+msgstr "Posunout výš v seznamu"
 
 #: SimpleNetworkEditor#12
 msgctxt "SimpleNetworkEditor#12"
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #: SimpleNetworkEditor#13
 msgctxt "SimpleNetworkEditor#13"
 msgid "Move downwards in list"
-msgstr ""
+msgstr "Posunout níž v seznamu"
 
 #: SimpleNetworkEditor#14
 msgid "Join Channels Automatically"
-msgstr ""
+msgstr "Automaticky vstoupit do"
 
 #: SimpleNetworkEditor#15
-msgid ""
-"A list of IRC channels you will join automatically after connecting to the "
-"network"
-msgstr ""
+msgid "A list of IRC channels you will join automatically after connecting to the network"
+msgstr "Seznam IRC kanálů ke kterým se automaticky připojíte po připojení do dané sítě"
 
 #: SqliteStorage#1
-msgid ""
-"SQLite is a file-based database engine that does not require any setup. It "
-"is suitable for small and medium-sized databases that do not require access "
-"via network. Use SQLite if your Quassel Core should store its data on the "
-"same machine it is running on, and if you only expect a few users to use "
-"your core."
-msgstr ""
+msgid "SQLite is a file-based database engine that does not require any setup. It is suitable for small and medium-sized databases that do not require access via network. Use SQLite if your Quassel Core should store its data on the same machine it is running on, and if you only expect a few users to use your core."
+msgstr "SQLite je souborově založený databázový server, který nevyžaduje nastavování. Je vhodný pro malé a střední databáze, které nepotřebují být přístupné přes síť. Použijte jej pokud vaše Quassel jádro ukládá data na stejném stroji na kterém běží a pokud očekáváte pouze pár připojujících se uživatelů k tomuto jádru."
 
 #: SslInfoDlg#1
 msgid "Security Information"
-msgstr ""
+msgstr "Bezpečnostní informace"
 
 #: SslInfoDlg#2
 msgid "<b>Hostname:</b>"
-msgstr ""
+msgstr "<b>Název počítače</b>"
 
 #: SslInfoDlg#3
 msgid "<b>IP address:</b>"
-msgstr ""
+msgstr "<b>IP adresa:</b>"
 
 #: SslInfoDlg#4
 msgid "<b>Encryption:</b>"
-msgstr ""
+msgstr "<b>Šifra:</b>"
 
 #: SslInfoDlg#5
 msgid "<b>Protocol:</b>"
-msgstr ""
+msgstr "<b>Protokol:</b>"
 
 #: SslInfoDlg#6
 msgid "<b>Certificate chain:</b>"
-msgstr ""
+msgstr "<b>Certifikační řetězec:</b>"
 
 #: SslInfoDlg#7
 msgid "Subject"
-msgstr ""
+msgstr "Objekt"
 
 #: SslInfoDlg#8
 msgid "<b>Common name:</b>"
-msgstr ""
+msgstr "<b>Jméno:</b>"
 
 #: SslInfoDlg#9
 msgid "<b>Organization:</b>"
-msgstr ""
+msgstr "<b>Organizace:</b>"
 
 #: SslInfoDlg#10
 msgid "<b>Organizational unit:</b>"
-msgstr ""
+msgstr "<b>Organizační jednotka:</b>"
 
 #: SslInfoDlg#11
 msgid "<b>Country:</b>"
-msgstr ""
+msgstr "<b>Země:</b>"
 
 #: SslInfoDlg#12
 msgid "<b>State or province:</b>"
-msgstr ""
+msgstr "<b>Stát či provincie:</b>"
 
 #: SslInfoDlg#13
 msgid "<b>Locality:</b>"
-msgstr ""
+msgstr "<b>Lokalita:</b>"
 
 #: SslInfoDlg#14
 msgid "Issuer"
-msgstr ""
+msgstr "Vydavatel"
 
 #: SslInfoDlg#15
 msgid "<b>Validity period:</b>"
-msgstr ""
+msgstr "<b>Doba platnosti:</b>"
 
 #: SslInfoDlg#16
 msgid "<b>MD5 digest:</b>"
-msgstr ""
+msgstr "<b>MD5 přehled:</b>"
 
 #: SslInfoDlg#17
 msgid "<b>SHA1 digest:</b>"
-msgstr ""
+msgstr "<b>SHA1 přehled:</b>"
 
 #: SslInfoDlg#18
 msgid "<b>Trusted:</b>"
-msgstr ""
+msgstr "<b>Důvěryhodný:</b>"
 
 #: SslInfoDlg#19
 msgid "Yes"
-msgstr ""
+msgstr "Ano"
 
 #: SslInfoDlg#20
 msgid "No, for the following reasons:<ul>"
-msgstr ""
+msgstr "Ne, z následujících důvodů:<ul>"
 
 #: SslInfoDlg#21
 msgid "%1 to %2"
-msgstr ""
+msgstr "%1 k %2"
 
 #: StatusBufferItem#1
 msgid "Status Buffer"
-msgstr ""
+msgstr "Záložka stavu"
 
 #: SystrayNotificationBackend::ConfigWidget#1
 msgid "System Tray Icon"
-msgstr ""
+msgstr "Ikonka v systémovém panelu"
 
 #: SystrayNotificationBackend::ConfigWidget#2
 msgid "Animate"
-msgstr ""
+msgstr "Animovat"
 
 #: SystrayNotificationBackend::ConfigWidget#3
 msgid "Show bubble"
-msgstr ""
+msgstr "Zobrazovat bublinu"
 
 #: TaskbarNotificationBackend::ConfigWidget#1
 msgid "Activate dock entry, timeout:"
-msgstr ""
+msgstr "Zpoždění zobrazení v panelu:"
 
 #: TaskbarNotificationBackend::ConfigWidget#2
 msgid "Mark taskbar entry, timeout:"
-msgstr ""
+msgstr "Zpoždění zobrazení v panelu:"
 
 #: TaskbarNotificationBackend::ConfigWidget#3
 msgctxt "TaskbarNotificationBackend::ConfigWidget#3"
 msgid "Unlimited"
-msgstr ""
+msgstr "Neomezeně"
 
 #: TaskbarNotificationBackend::ConfigWidget#4
 msgctxt "TaskbarNotificationBackend::ConfigWidget#4"
 msgid " s"
-msgstr ""
+msgstr " s"
 
 #: ToolBarActionProvider#1
 msgctxt "ToolBarActionProvider#1"
 msgid "Connect"
-msgstr ""
+msgstr "Připojit"
 
 #: ToolBarActionProvider#2
 msgid "Connect to IRC"
-msgstr ""
+msgstr "Připojí k IRC"
 
 #: ToolBarActionProvider#3
 msgctxt "ToolBarActionProvider#3"
 msgid "Disconnect"
-msgstr ""
+msgstr "Odpojit"
 
 #: ToolBarActionProvider#4
 msgid "Disconnect from IRC"
-msgstr ""
+msgstr "Odpojí od IRC"
 
 #: ToolBarActionProvider#5
 msgctxt "ToolBarActionProvider#5"
 msgid "Part"
-msgstr ""
+msgstr "Opustit"
 
 #: ToolBarActionProvider#6
 msgid "Leave currently selected channel"
-msgstr ""
+msgstr "Opustí zvýrazněný kanál"
 
 #: ToolBarActionProvider#7
 msgctxt "ToolBarActionProvider#7"
 msgid "Join"
-msgstr ""
+msgstr "Vstoupit"
 
 #: ToolBarActionProvider#8
 msgid "Join a channel"
-msgstr ""
+msgstr "Vstoupí na kanál"
 
 #: ToolBarActionProvider#9
 msgid "Query"
-msgstr ""
+msgstr "Vykecávat"
 
 #: ToolBarActionProvider#10
 msgid "Start a private conversation"
-msgstr ""
+msgstr "Zahájí soukromou konverzaci"
 
 #: ToolBarActionProvider#11
 msgctxt "ToolBarActionProvider#11"
 msgid "Whois"
-msgstr ""
+msgstr "Kdo je"
 
 #: ToolBarActionProvider#12
 msgid "Request user information"
-msgstr ""
+msgstr "Vyžádá uživatelské informace"
 
 #: ToolBarActionProvider#13
 msgid "Op"
-msgstr ""
+msgstr "Op"
 
 #: ToolBarActionProvider#14
 msgid "Give operator privileges to user"
-msgstr ""
+msgstr "Přidá práva dozorce uživateli"
 
 #: ToolBarActionProvider#15
 msgid "Deop"
-msgstr ""
+msgstr "Deop"
 
 #: ToolBarActionProvider#16
 msgid "Take operator privileges from user"
-msgstr ""
+msgstr "Odebere práva dozorce uživateli"
 
 #: ToolBarActionProvider#17
 msgid "Voice"
-msgstr ""
+msgstr "Rozkecat"
 
 #: ToolBarActionProvider#18
 msgid "Give voice to user"
-msgstr ""
+msgstr "Nastaví stav mluvky na uživatele"
 
 #: ToolBarActionProvider#19
 msgid "Devoice"
-msgstr ""
+msgstr "Umlčet"
 
 #: ToolBarActionProvider#20
 msgid "Take voice from user"
-msgstr ""
+msgstr "Odebere stav mluvky od uživatele"
 
 #: ToolBarActionProvider#21
 msgid "Kick"
-msgstr ""
+msgstr "Vykopnout"
 
 #: ToolBarActionProvider#22
 msgid "Remove user from channel"
-msgstr ""
+msgstr "Odstraní uživatele z kanálu"
 
 #: ToolBarActionProvider#23
 msgid "Ban"
-msgstr ""
+msgstr "Zablokovat"
 
 #: ToolBarActionProvider#24
 msgid "Ban user from channel"
-msgstr ""
+msgstr "Zabrání uživateli v přístupu ke kanálu"
 
 #: ToolBarActionProvider#25
 msgid "Kick/Ban"
-msgstr ""
+msgstr "Vyhodit/Zablokovat"
 
 #: ToolBarActionProvider#26
 msgid "Remove and ban user from channel"
-msgstr ""
+msgstr "Odstraní uživatele a zablokuje opětovný přístup uživateli na kanál"
 
 #: ToolBarActionProvider#27
 msgid "Connect to all"
-msgstr ""
+msgstr "Připojit ke všemu"
 
 #: ToolBarActionProvider#28
 msgid "Disconnect from all"
-msgstr ""
+msgstr "Odpojit ze všeho"
 
 #: TopicWidget#1
 msgctxt "TopicWidget#1"
 msgid "Form"
-msgstr ""
+msgstr "Form"
 
 #: TopicWidget#2
 msgctxt "TopicWidget#2"
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #: TopicWidgetSettingsPage#1
 msgctxt "TopicWidgetSettingsPage#1"
 msgid "Form"
-msgstr ""
+msgstr "Form"
 
 #: TopicWidgetSettingsPage#2
 msgctxt "TopicWidgetSettingsPage#2"
 msgid "Custom font:"
-msgstr ""
+msgstr "Vlastní font:"
 
 #: TopicWidgetSettingsPage#3
 msgid "Resize dynamically to fit contents"
-msgstr ""
+msgstr "Měnit velikost podle obsahu"
 
 #: TopicWidgetSettingsPage#4
 msgid "On hover only"
-msgstr ""
+msgstr "Pouze při podržení myši nad tématem"
 
 #: TopicWidgetSettingsPage#5
 msgctxt "TopicWidgetSettingsPage#5"
 msgid "Interface"
-msgstr ""
+msgstr "Rozhraní"
 
 #: TopicWidgetSettingsPage#6
 msgid "Topic Widget"
-msgstr ""
+msgstr "Rozhraní Tématu"
 
 #: UiStyle::StyledMessage#1
 msgctxt "UiStyle::StyledMessage#1"
 msgid "%1"
-msgstr ""
+msgstr "%1"
 
 #: UiStyle::StyledMessage#2
 msgid "%DN%1%DN %2"
-msgstr ""
+msgstr "%DN%1%DN %2"
 
 #: UiStyle::StyledMessage#3
 msgid "You are now known as %DN%1%DN"
-msgstr ""
+msgstr "Nyní jste znám jako %DN%1%DN"
 
 #: UiStyle::StyledMessage#4
 msgid "%DN%1%DN is now known as %DN%2%DN"
-msgstr ""
+msgstr "%DN%1%DN je nyní znám jako %DN%2%DN"
 
 #: UiStyle::StyledMessage#5
 msgid "User mode: %DM%1%DM"
-msgstr ""
+msgstr "Uživatelský režim: %DM%1%DM"
 
 #: UiStyle::StyledMessage#6
 msgid "Mode %DM%1%DM by %DN%2%DN"
-msgstr ""
+msgstr "Režim %DM%1%DM od %DN%2%DN"
 
 #: UiStyle::StyledMessage#7
 msgid "%DN%1%DN %DH(%2@%3)%DH has joined %DC%4%DC"
-msgstr ""
+msgstr "%DN%1%DN %DH(%2@%3)%DH vlezl do %DC%4%DC"
 
 #: UiStyle::StyledMessage#8
 msgid "%DN%1%DN %DH(%2@%3)%DH has left %DC%4%DC"
-msgstr ""
+msgstr "%DN%1%DN %DH(%2@%3)%DH opustil %DC%4%DC"
 
 #: UiStyle::StyledMessage#9
 msgid "%DN%1%DN %DH(%2@%3)%DH has quit"
-msgstr ""
+msgstr "%DN%1%DN %DH(%2@%3)%DH to zabalil"
 
 #: UiStyle::StyledMessage#10
 msgid "%DN%1%DN has kicked %DN%2%DN from %DC%3%DC"
-msgstr ""
+msgstr "%DN%1%DN vykopnul %DN%2%DN z %DC%3%DC"
 
 #: UiStyle::StyledMessage#11
 msgid "{Day changed to %1}"
-msgstr ""
+msgstr "{Den: %1}"
 
 #: UiStyle::StyledMessage#12
 msgid "Netsplit between %DH%1%DH and %DH%2%DH ended. Users joined: "
-msgstr ""
+msgstr "Netsplit mezi %DH%1%DH a %DH%2%DH skončil. Vrátili se: "
 
 #: UiStyle::StyledMessage#13
 msgid "%DN%1%DN (%2 more)"
-msgstr ""
+msgstr "%DN%1%DN (%2 více)"
 
 #: UiStyle::StyledMessage#14
 msgid "Netsplit between %DH%1%DH and %DH%2%DH. Users quit: "
-msgstr ""
+msgstr "Netsplit mezi %DH%1%DH a %DH%2%DH. Opustili nás: "
 
 #: UiStyle::StyledMessage#15
 msgid "[%1]"
-msgstr ""
+msgstr "[%1]"
 
 #: UiStyle::StyledMessage#16
 msgid "<%1>"
-msgstr ""
+msgstr "<%1>"
 
 #: UiStyle::StyledMessage#17
 msgid "-*-"
-msgstr ""
+msgstr "-*-"
 
 #: UiStyle::StyledMessage#18
 msgid "<->"
-msgstr ""
+msgstr "<->"
 
 #: UiStyle::StyledMessage#19
 msgid "***"
-msgstr ""
+msgstr "***"
 
 #: UiStyle::StyledMessage#20
 msgid "-->"
-msgstr ""
+msgstr "-->"
 
 #: UiStyle::StyledMessage#21
 msgid "<--"
-msgstr ""
+msgstr "<--"
 
 #: UiStyle::StyledMessage#22
 msgid "<-*"
-msgstr ""
+msgstr "<-*"
 
 #: UiStyle::StyledMessage#23
 msgid "<-x"
-msgstr ""
+msgstr "<-x"
 
 #: UiStyle::StyledMessage#24
 msgid "*"
-msgstr ""
+msgstr "*"
 
 #: UiStyle::StyledMessage#25
 msgid "-"
-msgstr ""
+msgstr "-"
 
 #: UiStyle::StyledMessage#26
 msgid "=>"
-msgstr ""
+msgstr "=>"
 
 #: UiStyle::StyledMessage#27
 msgid "<="
-msgstr ""
+msgstr "<="
 
 #: UserCategoryItem#1
-#, fuzzy
 msgid "%n Owner(s)"
-msgstr ""
-"\n"
-"            \n"
-"        "
+msgstr "%n Vlastník"
 
 #: UserCategoryItem#2
-#, fuzzy
 msgid "%n Admin(s)"
-msgstr ""
-"\n"
-"            \n"
-"        "
+msgstr "%n Správce"
 
 #: UserCategoryItem#3
-#, fuzzy
 msgid "%n Operator(s)"
-msgstr ""
-"\n"
-"            \n"
-"        "
+msgstr "%n Dozorce"
 
 #: UserCategoryItem#4
-#, fuzzy
 msgid "%n Half-Op(s)"
-msgstr ""
-"\n"
-"            \n"
-"        "
+msgstr "%n Bachař"
 
 #: UserCategoryItem#5
-#, fuzzy
 msgid "%n Voiced"
-msgstr ""
-"\n"
-"            \n"
-"        "
+msgstr "%n Mluvka"
 
 #: UserCategoryItem#6
-#, fuzzy
 msgid "%n User(s)"
-msgstr ""
-"\n"
-"            \n"
-"        "
+msgstr "%n Uživatel"
+
+
