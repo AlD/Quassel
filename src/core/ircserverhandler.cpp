@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-09 by the Quassel Project                          *
+ *   Copyright (C) 2005-10 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -33,7 +33,7 @@
 #include <QDebug>
 
 IrcServerHandler::IrcServerHandler(CoreNetwork *parent)
-  : BasicHandler(parent),
+  : CoreBasicHandler(parent),
     _whois(false)
 {
   connect(parent, SIGNAL(disconnected(NetworkId)), this, SLOT(destroyNetsplits()));
@@ -1077,17 +1077,20 @@ void IrcServerHandler::handleNetsplitJoin(const QString &channel, const QStringL
   }
   QList<IrcUser *> ircUsers;
   QStringList newModes = modes;
+  QStringList newUsers = users;
 
   foreach(QString user, users) {
-    IrcUser *iu = network()->updateNickFromMask(user);
+    IrcUser *iu = network()->ircUser(nickFromMask(user));
     if(iu)
       ircUsers.append(iu);
-    else {
-      newModes.removeAt(users.indexOf(user));
+    else { // the user already quit
+      int idx = users.indexOf(user);
+      newUsers.removeAt(idx);
+      newModes.removeAt(idx);
     }
   }
 
-  QString msg = users.join("#:#").append("#:#").append(quitMessage);
+  QString msg = newUsers.join("#:#").append("#:#").append(quitMessage);
   emit displayMsg(Message::NetsplitJoin, BufferInfo::ChannelBuffer, channel, msg);
   ircChannel->joinIrcUsers(ircUsers, newModes);
 }

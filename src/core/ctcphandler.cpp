@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-09 by the Quassel Project                          *
+ *   Copyright (C) 2005-10 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -26,7 +26,7 @@
 #include "coreignorelistmanager.h"
 
 CtcpHandler::CtcpHandler(CoreNetwork *parent)
-  : BasicHandler(parent),
+  : CoreBasicHandler(parent),
     XDELIM("\001"),
     _ignoreListManager(parent->ignoreListManager())
 {
@@ -218,9 +218,11 @@ void CtcpHandler::handleVersion(CtcpType ctcptype, const QString &prefix, const 
 void CtcpHandler::defaultHandler(const QString &cmd, CtcpType ctcptype, const QString &prefix, const QString &target, const QString &param) {
   Q_UNUSED(ctcptype);
   Q_UNUSED(target);
-  Q_UNUSED(param);
   if(!_ignoreListManager->ctcpMatch(prefix, network()->networkName())) {
-    emit displayMsg(Message::Error, BufferInfo::StatusBuffer, "", tr("Received unknown CTCP %1 by %2").arg(cmd).arg(prefix));
+    QString str = tr("Received unknown CTCP %1 by %2").arg(cmd).arg(prefix);
+    if(!param.isEmpty())
+      str.append(tr(" with arguments: %1").arg(param));
+    emit displayMsg(Message::Error, BufferInfo::StatusBuffer, "", str);
   }
 }
 

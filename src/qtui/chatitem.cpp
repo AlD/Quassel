@@ -387,6 +387,18 @@ void SenderChatItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
   }
 }
 
+void SenderChatItem::handleClick(const QPointF &pos, ChatScene::ClickMode clickMode) {
+  if(clickMode == ChatScene::DoubleClick) {
+    BufferInfo curBufInfo = Client::networkModel()->bufferInfo(data(MessageModel::BufferIdRole).value<BufferId>());
+    QString nick = data(MessageModel::EditRole).toString();
+    // check if the nick is a valid ircUser
+    if(!nick.isEmpty() && Client::network(curBufInfo.networkId())->ircUser(nick))
+      Client::bufferModel()->switchToOrStartQuery(curBufInfo.networkId(), nick);
+  }
+  else
+    ChatItem::handleClick(pos, clickMode);
+}
+
 // ************************************************************
 // ContentsChatItem
 // ************************************************************

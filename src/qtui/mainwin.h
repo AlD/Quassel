@@ -48,6 +48,8 @@ class InputWidget;
 class MsgProcessorStatusWidget;
 class NickListWidget;
 class SystemTray;
+class ChatMonitorView;
+class TopicWidget;
 
 class QMenu;
 class QLabel;
@@ -200,6 +202,8 @@ class MainWin
     BufferWidget *_bufferWidget;
     NickListWidget *_nickListWidget;
     InputWidget *_inputWidget;
+    ChatMonitorView *_chatMonitorView;
+    TopicWidget *_topicWidget;
 
     QMenu *_fileMenu, *_networksMenu, *_viewMenu, *_bufferViewsMenu, *_settingsMenu, *_helpMenu, *_helpDebugMenu;
     QMenu *_toolbarMenu;

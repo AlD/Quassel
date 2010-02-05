@@ -183,9 +183,9 @@ void MainWin::init() {
   setupBufferWidget();
   setupMenus();
   setupTopicWidget();
-  setupChatMonitor();
   setupNickWidget();
   setupInputWidget();
+  setupChatMonitor();
   setupStatusBar();
   setupToolBars();
   setupSystray();
@@ -591,9 +591,10 @@ void MainWin::setupChatMonitor() {
   dock->setObjectName("ChatMonitorDock");
 
   ChatMonitorFilter *filter = new ChatMonitorFilter(Client::messageModel(), this);
-  ChatMonitorView *chatView = new ChatMonitorView(filter, this);
-  chatView->show();
-  dock->setWidget(chatView);
+  _chatMonitorView = new ChatMonitorView(filter, this);
+  _chatMonitorView->setFocusProxy(_inputWidget);
+  _chatMonitorView->show();
+  dock->setWidget(_chatMonitorView);
   dock->hide();
 
   addDockWidget(Qt::TopDockWidgetArea, dock, Qt::Vertical);
@@ -619,17 +620,19 @@ void MainWin::setupInputWidget() {
   _bufferWidget->setFocusProxy(_inputWidget);
 
   _inputWidget->inputLine()->installEventFilter(_bufferWidget);
+
+  connect(_topicWidget, SIGNAL(switchedPlain()), _bufferWidget, SLOT(setFocus()));
 }
 
 void MainWin::setupTopicWidget() {
   VerticalDock *dock = new VerticalDock(tr("Topic"), this);
   dock->setObjectName("TopicDock");
-  TopicWidget *topicwidget = new TopicWidget(dock);
+  _topicWidget = new TopicWidget(dock);
 
-  dock->setWidget(topicwidget);
+  dock->setWidget(_topicWidget);
 
-  topicwidget->setModel(Client::bufferModel());
-  topicwidget->setSelectionModel(Client::bufferModel()->standardSelectionModel());
+  _topicWidget->setModel(Client::bufferModel());
+  _topicWidget->setSelectionModel(Client::bufferModel()->standardSelectionModel());
 
   addDockWidget(Qt::TopDockWidgetArea, dock, Qt::Vertical);
 

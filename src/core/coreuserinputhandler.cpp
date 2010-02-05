@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-09 by the Quassel Project                          *
+ *   Copyright (C) 2005-10 by the Quassel Project                          *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -29,7 +29,7 @@
 #include <QRegExp>
 
 CoreUserInputHandler::CoreUserInputHandler(CoreNetwork *parent)
-  : BasicHandler(parent)
+  : CoreBasicHandler(parent)
 {
 }
 
@@ -128,8 +128,8 @@ void CoreUserInputHandler::handleCtcp(const BufferInfo &bufferInfo, const QStrin
   if(ctcpTag.isEmpty())
     return;
 
-  QString message = "";
-  QString verboseMessage = tr("sending CTCP-%1 request").arg(ctcpTag);
+  QString message = msg.section(' ', 2);
+  QString verboseMessage = tr("sending CTCP-%1 request to %2").arg(ctcpTag).arg(nick);
 
   if(ctcpTag == "PING") {
     uint now = QDateTime::currentDateTime().toTime_t();
@@ -418,7 +418,7 @@ void CoreUserInputHandler::handleWhowas(const BufferInfo &bufferInfo, const QStr
 
 void CoreUserInputHandler::defaultHandler(QString cmd, const BufferInfo &bufferInfo, const QString &msg) {
   Q_UNUSED(bufferInfo);
-  emit putCmd(serverEncode(cmd.toUpper()), serverEncode(msg));
+  emit putCmd(serverEncode(cmd.toUpper()), serverEncode(msg.split(" ")));
 }
 
 void CoreUserInputHandler::putPrivmsg(const QByteArray &target, const QByteArray &message) {
