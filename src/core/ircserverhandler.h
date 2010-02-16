@@ -45,7 +45,8 @@ public slots:
   void handlePrivmsg(const QString &prefix, const QList<QByteArray> &params);
   void handleQuit(const QString &prefix, const QList<QByteArray> &params);
   void handleTopic(const QString &prefix, const QList<QByteArray> &params);
-
+  void handleCap(const QString &prefix, const QList<QByteArray> &params);   // CAP framework
+  void handleAuthenticate();                                                // SASL auth - no params
   void handle001(const QString &prefix, const QList<QByteArray> &params);   // RPL_WELCOME
   void handle005(const QString &prefix, const QList<QByteArray> &params);   // RPL_ISUPPORT
   void handle221(const QString &prefix, const QList<QByteArray> &params);   // RPL_UMODEIS
@@ -79,6 +80,7 @@ public slots:
   void handle369(const QString &prefix, const QList<QByteArray> &params);   // RPL_ENDOFWHOWAS
   void handle432(const QString &prefix, const QList<QByteArray> &params);   // ERR_ERRONEUSNICKNAME
   void handle433(const QString &prefix, const QList<QByteArray> &params);   // ERR_NICKNAMEINUSE
+  void handle437(const QString &prefix, const QList<QByteArray> &params);   // ERR_UNAVAILRESOURCE
 
   void defaultHandler(QString cmd, const QString &prefix, const QList<QByteArray> &params);
 

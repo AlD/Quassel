@@ -218,6 +218,14 @@ else(WITH_KDE)
   message(STATUS "Not enabling KDE4 integration")
 endif(WITH_KDE)
 
+# needed to compile with mingw without kde
+if(MINGW AND NOT HAVE_KDE)
+    add_definitions(-D_WIN32_WINNT=0x0500)
+    message(STATUS "Added _WIN32_WINNT=0x0500 definition for MinGW")
+# workaround for bug in mingw gcc 4.0
+    add_definitions(-U__STRICT_ANSI__)
+endif(MINGW AND NOT HAVE_KDE)
+
 # Setup Phonon support - we only need this if we don't have or want KDE4
 if(NOT HAVE_KDE)
   if(WITH_PHONON)
@@ -289,10 +297,12 @@ endif(STATIC AND CMAKE_COMPILER_IS_GNUCXX)
 
 if(WIN32)
   link_libraries(imm32 winmm dbghelp Secur32)  # missing by default :/
-
+  if(MSVC)
+    link_libraries(Version dwmapi shlwapi)
+  endif(MSVC)
   if(HAVE_SSL AND STATIC)
      find_package(OpenSSL REQUIRED)
-     link_libraries(${OPENSSL_LIBRARIES} libeay32MD)
+     link_libraries(${OPENSSL_LIBRARIES} ${OPENSSL_EAY_LIBRARIES})
   endif(HAVE_SSL AND STATIC)
 endif(WIN32)
 

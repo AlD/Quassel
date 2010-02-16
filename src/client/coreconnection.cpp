@@ -474,6 +474,8 @@ void CoreConnection::clientInitAck(const QVariantMap &msg) {
     return;
   }
 
+  Client::setCoreFeatures((Quassel::Features)msg["CoreFeatures"].toUInt());
+
 #ifndef QT_NO_COMPRESS
   if(msg["SupportsCompression"].toBool()) {
     _socket->setProperty("UseCompression", true);
@@ -633,6 +635,9 @@ void CoreConnection::internalSessionStateReceived(const QVariant &packedState) {
 }
 
 void CoreConnection::syncToCore(const QVariantMap &sessionState) {
+  if(sessionState.contains("CoreFeatures"))
+    Client::setCoreFeatures((Quassel::Features)sessionState["CoreFeatures"].toUInt());
+
   setProgressText(tr("Receiving network states"));
   updateProgress(0, 100);
 

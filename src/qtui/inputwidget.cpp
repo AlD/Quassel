@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-09 by the Quassel Project                          *
+ *   Copyright (C) 2005-2010 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -31,6 +31,7 @@
 #include "qtui.h"
 #include "qtuisettings.h"
 #include "tabcompleter.h"
+#include <QPainter>
 
 InputWidget::InputWidget(QWidget *parent)
   : AbstractItemView(parent),
@@ -41,6 +42,10 @@ InputWidget::InputWidget(QWidget *parent)
 
   layout()->setAlignment(ui.ownNick, Qt::AlignBottom);
   layout()->setAlignment(ui.inputEdit, Qt::AlignBottom);
+  layout()->setAlignment(ui.showStyleButton, Qt::AlignBottom);
+  layout()->setAlignment(ui.styleFrame, Qt::AlignBottom);
+
+  ui.styleFrame->setVisible(false);
 
   setFocusProxy(ui.inputEdit);
   ui.ownNick->setFocusProxy(ui.inputEdit);
@@ -54,6 +59,35 @@ InputWidget::InputWidget(QWidget *parent)
   ui.inputEdit->setMaxHeight(5);
   ui.inputEdit->setMode(MultiLineEdit::MultiLine);
   ui.inputEdit->setPasteProtectionEnabled(true);
+
+  ui.boldButton->setIcon(SmallIcon("format-text-bold"));
+  ui.italicButton->setIcon(SmallIcon("format-text-italic"));
+  ui.underlineButton->setIcon(SmallIcon("format-text-underline"));
+  ui.textcolorButton->setIcon(SmallIcon("format-text-color"));
+  ui.highlightcolorButton->setIcon(SmallIcon("format-fill-color"));
+
+  _colorMenu = new QMenu();
+  _colorFillMenu = new QMenu();
+
+  QStringList names;
+  names << tr("White") << tr("Black") << tr("Dark blue") << tr("Dark green") << tr("Red") << tr("Dark red") << tr("Dark magenta")  << tr("Orange")
+  << tr("Yellow") << tr("Green") << tr("Dark cyan") << tr("Cyan") << tr("Blue") << tr("Magenta") << tr("Dark gray") << tr("Light gray");
+
+  QPixmap pix(16, 16);
+  for (int i = 0; i < inputLine()->mircColorMap().count(); i++) {
+    pix.fill(inputLine()->mircColorMap().values()[i]);
+    _colorMenu->addAction(pix, names[i])->setData(inputLine()->mircColorMap().keys()[i]);
+    _colorFillMenu->addAction(pix, names[i])->setData(inputLine()->mircColorMap().keys()[i]);
+  }
+
+  pix.fill(Qt::transparent);
+  _colorMenu->addAction(pix, tr("Clear Color"))->setData("");
+  _colorFillMenu->addAction(pix, tr("Clear Color"))->setData("");
+
+  ui.textcolorButton->setMenu(_colorMenu);
+  connect(_colorMenu, SIGNAL(triggered(QAction*)), this, SLOT(colorChosen(QAction*)));
+  ui.highlightcolorButton->setMenu(_colorFillMenu);
+  connect(_colorFillMenu, SIGNAL(triggered(QAction*)), this, SLOT(colorHighlightChosen(QAction*)));
 
   new TabCompleter(ui.inputEdit);
 
@@ -88,6 +122,8 @@ InputWidget::InputWidget(QWidget *parent)
   connect(activateInputline, SIGNAL(triggered()), SLOT(setFocus()));
   activateInputline->setText(tr("Focus Input Line"));
   activateInputline->setShortcut(tr("Ctrl+L"));
+
+  connect(inputLine(), SIGNAL(currentCharFormatChanged(QTextCharFormat)), this, SLOT(currentCharFormatChanged(QTextCharFormat)));
 }
 
 InputWidget::~InputWidget() {
@@ -324,8 +360,154 @@ void InputWidget::changeNick(const QString &newNick) const {
 
 void InputWidget::on_inputEdit_textEntered(const QString &text) const {
   Client::userInput(currentBufferInfo(), text);
+  ui.boldButton->setChecked(false);
+  ui.underlineButton->setChecked(false);
+  ui.italicButton->setChecked(false);
+
+  QTextCharFormat fmt;
+  fmt.setFontWeight(QFont::Normal);
+  fmt.setFontUnderline(false);
+  fmt.setFontItalic(false);
+  fmt.clearForeground();
+  fmt.clearBackground();
+  inputLine()->setCurrentCharFormat(fmt);
 }
 
+void InputWidget::mergeFormatOnWordOrSelection(const QTextCharFormat &format) {
+  QTextCursor cursor = inputLine()->textCursor();
+  if (!cursor.hasSelection())
+    cursor.select(QTextCursor::WordUnderCursor);
+  cursor.mergeCharFormat(format);
+  inputLine()->mergeCurrentCharFormat(format);
+}
+
+void InputWidget::setFormatOnWordOrSelection(const QTextCharFormat &format) {
+  QTextCursor cursor = inputLine()->textCursor();
+  if (!cursor.hasSelection())
+    cursor.select(QTextCursor::WordUnderCursor);
+  cursor.setCharFormat(format);
+  inputLine()->setCurrentCharFormat(format);
+}
+
+QTextCharFormat InputWidget::getFormatOfWordOrSelection() {
+  QTextCursor cursor = inputLine()->textCursor();
+  return cursor.charFormat();
+}
+
+void InputWidget::currentCharFormatChanged(const QTextCharFormat &format) {
+  fontChanged(format.font());
+
+  if (format.foreground().isOpaque())
+    colorChanged(format.foreground().color());
+  else
+    colorChanged(Qt::transparent);
+  if (format.background().isOpaque())
+    colorHighlightChanged(format.background().color());
+  else
+    colorHighlightChanged(Qt::transparent);
+}
+
+void InputWidget::on_boldButton_clicked(bool checked) {
+  QTextCharFormat fmt;
+  fmt.setFontWeight(checked ? QFont::Bold : QFont::Normal);
+  mergeFormatOnWordOrSelection(fmt);
+}
+
+void InputWidget::on_underlineButton_clicked(bool checked) {
+  QTextCharFormat fmt;
+  fmt.setFontUnderline(checked);
+  mergeFormatOnWordOrSelection(fmt);
+}
+
+void InputWidget::on_italicButton_clicked(bool checked) {
+  QTextCharFormat fmt;
+  fmt.setFontItalic(checked);
+  mergeFormatOnWordOrSelection(fmt);
+}
+
+void InputWidget::fontChanged(const QFont &f)
+{
+  ui.boldButton->setChecked(f.bold());
+  ui.italicButton->setChecked(f.italic());
+  ui.underlineButton->setChecked(f.underline());
+}
+
+void InputWidget::colorChosen(QAction *action) {
+  QTextCharFormat fmt;
+  QColor color;
+  if (qVariantValue<QString>(action->data()) == "") {
+    color = Qt::transparent;
+    fmt = getFormatOfWordOrSelection();
+    fmt.clearForeground();
+    setFormatOnWordOrSelection(fmt);
+  }
+  else {
+    color = QColor(inputLine()->rgbColorFromMirc(qVariantValue<QString>(action->data())));
+    fmt.setForeground(color);
+    mergeFormatOnWordOrSelection(fmt);
+  }
+  ui.textcolorButton->setDefaultAction(action);
+  ui.textcolorButton->setIcon(createColorToolButtonIcon(SmallIcon("format-text-color"), color));
+}
+
+void InputWidget::colorHighlightChosen(QAction *action) {
+  QTextCharFormat fmt;
+  QColor color;
+  if (qVariantValue<QString>(action->data()) == "") {
+    color = Qt::transparent;
+    fmt = getFormatOfWordOrSelection();
+    fmt.clearBackground();
+    setFormatOnWordOrSelection(fmt);
+  }
+  else {
+    color = QColor(inputLine()->rgbColorFromMirc(qVariantValue<QString>(action->data())));
+    fmt.setBackground(color);
+    mergeFormatOnWordOrSelection(fmt);
+  }
+  ui.highlightcolorButton->setDefaultAction(action);
+  ui.highlightcolorButton->setIcon(createColorToolButtonIcon(SmallIcon("format-fill-color"), color));
+}
+
+void InputWidget::colorChanged(const QColor &fg) {
+  if (fg == Qt::transparent)
+    ui.textcolorButton->setDefaultAction(_colorMenu->actions().last());
+  else
+    ui.textcolorButton->setDefaultAction(_colorMenu->actions().value(inputLine()->mircColorFromRGB(fg.name()).toInt()));
+
+  ui.textcolorButton->setIcon(createColorToolButtonIcon(SmallIcon("format-text-color"), fg));
+}
+
+void InputWidget::colorHighlightChanged(const QColor &bg) {
+  if (bg == Qt::transparent)
+    ui.highlightcolorButton->setDefaultAction(_colorFillMenu->actions().last());
+  else
+    ui.highlightcolorButton->setDefaultAction(_colorFillMenu->actions().value(inputLine()->mircColorFromRGB(bg.name()).toInt()));
+
+  ui.highlightcolorButton->setIcon(createColorToolButtonIcon(SmallIcon("format-fill-color"), bg));
+}
+
+void InputWidget::on_showStyleButton_toggled(bool checked) {
+  ui.styleFrame->setVisible(checked);
+  if (checked) {
+    ui.showStyleButton->setArrowType(Qt::LeftArrow);
+  }
+  else {
+    ui.showStyleButton->setArrowType(Qt::RightArrow);
+  }
+}
+
+QIcon InputWidget::createColorToolButtonIcon(const QIcon &icon, const QColor &color) {
+  QPixmap pixmap(16, 16);
+  pixmap.fill(Qt::transparent);
+  QPainter painter(&pixmap);
+  QPixmap image = icon.pixmap(16,16);
+  QRect target(0, 0, 16, 14);
+  QRect source(0, 0, 16, 14);
+  painter.fillRect(QRect(0, 14, 16, 16), color);
+  painter.drawPixmap(target, image, source);
+
+  return QIcon(pixmap);
+}
 
 // MOUSE WHEEL FILTER
 MouseWheelFilter::MouseWheelFilter(QObject *parent)

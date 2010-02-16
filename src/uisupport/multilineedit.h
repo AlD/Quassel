@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-09 by the Quassel Project                          *
+ *   Copyright (C) 2005-2010 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -54,6 +54,7 @@ public:
 
   // Compatibility methods with the rest of the classes which still expect this to be a QLineEdit
   inline QString text() { return toPlainText(); }
+  inline QString html() { return toHtml(); }
   inline int cursorPosition() { return textCursor().position(); }
   inline void insert(const QString &newText) { insertPlainText(newText); }
   inline void backspace() { keyPressEvent(new QKeyEvent(QEvent::KeyPress, Qt::Key_Backspace, Qt::NoModifier)); }
@@ -64,6 +65,10 @@ public:
 
   virtual QSize sizeHint() const;
   virtual QSize minimumSizeHint() const;
+
+  inline QString mircColorFromRGB(QString rgbColor) const { return _mircColorMap.key(rgbColor); }
+  inline QString rgbColorFromMirc(QString mircColor) const { return _mircColorMap[mircColor]; }
+  inline QMap<QString, QString>  mircColorMap() const { return _mircColorMap; }
 
 public slots:
   void setMode(Mode mode);
@@ -94,6 +99,9 @@ private slots:
   void historyMoveForward();
   void historyMoveBack();
 
+  QString convertHtmlToMircCodes(const QString &text);
+  QString convertMircCodesToHtml(const QString &text);
+
 private:
   QStringList history;
   QHash<int, QString> tempHistory;
@@ -107,6 +115,8 @@ private:
 
   QSize _sizeHint;
   qreal _lastDocumentHeight;
+
+  QMap<QString, QString> _mircColorMap;
 
   void reset();
   void showHistoryEntry();

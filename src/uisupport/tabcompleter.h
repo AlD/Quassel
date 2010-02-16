@@ -35,6 +35,11 @@ class TabCompleter : public QObject {
   Q_OBJECT
 
 public:
+  enum Type {
+    UserTab = 0x01,
+    ChannelTab = 0x02
+  };
+
   explicit TabCompleter(MultiLineEdit *inputLine_);
 
   void reset();
@@ -43,10 +48,11 @@ public:
   virtual bool eventFilter(QObject *obj, QEvent *event);
 
 private:
+
   struct CompletionKey {
-    inline CompletionKey(const QString &n) { nick = n; }
+    inline CompletionKey(const QString &n) { contents = n; }
     bool operator<(const CompletionKey &other) const;
-    QString nick;
+    QString contents;
   };
 
   QPointer<MultiLineEdit> _lineEdit;
@@ -55,6 +61,8 @@ private:
 
   static const Network *_currentNetwork;
   static BufferId _currentBufferId;
+  static QString _currentBufferName;
+  static Type _completionType;
 
   QMap<CompletionKey, QString> _completionMap;
   // QStringList completionTemplates;

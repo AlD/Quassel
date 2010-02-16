@@ -38,6 +38,7 @@ set(SOURCES
     inputwidget.cpp
     ircconnectionwizard.cpp
     jumpkeyhandler.cpp
+    legacysystemtray.cpp
     mainpage.cpp
     mainwin.cpp
     msgprocessorstatuswidget.cpp
@@ -84,6 +85,7 @@ set(MOC_HDRS
     inputwidget.h
     ircconnectionwizard.h
     jumpkeyhandler.h
+    legacysystemtray.h
     mainpage.h
     mainwin.h
     msgprocessorstatuswidget.h
@@ -151,6 +153,14 @@ else(HAVE_KDE)
     include_directories(${PHONON_INCLUDES})
   endif(HAVE_PHONON)
 endif(HAVE_KDE)
+
+if(HAVE_DBUS)
+  set(SOURCES ${SOURCES} statusnotifieritem.cpp statusnotifieritemdbus.cpp)
+  set(MOC_HDRS ${MOC_HDRS} statusnotifieritem.h statusnotifieritemdbus.h)
+  set(FORMS ${FORMS})
+  qt4_add_dbus_interface(DBUS ../../interfaces/org.kde.StatusNotifierWatcher.xml statusnotifierwatcher)
+  qt4_add_dbus_adaptor(DBUS ../../interfaces/org.kde.StatusNotifierItem.xml statusnotifieritemdbus.h StatusNotifierItemDBus)  
+endif(HAVE_DBUS)
 
 if(HAVE_SSL)
   set(SOURCES ${SOURCES} sslinfodlg.cpp)

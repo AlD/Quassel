@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-09 by the Quassel Project                          *
+ *   Copyright (C) 2005-2010 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -28,6 +28,7 @@
 #include "bufferinfo.h"
 #include "identity.h"
 #include "network.h"
+#include <action.h>
 
 class MultiLineEdit;
 
@@ -70,11 +71,28 @@ private slots:
 
   BufferInfo currentBufferInfo() const;
 
+  void currentCharFormatChanged(const QTextCharFormat &format);
+  void on_showStyleButton_toggled(bool checked);
+  void on_boldButton_clicked(bool checked);
+  void on_italicButton_clicked(bool checked);
+  void on_underlineButton_clicked(bool checked);
+  void colorChosen(QAction *action);
+  void colorHighlightChosen(QAction *action);
+
 private:
   Ui::InputWidget ui;
 
   NetworkId _networkId;
   IdentityId _identityId;
+  QMenu *_colorMenu, *_colorFillMenu;
+
+  void mergeFormatOnWordOrSelection(const QTextCharFormat &format);
+  void fontChanged(const QFont &f);
+  void colorChanged(const QColor &fg);
+  void colorHighlightChanged(const QColor &bg);
+  QIcon createColorToolButtonIcon(const QIcon &icon, const QColor &color);
+  QTextCharFormat getFormatOfWordOrSelection();
+  void setFormatOnWordOrSelection(const QTextCharFormat &format);
 };
 
 
