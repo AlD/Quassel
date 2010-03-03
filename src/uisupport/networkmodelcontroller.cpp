@@ -153,9 +153,18 @@ void NetworkModelController::removeBuffers(const QModelIndexList &indexList) {
   if(inactive.count()) {
     msg = tr("Do you want to delete the following buffer(s) permanently?", 0, inactive.count());
     msg += "<ul>";
-    foreach(BufferInfo info, inactive)
-      msg += QString("<li>%1</li>").arg(info.bufferName());
+    int count = 0;
+    foreach(BufferInfo info, inactive) {
+      if(count < 10) {
+	msg += QString("<li>%1</li>").arg(info.bufferName());
+	count++;
+      }
+      else
+	break;
+    }
     msg += "</ul>";
+    if(count > 9 && inactive.size() - count != 0)
+      msg += tr("...and <b>%1</b> more<br><br>").arg(inactive.size() - count);
     msg += tr("<b>Note:</b> This will delete all related data, including all backlog data, from the core's database and cannot be undone.");
     if(inactive.count() != indexList.count())
       msg += tr("<br>Active channel buffers cannot be deleted, please part the channel first.");
@@ -329,15 +338,20 @@ void NetworkModelController::handleGeneralAction(ActionType type, QAction *actio
   switch(type) {
     case JoinChannel: {
       QString channelName = contextItem();
+      QString channelPassword;
       if(channelName.isEmpty()) {
         JoinDlg dlg(indexList().first());
         if(dlg.exec() == QDialog::Accepted) {
           channelName = dlg.channelName();
           networkId = dlg.networkId();
+	  channelPassword = dlg.channelPassword();
         }
       }
       if(!channelName.isEmpty()) {
-        Client::instance()->userInput(BufferInfo::fakeStatusBuffer(networkId), QString("/JOIN %1").arg(channelName));
+	if(!channelPassword.isEmpty())
+	  Client::instance()->userInput(BufferInfo::fakeStatusBuffer(networkId), QString("/JOIN %1 %2").arg(channelName).arg(channelPassword));
+	else
+	  Client::instance()->userInput(BufferInfo::fakeStatusBuffer(networkId), QString("/JOIN %1").arg(channelName));
       }
       break;
     }
@@ -474,12 +488,15 @@ NetworkModelController::JoinDlg::JoinDlg(const QModelIndex &index, QWidget *pare
   layout->addWidget(networks = new QComboBox, 0, 1);
   layout->addWidget(new QLabel(tr("Channel:")), 1, 0);
   layout->addWidget(channel = new QLineEdit, 1, 1);
-  layout->addWidget(buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel), 2, 0, 1, 2);
+  layout->addWidget(new QLabel(tr("Password:")), 2, 0);
+  layout->addWidget(password = new QLineEdit, 2, 1);
+  layout->addWidget(buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel), 3, 0, 1, 2);
   setLayout(layout);
 
   channel->setFocus();
   buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
   networks->setInsertPolicy(QComboBox::InsertAlphabetically);
+  password->setEchoMode(QLineEdit::Password);
 
   connect(buttonBox, SIGNAL(accepted()), SLOT(accept()));
   connect(buttonBox, SIGNAL(rejected()), SLOT(reject()));
@@ -509,6 +526,10 @@ NetworkId NetworkModelController::JoinDlg::networkId() const {
 
 QString NetworkModelController::JoinDlg::channelName() const {
   return channel->text();
+}
+
+QString NetworkModelController::JoinDlg::channelPassword() const {
+  return password->text();
 }
 
 void NetworkModelController::JoinDlg::on_channel_textChanged(const QString &text) {

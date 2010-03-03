@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-09 by the Quassel Project                          *
+ *   Copyright (C) 2005-2010 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -85,9 +85,6 @@
 #include "verticaldock.h"
 
 #ifndef HAVE_KDE
-#  ifdef HAVE_DBUS
-#    include "desktopnotificationbackend.h"
-#  endif
 #  ifdef HAVE_PHONON
 #    include "phononnotificationbackend.h"
 #  endif
@@ -136,6 +133,8 @@ MainWin::MainWin(QWidget *parent)
     _awayLog(0),
     _layoutLoaded(false)
 {
+  setAttribute(Qt::WA_DeleteOnClose, false);  // we delete the mainwin manually
+
   QtUiSettings uiSettings;
   QString style = uiSettings.value("Style", QString()).toString();
   if(!style.isEmpty()) {
@@ -190,16 +189,14 @@ void MainWin::init() {
   setupHotList();
 
 #ifndef HAVE_KDE
-  QtUi::registerNotificationBackend(new TaskbarNotificationBackend(this));
-#  ifndef QT_NO_SYSTEMTRAYICON
-  QtUi::registerNotificationBackend(new SystrayNotificationBackend(this));
-#  endif
 #  ifdef HAVE_PHONON
   QtUi::registerNotificationBackend(new PhononNotificationBackend(this));
 #  endif
-#  ifdef HAVE_DBUS
-  QtUi::registerNotificationBackend(new DesktopNotificationBackend(this));
+#  ifndef QT_NO_SYSTEMTRAYICON
+  QtUi::registerNotificationBackend(new SystrayNotificationBackend(this));
 #  endif
+
+  QtUi::registerNotificationBackend(new TaskbarNotificationBackend(this));
 
 #else /* HAVE_KDE */
   QtUi::registerNotificationBackend(new KNotificationBackend(this));
@@ -250,6 +247,9 @@ void MainWin::saveStateToSettings(UiSettings &s) {
   s.setValue("MainWinMinimized", isMinimized());
   s.setValue("MainWinMaximized", isMaximized());
   s.setValue("MainWinHidden", !isVisible());
+  BufferId lastBufId = Client::bufferModel()->currentBuffer();
+  if(lastBufId.isValid())
+    s.setValue("LastUsedBufferId", lastBufId.toInt());
 
 #ifdef HAVE_KDE
   saveAutoSaveSettings();
@@ -754,6 +754,12 @@ void MainWin::setConnectedState() {
     IrcConnectionWizard *wizard = new IrcConnectionWizard(this, Qt::Sheet);
     wizard->show();
   }
+  else {
+    QtUiSettings s;
+    BufferId lastUsedBufferId(s.value("LastUsedBufferId").toInt());
+    if(lastUsedBufferId.isValid())
+      Client::bufferModel()->switchToBuffer(lastUsedBufferId);
+  }
 }
 
 void MainWin::loadLayout() {
@@ -761,9 +767,9 @@ void MainWin::loadLayout() {
   int accountId = Client::currentCoreAccount().accountId().toInt();
   QByteArray state = s.value(QString("MainWinState-%1").arg(accountId)).toByteArray();
   if(state.isEmpty()) {
-    // Make sure that the default bufferview is shown
-    if(_bufferViews.count())
-      _bufferViews.at(0)->show();
+    foreach(BufferViewDock *view, _bufferViews)
+      view->show();
+    _layoutLoaded = true;
     return;
   }
 
@@ -1183,4 +1189,3 @@ void MainWin::on_actionDebugLog_triggered() {
 void MainWin::showStatusBarMessage(const QString &message) {
   statusBar()->showMessage(message, 10000);
 }
-

@@ -77,13 +77,16 @@ public slots:
   virtual void setState(State);
   virtual void setVisible(bool visible = true);
   virtual void setToolTip(const QString &title, const QString &subtitle);
-  virtual void showMessage(const QString &title, const QString &message, MessageIcon icon = Information, int millisecondsTimeoutHint = 10000);
+  virtual void showMessage(const QString &title, const QString &message, MessageIcon icon = Information, int msTimeout = 10000, uint notificationId = 0);
+  virtual void closeMessage(uint notificationId) { Q_UNUSED(notificationId) }
 
 signals:
   void activated(SystemTray::ActivationReason);
   void iconChanged(const Icon &);
+  void animationEnabledChanged(bool);
   void toolTipChanged(const QString &title, const QString &subtitle);
-  void messageClicked();
+  void messageClicked(uint notificationId);
+  void messageClosed(uint notificationId);
 
 protected slots:
   virtual void activate(SystemTray::ActivationReason = Trigger);
@@ -98,9 +101,12 @@ protected:
   inline QString toolTipSubTitle() const;
   inline QMenu *trayMenu() const;
 
+  inline bool animationEnabled() const;
+
 private slots:
   void minimizeRestore();
   void trayMenuAboutToShow();
+  void enableAnimationChanged(const QVariant &);
 
 private:
   Mode _mode;
@@ -108,6 +114,7 @@ private:
 
   QString _toolTipTitle, _toolTipSubTitle;
   Icon _passiveIcon, _activeIcon, _needsAttentionIcon;
+  bool _animationEnabled;
 
   QMenu *_trayMenu;
   QWidget *_associatedWidget;
@@ -123,6 +130,6 @@ SystemTray::State SystemTray::state() const { return _state; }
 QMenu *SystemTray::trayMenu() const { return _trayMenu; }
 QString SystemTray::toolTipTitle() const { return _toolTipTitle; }
 QString SystemTray::toolTipSubTitle() const { return _toolTipSubTitle; }
-
+bool SystemTray::animationEnabled() const { return _animationEnabled; }
 
 #endif

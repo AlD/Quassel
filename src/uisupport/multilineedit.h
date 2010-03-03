@@ -53,12 +53,12 @@ public:
   void setCustomFont(const QFont &); // should be used instead setFont(), so we can set our size correctly
 
   // Compatibility methods with the rest of the classes which still expect this to be a QLineEdit
-  inline QString text() { return toPlainText(); }
-  inline QString html() { return toHtml(); }
-  inline int cursorPosition() { return textCursor().position(); }
+  inline QString text() const { return toPlainText(); }
+  inline QString html() const { return toHtml(); }
+  inline int cursorPosition() const { return textCursor().position(); }
   inline void insert(const QString &newText) { insertPlainText(newText); }
   inline void backspace() { keyPressEvent(new QKeyEvent(QEvent::KeyPress, Qt::Key_Backspace, Qt::NoModifier)); }
-  inline bool hasSelectedText() { return textCursor().hasSelection(); }
+  inline bool hasSelectedText() const { return textCursor().hasSelection(); }
 
   inline bool isSingleLine() const { return _singleLine; }
   inline bool pasteProtectionEnabled() const { return _pasteProtectionEnabled; }
@@ -70,6 +70,10 @@ public:
   inline QString rgbColorFromMirc(QString mircColor) const { return _mircColorMap[mircColor]; }
   inline QMap<QString, QString>  mircColorMap() const { return _mircColorMap; }
 
+  inline QStringList history() const { return _history; }
+  inline QHash<int, QString> tempHistory() const { return _tempHistory; }
+  inline qint32 idx() const { return _idx; }
+
 public slots:
   void setMode(Mode mode);
   void setMinHeight(int numLines);
@@ -80,6 +84,10 @@ public slots:
 
   // Note: Enabling wrap will make isSingleLine() not work correctly, so only use this if minHeight() > 1!
   void setWordWrapEnabled(bool enable = true);
+
+  inline void setHistory(QStringList history) { _history = history; }
+  inline void setTempHistory(QHash<int, QString> tempHistory) { _tempHistory = tempHistory; }
+  inline void setIdx(qint32 idx) { _idx = idx; }
 
 signals:
   void textEntered(const QString &text);
@@ -99,13 +107,14 @@ private slots:
   void historyMoveForward();
   void historyMoveBack();
 
-  QString convertHtmlToMircCodes(const QString &text);
+  QString convertRichtextToMircCodes();
   QString convertMircCodesToHtml(const QString &text);
+  bool mircCodesChanged(QTextCursor &cursor, QTextCursor &peekcursor);
 
 private:
-  QStringList history;
-  QHash<int, QString> tempHistory;
-  qint32 idx;
+  QStringList _history;
+  QHash<int, QString> _tempHistory;
+  qint32 _idx;
   Mode _mode;
   bool _singleLine;
   int _minHeight;

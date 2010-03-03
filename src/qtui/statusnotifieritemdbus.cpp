@@ -19,9 +19,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "mainwin.h"
+#include "qtui.h"
 #include "statusnotifieritemdbus.h"
 #include "statusnotifieritem.h"
-#include "qtui.h"
 
 #include <QDBusConnection>
 #include <QPixmap>
@@ -146,7 +147,7 @@ StatusNotifierItemDBus::StatusNotifierItemDBus(StatusNotifierItem *parent)
     m_dbus(QDBusConnection::connectToBus(QDBusConnection::SessionBus, m_service))
 {
    new StatusNotifierItemAdaptor(this);
-   qDebug() << "service is" << m_service;
+   //qDebug() << "service is" << m_service;
    m_dbus.registerService(m_service);
    m_dbus.registerObject("/StatusNotifierItem", this);
 }

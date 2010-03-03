@@ -2,12 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# 
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-10 13:33+0200\n"
+"POT-Creation-Date: 2010-02-25 00:37+0200\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "X-Language: fi_FI\n"
 
@@ -60,8 +59,8 @@ msgid "<b>Version:</b> %1<br><b>Protocol version:</b> %2<br><b>Built:</b> %3"
 msgstr "<b>Versio:</b> %1<br><b>Protokollan versio:</b> %2<br><b>Käännetty:</b> %3"
 
 #: AboutDlg#9
-msgid "<b>A modern, distributed IRC Client</b><br><br>&copy;2005-2009 by the Quassel Project<br><a href=\"http://quassel-irc.org\">http://quassel-irc.org</a><br><a href=\"irc://irc.freenode.net/quassel\">#quassel</a> on <a href=\"http://www.freenode.net\">Freenode</a><br><br>Quassel IRC is dual-licensed under <a href=\"http://www.gnu.org/licenses/gpl-2.0.txt\">GPLv2</a> and <a href=\"http://www.gnu.org/licenses/gpl-3.0.txt\">GPLv3</a>.<br>Most icons are &copy; by the <a href=\"http://www.oxygen-icons.org\">Oxygen Team</a> and used under the <a href=\"http://www.gnu.org/licenses/lgpl.html\">LGPL</a>.<br><br>Please use <a href=\"http://bugs.quassel-irc.org\">http://bugs.quassel-irc.org</a> to report bugs."
-msgstr "<b>Moderni, hajautettu IRC-asiakas</b><br><br>&copy;2005-2009 Quassel Project<br><a href=\"http://quassel-irc.org\">http://quassel-irc.org</a><br><a href=\"irc://irc.freenode.net/quassel\">#quassel</a> verkossa <a href=\"http://www.freenode.net\">Freenode</a><br><br>Quassel IRC on kaksois-lisenssoitu <a href=\"http://www.gnu.org/licenses/gpl-2.0.txt\">GPLv2</a>:n ja <a href=\"http://www.gnu.org/licenses/gpl-3.0.txt\">GPLv3</a>:n alaisuudessa.<br>Suurin osa kuvakkeista on &copy; <a href=\"http://www.oxygen-icons.org\">Oxygen Team</a> ja niitä käytetään <a href=\"http://www.gnu.org/licenses/lgpl.html\">LGPL</a> -lisenssin alaisuudessa.<br><br>Käytä <a href=\"http://bugs.quassel-irc.org\">http://bugs.quassel-irc.org</a> ilmoittaaksesi ohjelmavirheistä."
+msgid "<b>A modern, distributed IRC Client</b><br><br>&copy;2005-2010 by the Quassel Project<br><a href=\"http://quassel-irc.org\">http://quassel-irc.org</a><br><a href=\"irc://irc.freenode.net/quassel\">#quassel</a> on <a href=\"http://www.freenode.net\">Freenode</a><br><br>Quassel IRC is dual-licensed under <a href=\"http://www.gnu.org/licenses/gpl-2.0.txt\">GPLv2</a> and <a href=\"http://www.gnu.org/licenses/gpl-3.0.txt\">GPLv3</a>.<br>Most icons are &copy; by the <a href=\"http://www.oxygen-icons.org\">Oxygen Team</a> and used under the <a href=\"http://www.gnu.org/licenses/lgpl.html\">LGPL</a>.<br><br>Please use <a href=\"http://bugs.quassel-irc.org\">http://bugs.quassel-irc.org</a> to report bugs."
+msgstr "<b>Moderni hajautettu IRC</b><br><br>&copy;2005-2009 Quassel Project<br><a href=\"http://quassel-irc.org\">http://quassel-irc.org</a><br><a href=\"irc://irc.freenode.net/quassel\">#quassel</a> verkossa <a href=\"http://www.freenode.net\">Freenode</a><br><br>Quassel IRC on kaksoislisenssoitu <a href=\"http://www.gnu.org/licenses/gpl-2.0.txt\">GPLv2</a>:n ja <a href=\"http://www.gnu.org/licenses/gpl-3.0.txt\">GPLv3</a>:n alaisuudessa.<br>Suurin osa kuvakkeista on &copy; <a href=\"http://www.oxygen-icons.org\">Oxygen Team</a> ja niitä käytetään <a href=\"http://www.gnu.org/licenses/lgpl.html\">LGPL</a> -lisenssin alaisuudessa.<br><br>Käytä <a href=\"http://bugs.quassel-irc.org\">http://bugs.quassel-irc.org</a> saittia ilmoittaaksesi bugeista."
 
 #: AboutDlg#10
 msgid "Quassel IRC is mainly developed by:"
@@ -73,7 +72,7 @@ msgstr "Haluaisimme kiittää seuraavia henkilöitä (aakkosjärjestyksessä), s
 
 #: AboutDlg#12
 msgid "Special thanks goes to:<br><dl><dt><img src=\":/pics/quassel-eye.png\">&nbsp;<b>John \"nox\" Hand</b></dt><dd>for the original Quassel icon - The All-Seeing Eye</dt><dt><img src=\":/pics/oxygen.png\">&nbsp;<b><a href=\"http://www.oxygen-icons.org\">The Oxygen Team</a></b></dt><dd>for creating all the artwork you see throughout Quassel</dd><dt><img src=\":/pics/qt-logo-32.png\">&nbsp;<b><a href=\"http://www.trolltech.com\">Qt Software formerly known as Trolltech</a></b></dt><dd>for creating Qt and Qtopia, and for sponsoring development of QuasselTopia with Greenphones and more</dd><dt><a href=\"http://www.nokia.com\"><img src=\":/pics/nokia.png\"></a></b></dt><dd>for keeping Qt alive, and for sponsoring development of Quassel Mobile with N810s</dd>"
-msgstr "Erikoiskiitokset:<br><dl><dt><img src=\":/pics/quassel-eye.png\">&nbsp;<b>John \"nox\" Hand</b></dt><dd>alkuperäisestä Quassel-kuvakkeesta - \"The All-Seeing Eye\"</dt><dt><img src=\":/pics/oxygen.png\">&nbsp;<b><a href=\"http://www.oxygen-icons.org\">The Oxygen Team</a></b></dt><dd>Quasselissa nähtävän grafiikan luomisesta</dd><dt><img src=\":/pics/qt-logo-32.png\">&nbsp;<b><a href=\"http://www.trolltech.com\">Qt Software, tunnettu ennen nimellä Trolltech</a></b></dt><dd>Qt:n ja Qtopia:n luonnista, ja QuasselTopia:n luonnin sponsoroinnista Greenphone:illa ja paljon muulla</dd><dt><a href=\"http://www.nokia.com\"><img src=\":/pics/nokia.png\"></a></b></dt><dd>Qt:n hengissä pidosta, ja Quassel Mobile:n kehityksen sponsoroinnista N810:illä</dd>"
+msgstr "Erikoiskiitokset:<br><dl><dt><img src=\":/pics/quassel-eye.png\">&nbsp;<b>John \"nox\" Hand</b></dt><dd>alkuperäisestä Quassel-kuvakkeesta - \"The All-Seeing Eye\"</dt><dt><img src=\":/pics/oxygen.png\">&nbsp;<b><a href=\"http://www.oxygen-icons.org\">The Oxygen Team</a></b></dt><dd>Quasselissa nähtävän grafiikan luomisesta</dd><dt><img src=\":/pics/qt-logo-32.png\">&nbsp;<b><a href=\"http://www.trolltech.com\">Qt Software, tunnettu aiemmin nimellä Trolltech</a></b></dt><dd>Qt:n ja Qtopian luonnista, ja QuasselTopian sponsoroinnista Greenphoneilla ja paljon muulla</dd><dt><a href=\"http://www.nokia.com\"><img src=\":/pics/nokia.png\"></a></b></dt><dd>Qt:n hengissä pidosta, ja Quassel Mobilen kehitystyön sponsoroinnista N810:illä</dd>"
 
 #: AbstractSqlStorage#1
 msgid "Installed Schema (version %1) is not up to date. Upgrading to version %2..."
@@ -97,7 +96,7 @@ msgstr "Alias"
 
 #: AliasesModel#4
 msgid "Expansion"
-msgstr "Laajennos"
+msgstr "Laajennus"
 
 #: AliasesSettingsPage#1
 msgctxt "AliasesSettingsPage#1"
@@ -145,12 +144,12 @@ msgid "Set the application language. Requires restart!"
 msgstr "Aseta sovelluksen kieli. Vaatii uudelleenkäynnistyksen!"
 
 #: AppearanceSettingsPage#6
-msgid "<System Default>"
-msgstr "<Järjestelmän oletus>"
+msgid "<Untranslated>"
+msgstr "<Ei-käännetty>"
 
 #: AppearanceSettingsPage#7
-msgid "<Original>"
-msgstr "<Alkuperäinen>"
+msgid "<System Default>"
+msgstr "<Järjestelmän oletus>"
 
 #: AppearanceSettingsPage#8
 msgid "Use custom stylesheet"
@@ -191,7 +190,7 @@ msgstr "Oletuskohde"
 
 #: AppearanceSettingsPage#17
 msgid "Status Window"
-msgstr "Tilaikuna"
+msgstr "Tilaikkuna"
 
 #: AppearanceSettingsPage#18
 msgid "Current Chat"
@@ -990,6 +989,7 @@ msgid "Hide Events"
 msgstr "Piilota tapahtumat"
 
 #: ContextMenuActionProvider#37
+msgctxt "ContextMenuActionProvider#37"
 msgid "CTCP"
 msgstr "CTCP"
 
@@ -1669,7 +1669,8 @@ msgid "away"
 msgstr "poissa"
 
 #: CoreUserInputHandler#2
-msgid "sending CTCP-%1 request"
+#, fuzzy
+msgid "sending CTCP-%1 request to %2"
 msgstr "lähetetään CTCP-%1 -pyyntö"
 
 #: CreateIdentityDlg#1
@@ -1690,23 +1691,35 @@ msgstr "Luo kopio:"
 
 #: CtcpHandler#1
 msgid "Received CTCP PING request from %1"
-msgstr "Vastaanotettiin CTCP PING -pyyntö koheelta %1"
+msgstr "Vastaanotettiin CTCP PING -pyyntö kohteelta %1"
 
 #: CtcpHandler#2
 msgid "Received CTCP PING answer from %1 with %2 seconds round trip time"
-msgstr "Vastaanotettiin CTCP PING -vastaus koheelta %1, kesti %2 sekuntia"
+msgstr "Vastaanotettiin CTCP PING -vastaus kohteelta %1, round-trip kesti %2 sekuntia"
 
 #: CtcpHandler#3
 msgid "Received CTCP VERSION request by %1"
-msgstr "Vastaanotettiin CTCP VERSION -pyyntö koheelta %1"
+msgstr "Vastaanotettiin CTCP VERSION -pyyntö kohteelta %1"
 
 #: CtcpHandler#4
 msgid "Received CTCP VERSION answer from %1: %2"
-msgstr "Vastaanotettiin CTCP VERSION -vastaus koheelta %1: %2"
+msgstr "Vastaanotettiin CTCP VERSION -vastaus kohteelta %1: %2"
 
 #: CtcpHandler#5
+msgid "Received CTCP TIME request by %1"
+msgstr "Vastaanotettiin CTCP VERSION -pyyntö kohteelta %1"
+
+#: CtcpHandler#6
+msgid "Received CTCP TIME answer from %1: %2"
+msgstr "Vastaanotettiin CTCP VERSION -vastaus kohteelta %1: %2"
+
+#: CtcpHandler#7
 msgid "Received unknown CTCP %1 by %2"
 msgstr "Vastaanotettiin tuntematon CTCP %1 kohteelta %2"
+
+#: CtcpHandler#8
+msgid " with arguments: %1"
+msgstr "argumenteillä: %1"
 
 #: DebugBufferViewOverlay#1
 msgid "Debug BufferView Overlay"
@@ -1750,7 +1763,7 @@ msgstr "Lisää puskurit automaattisesti:"
 
 #: DebugBufferViewOverlay#11
 msgid "Hide inactive buffers:"
-msgstr "Piilota epäaktiiviset puskurit:"
+msgstr "Piilota ei-aktiiviset puskurit:"
 
 #: DebugBufferViewOverlay#12
 msgid "Allowed buffer types:"
@@ -2301,6 +2314,12 @@ msgid "Message"
 msgstr "Viesti"
 
 #: IgnoreListEditDlg#10
+#, fuzzy
+msgctxt "IgnoreListEditDlg#10"
+msgid "CTCP"
+msgstr "CTCP"
+
+#: IgnoreListEditDlg#11
 msgid ""
 "<p><b>Ignore rule:</b></p>\n"
 "<p>Depending on the type of the rule, the text is matched against either:</p>\n"
@@ -2315,25 +2334,25 @@ msgid ""
 "<br />\n"
 "- <i>stupid!.+</i> (RegEx) matches any sender with nickname <i>stupid</i> from any host</p>"
 msgstr ""
-"<p><b>Sudatussääntö:</b></p>\n"
+"<p><b>Suodatussääntö:</b></p>\n"
 "<p>Säännön tyypistä riippuen sitä verrataan joko:</p>\n"
 "<p><u>- viestin sisältöön:</u></p>\n"
 "<p><i>Esimerkki:</i>\n"
 "<br />\n"
-"<i>*foobar*</i> pätee kaikkiien viesteihin jotka sisältävät sanan <i>foobar</i></p>\n"
-"<p><u>- lähettäjämerkkijonoon</u>  <i>(nimimerkki!ident@verkko.osoite)</i></p>\n"
-"<p><i>Esimerkejä:</i>\n"
+"<i>*foobar*</i> pätee kaikkiin viesteihin, jotka sisältävät sanan <i>foobar</i></p>\n"
+"<p><u>- lähettäjän merkkijonoon</u>  <i>(nimimerkki!ident@verkko.osoite)</i></p>\n"
+"<p><i>Esimerkkejä:</i>\n"
 "<br />\n"
-"- <i>*@foobar.com</i> pätee kaikkiin lähettäjiin osoitteesta <i>foobar.com</i>\n"
+"- <i>*@foobar.com</i> osuu kaikkiin lähettäjiin osoitteesta <i>foobar.com</i>\n"
 "<br />\n"
-"- <i>evo!.+</i> (RegEx) pätee kaikkiin lähettäjiin, joiden nimimerkki on <i>evo</i></p>"
+"- <i>evo!.+</i> (RegEx) osuu kaikkiin lähettäjiin, joiden nimimerkki on <i>evo</i></p>"
 
-#: IgnoreListEditDlg#11
-msgctxt "IgnoreListEditDlg#11"
+#: IgnoreListEditDlg#12
+msgctxt "IgnoreListEditDlg#12"
 msgid "Ignore Rule"
 msgstr "Suodatussääntö"
 
-#: IgnoreListEditDlg#12
+#: IgnoreListEditDlg#13
 msgid ""
 "<p><b>Use regular expressions:</b></p>\n"
 "<p>If enabled, rules follow regular expression syntax.</p>\n"
@@ -2343,17 +2362,17 @@ msgid ""
 "?: representing \"exactly one character\"</p>"
 msgstr ""
 "<p><b>Käytä säännöllisiä ilmauksia (RegEx):</b></p>\n"
-"<p>Säännöt tulkitaan säännöllisiksi ilmaisuiksi jos tämä on valittuna.</p>\n"
-"<p>Muussa tapauksessa säännöissä voidaan käyttää seuraavia jokerimerkkejä:</p>\n"
-"<p> * tarkoittaa \"kuinka monta kappaletta tahansa mitä merkkiä tahansa\"\n"
+"<p>Säännöt tulkitaan säännöllisiksi ilmaisuiksi, jos tämä on valittuna.</p>\n"
+"<p>Muutoin säännöissä voidaan käyttää seuraavia jokerimerkkejä:</p>\n"
+"<p> * tarkoittaa \"mitä tahansa merkkiä kuinka monta tahansa\"\n"
 "<br />\n"
 "? tarkoittaa \"tarkalleen yksi merkki\"</p>"
 
-#: IgnoreListEditDlg#13
+#: IgnoreListEditDlg#14
 msgid "Regular expression"
 msgstr "Säännöllinen ilmaus (RegEx)"
 
-#: IgnoreListEditDlg#14
+#: IgnoreListEditDlg#15
 msgid ""
 "<p><b>Scope:</b></p>\n"
 "<p><u>Global:</u></p>\n"
@@ -2367,29 +2386,29 @@ msgstr ""
 "<p><u>Globaali:</u></p>\n"
 "<p>Sääntö on käytössä kaikilla kanavilla kaikissa verkoissa</p>\n"
 "<p><u>Verkko:</u></p>\n"
-"<p>Lista tulkitaan listaksi verkkoja joissa sääntö on käytössä</p>\n"
+"<p>Lista tulkitaan listaksi verkkoja, joissa sääntö on käytössä</p>\n"
 "<p><u>Kanava:</u></p>\n"
-"<p>Lista tulkitaan listaksi kanavia joissa sääntö on käytössä</p>"
+"<p>Lista tulkitaan listaksi kanavia, joissa sääntö on käytössä</p>"
 
-#: IgnoreListEditDlg#15
+#: IgnoreListEditDlg#16
 msgid "Scope"
 msgstr "Laajuus"
 
-#: IgnoreListEditDlg#16
+#: IgnoreListEditDlg#17
 msgid "Global"
 msgstr "Globaali"
 
-#: IgnoreListEditDlg#17
-msgctxt "IgnoreListEditDlg#17"
+#: IgnoreListEditDlg#18
+msgctxt "IgnoreListEditDlg#18"
 msgid "Network"
 msgstr "Verkko"
 
-#: IgnoreListEditDlg#18
-msgctxt "IgnoreListEditDlg#18"
+#: IgnoreListEditDlg#19
+msgctxt "IgnoreListEditDlg#19"
 msgid "Channel"
 msgstr "Kanava"
 
-#: IgnoreListEditDlg#19
+#: IgnoreListEditDlg#20
 msgid ""
 "<p><b>Scope rule:</b></p>\n"
 "<p>A scope rule is a semicolon separated list of either <i>network</i> or <i>channel</i> names.</p>\n"
@@ -2405,9 +2424,9 @@ msgstr ""
 "<br />\n"
 "<i>#quassel*; #foobar</i>\n"
 "<br />\n"
-"tarkoittaisi kanavaa #foobar, sekä kaikkia kanavia joiden nimi alkaa <i>#quassel</i></p>"
+"tarkoittaisi kanavaa #foobar sekä kaikkia kanavia joiden nimi alkaa <i>#quassel</i></p>"
 
-#: IgnoreListEditDlg#20
+#: IgnoreListEditDlg#21
 msgid ""
 "<p><b>Enable / Disable:</b></p>\n"
 "<p>Only enabled rules are filtered.\n"
@@ -2419,7 +2438,7 @@ msgstr ""
 "<br />\n"
 "Dynaamisen säännön käytöstä poistaminen itseasiassa näyttää suodatetut viestit uudelleen</p>"
 
-#: IgnoreListEditDlg#21
+#: IgnoreListEditDlg#22
 msgid "Rule is enabled"
 msgstr "Käytössä"
 
@@ -2509,10 +2528,79 @@ msgid "Form"
 msgstr "Lomake"
 
 #: InputWidget#2
+msgid "White"
+msgstr "Valkoinen"
+
+#: InputWidget#3
+msgid "Black"
+msgstr "Musta"
+
+#: InputWidget#4
+msgid "Dark blue"
+msgstr "Tumma sininen"
+
+#: InputWidget#5
+msgid "Dark green"
+msgstr "Tumma vihreä"
+
+#: InputWidget#6
+msgid "Red"
+msgstr "Punainen"
+
+#: InputWidget#7
+msgid "Dark red"
+msgstr "Tumma punainen"
+
+#: InputWidget#8
+msgid "Dark magenta"
+msgstr "Tumma lila"
+
+#: InputWidget#9
+msgid "Orange"
+msgstr "Oranssi"
+
+#: InputWidget#10
+msgid "Yellow"
+msgstr "Keltainen"
+
+#: InputWidget#11
+msgid "Green"
+msgstr "Vihreä"
+
+#: InputWidget#12
+msgid "Dark cyan"
+msgstr "Tumma turkoosi"
+
+#: InputWidget#13
+msgid "Cyan"
+msgstr "Turkoosi"
+
+#: InputWidget#14
+#, fuzzy
+msgid "Blue"
+msgstr "Sininen"
+
+#: InputWidget#15
+msgid "Magenta"
+msgstr "Lila"
+
+#: InputWidget#16
+msgid "Dark gray"
+msgstr "Tumma harmaa"
+
+#: InputWidget#17
+msgid "Light gray"
+msgstr "Vaalea harmaa"
+
+#: InputWidget#18
+msgid "Clear Color"
+msgstr "Poista väri"
+
+#: InputWidget#19
 msgid "Focus Input Line"
 msgstr "Kohdista syöterivi"
 
-#: InputWidget#3
+#: InputWidget#20
 msgid "Ctrl+L"
 msgstr "Ctrl+L"
 
@@ -2535,39 +2623,44 @@ msgid "Show nick selector"
 msgstr "Näytä nimimerkinvalitsin"
 
 #: InputWidgetSettingsPage#5
+msgid "Show style buttons"
+msgstr "Näytä tyylipainikkeet"
+
+#: InputWidgetSettingsPage#6
 msgid "Multi-Line Editing"
 msgstr "Usean rivin muokkaus"
 
-#: InputWidgetSettingsPage#6
+#: InputWidgetSettingsPage#7
 msgid "Show at most"
 msgstr "Näytä enintään"
 
-#: InputWidgetSettingsPage#7
+#: InputWidgetSettingsPage#8
 msgid "lines"
 msgstr "riviä"
 
-#: InputWidgetSettingsPage#8
+#: InputWidgetSettingsPage#9
 msgid "Enable scrollbars"
 msgstr "Näytä vierityspalkit"
 
-#: InputWidgetSettingsPage#9
+#: InputWidgetSettingsPage#10
 msgid "Tab Completion"
 msgstr "Sarkaintäydennys"
 
-#: InputWidgetSettingsPage#10
+#: InputWidgetSettingsPage#11
 msgid "Completion suffix:"
 msgstr "Täydennyksen loppuliite:"
 
-#: InputWidgetSettingsPage#11
+#: InputWidgetSettingsPage#12
 msgid ": "
 msgstr ": "
 
-#: InputWidgetSettingsPage#12
-msgctxt "InputWidgetSettingsPage#12"
+#: InputWidgetSettingsPage#13
+#, fuzzy
+msgctxt "InputWidgetSettingsPage#13"
 msgid "Interface"
 msgstr "Käyttöliittymä"
 
-#: InputWidgetSettingsPage#13
+#: InputWidgetSettingsPage#14
 msgid "Input Widget"
 msgstr "Syöttöelementti"
 
@@ -2703,6 +2796,10 @@ msgid "Nick already in use: %1"
 msgstr "Nimimerkki jo käytössä: %1"
 
 #: IrcServerHandler#29
+msgid "Nick/channel is temporarily unavailable: %1"
+msgstr "Nimimerkki/kanava ei ole juuri nyt käytettävissä: %1 "
+
+#: IrcServerHandler#30
 msgid "No free and valid nicks in nicklist found. use: /nick <othernick> to continue"
 msgstr "Vapaita ja kelpoja nimimerkkejä ei löytynyt. käytä /nick <nimimerkki> jatkaaksesi"
 
@@ -2826,6 +2923,11 @@ msgstr "Korostus"
 #: ItemViewSettingsPage#25
 msgid "Other activity"
 msgstr "Muu toiminta"
+
+#: KNotificationBackend#1
+msgctxt "KNotificationBackend#1"
+msgid "%n pending highlights"
+msgstr "%n korostusta odottaa"
 
 #: MainWin#1
 msgid "&Connect to Core..."
@@ -3130,12 +3232,14 @@ msgid "Server: %1"
 msgstr "Palvelin: %1"
 
 #: NetworkItem#2
+msgctxt "NetworkItem#2"
 msgid "Users: %1"
 msgstr "Käyttäjiä: %1"
 
 #: NetworkItem#3
+msgctxt "NetworkItem#3"
 msgid "Lag: %1 msecs"
-msgstr "Viive: %1 msec"
+msgstr "Viive: %1 ms"
 
 #: NetworkModel#1
 msgid "Chat"
@@ -3313,22 +3417,31 @@ msgid "Password:"
 msgstr "Salasana:"
 
 #: NetworksSettingsPage#29
+#, fuzzy
+msgid "Use SASL Authentication"
+msgstr "Käytä SSL-varmennetta"
+
+#: NetworksSettingsPage#30
+msgid "Account:"
+msgstr "TIli:"
+
+#: NetworksSettingsPage#31
 msgid "Encodings"
 msgstr "Merkkikoodaukset"
 
-#: NetworksSettingsPage#30
+#: NetworksSettingsPage#32
 msgid "Configure advanced settings such as message encodings and automatic reconnect"
 msgstr "Määritä edistyneitä asetuksia, kuten viestien merkkikoodauksia"
 
-#: NetworksSettingsPage#31
+#: NetworksSettingsPage#33
 msgid "Control encodings for in- and outgoing messages"
 msgstr "Hallitse sisääntulevien ja uloslähtevien viestien merkkikoodauksia"
 
-#: NetworksSettingsPage#32
+#: NetworksSettingsPage#34
 msgid "Use Custom Encodings"
 msgstr "Käytä mukautettuja merkkikoodauksia"
 
-#: NetworksSettingsPage#33
+#: NetworksSettingsPage#35
 msgid ""
 "Specify which encoding your messages will be sent in.\n"
 "UTF-8 should be a sane choice for most networks."
@@ -3336,11 +3449,11 @@ msgstr ""
 "Määritä millä merkkikoodauksella viestisi lähetetään.\n"
 "UTF-8 pitäisi olla hyvä valinta useimmille verkoille."
 
-#: NetworksSettingsPage#34
+#: NetworksSettingsPage#36
 msgid "Send messages in:"
 msgstr "Lähetetyt viestit:"
 
-#: NetworksSettingsPage#35
+#: NetworksSettingsPage#37
 msgid ""
 "Incoming messages encoded in Utf8 will always be treated as such.\n"
 "This setting defines the encoding for messages that are not Utf8."
@@ -3348,11 +3461,11 @@ msgstr ""
 "Sisääntulevat Utf8 viestit käsitellään aina sellaisenaan.\n"
 "Tämä asetus määrittää niiden viestien merkkikoodauksen jotka eivät ole Utf8."
 
-#: NetworksSettingsPage#36
+#: NetworksSettingsPage#38
 msgid "Receive fallback:"
 msgstr "Vastaanotetut:"
 
-#: NetworksSettingsPage#37
+#: NetworksSettingsPage#39
 msgid ""
 "This specifies how control messages, nicks and servernames are encoded.\n"
 "Unless you *really* know what you do, leave this as ISO-8859-1!"
@@ -3360,42 +3473,45 @@ msgstr ""
 "Tämä määrittää miten ohjausviestit, nimimerkit ja palvelinnimet merkkikoodataan.\n"
 "Josset *todella* tiedä mitä teet, jätä tämä ISO-8859-1:ksi!"
 
-#: NetworksSettingsPage#38
+#: NetworksSettingsPage#40
 msgid "Server encoding:"
 msgstr "Palvelin:"
 
-#: NetworksSettingsPage#39
-msgctxt "NetworksSettingsPage#39"
+#: NetworksSettingsPage#41
+#, fuzzy
+msgctxt "NetworksSettingsPage#41"
 msgid "IRC"
 msgstr "IRC"
 
-#: NetworksSettingsPage#40
+#: NetworksSettingsPage#42
 msgid "Networks"
 msgstr "Verkot"
 
-#: NetworksSettingsPage#41
-msgctxt "NetworksSettingsPage#41"
+#: NetworksSettingsPage#43
+#, fuzzy
+msgctxt "NetworksSettingsPage#43"
 msgid "<b>The following problems need to be corrected before your changes can be applied:</b><ul>"
 msgstr "<b>Seuraavat virheet pitää korjata ennen kuin muutoksesi voidaan ottaa käyttöön:</b><ul>"
 
-#: NetworksSettingsPage#42
+#: NetworksSettingsPage#44
 msgid "<li>All networks need at least one server defined</li>"
 msgstr "<li>Jokainen verkko tarvitsee vähintään yhden palvelimen</li>"
 
-#: NetworksSettingsPage#43
-msgctxt "NetworksSettingsPage#43"
+#: NetworksSettingsPage#45
+#, fuzzy
+msgctxt "NetworksSettingsPage#45"
 msgid "</ul>"
 msgstr "</ul>"
 
-#: NetworksSettingsPage#44
+#: NetworksSettingsPage#46
 msgid "Invalid Network Settings"
 msgstr "Virheelliset verkkoasetukset"
 
-#: NetworksSettingsPage#45
+#: NetworksSettingsPage#47
 msgid "Delete Network?"
 msgstr "Poistetaanko verkko?"
 
-#: NetworksSettingsPage#46
+#: NetworksSettingsPage#48
 msgid "Do you really want to delete the network \"%1\" and all related settings, including the backlog?"
 msgstr "Haluatko varmasti poistaa verkon \"%1\" ja kaikki siihen liittyvät asetukset, mukaanlukien takalokin?"
 
@@ -3969,6 +4085,23 @@ msgstr "%1 – %2"
 msgid "Status Buffer"
 msgstr "Tilapuskuri"
 
+#: SystemTray#1
+msgid "&Minimize"
+msgstr "&Minimoi"
+
+#: SystemTray#2
+msgid "&Restore"
+msgstr "&Palauta"
+
+#: SystrayNotificationBackend#1
+#, fuzzy
+msgctxt "SystrayNotificationBackend#1"
+msgid "%n pending highlights"
+msgstr ""
+"\n"
+"            \n"
+"        "
+
 #: SystrayNotificationBackend::ConfigWidget#1
 msgid "System Tray Icon"
 msgstr "Ilmoitusalueen kuvake"
@@ -4125,6 +4258,18 @@ msgstr "Lomake"
 msgctxt "TopicWidget#2"
 msgid "..."
 msgstr "..."
+
+#: TopicWidget#3
+#, fuzzy
+msgctxt "TopicWidget#3"
+msgid "Users: %1"
+msgstr "Käyttäjiä: %1"
+
+#: TopicWidget#4
+#, fuzzy
+msgctxt "TopicWidget#4"
+msgid "Lag: %1 msecs"
+msgstr "Viive: %1 msec"
 
 #: TopicWidgetSettingsPage#1
 msgctxt "TopicWidgetSettingsPage#1"
@@ -4285,3 +4430,22 @@ msgstr "%n puheoikeutettu(a)"
 #: UserCategoryItem#6
 msgid "%n User(s)"
 msgstr "%n käyttäjä(ä)"
+
+#~ msgid "<Original>"
+#~ msgstr "<Alkuperäinen>"
+
+#~ msgctxt "InputWidgetSettingsPage#12"
+#~ msgid "Interface"
+#~ msgstr "Käyttöliittymä"
+
+#~ msgctxt "NetworksSettingsPage#39"
+#~ msgid "IRC"
+#~ msgstr "IRC"
+
+#~ msgctxt "NetworksSettingsPage#41"
+#~ msgid "<b>The following problems need to be corrected before your changes can be applied:</b><ul>"
+#~ msgstr "<b>Seuraavat virheet pitää korjata ennen kuin muutoksesi voidaan ottaa käyttöön:</b><ul>"
+
+#~ msgctxt "NetworksSettingsPage#43"
+#~ msgid "</ul>"
+#~ msgstr "</ul>"

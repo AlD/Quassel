@@ -18,13 +18,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "systraynotificationbackend.h"
+#include <QApplication>
+#include <QCheckBox>
+#include <QGroupBox>
+#include <QHBoxLayout>
 
-#include <QtGui>
+#include "systraynotificationbackend.h"
 
 #include "client.h"
 #include "clientsettings.h"
 #include "icon.h"
+#include "iconloader.h"
 #include "mainwin.h"
 #include "networkmodel.h"
 #include "qtui.h"
@@ -35,13 +39,10 @@ SystrayNotificationBackend::SystrayNotificationBackend(QObject *parent)
   _blockActivation(false)
 {
   NotificationSettings notificationSettings;
-  _showBubble = notificationSettings.value("Systray/ShowBubble", true).toBool();
-  _animate = notificationSettings.value("Systray/Animate", true).toBool();
+  notificationSettings.initAndNotify("Systray/ShowBubble", this, SLOT(showBubbleChanged(QVariant)), true);
+  notificationSettings.initAndNotify("Systray/Animate", this, SLOT(animateChanged(QVariant)), true);
 
-  notificationSettings.notify("Systray/ShowBubble", this, SLOT(showBubbleChanged(const QVariant &)));
-  notificationSettings.notify("Systray/Animate", this, SLOT(animateChanged(const QVariant &)));
-
-  connect(QtUi::mainWindow()->systemTray(), SIGNAL(messageClicked()), SLOT(notificationActivated()));
+  connect(QtUi::mainWindow()->systemTray(), SIGNAL(messageClicked(uint)), SLOT(notificationActivated(uint)));
   connect(QtUi::mainWindow()->systemTray(), SIGNAL(activated(SystemTray::ActivationReason)),
                                             SLOT(notificationActivated(SystemTray::ActivationReason)));
 
@@ -50,13 +51,16 @@ SystrayNotificationBackend::SystrayNotificationBackend(QObject *parent)
   updateToolTip();
 }
 
-void SystrayNotificationBackend::notify(const Notification &notification) {
-  if(notification.type != Highlight && notification.type != PrivMsg)
+void SystrayNotificationBackend::notify(const Notification &n) {
+  if(n.type != Highlight && n.type != PrivMsg)
     return;
 
-  _notifications.append(notification);
-  if(_showBubble)
-    showBubble();
+  _notifications.append(n);
+  if(_showBubble) {
+    QString title = Client::networkModel()->networkName(n.bufferId) + " - " + Client::networkModel()->bufferName(n.bufferId);
+    QString message = QString("<%1> %2").arg(n.sender, n.message);
+    QtUi::mainWindow()->systemTray()->showMessage(title, message, SystemTray::Information, 10000, n.notificationId);
+  }
 
   if(_animate)
     QtUi::mainWindow()->systemTray()->setAlert(true);
@@ -73,7 +77,7 @@ void SystrayNotificationBackend::close(uint notificationId) {
       ++i;
   }
 
-  closeBubble();
+  QtUi::mainWindow()->systemTray()->closeMessage(notificationId);
 
   if(!_notifications.count())
     QtUi::mainWindow()->systemTray()->setAlert(false);
@@ -81,30 +85,13 @@ void SystrayNotificationBackend::close(uint notificationId) {
   updateToolTip();
 }
 
-void SystrayNotificationBackend::showBubble() {
-  // fancy stuff later: show messages in order
-  // for now, we just show the last message
-  if(_notifications.isEmpty())
-    return;
-  Notification n = _notifications.last();
-  QString title = Client::networkModel()->networkName(n.bufferId) + " - " + Client::networkModel()->bufferName(n.bufferId);
-  QString message = QString("<%1> %2").arg(n.sender, n.message);
-  QtUi::mainWindow()->systemTray()->showMessage(title, message);
-}
-
-void SystrayNotificationBackend::closeBubble() {
-  // there really seems to be no sane way to close the bubble... :(
-#ifdef Q_WS_X11
-  QtUi::mainWindow()->systemTray()->showMessage("", "", SystemTray::NoIcon, 1);
-#endif
-}
-
-void SystrayNotificationBackend::notificationActivated() {
+void SystrayNotificationBackend::notificationActivated(uint notificationId) {
   if(!_blockActivation) {
     if(QtUi::mainWindow()->systemTray()->isAlerted()) {
       _blockActivation = true; // prevent double activation because both tray icon and bubble might send a signal
-      uint id = _notifications.count()? _notifications.last().notificationId : 0;
-      emit activated(id);
+      if(!notificationId)
+        notificationId = _notifications.count()? _notifications.last().notificationId : 0;
+      emit activated(notificationId);
     } else
       GraphicalUi::toggleMainWidget();
   }
@@ -112,7 +99,7 @@ void SystrayNotificationBackend::notificationActivated() {
 
 void SystrayNotificationBackend::notificationActivated(SystemTray::ActivationReason reason) {
   if(reason == SystemTray::Trigger) {
-    notificationActivated();
+    notificationActivated(0);
   }
 }
 
@@ -144,23 +131,17 @@ SettingsPage *SystrayNotificationBackend::createConfigWidget() const {
 /***************************************************************************/
 
 SystrayNotificationBackend::ConfigWidget::ConfigWidget(QWidget *parent) : SettingsPage("Internal", "SystrayNotification", parent) {
-  QGroupBox *groupBox = new QGroupBox(tr("System Tray Icon"), this);
-  _animateBox = new QCheckBox(tr("Animate"));
-  connect(_animateBox, SIGNAL(toggled(bool)), this, SLOT(widgetChanged()));
-  _showBubbleBox = new QCheckBox(tr("Show bubble"));
+  _showBubbleBox = new QCheckBox(tr("Show a message in a popup"));
+  _showBubbleBox->setIcon(SmallIcon("dialog-information"));
   connect(_showBubbleBox, SIGNAL(toggled(bool)), this, SLOT(widgetChanged()));
-  QVBoxLayout *layout = new QVBoxLayout(groupBox);
-  layout->addWidget(_animateBox);
+  QHBoxLayout *layout = new QHBoxLayout(this);
   layout->addWidget(_showBubbleBox);
-  layout->addStretch(1);
-  QVBoxLayout *globalLayout = new QVBoxLayout(this);
-  globalLayout->addWidget(groupBox);
-
 }
 
 void SystrayNotificationBackend::ConfigWidget::widgetChanged() {
-  bool changed = (_showBubble != _showBubbleBox->isChecked() || _animate != _animateBox->isChecked());
-  if(changed != hasChanged()) setChangedState(changed);
+  bool changed = (_showBubble != _showBubbleBox->isChecked());
+  if(changed != hasChanged())
+    setChangedState(changed);
 }
 
 bool SystrayNotificationBackend::ConfigWidget::hasDefaults() const {
@@ -168,23 +149,19 @@ bool SystrayNotificationBackend::ConfigWidget::hasDefaults() const {
 }
 
 void SystrayNotificationBackend::ConfigWidget::defaults() {
-  _animateBox->setChecked(true);
   _showBubbleBox->setChecked(false);
   widgetChanged();
 }
 
 void SystrayNotificationBackend::ConfigWidget::load() {
   NotificationSettings s;
-  _animate = s.value("Systray/Animate", true).toBool();
   _showBubble = s.value("Systray/ShowBubble", false).toBool();
-  _animateBox->setChecked(_animate);
   _showBubbleBox->setChecked(_showBubble);
   setChangedState(false);
 }
 
 void SystrayNotificationBackend::ConfigWidget::save() {
   NotificationSettings s;
-  s.setValue("Systray/Animate", _animateBox->isChecked());
   s.setValue("Systray/ShowBubble", _showBubbleBox->isChecked());
   load();
 }

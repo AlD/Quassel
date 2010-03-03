@@ -1,19 +1,23 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Copyright (C) 2010 Free Software Foundation, Inc.
+# This file is distributed under the same license as the quassel package.
+# Daniel Nylander <po@danielnylander.se>, 2010.
 #
-#, fuzzy
 msgid ""
 msgstr ""
+"Project-Id-Version: quassel irc\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-02-25 00:37+0200\n"
+"PO-Revision-Date: 2010-03-02 01:47+0100\n"
+"Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
+"Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
+"MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"X-Language: hu_HU\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Translate Toolkit 1.5.1\n"
 
 #: AboutDlg#1
 msgid "About Quassel"
-msgstr "Quassel Névjegye"
+msgstr "Om Quassel"
 
 #: AboutDlg#2
 msgid ""
@@ -22,6 +26,10 @@ msgid ""
 "</style></head><body style=\" font-family:'DejaVu Sans'; font-size:15pt; font-weight:600; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Quassel IRC</p></body></html>"
 msgstr ""
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'DejaVu Sans'; font-size:15pt; font-weight:600; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Quassel IRC</p></body></html>"
 
 #: AboutDlg#3
 msgid ""
@@ -30,38 +38,42 @@ msgid ""
 "</style></head><body style=\" font-family:'DejaVu Sans'; font-size:10pt; font-weight:600; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Version 0.2.0-pre, Build &gt;= 474 (2008-02-08)</p></body></html>"
 msgstr ""
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'DejaVu Sans'; font-size:10pt; font-weight:600; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Version 0.2.0-pre, Byggd &gt;= 474 (2008-02-08)</p></body></html>"
 
 #: AboutDlg#4
 msgid "&About"
-msgstr "&Névjegy"
+msgstr "&Om"
 
 #: AboutDlg#5
 msgid "A&uthors"
-msgstr "K&észítők"
+msgstr "U&pphovsmän"
 
 #: AboutDlg#6
 msgid "&Contributors"
-msgstr "&Közreműködők"
+msgstr "&Bidragsgivare"
 
 #: AboutDlg#7
 msgid "&Thanks To"
-msgstr ""
+msgstr "&Tack till"
 
 #: AboutDlg#8
 msgid "<b>Version:</b> %1<br><b>Protocol version:</b> %2<br><b>Built:</b> %3"
-msgstr ""
+msgstr "<b>Version:</b> %1<br><b>Protokollversion:</b> %2<br><b>Byggd:</b> %3"
 
 #: AboutDlg#9
 msgid "<b>A modern, distributed IRC Client</b><br><br>&copy;2005-2010 by the Quassel Project<br><a href=\"http://quassel-irc.org\">http://quassel-irc.org</a><br><a href=\"irc://irc.freenode.net/quassel\">#quassel</a> on <a href=\"http://www.freenode.net\">Freenode</a><br><br>Quassel IRC is dual-licensed under <a href=\"http://www.gnu.org/licenses/gpl-2.0.txt\">GPLv2</a> and <a href=\"http://www.gnu.org/licenses/gpl-3.0.txt\">GPLv3</a>.<br>Most icons are &copy; by the <a href=\"http://www.oxygen-icons.org\">Oxygen Team</a> and used under the <a href=\"http://www.gnu.org/licenses/lgpl.html\">LGPL</a>.<br><br>Please use <a href=\"http://bugs.quassel-irc.org\">http://bugs.quassel-irc.org</a> to report bugs."
-msgstr ""
+msgstr "<b>En modern, distribuerad IRC-klient</b><br><br>&copy;2005-2010 Quassel-projektet<br><a href=\"http://quassel-irc.org\">http://quassel-irc.org</a><br><a href=\"irc://irc.freenode.net/quassel\">#quassel</a> på <a href=\"http://www.freenode.net\">Freenode</a><br><br>Quassel IRC är dubbel-licensierad under <a href=\"http://www.gnu.org/licenses/gpl-2.0.txt\">GPLv2</a> och <a href=\"http://www.gnu.org/licenses/gpl-3.0.txt\">GPLv3</a>.<br>De flesta ikoner är &copy; av <a href=\"http://www.oxygen-icons.org\">Oxygen Team</a> och används under <a href=\"http://www.gnu.org/licenses/lgpl.html\">LGPL</a>.<br><br>Använd <a href=\"http://bugs.quassel-irc.org\">http://bugs.quassel-irc.org</a> för att rapportera fel."
 
 #: AboutDlg#10
 msgid "Quassel IRC is mainly developed by:"
-msgstr ""
+msgstr "Quassel IRC utvecklas huvudsakligen av:"
 
 #: AboutDlg#11
 msgid "We would like to thank the following contributors (in alphabetical order) and everybody we forgot to mention here:"
-msgstr "Szeretnénk köszönetet mondani a következő közreműködőknek, és mindazoknak akiket elfelejtettünk megemlíteni itt:"
+msgstr "Vi vill tacka följande bidragsgivare (i alfabetisk ordning) och alla som vi har glömt att nämna här:"
 
 #: AboutDlg#12
 msgid "Special thanks goes to:<br><dl><dt><img src=\":/pics/quassel-eye.png\">&nbsp;<b>John \"nox\" Hand</b></dt><dd>for the original Quassel icon - The All-Seeing Eye</dt><dt><img src=\":/pics/oxygen.png\">&nbsp;<b><a href=\"http://www.oxygen-icons.org\">The Oxygen Team</a></b></dt><dd>for creating all the artwork you see throughout Quassel</dd><dt><img src=\":/pics/qt-logo-32.png\">&nbsp;<b><a href=\"http://www.trolltech.com\">Qt Software formerly known as Trolltech</a></b></dt><dd>for creating Qt and Qtopia, and for sponsoring development of QuasselTopia with Greenphones and more</dd><dt><a href=\"http://www.nokia.com\"><img src=\":/pics/nokia.png\"></a></b></dt><dd>for keeping Qt alive, and for sponsoring development of Quassel Mobile with N810s</dd>"
@@ -73,7 +85,7 @@ msgstr ""
 
 #: AbstractSqlStorage#2
 msgid "Upgrade failed..."
-msgstr ""
+msgstr "Uppgradering misslyckades..."
 
 #: AliasesModel#1
 msgid "<b>The shortcut for the alias</b><br />It can be used as a regular slash command.<br /><br /><b>Example:</b> \"foo\" can be used per /foo"
@@ -85,48 +97,44 @@ msgstr ""
 
 #: AliasesModel#3
 msgid "Alias"
-msgstr "Álnév"
+msgstr "Alias"
 
 #: AliasesModel#4
 msgid "Expansion"
-msgstr "Bővítés"
+msgstr ""
 
 #: AliasesSettingsPage#1
-#, fuzzy
 msgctxt "AliasesSettingsPage#1"
 msgid "Form"
-msgstr "Forma"
+msgstr "Formulär"
 
 #: AliasesSettingsPage#2
-#, fuzzy
 msgctxt "AliasesSettingsPage#2"
 msgid "New"
-msgstr "Új"
+msgstr "Nytt"
 
 #: AliasesSettingsPage#3
-#, fuzzy
 msgctxt "AliasesSettingsPage#3"
 msgid "Delete"
-msgstr "Törlés"
+msgstr "Ta bort"
 
 #: AliasesSettingsPage#4
 msgctxt "AliasesSettingsPage#4"
 msgid "IRC"
-msgstr ""
+msgstr "IRC"
 
 #: AliasesSettingsPage#5
 msgid "Aliases"
-msgstr "Álnevek"
+msgstr "Alias"
 
 #: AppearanceSettingsPage#1
-#, fuzzy
 msgctxt "AppearanceSettingsPage#1"
 msgid "Form"
-msgstr "Forma"
+msgstr "Formulär"
 
 #: AppearanceSettingsPage#2
 msgid "Client style:"
-msgstr "Kliens stilus:"
+msgstr ""
 
 #: AppearanceSettingsPage#3
 msgid "Set application style"
@@ -134,11 +142,11 @@ msgstr ""
 
 #: AppearanceSettingsPage#4
 msgid "Language:"
-msgstr "Nyelv:"
+msgstr "Språk:"
 
 #: AppearanceSettingsPage#5
 msgid "Set the application language. Requires restart!"
-msgstr ""
+msgstr "Ställ in programmets språk. Kräver omstart!"
 
 #: AppearanceSettingsPage#6
 msgid "<Untranslated>"
@@ -146,7 +154,7 @@ msgstr ""
 
 #: AppearanceSettingsPage#7
 msgid "<System Default>"
-msgstr "Alapértelmezett"
+msgstr ""
 
 #: AppearanceSettingsPage#8
 msgid "Use custom stylesheet"
@@ -154,17 +162,16 @@ msgstr ""
 
 #: AppearanceSettingsPage#9
 msgid "Path:"
-msgstr ""
+msgstr "Sökväg:"
 
 #: AppearanceSettingsPage#10
-#, fuzzy
 msgctxt "AppearanceSettingsPage#10"
 msgid "..."
 msgstr "..."
 
 #: AppearanceSettingsPage#11
 msgid "Show system tray icon"
-msgstr "Tálca Ikon Mutatása"
+msgstr ""
 
 #: AppearanceSettingsPage#12
 msgid "Hide to tray on close button"
@@ -172,37 +179,36 @@ msgstr ""
 
 #: AppearanceSettingsPage#13
 msgid "Message Redirection"
-msgstr ""
+msgstr "Omdirigering av meddelanden"
 
 #: AppearanceSettingsPage#14
 msgid "User Notices:"
-msgstr "Felhasználó Figyelmeztetés:"
+msgstr ""
 
 #: AppearanceSettingsPage#15
 msgid "Server Notices:"
-msgstr "Kiszolgáló Figyelmeztetés:"
+msgstr ""
 
 #: AppearanceSettingsPage#16
 msgid "Default Target"
-msgstr "Alapértelmezett Cél"
+msgstr "Standardmål"
 
 #: AppearanceSettingsPage#17
 msgid "Status Window"
-msgstr ""
+msgstr "Statusfönster"
 
 #: AppearanceSettingsPage#18
 msgid "Current Chat"
-msgstr ""
+msgstr "Aktuell chatt"
 
 #: AppearanceSettingsPage#19
 msgid "Errors:"
-msgstr "Hibák:"
+msgstr "Fel:"
 
 #: AppearanceSettingsPage#20
-#, fuzzy
 msgctxt "AppearanceSettingsPage#20"
 msgid "Interface"
-msgstr "Intervallum:"
+msgstr "Gränssnitt"
 
 #: AppearanceSettingsPage#21
 msgid "Please choose a stylesheet file"
@@ -210,25 +216,22 @@ msgstr ""
 
 #: AwayLogView#1
 msgid "Away Log"
-msgstr "Távollét Alatti Naplózás"
+msgstr ""
 
 #: AwayLogView#2
-#, fuzzy
 msgctxt "AwayLogView#2"
 msgid "Show Network Name"
-msgstr "Hálózat Nevének Mutatása"
+msgstr "Visa nätverksnamn"
 
 #: AwayLogView#3
-#, fuzzy
 msgctxt "AwayLogView#3"
 msgid "Show Buffer Name"
-msgstr "Puffer Nevének Mutatása"
+msgstr ""
 
 #: BacklogSettingsPage#1
-#, fuzzy
 msgctxt "BacklogSettingsPage#1"
 msgid "Form"
-msgstr "Forma"
+msgstr "Formulär"
 
 #: BacklogSettingsPage#2
 msgid "Number of messages to be requested from the core when using scrolling up in the buffer view."
@@ -282,10 +285,9 @@ msgid "Limit:"
 msgstr ""
 
 #: BacklogSettingsPage#14
-#, fuzzy
 msgctxt "BacklogSettingsPage#14"
 msgid "Unlimited"
-msgstr "Korlátlan"
+msgstr ""
 
 #: BacklogSettingsPage#15
 msgid "Amount of messages to be fetched in addition to the unread messages. The Limit does not apply here."
@@ -310,10 +312,9 @@ msgid "Maximum amount of messages to be fetched over all buffers."
 msgstr ""
 
 #: BacklogSettingsPage#19
-#, fuzzy
 msgctxt "BacklogSettingsPage#19"
 msgid "Interface"
-msgstr "Intervallum:"
+msgstr "Gränssnitt"
 
 #: BacklogSettingsPage#20
 msgid "Backlog Fetching"
@@ -325,7 +326,7 @@ msgstr "<p> %1 - %2 </p>"
 
 #: BufferView#1
 msgid "Merge buffers permanently?"
-msgstr "Pufferok egyesítése véglegesen?"
+msgstr ""
 
 #: BufferView#2
 msgid ""
@@ -334,10 +335,9 @@ msgid ""
 msgstr ""
 
 #: BufferViewEditDlg#1
-#, fuzzy
 msgctxt "BufferViewEditDlg#1"
 msgid "Dialog"
-msgstr "Párbeszéd"
+msgstr "Dialogruta"
 
 #: BufferViewEditDlg#2
 msgid "Please enter a name for the chat list:"
@@ -345,65 +345,58 @@ msgstr ""
 
 #: BufferViewEditDlg#3
 msgid "Add Chat List"
-msgstr ""
+msgstr "Lägg till chattlista"
 
 #: BufferViewFilter#1
 msgid "Show / Hide Chats"
-msgstr ""
+msgstr "Visa / Dölj chattar"
 
 #: BufferViewSettingsPage#1
-#, fuzzy
 msgctxt "BufferViewSettingsPage#1"
 msgid "Form"
-msgstr "Forma"
+msgstr "Formulär"
 
 #: BufferViewSettingsPage#2
-#, fuzzy
 msgctxt "BufferViewSettingsPage#2"
 msgid "Re&name..."
-msgstr "Át&nevezés..."
+msgstr "B&yt namn..."
 
 #: BufferViewSettingsPage#3
-#, fuzzy
 msgctxt "BufferViewSettingsPage#3"
 msgid "&Add..."
-msgstr "&Hozzáadás..."
+msgstr "&Lägg till..."
 
 #: BufferViewSettingsPage#4
-#, fuzzy
 msgctxt "BufferViewSettingsPage#4"
 msgid "De&lete"
-msgstr "Tö&rlés"
+msgstr "Ta &bort"
 
 #: BufferViewSettingsPage#5
 msgid "Chat List Settings"
-msgstr ""
+msgstr "Inställningar för chattlista"
 
 #: BufferViewSettingsPage#6
-#, fuzzy
 msgctxt "BufferViewSettingsPage#6"
 msgid "Network:"
-msgstr "Hálózatok:"
+msgstr "Nätverk:"
 
 #: BufferViewSettingsPage#7
 msgid "All"
-msgstr "Összes"
+msgstr "Alla"
 
 #: BufferViewSettingsPage#8
 msgid ""
 "This option is not available when all Networks are visible.\n"
 "In this mode no separate status buffer is displayed."
 msgstr ""
-"Ez az opció nem használható amikor minden Hálozat Látható.\n"
-"Ebben a módban különálló státuszpufferek nem láthatók."
 
 #: BufferViewSettingsPage#9
 msgid "Show status window"
-msgstr ""
+msgstr "Visa statusfönster"
 
 #: BufferViewSettingsPage#10
 msgid "Show channels"
-msgstr ""
+msgstr "Visa kanaler"
 
 #: BufferViewSettingsPage#11
 msgid "Show queries"
@@ -419,39 +412,37 @@ msgstr ""
 
 #: BufferViewSettingsPage#14
 msgid "Sort alphabetically"
-msgstr "Alfebetikus rendezés"
+msgstr "Sortera alfabetiskt"
 
 #: BufferViewSettingsPage#15
 msgid "Minimum Activity:"
-msgstr "Minimális Aktivitás:"
+msgstr ""
 
 #: BufferViewSettingsPage#16
 msgid "No Activity"
-msgstr "Nincs Aktivitás"
+msgstr "Ingen aktivitet"
 
 #: BufferViewSettingsPage#17
 msgid "Other Activity"
-msgstr "Egyéb Aktivitás"
+msgstr ""
 
 #: BufferViewSettingsPage#18
 msgid "New Message"
-msgstr "Új Üzenet"
+msgstr "Nytt meddelande"
 
 #: BufferViewSettingsPage#19
-#, fuzzy
 msgctxt "BufferViewSettingsPage#19"
 msgid "Highlight"
-msgstr "Kiemelés"
+msgstr ""
 
 #: BufferViewSettingsPage#20
 msgid "Preview:"
-msgstr "Előnézet:"
+msgstr ""
 
 #: BufferViewSettingsPage#21
-#, fuzzy
 msgctxt "BufferViewSettingsPage#21"
 msgid "Interface"
-msgstr "Intervallum:"
+msgstr "Gränssnitt"
 
 #: BufferViewSettingsPage#22
 msgid "Custom Chat Lists"
@@ -467,39 +458,39 @@ msgstr ""
 
 #: BufferViewWidget#1
 msgid "BufferView"
-msgstr "PufferNézet"
+msgstr ""
 
 #: BufferWidget#1
 msgid "Zoom In"
-msgstr "Nagyítás +"
+msgstr "Zooma in"
 
 #: BufferWidget#2
 msgid "Zoom Out"
-msgstr "Nagyítás -"
+msgstr "Zooma ut"
 
 #: BufferWidget#3
 msgid "Actual Size"
-msgstr "Aktuális Méret"
+msgstr ""
 
 #: ChannelBufferItem#1
 msgid "<b>Channel %1</b>"
-msgstr "<b>Csatorna %1</b>"
+msgstr "<b>Kanal %1</b>"
 
 #: ChannelBufferItem#2
 msgid "<b>Users:</b> %1"
-msgstr "<b>Felhasználók:</b> %1"
+msgstr "<b>Användare:</b> %1"
 
 #: ChannelBufferItem#3
 msgid "<b>Mode:</b> %1"
-msgstr "<b>Mód:</b> %1"
+msgstr "<b>Läge:</b> %1"
 
 #: ChannelBufferItem#4
 msgid "<b>Topic:</b> %1"
-msgstr "<b>Téma:</b> %1"
+msgstr "<b>Ämne:</b> %1"
 
 #: ChannelBufferItem#5
 msgid "Not active <br /> Double-click to join"
-msgstr "Nem Aktív <br /> Dupla-kattintás a csatlakozáshoz"
+msgstr ""
 
 #: ChannelBufferItem#6
 msgid "<p> %1 </p>"
@@ -507,22 +498,21 @@ msgstr "<p> %1 </p>"
 
 #: ChannelListDlg#1
 msgid "Channel List"
-msgstr "Csatorna Lista"
+msgstr "Kanallista"
 
 #: ChannelListDlg#2
 msgid "Search Pattern:"
-msgstr "Minta Keresése:"
+msgstr ""
 
 #: ChannelListDlg#3
-#, fuzzy
 msgid ""
 "Toggle between simple and advanced mode.\n"
 "Advanced mode allows to pass search strings to the IRC Server."
-msgstr "Válassz egyszerű és haladó mód között.\n"
+msgstr ""
 
 #: ChannelListDlg#4
 msgid "Show Channels"
-msgstr "Csatornak Mutatása"
+msgstr "Visa kanaler"
 
 #: ChannelListDlg#5
 msgid "Filter:"
@@ -530,10 +520,9 @@ msgstr "Filter:"
 
 #: ChannelListDlg#6
 msgid "Errors Occured:"
-msgstr "Hibák Történtek:"
+msgstr ""
 
 #: ChannelListDlg#7
-#, fuzzy
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
@@ -541,17 +530,16 @@ msgid ""
 "</style></head><body style=\" font-family:'DejaVu Sans'; font-size:8pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Lucida Grande'; font-size:13pt;\">SUPER EVIL CATASTROPHIC ERROR!!11</span></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Lucida Grande'; font-size:13pt;\"></p></body></html>"
-msgstr "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\"><html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body style=\" font-family:'Trebuchet MS'; font-size:13pt; font-weight:400; font-style:normal;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><img src=\":/pics/quassel-large.png\" /><span style=\" font-size:89pt; color:#00008b;\">uassel IRC</span></p><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:49pt;\"><span style=\" font-size:22pt;\">Csevegj kényelmesen. Bárhol.</span></p></body></html>"
+msgstr ""
 
 #: ChatMonitorSettingsPage#1
-#, fuzzy
 msgctxt "ChatMonitorSettingsPage#1"
 msgid "Form"
-msgstr "Forma"
+msgstr "Formulär"
 
 #: ChatMonitorSettingsPage#2
 msgid "Operation Mode:"
-msgstr "Művelet Mód:"
+msgstr ""
 
 #: ChatMonitorSettingsPage#3
 msgid ""
@@ -570,15 +558,15 @@ msgstr ""
 
 #: ChatMonitorSettingsPage#5
 msgid "Move selected buffers to the left"
-msgstr "KIválasztott pufferok mozgatása balra"
+msgstr ""
 
 #: ChatMonitorSettingsPage#6
 msgid "Move selected buffers to the right"
-msgstr "KIválasztott pufferok mozgatása jobbra"
+msgstr ""
 
 #: ChatMonitorSettingsPage#7
 msgid "Show:"
-msgstr "Mutat:"
+msgstr "Visa:"
 
 #: ChatMonitorSettingsPage#8
 msgid "Show highlights in chatmonitor even if the originating buffer is ignored"
@@ -586,68 +574,62 @@ msgstr ""
 
 #: ChatMonitorSettingsPage#9
 msgid "Always show highlighted messages"
-msgstr "Mindig mutasd a kiemelt üzeneteket"
+msgstr ""
 
 #: ChatMonitorSettingsPage#10
 msgid "Show own messages"
-msgstr "Saját Üzenetek Mutatása"
+msgstr "Visa egna meddelanden"
 
 #: ChatMonitorSettingsPage#11
-#, fuzzy
 msgctxt "ChatMonitorSettingsPage#11"
 msgid "Interface"
-msgstr "Intervallum:"
+msgstr "Gränssnitt"
 
 #: ChatMonitorSettingsPage#12
-#, fuzzy
 msgctxt "ChatMonitorSettingsPage#12"
 msgid "Chat Monitor"
-msgstr "Csevegésfigyelő"
+msgstr ""
 
 #: ChatMonitorSettingsPage#13
 msgid "Opt In"
-msgstr "Bekapcsol"
+msgstr ""
 
 #: ChatMonitorSettingsPage#14
 msgid "Opt Out"
-msgstr "Kikapcsol"
+msgstr ""
 
 #: ChatMonitorSettingsPage#15
 msgid "Ignore:"
-msgstr "Mellőzés:"
+msgstr "Ignorera:"
 
 #: ChatMonitorView#1
 msgid "Show Own Messages"
-msgstr "Saját Üzenetek Mutatása"
+msgstr "Visa egna meddelanden"
 
 #: ChatMonitorView#2
-#, fuzzy
 msgctxt "ChatMonitorView#2"
 msgid "Show Network Name"
-msgstr "Hálózat Nevének Mutatása"
+msgstr "Visa nätverksnamn"
 
 #: ChatMonitorView#3
-#, fuzzy
 msgctxt "ChatMonitorView#3"
 msgid "Show Buffer Name"
-msgstr "Puffer Nevének Mutatása"
+msgstr ""
 
 #: ChatMonitorView#4
 msgid "Configure..."
-msgstr "Beállít..."
+msgstr "Konfigurera..."
 
 #: ChatScene#1
 msgid "Copy Selection"
-msgstr "Kiválasztottak másolása"
+msgstr "Kopiera markering"
 
 #: ChatViewSearchBar#1
-#, fuzzy
 msgctxt "ChatViewSearchBar#1"
 msgid "Form"
-msgstr "Forma"
+msgstr "Formulär"
 
 #: ChatViewSearchBar#2
-#, fuzzy
 msgctxt "ChatViewSearchBar#2"
 msgid "..."
 msgstr "..."
@@ -658,29 +640,28 @@ msgstr ""
 
 #: ChatViewSearchBar#4
 msgid "search nick"
-msgstr "becenév keresése"
+msgstr ""
 
 #: ChatViewSearchBar#5
 msgid "search message"
-msgstr "üzenet keresése"
+msgstr ""
 
 #: ChatViewSearchBar#6
 msgid "ignore joins, parts, etc."
 msgstr ""
 
 #: ChatViewSettingsPage#1
-#, fuzzy
 msgctxt "ChatViewSettingsPage#1"
 msgid "Form"
-msgstr "Forma"
+msgstr "Formulär"
 
 #: ChatViewSettingsPage#2
 msgid "Timestamp format:"
-msgstr ""
+msgstr "Format för tidsstämpel:"
 
 #: ChatViewSettingsPage#3
 msgid "[hh:mm:ss]"
-msgstr ""
+msgstr "[hh:mm:ss]"
 
 #: ChatViewSettingsPage#4
 msgid "Custom chat window font:"
@@ -700,25 +681,24 @@ msgstr ""
 
 #: ChatViewSettingsPage#8
 msgid "Custom Colors"
-msgstr ""
+msgstr "Anpassade färger"
 
 #: ChatViewSettingsPage#9
 msgid "Action:"
-msgstr ""
+msgstr "Åtgärd:"
 
 #: ChatViewSettingsPage#10
-#, fuzzy
 msgctxt "ChatViewSettingsPage#10"
 msgid "..."
 msgstr "..."
 
 #: ChatViewSettingsPage#11
 msgid "Timestamp:"
-msgstr "Időbélyeg:"
+msgstr "Tidsstämpel:"
 
 #: ChatViewSettingsPage#12
 msgid "Channel message:"
-msgstr ""
+msgstr "Kanalmeddelande:"
 
 #: ChatViewSettingsPage#13
 msgid "Highlight foreground:"
@@ -734,19 +714,19 @@ msgstr ""
 
 #: ChatViewSettingsPage#16
 msgid "Server message:"
-msgstr ""
+msgstr "Servermeddelande:"
 
 #: ChatViewSettingsPage#17
 msgid "Marker line:"
-msgstr ""
+msgstr "Markörlinje:"
 
 #: ChatViewSettingsPage#18
 msgid "Error message:"
-msgstr ""
+msgstr "Felmeddelande:"
 
 #: ChatViewSettingsPage#19
 msgid "Background:"
-msgstr ""
+msgstr "Bakgrund:"
 
 #: ChatViewSettingsPage#20
 msgid "Use Sender Coloring"
@@ -754,13 +734,12 @@ msgstr ""
 
 #: ChatViewSettingsPage#21
 msgid "Own messages:"
-msgstr ""
+msgstr "Egna meddelanden:"
 
 #: ChatViewSettingsPage#22
-#, fuzzy
 msgctxt "ChatViewSettingsPage#22"
 msgid "Interface"
-msgstr "Intervallum:"
+msgstr "Gränssnitt"
 
 #: ChatViewSettingsPage#23
 msgid "Chat View"
@@ -768,19 +747,19 @@ msgstr ""
 
 #: Client#1
 msgid "Identity already exists in client!"
-msgstr "A profil már létezik!"
+msgstr ""
 
 #: Client#2
 msgid "All Chats"
-msgstr ""
+msgstr "Alla chattar"
 
 #: ClientBacklogManager#1
 msgid "Processed %1 messages in %2 seconds."
-msgstr ""
+msgstr "Behandlade %1 meddelanden på %2 sekunder."
 
 #: ConnectionSettingsPage#1
 msgid "Configure the IRC Connection"
-msgstr ""
+msgstr "Konfigurera IRC-anslutningen"
 
 #: ConnectionSettingsPage#2
 msgid "Enable Ping Timeout Detection"
@@ -788,16 +767,16 @@ msgstr ""
 
 #: ConnectionSettingsPage#3
 msgid "Ping interval:"
-msgstr ""
+msgstr "Ping-intervall:"
 
 #: ConnectionSettingsPage#4
 msgctxt "ConnectionSettingsPage#4"
 msgid " seconds"
-msgstr ""
+msgstr " sekunder"
 
 #: ConnectionSettingsPage#5
 msgid "Disconnect after"
-msgstr ""
+msgstr "Koppla från efter"
 
 #: ConnectionSettingsPage#6
 msgid "missed pings"
@@ -813,15 +792,15 @@ msgstr ""
 
 #: ConnectionSettingsPage#9
 msgid "Update interval:"
-msgstr ""
+msgstr "Uppdateringsintervall:"
 
 #: ConnectionSettingsPage#10
 msgid "Ignore channels with more than:"
-msgstr ""
+msgstr "Ignorera kanaler med fler än:"
 
 #: ConnectionSettingsPage#11
 msgid " users"
-msgstr ""
+msgstr " användare"
 
 #: ConnectionSettingsPage#12
 msgid "Minimum delay between requests:"
@@ -830,35 +809,31 @@ msgstr ""
 #: ConnectionSettingsPage#13
 msgctxt "ConnectionSettingsPage#13"
 msgid "IRC"
-msgstr ""
+msgstr "IRC"
 
 #: ContentsChatItem#1
 msgid "Copy Link Address"
-msgstr "Hivatkozás Címének Másolása"
+msgstr "Kopiera länkadress"
 
 #: ContextMenuActionProvider#1
-#, fuzzy
 msgctxt "ContextMenuActionProvider#1"
 msgid "Connect"
-msgstr "Csatlakozás"
+msgstr "Anslut"
 
 #: ContextMenuActionProvider#2
-#, fuzzy
 msgctxt "ContextMenuActionProvider#2"
 msgid "Disconnect"
-msgstr "Szétkapcsolás"
+msgstr "Koppla från"
 
 #: ContextMenuActionProvider#3
-#, fuzzy
 msgctxt "ContextMenuActionProvider#3"
 msgid "Join"
-msgstr "Belépés"
+msgstr "Gå in i"
 
 #: ContextMenuActionProvider#4
-#, fuzzy
 msgctxt "ContextMenuActionProvider#4"
 msgid "Part"
-msgstr "Kilépés"
+msgstr ""
 
 #: ContextMenuActionProvider#5
 msgid "Delete Chat(s)..."
@@ -866,31 +841,31 @@ msgstr ""
 
 #: ContextMenuActionProvider#6
 msgid "Go to Chat"
-msgstr ""
+msgstr "Gå till chatt"
 
 #: ContextMenuActionProvider#7
 msgid "Joins"
-msgstr "Belépések"
+msgstr ""
 
 #: ContextMenuActionProvider#8
 msgid "Parts"
-msgstr "Kilépések"
+msgstr ""
 
 #: ContextMenuActionProvider#9
 msgid "Quits"
-msgstr "Kilépések"
+msgstr ""
 
 #: ContextMenuActionProvider#10
 msgid "Nick Changes"
-msgstr "Becenév Változik"
+msgstr ""
 
 #: ContextMenuActionProvider#11
 msgid "Mode Changes"
-msgstr "Mód Változik"
+msgstr ""
 
 #: ContextMenuActionProvider#12
 msgid "Day Changes"
-msgstr "Nap változik"
+msgstr ""
 
 #: ContextMenuActionProvider#13
 msgid "Topic Changes"
@@ -898,77 +873,76 @@ msgstr ""
 
 #: ContextMenuActionProvider#14
 msgid "Set as Default..."
-msgstr "Beállít Alapértelmezettként..."
+msgstr ""
 
 #: ContextMenuActionProvider#15
 msgid "Use Defaults..."
-msgstr "Alapértelmezések Használata..."
+msgstr ""
 
 #: ContextMenuActionProvider#16
 msgid "Join Channel..."
-msgstr "Belépés Csatornára..."
+msgstr ""
 
 #: ContextMenuActionProvider#17
 msgid "Start Query"
-msgstr "Párbeszéd Indítása"
+msgstr ""
 
 #: ContextMenuActionProvider#18
 msgid "Show Query"
-msgstr "Párbeszé megjelenítése"
+msgstr ""
 
 #: ContextMenuActionProvider#19
-#, fuzzy
 msgctxt "ContextMenuActionProvider#19"
 msgid "Whois"
-msgstr "Belépések"
+msgstr "Whois"
 
 #: ContextMenuActionProvider#20
 msgid "Version"
-msgstr ""
+msgstr "Version"
 
 #: ContextMenuActionProvider#21
 msgid "Time"
-msgstr ""
+msgstr "Tid"
 
 #: ContextMenuActionProvider#22
 msgid "Ping"
-msgstr ""
+msgstr "Ping"
 
 #: ContextMenuActionProvider#23
 msgid "Finger"
-msgstr ""
+msgstr "Finger"
 
 #: ContextMenuActionProvider#24
 msgid "Custom..."
-msgstr ""
+msgstr "Anpassad..."
 
 #: ContextMenuActionProvider#25
 msgid "Give Operator Status"
-msgstr "Operátor Jog Adása"
+msgstr ""
 
 #: ContextMenuActionProvider#26
 msgid "Take Operator Status"
-msgstr "Operátor Jog Elvétele"
+msgstr ""
 
 #: ContextMenuActionProvider#27
 msgid "Give Voice"
-msgstr "Voice jog adása"
+msgstr ""
 
 #: ContextMenuActionProvider#28
 msgid "Take Voice"
-msgstr "Voice jog elvétele"
+msgstr ""
 
 #: ContextMenuActionProvider#29
 msgid "Kick From Channel"
-msgstr "Kirugás A Csatornáról"
+msgstr ""
 
 #: ContextMenuActionProvider#30
 msgid "Ban From Channel"
-msgstr "Kitiltás A Csatornáról"
+msgstr ""
 
 #: ContextMenuActionProvider#31
 msgid "Kick && Ban"
-msgstr "Kirúgás && kitiltás"
+msgstr ""
 
 #: ContextMenuActionProvider#32
 msgid "Hide Chat(s) Temporarily"
@@ -980,28 +954,28 @@ msgstr ""
 
 #: ContextMenuActionProvider#34
 msgid "Show Channel List"
-msgstr "Csatorna Lista Mutatása"
+msgstr "Visa kanallista"
 
 #: ContextMenuActionProvider#35
 msgid "Show Ignore List"
-msgstr "Mellőzöttek Listája"
+msgstr ""
 
 #: ContextMenuActionProvider#36
 msgid "Hide Events"
-msgstr "Események Rejtése"
+msgstr "Dölj händelser"
 
 #: ContextMenuActionProvider#37
 msgctxt "ContextMenuActionProvider#37"
 msgid "CTCP"
-msgstr ""
+msgstr "CTCP"
 
 #: ContextMenuActionProvider#38
 msgid "Actions"
-msgstr "Tevékenységek"
+msgstr "Åtgärder"
 
 #: ContextMenuActionProvider#39
 msgid "Ignore"
-msgstr ""
+msgstr "Ignorera"
 
 #: ContextMenuActionProvider#40
 msgid "Add Ignore Rule"
@@ -1028,7 +1002,7 @@ msgstr ""
 
 #: Core#4
 msgid "Admin user or password not set."
-msgstr "Admin felhasználót vagy jelszót nem állítottak be."
+msgstr ""
 
 #: Core#5
 msgid "Could not setup storage!"
@@ -1036,11 +1010,11 @@ msgstr ""
 
 #: Core#6
 msgid "Creating admin user..."
-msgstr "Adminisztrátor Felhasználó Létrehozása..."
+msgstr ""
 
 #: Core#7
 msgid "Invalid listen address %1"
-msgstr ""
+msgstr "Ogiltig lyssningsadress %1"
 
 #: Core#8
 msgid "Listening for GUI clients on IPv4 %1 port %2 using protocol version %3"
@@ -1068,7 +1042,7 @@ msgstr ""
 
 #: Core#14
 msgid "Client connected from"
-msgstr ""
+msgstr "Klient ansluten från"
 
 #: Core#15
 msgid "Closing server for basic setup."
@@ -1083,10 +1057,9 @@ msgid "<b>Your Quassel Client is too old!</b><br>This core needs at least client
 msgstr ""
 
 #: Core#18
-#, fuzzy
 msgctxt "Core#18"
 msgid "Client"
-msgstr "Kliens"
+msgstr "Klient"
 
 #: Core#19
 msgid "too old, rejecting."
@@ -1098,7 +1071,7 @@ msgstr ""
 
 #: Core#21
 msgid "Starting TLS for Client:"
-msgstr "Tls Indítása a Klienshez:"
+msgstr ""
 
 #: Core#22
 msgid "<b>Client not initialized!</b><br>You need to send an init message before trying to login."
@@ -1133,179 +1106,160 @@ msgid "Could not find a session for client:"
 msgstr ""
 
 #: CoreAccount#1
-#, fuzzy
 msgctxt "CoreAccount#1"
 msgid "Internal Core"
-msgstr "Belső mag használata"
+msgstr ""
 
 #: CoreAccountEditDlg#1
 msgid "Edit Core Account"
-msgstr "Mag Profil Szerkesztése"
+msgstr ""
 
 #: CoreAccountEditDlg#2
 msgid "Account Details"
-msgstr "Profil Részletei"
+msgstr ""
 
 #: CoreAccountEditDlg#3
 msgid "Account Name:"
-msgstr "Felhasználói Profil Neve:"
+msgstr "Kontonamn:"
 
 #: CoreAccountEditDlg#4
 msgid "Local Core"
-msgstr "Helyi Mag"
+msgstr ""
 
 #: CoreAccountEditDlg#5
 msgid "Hostname:"
-msgstr "Kiszolgálónév:"
+msgstr "Värdnamn:"
 
 #: CoreAccountEditDlg#6
-#, fuzzy
 msgctxt "CoreAccountEditDlg#6"
 msgid "localhost"
-msgstr "Helyi Kiszolgáló"
+msgstr "localhost"
 
 #: CoreAccountEditDlg#7
-#, fuzzy
 msgctxt "CoreAccountEditDlg#7"
 msgid "Port:"
 msgstr "Port:"
 
 #: CoreAccountEditDlg#8
 msgid "User:"
-msgstr "Felhasználó:"
+msgstr "Användare:"
 
 #: CoreAccountEditDlg#9
-#, fuzzy
 msgctxt "CoreAccountEditDlg#9"
 msgid "Password:"
-msgstr "Jelszó:"
+msgstr "Lösenord:"
 
 #: CoreAccountEditDlg#10
 msgid "Remember"
-msgstr ""
+msgstr "Kom ihåg"
 
 #: CoreAccountEditDlg#11
-#, fuzzy
 msgctxt "CoreAccountEditDlg#11"
 msgid "Use a Proxy"
-msgstr "Proxy Használata"
+msgstr "Använd en proxyserver"
 
 #: CoreAccountEditDlg#12
-#, fuzzy
 msgctxt "CoreAccountEditDlg#12"
 msgid "Proxy Type:"
-msgstr "Proxy Tipusa:"
+msgstr "Proxytyp:"
 
 #: CoreAccountEditDlg#13
 msgctxt "CoreAccountEditDlg#13"
 msgid "Socks 5"
-msgstr ""
+msgstr "Socks 5"
 
 #: CoreAccountEditDlg#14
 msgctxt "CoreAccountEditDlg#14"
 msgid "HTTP"
-msgstr ""
+msgstr "HTTP"
 
 #: CoreAccountEditDlg#15
 msgid "Add Core Account"
-msgstr "Profil Hozzáadása"
+msgstr ""
 
 #: CoreAccountModel#1
-#, fuzzy
 msgctxt "CoreAccountModel#1"
 msgid "Internal Core"
-msgstr "Belső mag használata"
+msgstr ""
 
 #: CoreAccountSettingsPage#1
 msgid "Connect to Quassel Core"
-msgstr "Kapcsolódás a Quassel Maghoz"
+msgstr ""
 
 #: CoreAccountSettingsPage#2
-#, fuzzy
 msgid "Core Accounts"
-msgstr "Profil Hozzáadása"
+msgstr ""
 
 #: CoreAccountSettingsPage#3
 msgid "Edit..."
-msgstr "Szerkesztés..."
+msgstr "Redigera..."
 
 #: CoreAccountSettingsPage#4
-#, fuzzy
 msgctxt "CoreAccountSettingsPage#4"
 msgid "Add..."
-msgstr "Hozzáadás..."
+msgstr "Lägg till..."
 
 #: CoreAccountSettingsPage#5
-#, fuzzy
 msgctxt "CoreAccountSettingsPage#5"
 msgid "Delete"
-msgstr "Törlés"
+msgstr "Ta bort"
 
 #: CoreAccountSettingsPage#6
-#, fuzzy
 msgid "Automatically connect on startup"
-msgstr "Automatikus Újrakapcsolódás"
+msgstr ""
 
 #: CoreAccountSettingsPage#7
-#, fuzzy
 msgid "Connect to last account used"
-msgstr "Kapcsolódás a Quassel Maghoz"
+msgstr ""
 
 #: CoreAccountSettingsPage#8
-#, fuzzy
 msgid "Always connect to"
-msgstr "Kapcsolódás %1 hálózathoz"
+msgstr "Anslut alltid till"
 
 #: CoreAccountSettingsPage#9
-#, fuzzy
 msgctxt "CoreAccountSettingsPage#9"
 msgid "Remote Cores"
-msgstr "Ismétel:"
+msgstr ""
 
 #: CoreConfigWizard#1
 msgid "Core Configuration Wizard"
-msgstr "Mag Konfiguráció Varázsló"
+msgstr ""
 
 #: CoreConfigWizard#2
 msgid "Your core has been successfully configured. Logging you in..."
-msgstr "A magot sikeresen beállítottuk. Bejelentkezés..."
+msgstr ""
 
 #: CoreConfigWizard#3
-#, fuzzy
 msgid "Core configuration failed:<br><b>%1</b><br>Press <em>Next</em> to start over."
-msgstr "Mag konfiguráció nem sikerül:<br><b>%1</b><br>Press <em>Next</em> to start over."
+msgstr ""
 
 #: CoreConfigWizard#4
 msgid "Your are now logged into your freshly configured Quassel Core!<br>Please remember to configure your identities and networks now."
-msgstr "Bejelentkeztél a frissen Konfigurált Quassel magba!<br>Legyen gondod rá, hogy most beállítsd a profilokat és a hálózatokat."
+msgstr ""
 
 #: CoreConfigWizardAdminUserPage#1
-#, fuzzy
 msgctxt "CoreConfigWizardAdminUserPage#1"
 msgid "Form"
-msgstr "Forma"
+msgstr "Formulär"
 
 #: CoreConfigWizardAdminUserPage#2
-#, fuzzy
 msgctxt "CoreConfigWizardAdminUserPage#2"
 msgid "Username:"
-msgstr "Felhasználónév:"
+msgstr "Användarnamn:"
 
 #: CoreConfigWizardAdminUserPage#3
-#, fuzzy
 msgctxt "CoreConfigWizardAdminUserPage#3"
 msgid "Password:"
-msgstr "Jelszó:"
+msgstr "Lösenord:"
 
 #: CoreConfigWizardAdminUserPage#4
 msgid "Repeat password:"
-msgstr "Jelszó Imétlése:"
+msgstr "Upprepa lösenordet:"
 
 #: CoreConfigWizardAdminUserPage#5
-#, fuzzy
 msgctxt "CoreConfigWizardAdminUserPage#5"
 msgid "Remember password"
-msgstr "Jelszó megjegyzése"
+msgstr "Kom ihåg lösenordet"
 
 #: CoreConfigWizardAdminUserPage#6
 msgid ""
@@ -1314,34 +1268,33 @@ msgid ""
 msgstr ""
 
 #: CoreConfigWizardIntroPage#1
-#, fuzzy
 msgctxt "CoreConfigWizardIntroPage#1"
 msgid "Form"
-msgstr "Forma"
+msgstr "Formulär"
 
 #: CoreConfigWizardIntroPage#2
 msgid "This wizard will guide you through the setup of your Quassel Core."
-msgstr "Ez a varázsló segíteni fog téged a Quassel mag Beállításaiban."
+msgstr ""
 
 #: CoreConfigWizardPages::AdminUserPage#1
 msgid "Create Admin User"
-msgstr "Adminisztrátor Felhasználó Létrehozása"
+msgstr ""
 
 #: CoreConfigWizardPages::AdminUserPage#2
 msgid "First, we will create a user on the core. This first user will have administrator privileges."
-msgstr "Először létre fogunk hozni egy felhasználót a magon. Ennek az első felhasználónak adminisztrátor kiváltságai lesznek."
+msgstr ""
 
 #: CoreConfigWizardPages::IntroPage#1
 msgid "Introduction"
-msgstr "Bemutatás"
+msgstr "Introduktion"
 
 #: CoreConfigWizardPages::StorageSelectionPage#1
 msgid "Select Storage Backend"
-msgstr "HáttérTároló kiválasztása"
+msgstr ""
 
 #: CoreConfigWizardPages::StorageSelectionPage#2
 msgid "Please select a database backend for the Quassel Core storage to store the backlog and other data in."
-msgstr "Válassz ki egy adatbázis-tárolót a Quassel mag raktárhoz, hogy tárolja tudja a restanciákat és egyéb adatokat."
+msgstr ""
 
 #: CoreConfigWizardPages::StorageSelectionPage#3
 msgid "Connection Properties"
@@ -1349,152 +1302,134 @@ msgstr ""
 
 #: CoreConfigWizardPages::SyncPage#1
 msgid "Storing Your Settings"
-msgstr "Beállításaid Tárolása"
+msgstr ""
 
 #: CoreConfigWizardPages::SyncPage#2
 msgid "Your settings are now stored in the core, and you will be logged in automatically."
-msgstr "A beállításaidat tárolásra kerültek a magban, és te automatikusan bejelentkezett leszel."
+msgstr ""
 
 #: CoreConfigWizardStorageSelectionPage#1
-#, fuzzy
 msgctxt "CoreConfigWizardStorageSelectionPage#1"
 msgid "Form"
-msgstr "Forma"
+msgstr "Formulär"
 
 #: CoreConfigWizardStorageSelectionPage#2
-#, fuzzy
 msgctxt "CoreConfigWizardStorageSelectionPage#2"
 msgid "Storage Backend:"
-msgstr "Háttér Tároló:"
+msgstr ""
 
 #: CoreConfigWizardStorageSelectionPage#3
 msgid "Description"
-msgstr "Leírás"
+msgstr "Beskrivning"
 
 #: CoreConfigWizardStorageSelectionPage#4
 msgid "Foobar"
 msgstr ""
 
 #: CoreConfigWizardSyncPage#1
-#, fuzzy
 msgctxt "CoreConfigWizardSyncPage#1"
 msgid "Form"
-msgstr "Forma"
+msgstr "Formulär"
 
 #: CoreConfigWizardSyncPage#2
 msgid "Your Choices"
-msgstr "Választásaid"
+msgstr ""
 
 #: CoreConfigWizardSyncPage#3
 msgid "Admin User:"
-msgstr "Adminisztrátor Felhasználó:"
+msgstr ""
 
 #: CoreConfigWizardSyncPage#4
 msgid "foo"
-msgstr ""
+msgstr "foo"
 
 #: CoreConfigWizardSyncPage#5
-#, fuzzy
 msgctxt "CoreConfigWizardSyncPage#5"
 msgid "Storage Backend:"
-msgstr "Háttér Tároló:"
+msgstr ""
 
 #: CoreConfigWizardSyncPage#6
 msgid "bar"
-msgstr ""
+msgstr "bar"
 
 #: CoreConfigWizardSyncPage#7
-#, fuzzy
 msgid "Please wait while your settings are being transmitted to the core..."
-msgstr "Várj, amíg a beállításaidat "
+msgstr ""
 
 #: CoreConnectAuthDlg#1
 msgid "Authentication Required"
 msgstr ""
 
 #: CoreConnectAuthDlg#2
-#, fuzzy
 msgid "Please enter your account data:"
-msgstr "Hálózat nevének megadása:"
+msgstr ""
 
 #: CoreConnectAuthDlg#3
-#, fuzzy
 msgctxt "CoreConnectAuthDlg#3"
 msgid "Password:"
-msgstr "Jelszó:"
+msgstr "Lösenord:"
 
 #: CoreConnectAuthDlg#4
-#, fuzzy
 msgctxt "CoreConnectAuthDlg#4"
 msgid "Username:"
-msgstr "Felhasználónév:"
+msgstr "Användarnamn:"
 
 #: CoreConnectAuthDlg#5
-#, fuzzy
 msgctxt "CoreConnectAuthDlg#5"
 msgid "Remember password"
-msgstr "Jelszó megjegyzése"
+msgstr "Kom ihåg lösenordet"
 
 #: CoreConnectAuthDlg#6
-#, fuzzy
 msgid "Please enter your credentials for %1:"
-msgstr "Hálózat nevének megadása:"
+msgstr ""
 
 #: CoreConnectDlg#1
-#, fuzzy
 msgid "Connect to Core"
-msgstr "Csatlakozás a maghoz..."
+msgstr ""
 
 #: CoreConnection#1
-#, fuzzy
 msgid "Network is down"
-msgstr "Hálózatok"
+msgstr ""
 
 #: CoreConnection#2
-#, fuzzy
 msgid "Disconnected"
-msgstr "Szétkapcsolás"
+msgstr "Frånkopplad"
 
 #: CoreConnection#3
 msgid "Looking up %1..."
-msgstr ""
+msgstr "Slår upp %1..."
 
 #: CoreConnection#4
 msgid "Connecting to %1..."
-msgstr "Kapcsolódás %1 hálózathoz..."
+msgstr "Ansluter till %1..."
 
 #: CoreConnection#5
 msgid "Connected to %1"
-msgstr "Kapcsolódva %1 hálózathoz"
+msgstr "Ansluten till %1"
 
 #: CoreConnection#6
-#, fuzzy
 msgid "Disconnecting from %1..."
-msgstr "Kapcsolódás %1 hálózathoz..."
+msgstr "Kopplar från %1..."
 
 #: CoreConnection#7
 msgid "The Quassel Core you try to connect to is too old! Please consider upgrading."
-msgstr "A Quassel mag amihez csatlakozni próbálsz elavult! Frissítés Ajánlott."
+msgstr ""
 
 #: CoreConnection#8
-#, fuzzy
 msgid "Invalid data received from core"
-msgstr "<b>Érvénytelen Adat érkezett a magból!</b><br>Szétkapcsolás."
+msgstr ""
 
 #: CoreConnection#9
-#, fuzzy
 msgid "Disconnected from core."
-msgstr "&Kapcsolat Bontása"
+msgstr ""
 
 #: CoreConnection#10
-#, fuzzy
 msgid "Unencrypted connection canceled"
-msgstr "Biztonsági Kapcsolat Használata"
+msgstr ""
 
 #: CoreConnection#11
-#, fuzzy
 msgid "Synchronizing to core..."
-msgstr "Csatlakozás a maghoz..."
+msgstr ""
 
 #: CoreConnection#12
 msgid "<b>The Quassel Core you are trying to connect to is too old!</b><br>Need at least core/client protocol v%1 to connect."
@@ -1502,41 +1437,36 @@ msgstr ""
 
 #: CoreConnection#13
 msgid "Logging in..."
-msgstr "Belépés folyamatban…"
+msgstr "Loggar in..."
 
 #: CoreConnection#14
-#, fuzzy
 msgid "Login canceled"
-msgstr "Belépés Csatornára"
+msgstr ""
 
 #: CoreConnection#15
 msgid "Receiving session state"
 msgstr ""
 
 #: CoreConnection#16
-#, fuzzy
 msgid "Synchronizing to %1..."
-msgstr "Kapcsolódás %1 hálózathoz..."
+msgstr "Synkroniserar till %1..."
 
 #: CoreConnection#17
 msgid "Receiving network states"
 msgstr ""
 
 #: CoreConnection#18
-#, fuzzy
 msgid "Synchronized to %1"
-msgstr "Nap váltása: %1"
+msgstr "Synkroniserad till %1"
 
 #: CoreConnectionSettingsPage#1
-#, fuzzy
 msgctxt "CoreConnectionSettingsPage#1"
 msgid "Form"
-msgstr "Forma"
+msgstr "Formulär"
 
 #: CoreConnectionSettingsPage#2
-#, fuzzy
 msgid "Network Status Detection"
-msgstr "Hálózat Részletei"
+msgstr ""
 
 #: CoreConnectionSettingsPage#3
 msgid "Rely on KDE's hardware layer to detect if we're online. Recommended for most KDE users"
@@ -1557,7 +1487,7 @@ msgstr ""
 #: CoreConnectionSettingsPage#7
 msgctxt "CoreConnectionSettingsPage#7"
 msgid " seconds"
-msgstr ""
+msgstr " sekunder"
 
 #: CoreConnectionSettingsPage#8
 msgid "Only disconnect if the network socket gets closed by the operating system. This may take a long time after actually losing connectivity"
@@ -1576,43 +1506,38 @@ msgid "Retry every"
 msgstr ""
 
 #: CoreConnectionSettingsPage#12
-#, fuzzy
 msgctxt "CoreConnectionSettingsPage#12"
 msgid "Remote Cores"
-msgstr "Ismétel:"
+msgstr ""
 
 #: CoreConnectionSettingsPage#13
-#, fuzzy
 msgctxt "CoreConnectionSettingsPage#13"
 msgid "Connection"
-msgstr "Kapcsolat"
+msgstr "Anslutning"
 
 #: CoreConnectionStatusWidget#1
-#, fuzzy
 msgctxt "CoreConnectionStatusWidget#1"
 msgid "Form"
-msgstr "Forma"
+msgstr "Formulär"
 
 #: CoreConnectionStatusWidget#2
-#, fuzzy
 msgctxt "CoreConnectionStatusWidget#2"
 msgid "Message"
-msgstr "Üzenet"
+msgstr "Meddelande"
 
 # seconds
 #: CoreConnectionStatusWidget#3
 msgid "s"
-msgstr ""
+msgstr "s"
 
 # milliseconds
 #: CoreConnectionStatusWidget#4
 msgid "ms"
-msgstr ""
+msgstr "ms"
 
 #: CoreConnectionStatusWidget#5
-#, fuzzy
 msgid "(Lag: %1 %2)"
-msgstr "Késés: %1 msec"
+msgstr ""
 
 #: CoreConnectionStatusWidget#6
 msgid "The connection to your core is encrypted with SSL."
@@ -1624,19 +1549,19 @@ msgstr ""
 
 #: CoreInfoDlg#1
 msgid "Core Information"
-msgstr "Mag Információ"
+msgstr ""
 
 #: CoreInfoDlg#2
 msgid "Version:"
-msgstr "Verzió:"
+msgstr "Version:"
 
 #: CoreInfoDlg#3
 msgid "<core version>"
-msgstr "<mag verzió>"
+msgstr ""
 
 #: CoreInfoDlg#4
 msgid "Uptime:"
-msgstr "Üzemidő:"
+msgstr "Upptid:"
 
 #: CoreInfoDlg#5
 msgid "Connected Clients:"
@@ -1659,27 +1584,25 @@ msgid "<build date>"
 msgstr ""
 
 #: CoreInfoDlg#10
-#, fuzzy
 msgctxt "CoreInfoDlg#10"
 msgid "Close"
-msgstr "Bezár"
+msgstr "Stäng"
 
 #: CoreInfoDlg#11
-#, fuzzy
 msgid "%n Day(s)"
-msgstr "%n Nap(ok)"
+msgstr ""
 
 #: CoreInfoDlg#12
 msgid " %1:%2:%3 (since %4)"
-msgstr ""
+msgstr " %1:%2:%3 (sedan %4)"
 
 #: CoreNetwork#1
 msgid "Connection failed. Cycling to next Server"
-msgstr "Kapcsolódás Sikertelen. Kapcsolódás a következő Kiszolgálóhoz"
+msgstr ""
 
 #: CoreNetwork#2
 msgid "Connecting to %1:%2..."
-msgstr "Kapcsolódás %1:%2 hálózatokhoz..."
+msgstr "Ansluter till %1:%2..."
 
 #: CoreNetwork#3
 msgid "Disconnecting. (%1)"
@@ -1691,17 +1614,16 @@ msgstr ""
 
 #: CoreNetwork#5
 msgid "Could not connect to %1 (%2)"
-msgstr "Nem lehet csatlakozni a %1 (%2)"
+msgstr ""
 
 #: CoreNetwork#6
 msgid "Connection failure: %1"
-msgstr "Kapcsolódás sikertelen %1"
+msgstr ""
 
 #: CoreSession#1
-#, fuzzy
 msgctxt "CoreSession#1"
 msgid "Client"
-msgstr "Kliens"
+msgstr "Klient"
 
 #: CoreSession#2
 msgid "disconnected (UserId: %1)."
@@ -1721,19 +1643,19 @@ msgstr ""
 
 #: CoreUserInputHandler#2
 msgid "sending CTCP-%1 request to %2"
-msgstr ""
+msgstr "skickar CTCP-%1-fråga till %2"
 
 #: CreateIdentityDlg#1
 msgid "Create New Identity"
-msgstr "Új Profil Létrehozása"
+msgstr "Skapa ny identitet"
 
 #: CreateIdentityDlg#2
 msgid "Identity name:"
-msgstr "Profil neve:"
+msgstr ""
 
 #: CreateIdentityDlg#3
 msgid "Create blank identity"
-msgstr "Üres Profil létrehozása"
+msgstr "Skapa tom identitet"
 
 #: CreateIdentityDlg#4
 msgid "Duplicate:"
@@ -1741,7 +1663,7 @@ msgstr ""
 
 #: CtcpHandler#1
 msgid "Received CTCP PING request from %1"
-msgstr ""
+msgstr "Tog emot CTCP PING-fråga från %1"
 
 #: CtcpHandler#2
 msgid "Received CTCP PING answer from %1 with %2 seconds round trip time"
@@ -1749,27 +1671,27 @@ msgstr ""
 
 #: CtcpHandler#3
 msgid "Received CTCP VERSION request by %1"
-msgstr ""
+msgstr "Tog emot CTCP VERSION-fråga av %1"
 
 #: CtcpHandler#4
 msgid "Received CTCP VERSION answer from %1: %2"
-msgstr ""
+msgstr "Tog emot CTCP VERSION-svar från %1: %2"
 
 #: CtcpHandler#5
 msgid "Received CTCP TIME request by %1"
-msgstr ""
+msgstr "Tog emot CTCP TIME-fråga av %1"
 
 #: CtcpHandler#6
 msgid "Received CTCP TIME answer from %1: %2"
-msgstr ""
+msgstr "Tog emot CTCP TIME-svar från %1: %2"
 
 #: CtcpHandler#7
 msgid "Received unknown CTCP %1 by %2"
-msgstr ""
+msgstr "Tog emot okänd CTCP %1 av %2"
 
 #: CtcpHandler#8
 msgid " with arguments: %1"
-msgstr ""
+msgstr " med argument: %1"
 
 #: DebugBufferViewOverlay#1
 msgid "Debug BufferView Overlay"
@@ -1789,11 +1711,11 @@ msgstr ""
 
 #: DebugBufferViewOverlay#5
 msgid "All Networks:"
-msgstr ""
+msgstr "Alla nätverk:"
 
 #: DebugBufferViewOverlay#6
 msgid "Networks:"
-msgstr ""
+msgstr "Nätverk:"
 
 #: DebugBufferViewOverlay#7
 msgid "Buffers:"
@@ -1829,7 +1751,7 @@ msgstr ""
 
 #: DebugConsole#1
 msgid "Debug Console"
-msgstr "Hibakereső Konzol"
+msgstr "Felsökningskonsoll"
 
 #: DebugConsole#2
 msgid "local"
@@ -1837,27 +1759,25 @@ msgstr ""
 
 #: DebugConsole#3
 msgid "core"
-msgstr "mag"
+msgstr ""
 
 #: DebugConsole#4
 msgid "Evaluate!"
-msgstr "Kiértékel!"
+msgstr ""
 
 #: DebugLogWidget#1
 msgid "Debug Log"
-msgstr "Hibakereső Naplózás"
+msgstr ""
 
 #: DebugLogWidget#2
-#, fuzzy
 msgctxt "DebugLogWidget#2"
 msgid "Close"
-msgstr "Bezár"
+msgstr "Stäng"
 
 #: DesktopNotificationConfigWidget#1
-#, fuzzy
 msgctxt "DesktopNotificationConfigWidget#1"
 msgid "Form"
-msgstr "Forma"
+msgstr "Formulär"
 
 #: DesktopNotificationConfigWidget#2
 msgid "Desktop Notification (via D-Bus)"
@@ -1865,7 +1785,7 @@ msgstr ""
 
 #: DesktopNotificationConfigWidget#3
 msgid "Timeout:"
-msgstr "Időtúllépés:"
+msgstr "Tidsgräns:"
 
 #: DesktopNotificationConfigWidget#4
 msgctxt "DesktopNotificationConfigWidget#4"
@@ -1874,7 +1794,7 @@ msgstr ""
 
 #: DesktopNotificationConfigWidget#5
 msgid "Position hint:"
-msgstr "Pozíció tipp:"
+msgstr ""
 
 #: DesktopNotificationConfigWidget#6
 msgid " px"
@@ -1918,23 +1838,21 @@ msgstr ""
 
 #: FontSelector#1
 msgid "Choose..."
-msgstr "Kiválaszt..."
+msgstr "Välj..."
 
 #: HighlightSettingsPage#1
-#, fuzzy
 msgctxt "HighlightSettingsPage#1"
 msgid "Form"
-msgstr "Forma"
+msgstr "Formulär"
 
 #: HighlightSettingsPage#2
 msgid "Custom Highlights"
-msgstr "Egyéni Kiemelések"
+msgstr ""
 
 #: HighlightSettingsPage#3
-#, fuzzy
 msgctxt "HighlightSettingsPage#3"
 msgid "Highlight"
-msgstr "Kiemelés"
+msgstr ""
 
 #: HighlightSettingsPage#4
 msgid "RegEx"
@@ -1946,43 +1864,41 @@ msgstr ""
 
 #: HighlightSettingsPage#6
 msgid "Enable"
-msgstr "Engedélyezés"
+msgstr "Aktivera"
 
 #: HighlightSettingsPage#7
 msgid "Add"
-msgstr "Hozzáadás"
+msgstr "Lägg till"
 
 #: HighlightSettingsPage#8
-#, fuzzy
 msgctxt "HighlightSettingsPage#8"
 msgid "Remove"
-msgstr "Eltávolítás"
+msgstr "Ta bort"
 
 #: HighlightSettingsPage#9
 msgid "Highlight Nicks"
-msgstr "Kiemelt Becenevek"
+msgstr ""
 
 #: HighlightSettingsPage#10
 msgid "All nicks from identity"
-msgstr "Minden Becenév A Profilból"
+msgstr ""
 
 #: HighlightSettingsPage#11
 msgid "Current nick"
-msgstr "Aktuális Becenév"
+msgstr ""
 
 #: HighlightSettingsPage#12
 msgid "None"
-msgstr "Nincs"
+msgstr "Inget"
 
 #: HighlightSettingsPage#13
 msgid "Case sensitive"
 msgstr ""
 
 #: HighlightSettingsPage#14
-#, fuzzy
 msgctxt "HighlightSettingsPage#14"
 msgid "Interface"
-msgstr "Intervallum:"
+msgstr "Gränssnitt"
 
 #: HighlightSettingsPage#15
 msgid "this shouldn't be empty"
@@ -1990,48 +1906,44 @@ msgstr ""
 
 #: HighlightSettingsPage#16
 msgid "highlight rule"
-msgstr "kiemelés szabályai"
+msgstr ""
 
 #: IdentitiesSettingsPage#1
-#, fuzzy
 msgctxt "IdentitiesSettingsPage#1"
 msgid "Rename Identity"
-msgstr "Profil Átnevezése"
+msgstr "Byt namn på identitet"
 
 #: IdentitiesSettingsPage#2
-#, fuzzy
 msgctxt "IdentitiesSettingsPage#2"
 msgid "..."
 msgstr "..."
 
 #: IdentitiesSettingsPage#3
 msgid "Add Identity"
-msgstr "Profil Létrehozása"
+msgstr "Lägg till identitet"
 
 #: IdentitiesSettingsPage#4
-#, fuzzy
 msgctxt "IdentitiesSettingsPage#4"
 msgid "Add..."
-msgstr "Hozzáadás..."
+msgstr "Lägg till..."
 
 #: IdentitiesSettingsPage#5
 msgid "Remove Identity"
-msgstr "Profil Eltávolítása"
+msgstr "Ta bort identitet"
 
 #: IdentitiesSettingsPage#6
 msgctxt "IdentitiesSettingsPage#6"
 msgid "IRC"
-msgstr ""
+msgstr "IRC"
 
 #: IdentitiesSettingsPage#7
 msgid "Identities"
-msgstr "Azonosítók"
+msgstr "Identiteter"
 
 #: IdentitiesSettingsPage#8
-#, fuzzy
 msgctxt "IdentitiesSettingsPage#8"
 msgid "<b>The following problems need to be corrected before your changes can be applied:</b><ul>"
-msgstr "<b>A következő problémák javítása szükséges mielött változtatásaid alkalmazásra kerülnek:</b><ul>"
+msgstr ""
 
 #: IdentitiesSettingsPage#9
 msgid "<li>All identities need an identity name set</li>"
@@ -2052,19 +1964,19 @@ msgstr ""
 #: IdentitiesSettingsPage#13
 msgctxt "IdentitiesSettingsPage#13"
 msgid "</ul>"
-msgstr ""
+msgstr "</ul>"
 
 #: IdentitiesSettingsPage#14
 msgid "One or more identities are invalid"
-msgstr ""
+msgstr "En eller flera identiteter är ogiltiga"
 
 #: IdentitiesSettingsPage#15
 msgid "Delete Identity?"
-msgstr "Adatlap Törlése?"
+msgstr "Ta bort identitet?"
 
 #: IdentitiesSettingsPage#16
 msgid "Do you really want to delete identity \"%1\"?"
-msgstr "Biztosan törlöd a \"%1\" profilt?"
+msgstr ""
 
 #: IdentitiesSettingsPage#17
 msgid "Please enter a new name for the identity \"%1\"!"
@@ -2072,15 +1984,15 @@ msgstr ""
 
 #: Identity#1
 msgid "Quassel IRC User"
-msgstr "Quassel IRC Felhasználó"
+msgstr "Quassel IRC-användare"
 
 #: Identity#2
 msgid "<empty>"
-msgstr ""
+msgstr "<tom>"
 
 #: Identity#3
 msgid "Gone fishing."
-msgstr "Pecázni Mentem."
+msgstr "Gått och fiskat."
 
 #: Identity#4
 msgid "Not here. No, really. not here!"
@@ -2092,19 +2004,19 @@ msgstr ""
 
 #: Identity#6
 msgid "Kindergarten is elsewhere!"
-msgstr ""
+msgstr "Detta är inte ett dagis!"
 
 #: Identity#7
 msgid "http://quassel-irc.org - Chat comfortably. Anywhere."
-msgstr "http://quassel-irc.org - Csevegj kényelmesen. Bárhol."
+msgstr "http://quassel-irc.org - Chatta smidigt. Överallt."
 
 #: IdentityEditWidget#1
 msgid "General"
-msgstr "Általános"
+msgstr "Allmänt"
 
 #: IdentityEditWidget#2
 msgid "Real Name:"
-msgstr "Valódi Név:"
+msgstr "Riktigt namn:"
 
 #: IdentityEditWidget#3
 msgid "The \"Real Name\" is shown in /whois."
@@ -2112,41 +2024,36 @@ msgstr ""
 
 #: IdentityEditWidget#4
 msgid "Nicknames"
-msgstr "Becenevek"
+msgstr "Smeknamn"
 
 #: IdentityEditWidget#5
-#, fuzzy
 msgctxt "IdentityEditWidget#5"
 msgid "Add Nickname"
-msgstr "Becenév Hozzáadása"
+msgstr "Lägg till smeknamn"
 
 #: IdentityEditWidget#6
-#, fuzzy
 msgctxt "IdentityEditWidget#6"
 msgid "&Add..."
-msgstr "&Hozzáadás..."
+msgstr "&Lägg till..."
 
 #: IdentityEditWidget#7
 msgid "Remove Nickname"
-msgstr "Becenév Eltávolítása"
+msgstr "Ta bort smeknamn"
 
 #: IdentityEditWidget#8
-#, fuzzy
 msgctxt "IdentityEditWidget#8"
 msgid "Remove"
-msgstr "Eltávolítás"
+msgstr "Ta bort"
 
 #: IdentityEditWidget#9
-#, fuzzy
 msgctxt "IdentityEditWidget#9"
 msgid "Rename Identity"
-msgstr "Profil Átnevezése"
+msgstr "Byt namn på identitet"
 
 #: IdentityEditWidget#10
-#, fuzzy
 msgctxt "IdentityEditWidget#10"
 msgid "Re&name..."
-msgstr "Át&nevezés..."
+msgstr "B&yt namn..."
 
 #: IdentityEditWidget#11
 msgctxt "IdentityEditWidget#11"
@@ -2154,7 +2061,6 @@ msgid "Move upwards in list"
 msgstr ""
 
 #: IdentityEditWidget#12
-#, fuzzy
 msgctxt "IdentityEditWidget#12"
 msgid "..."
 msgstr "..."
@@ -2166,7 +2072,7 @@ msgstr ""
 
 #: IdentityEditWidget#14
 msgid "A&way"
-msgstr "T&ávollévő"
+msgstr ""
 
 #: IdentityEditWidget#15
 msgid "Default Away Settings"
@@ -2174,19 +2080,19 @@ msgstr ""
 
 #: IdentityEditWidget#16
 msgid "Nick to be used when being away"
-msgstr "Távollét Alatt használt Becenév"
+msgstr ""
 
 #: IdentityEditWidget#17
 msgid "Default away reason"
-msgstr "Alapértelmezett"
+msgstr ""
 
 #: IdentityEditWidget#18
 msgid "Away Nick:"
-msgstr "Becenév Távollét Alatt:"
+msgstr ""
 
 #: IdentityEditWidget#19
 msgid "Away Reason:"
-msgstr "Távollét oka:"
+msgstr ""
 
 #: IdentityEditWidget#20
 msgid "Set away when all clients have detached from the core"
@@ -2198,7 +2104,7 @@ msgstr ""
 
 #: IdentityEditWidget#22
 msgid "Not implemented yet"
-msgstr ""
+msgstr "Inte implementerat ännu"
 
 #: IdentityEditWidget#23
 msgid "Away On Idle"
@@ -2213,14 +2119,13 @@ msgid "minutes of being idle"
 msgstr ""
 
 #: IdentityEditWidget#26
-#, fuzzy
 msgctxt "IdentityEditWidget#26"
 msgid "Advanced"
-msgstr "Haladó"
+msgstr "Avancerat"
 
 #: IdentityEditWidget#27
 msgid "Ident:"
-msgstr ""
+msgstr "Ident:"
 
 #: IdentityEditWidget#28
 msgid "The \"ident\" is part of your hostmask and, together with your host, uniquely identifies you within the IRC network."
@@ -2228,19 +2133,19 @@ msgstr ""
 
 #: IdentityEditWidget#29
 msgid "Messages"
-msgstr "Üzenetek"
+msgstr "Meddelanden"
 
 #: IdentityEditWidget#30
 msgid "Part Reason:"
-msgstr "Távozás oka:"
+msgstr ""
 
 #: IdentityEditWidget#31
 msgid "Quit Reason:"
-msgstr "Kilépés oka:"
+msgstr ""
 
 #: IdentityEditWidget#32
 msgid "Kick Reason:"
-msgstr "Kirúgás Indoka:"
+msgstr ""
 
 #: IdentityEditWidget#33
 msgid "You need an SSL Capable Client to edit your Cores SSL Key and Certificate"
@@ -2253,38 +2158,37 @@ msgid ""
 msgstr ""
 
 #: IdentityEditWidget#35
-#, fuzzy
 msgctxt "IdentityEditWidget#35"
 msgid "Continue"
-msgstr "Folytatás"
+msgstr "Fortsätt"
 
 #: IdentityEditWidget#36
 msgid "Use SSL Key"
-msgstr "SSL kulcs használata"
+msgstr "Använd SSL-nyckel"
 
 #: IdentityEditWidget#37
 msgid "Key Type:"
-msgstr ""
+msgstr "Nyckeltyp:"
 
 #: IdentityEditWidget#38
 msgid "No Key loaded"
-msgstr ""
+msgstr "Ingen nyckel inläst"
 
 #: IdentityEditWidget#39
 msgid "Load"
-msgstr "Betöltés"
+msgstr "Läs in"
 
 #: IdentityEditWidget#40
 msgid "Use SSL Certificate"
-msgstr ""
+msgstr "Använd SSL-certifikat"
 
 #: IdentityEditWidget#41
 msgid "Organisation:"
-msgstr ""
+msgstr "Organisation:"
 
 #: IdentityEditWidget#42
 msgid "No Certificate loaded"
-msgstr ""
+msgstr "Inget certifikat inläst"
 
 #: IdentityEditWidget#43
 msgid "CommonName:"
@@ -2292,31 +2196,31 @@ msgstr ""
 
 #: IdentityEditWidget#44
 msgid "Load a Key"
-msgstr ""
+msgstr "Läs in en nyckel"
 
 #: IdentityEditWidget#45
 msgid "RSA"
-msgstr ""
+msgstr "RSA"
 
 #: IdentityEditWidget#46
 msgid "DSA"
-msgstr ""
+msgstr "DSA"
 
 #: IdentityEditWidget#47
 msgid "Clear"
-msgstr ""
+msgstr "Töm"
 
 #: IdentityEditWidget#48
 msgid "Load a Certificate"
-msgstr ""
+msgstr "Läs in ett certifikat"
 
 #: IdentityPage#1
 msgid "Setup Identity"
-msgstr ""
+msgstr "Konfigurera identitet"
 
 #: IdentityPage#2
 msgid "Default Identity"
-msgstr "Alapértelmezett Profil"
+msgstr "Standardidentitet"
 
 #: IgnoreListEditDlg#1
 msgid "Configure Ignore Rule"
@@ -2334,15 +2238,15 @@ msgstr ""
 
 #: IgnoreListEditDlg#3
 msgid "Strictness"
-msgstr ""
+msgstr "Strikthet"
 
 #: IgnoreListEditDlg#4
 msgid "Dynamic"
-msgstr ""
+msgstr "Dynamisk"
 
 #: IgnoreListEditDlg#5
 msgid "Permanent"
-msgstr ""
+msgstr "Permanent"
 
 #: IgnoreListEditDlg#6
 msgid ""
@@ -2360,18 +2264,17 @@ msgstr ""
 
 #: IgnoreListEditDlg#8
 msgid "Sender"
-msgstr ""
+msgstr "Avsändare"
 
 #: IgnoreListEditDlg#9
-#, fuzzy
 msgctxt "IgnoreListEditDlg#9"
 msgid "Message"
-msgstr "Üzenet"
+msgstr "Meddelande"
 
 #: IgnoreListEditDlg#10
 msgctxt "IgnoreListEditDlg#10"
 msgid "CTCP"
-msgstr ""
+msgstr "CTCP"
 
 #: IgnoreListEditDlg#11
 msgid ""
@@ -2390,10 +2293,9 @@ msgid ""
 msgstr ""
 
 #: IgnoreListEditDlg#12
-#, fuzzy
 msgctxt "IgnoreListEditDlg#12"
 msgid "Ignore Rule"
-msgstr "Mellőzés:"
+msgstr ""
 
 #: IgnoreListEditDlg#13
 msgid ""
@@ -2429,16 +2331,14 @@ msgid "Global"
 msgstr ""
 
 #: IgnoreListEditDlg#18
-#, fuzzy
 msgctxt "IgnoreListEditDlg#18"
 msgid "Network"
-msgstr "Hálózatok:"
+msgstr "Nätverk"
 
 #: IgnoreListEditDlg#19
-#, fuzzy
 msgctxt "IgnoreListEditDlg#19"
 msgid "Channel"
-msgstr "Csatorna"
+msgstr "Kanal"
 
 #: IgnoreListEditDlg#20
 msgid ""
@@ -2481,44 +2381,40 @@ msgstr ""
 
 #: IgnoreListModel#5
 msgid "Enabled"
-msgstr ""
+msgstr "Aktiverad"
 
 #: IgnoreListModel#6
 msgid "Type"
-msgstr ""
+msgstr "Typ"
 
 #: IgnoreListModel#7
-#, fuzzy
 msgctxt "IgnoreListModel#7"
 msgid "Ignore Rule"
-msgstr "Mellőzés:"
+msgstr ""
 
 #: IgnoreListSettingsPage#1
-#, fuzzy
 msgctxt "IgnoreListSettingsPage#1"
 msgid "Form"
-msgstr "Forma"
+msgstr "Formulär"
 
 #: IgnoreListSettingsPage#2
-#, fuzzy
 msgctxt "IgnoreListSettingsPage#2"
 msgid "New"
-msgstr "Új"
+msgstr "Ny"
 
 #: IgnoreListSettingsPage#3
-#, fuzzy
 msgctxt "IgnoreListSettingsPage#3"
 msgid "Delete"
-msgstr "Törlés"
+msgstr "Ta bort"
 
 #: IgnoreListSettingsPage#4
 msgid "&Edit"
-msgstr ""
+msgstr "R&edigera"
 
 #: IgnoreListSettingsPage#5
 msgctxt "IgnoreListSettingsPage#5"
 msgid "IRC"
-msgstr ""
+msgstr "IRC"
 
 #: IgnoreListSettingsPage#6
 msgid "Ignore List"
@@ -2536,85 +2432,82 @@ msgid ""
 msgstr ""
 
 #: IndicatorNotificationConfigWidget#1
-#, fuzzy
 msgctxt "IndicatorNotificationConfigWidget#1"
 msgid "Form"
-msgstr "Forma"
+msgstr "Formulär"
 
 #: IndicatorNotificationConfigWidget#2
 msgid "Show messages in indicator"
-msgstr ""
+msgstr "Visa meddelanden i indikator"
 
 #: InputWidget#1
-#, fuzzy
 msgctxt "InputWidget#1"
 msgid "Form"
-msgstr "Forma"
+msgstr "Formulär"
 
 #: InputWidget#2
 msgid "White"
-msgstr ""
+msgstr "Vit"
 
 #: InputWidget#3
 msgid "Black"
-msgstr ""
+msgstr "Svart"
 
 #: InputWidget#4
 msgid "Dark blue"
-msgstr ""
+msgstr "Mörkblå"
 
 #: InputWidget#5
 msgid "Dark green"
-msgstr ""
+msgstr "Mörkgrön"
 
 #: InputWidget#6
 msgid "Red"
-msgstr ""
+msgstr "Röd"
 
 #: InputWidget#7
 msgid "Dark red"
-msgstr ""
+msgstr "Mörkröd"
 
 #: InputWidget#8
 msgid "Dark magenta"
-msgstr ""
+msgstr "Mörk magenta"
 
 #: InputWidget#9
 msgid "Orange"
-msgstr ""
+msgstr "Orange"
 
 #: InputWidget#10
 msgid "Yellow"
-msgstr ""
+msgstr "Gul"
 
 #: InputWidget#11
 msgid "Green"
-msgstr ""
+msgstr "Grön"
 
 #: InputWidget#12
 msgid "Dark cyan"
-msgstr ""
+msgstr "Mörk cyan"
 
 #: InputWidget#13
 msgid "Cyan"
-msgstr ""
+msgstr "Cyan"
 
 #: InputWidget#14
-#, fuzzy
 msgid "Blue"
-msgstr "Puffer"
+msgstr "Blå"
 
 #: InputWidget#15
 msgid "Magenta"
-msgstr ""
+msgstr "Magenta"
 
 #: InputWidget#16
 msgid "Dark gray"
-msgstr ""
+msgstr "Mörkgrå"
 
 #: InputWidget#17
 msgid "Light gray"
-msgstr ""
+msgstr "Ljusgrå"
 
 #: InputWidget#18
 msgid "Clear Color"
@@ -2629,10 +2522,9 @@ msgid "Ctrl+L"
 msgstr ""
 
 #: InputWidgetSettingsPage#1
-#, fuzzy
 msgctxt "InputWidgetSettingsPage#1"
 msgid "Form"
-msgstr "Forma"
+msgstr "Formulär"
 
 #: InputWidgetSettingsPage#2
 msgctxt "InputWidgetSettingsPage#2"
@@ -2648,9 +2540,8 @@ msgid "Show nick selector"
 msgstr ""
 
 #: InputWidgetSettingsPage#5
-#, fuzzy
 msgid "Show style buttons"
-msgstr "Tálca Ikon Mutatása"
+msgstr ""
 
 #: InputWidgetSettingsPage#6
 msgid "Multi-Line Editing"
@@ -2658,15 +2549,15 @@ msgstr ""
 
 #: InputWidgetSettingsPage#7
 msgid "Show at most"
-msgstr ""
+msgstr "Visa som mest"
 
 #: InputWidgetSettingsPage#8
 msgid "lines"
-msgstr ""
+msgstr "rader"
 
 #: InputWidgetSettingsPage#9
 msgid "Enable scrollbars"
-msgstr ""
+msgstr "Aktivera rullningslister"
 
 #: InputWidgetSettingsPage#10
 msgid "Tab Completion"
@@ -2678,13 +2569,12 @@ msgstr ""
 
 #: InputWidgetSettingsPage#12
 msgid ": "
-msgstr ""
+msgstr ": "
 
 #: InputWidgetSettingsPage#13
-#, fuzzy
 msgctxt "InputWidgetSettingsPage#13"
 msgid "Interface"
-msgstr "Intervallum:"
+msgstr "Gränssnitt"
 
 #: InputWidgetSettingsPage#14
 msgid "Input Widget"
@@ -2692,49 +2582,46 @@ msgstr ""
 
 #: IrcConnectionWizard#1
 msgid "Save && Connect"
-msgstr ""
+msgstr "Spara och anslut"
 
 #: IrcListModel#1
-#, fuzzy
 msgctxt "IrcListModel#1"
 msgid "Channel"
-msgstr "Csatorna"
+msgstr "Kanal"
 
 #: IrcListModel#2
 msgid "Users"
-msgstr "Felhasználók"
+msgstr "Användare"
 
 #: IrcListModel#3
-#, fuzzy
 msgctxt "IrcListModel#3"
 msgid "Topic"
-msgstr "Téma"
+msgstr "Ämne"
 
 #: IrcServerHandler#1
 msgid "%1 has changed topic for %2 to: \"%3\""
-msgstr ""
+msgstr "%1 har ändrat ämnet för %2 till: \"%3\""
 
 #: IrcServerHandler#2
 msgid "Received RPL_ISUPPORT (005) without parameters!"
-msgstr ""
+msgstr "Tog emot RPL_ISUPPORT (005) utan parametrar!"
 
 #: IrcServerHandler#3
 msgid "Received non RFC compliant RPL_ISUPPORT: this can lead to unexpected behavior!"
 msgstr ""
 
 #: IrcServerHandler#4
-#, fuzzy
 msgctxt "IrcServerHandler#4"
 msgid "%1"
 msgstr "%1"
 
 #: IrcServerHandler#5
 msgid "[Whois] %1 is away: \"%2\""
-msgstr ""
+msgstr "[Whois] %1 är frånvarande: \"%2\""
 
 #: IrcServerHandler#6
 msgid "%1 is away: \"%2\""
-msgstr ""
+msgstr "%1 är frånvarande: \"%2\""
 
 #: IrcServerHandler#7
 msgid "[Whois] %1"
@@ -2746,7 +2633,7 @@ msgstr ""
 
 #: IrcServerHandler#9
 msgid "%1 is online via %2 (%3)"
-msgstr ""
+msgstr "%1 är ansluten via %2 (%3)"
 
 #: IrcServerHandler#10
 msgid "[Whowas] %1"
@@ -2786,43 +2673,43 @@ msgstr ""
 
 #: IrcServerHandler#19
 msgid "Channel %1 has %2 users. Topic is: %3"
-msgstr ""
+msgstr "Kanalen %1 har %2 användare. Ämnet är: %3"
 
 #: IrcServerHandler#20
 msgid "End of channel list"
-msgstr ""
+msgstr "Slut på kanallistan"
 
 #: IrcServerHandler#21
 msgid "Homepage for %1 is %2"
-msgstr ""
+msgstr "Webbsidan för %1 är %2"
 
 #: IrcServerHandler#22
 msgid "Channel %1 created on %2"
-msgstr ""
+msgstr "Kanalen %1 skapades %2"
 
 #: IrcServerHandler#23
 msgid "No topic is set for %1."
-msgstr ""
+msgstr "Inget ämne har ställts in för %1."
 
 #: IrcServerHandler#24
 msgid "Topic for %1 is \"%2\""
-msgstr ""
+msgstr "Ämnet för %1 är \"%2\""
 
 #: IrcServerHandler#25
 msgid "Topic set by %1 on %2"
-msgstr ""
+msgstr "Ämnet inställt av %1 den %2"
 
 #: IrcServerHandler#26
 msgid "[Who] %1"
-msgstr ""
+msgstr "[Who] %1"
 
 #: IrcServerHandler#27
 msgid "Nick %1 contains illegal characters"
-msgstr ""
+msgstr "Smeknamnet %1 innehåller otillåtna tecken"
 
 #: IrcServerHandler#28
 msgid "Nick already in use: %1"
-msgstr ""
+msgstr "Smeknamnet används redan: %1"
 
 #: IrcServerHandler#29
 msgid "Nick/channel is temporarily unavailable: %1"
@@ -2833,28 +2720,24 @@ msgid "No free and valid nicks in nicklist found. use: /nick <othernick> to cont
 msgstr ""
 
 #: IrcUserItem#1
-#, fuzzy
 msgctxt "IrcUserItem#1"
 msgid "idling since %1"
-msgstr "bejelentkezési idő: %1"
+msgstr ""
 
 #: IrcUserItem#2
-#, fuzzy
 msgctxt "IrcUserItem#2"
 msgid "login time: %1"
-msgstr "bejelentkezési idő: %1"
+msgstr ""
 
 #: IrcUserItem#3
-#, fuzzy
 msgctxt "IrcUserItem#3"
 msgid "server: %1"
-msgstr "kiszolgáló: %1"
+msgstr "server: %1"
 
 #: ItemViewSettingsPage#1
-#, fuzzy
 msgctxt "ItemViewSettingsPage#1"
 msgid "Form"
-msgstr "Forma"
+msgstr "Formulär"
 
 #: ItemViewSettingsPage#2
 msgctxt "ItemViewSettingsPage#2"
@@ -2863,15 +2746,15 @@ msgstr ""
 
 #: ItemViewSettingsPage#3
 msgid "Show icons"
-msgstr ""
+msgstr "Visa ikoner"
 
 #: ItemViewSettingsPage#4
 msgid "Chat List"
-msgstr ""
+msgstr "Chattlista"
 
 #: ItemViewSettingsPage#5
 msgid "Display topic in tooltip"
-msgstr "Téma megjelenítése gyorstippként"
+msgstr ""
 
 #: ItemViewSettingsPage#6
 msgid "Mouse wheel changes selected chat"
@@ -2879,29 +2762,28 @@ msgstr ""
 
 #: ItemViewSettingsPage#7
 msgid "Use Custom Colors"
-msgstr ""
+msgstr "Använd anpassade färger"
 
 #: ItemViewSettingsPage#8
 msgid "Standard:"
-msgstr ""
+msgstr "Standard:"
 
 #: ItemViewSettingsPage#9
-#, fuzzy
 msgctxt "ItemViewSettingsPage#9"
 msgid "..."
 msgstr "..."
 
 #: ItemViewSettingsPage#10
 msgid "Inactive:"
-msgstr "Inaktív:"
+msgstr "Inaktiv:"
 
 #: ItemViewSettingsPage#11
 msgid "Unread messages:"
-msgstr ""
+msgstr "Olästa meddelanden:"
 
 #: ItemViewSettingsPage#12
 msgid "Highlight:"
-msgstr "Kiemelés:"
+msgstr ""
 
 #: ItemViewSettingsPage#13
 msgid "Other activity:"
@@ -2909,7 +2791,7 @@ msgstr ""
 
 #: ItemViewSettingsPage#14
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: ItemViewSettingsPage#15
 msgid "Custom Nick List Colors"
@@ -2917,130 +2799,123 @@ msgstr ""
 
 #: ItemViewSettingsPage#16
 msgid "Online:"
-msgstr "Online:"
+msgstr ""
 
 #: ItemViewSettingsPage#17
 msgid "Away:"
-msgstr "Távollét:"
+msgstr ""
 
 #: ItemViewSettingsPage#18
-#, fuzzy
 msgctxt "ItemViewSettingsPage#18"
 msgid "Interface"
-msgstr "Intervallum:"
+msgstr "Gränssnitt"
 
 #: ItemViewSettingsPage#19
 msgid "Chat & Nick Lists"
 msgstr ""
 
 #: ItemViewSettingsPage#20
-#, fuzzy
 msgctxt "ItemViewSettingsPage#20"
 msgid "Network"
-msgstr "Hálózatok:"
+msgstr "Nätverk"
 
 #: ItemViewSettingsPage#21
 msgid "Inactive"
-msgstr ""
+msgstr "Inaktiv"
 
 #: ItemViewSettingsPage#22
 msgid "Normal"
-msgstr ""
+msgstr "Normal"
 
 #: ItemViewSettingsPage#23
 msgid "Unread messages"
-msgstr ""
+msgstr "Olästa meddelanden"
 
 #: ItemViewSettingsPage#24
-#, fuzzy
 msgctxt "ItemViewSettingsPage#24"
 msgid "Highlight"
-msgstr "Kiemelés"
+msgstr ""
 
 #: ItemViewSettingsPage#25
 msgid "Other activity"
 msgstr ""
 
 #: KNotificationBackend#1
-#, fuzzy
 msgctxt "KNotificationBackend#1"
 msgid "%n pending highlights"
 msgstr ""
-"\n"
-"            \n"
-"        "
 
 #: MainWin#1
 msgid "&Connect to Core..."
-msgstr "&Csatlakozás..."
+msgstr ""
 
 #: MainWin#2
 msgid "&Disconnect from Core"
-msgstr "&Kapcsolat Bontása"
+msgstr ""
 
 #: MainWin#3
 msgid "Core &Info..."
-msgstr "Mag &Info..."
+msgstr ""
 
 #: MainWin#4
 msgid "Configure &Networks..."
-msgstr "Hálózatok &Beállítása..."
+msgstr "Konfigurera &nätverk..."
 
 #: MainWin#5
 msgid "&Quit"
-msgstr "&Kilépés"
+msgstr "A&vsluta"
 
 #: MainWin#6
 msgid "Ctrl+Q"
-msgstr ""
+msgstr "Ctrl+V"
 
 #: MainWin#7
 msgid "&Configure Chat Lists..."
-msgstr ""
+msgstr "&Konfigurera chattlistor..."
 
 #: MainWin#8
 msgid "&Lock Layout"
-msgstr ""
+msgstr "&Lås layout"
 
 #: MainWin#9
 msgid "Show &Search Bar"
-msgstr "Keresőmező &Megjelenítése"
+msgstr ""
 
 #: MainWin#10
 msgid "Show Away Log"
-msgstr "Távollét Alatti Naplózás Megjelenítése"
+msgstr ""
 
 #: MainWin#11
 msgid "Show &Menubar"
-msgstr ""
+msgstr "Visa &menyrad"
 
 #: MainWin#12
 msgid "Ctrl+M"
-msgstr ""
+msgstr "Ctrl+M"
 
 #: MainWin#13
 msgid "Show Status &Bar"
-msgstr "ÁllapotKijelző &Mutatása"
+msgstr "Visa status&rad"
 
 #: MainWin#14
 msgid "&Configure Quassel..."
-msgstr "&Quassel Beállítások..."
+msgstr "&Konfigurera Quassel..."
 
 #: MainWin#15
 msgid "F7"
-msgstr ""
+msgstr "F7"
 
 #: MainWin#16
 msgid "&About Quassel"
-msgstr "&Quassel Névjegye"
+msgstr "&Om Quassel"
 
 #: MainWin#17
 msgid "About &Qt"
-msgstr "&Qt Néjegye"
+msgstr "Om &Qt"
 
 #: MainWin#18
 msgid "Debug &NetworkModel"
-msgstr "Hibakeresés &HálózatiModell"
+msgstr ""
 
 #: MainWin#19
 msgid "Debug &BufferViewOverlay"
@@ -3048,7 +2923,7 @@ msgstr ""
 
 #: MainWin#20
 msgid "Debug &MessageModel"
-msgstr "Hibakeresés &ÜzenetModell"
+msgstr ""
 
 #: MainWin#21
 msgid "Debug &HotList"
@@ -3056,7 +2931,7 @@ msgstr ""
 
 #: MainWin#22
 msgid "Debug &Log"
-msgstr "Hibakeresés &Naplózás"
+msgstr ""
 
 #: MainWin#23
 msgid "Reload Stylesheet"
@@ -3068,71 +2943,69 @@ msgstr ""
 
 #: MainWin#25
 msgid "&File"
-msgstr "&Fájl"
+msgstr "&Arkiv"
 
 #: MainWin#26
 msgid "&Networks"
-msgstr "&Hálózatok"
+msgstr "&Nätverk"
 
 #: MainWin#27
 msgid "&View"
-msgstr "&Nézet"
+msgstr "&Visa"
 
 #: MainWin#28
 msgid "&Chat Lists"
-msgstr ""
+msgstr "&Chattlistor"
 
 #: MainWin#29
 msgid "&Toolbars"
-msgstr ""
+msgstr "Ver&ktygsrader"
 
 #: MainWin#30
 msgid "&Settings"
-msgstr "&Beállítások"
+msgstr "&Inställningar"
 
 #: MainWin#31
 msgid "&Help"
-msgstr "&Segítség"
+msgstr "&Hjälp"
 
 #: MainWin#32
 msgid "Debug"
-msgstr "Hibakereső"
+msgstr "Felsök"
 
 #: MainWin#33
 msgid "Nicks"
-msgstr "Becenevek"
+msgstr "Smeknamn"
 
 #: MainWin#34
 msgid "Show Nick List"
-msgstr "Becenevek Megjelenítése"
+msgstr ""
 
 #: MainWin#35
-#, fuzzy
 msgctxt "MainWin#35"
 msgid "Chat Monitor"
-msgstr "Csevegésfigyelő"
+msgstr ""
 
 #: MainWin#36
 msgid "Show Chat Monitor"
-msgstr "Csevegésfigyelő"
+msgstr ""
 
 #: MainWin#37
 msgid "Inputline"
-msgstr "Beviteli Mező"
+msgstr ""
 
 #: MainWin#38
 msgid "Show Input Line"
-msgstr "Beviteli Mező Megjelenítése"
+msgstr ""
 
 #: MainWin#39
-#, fuzzy
 msgctxt "MainWin#39"
 msgid "Topic"
-msgstr "Téma"
+msgstr "Ämne"
 
 #: MainWin#40
 msgid "Show Topic Line"
-msgstr "Téma Mutatása"
+msgstr ""
 
 #: MainWin#41
 msgid "Main Toolbar"
@@ -3140,16 +3013,15 @@ msgstr ""
 
 #: MainWin#42
 msgid "Connected to core."
-msgstr "Csatlakozva a maghoz."
+msgstr ""
 
 #: MainWin#43
 msgid "Not connected to core."
-msgstr "Nem kapcsolódott a maghoz."
+msgstr ""
 
 #: MainWin#44
-#, fuzzy
 msgid "Unencrypted Connection"
-msgstr "Biztonsági Kapcsolat Használata"
+msgstr ""
 
 #: MainWin#45
 msgid "<b>Your client does not support SSL encryption</b>"
@@ -3172,14 +3044,13 @@ msgid "<b>The SSL certificate provided by the core at %1 is untrusted for the fo
 msgstr ""
 
 #: MainWin#50
-#, fuzzy
 msgctxt "MainWin#50"
 msgid "Continue"
-msgstr "Folytatás"
+msgstr "Fortsätt"
 
 #: MainWin#51
 msgid "Show Certificate"
-msgstr ""
+msgstr "Visa certifikat"
 
 #: MainWin#52
 msgid "Would you like to accept this certificate forever without being prompted?"
@@ -3191,22 +3062,20 @@ msgstr ""
 
 #: MainWin#54
 msgid "Forever"
-msgstr ""
+msgstr "För alltid"
 
 #: MainWin#55
-#, fuzzy
 msgid "Core Connection Error"
-msgstr "Kapcsolat folytatása"
+msgstr ""
 
 #: MessageModel#1
 msgid "Requesting %1 messages from backlog for buffer %2:%3"
 msgstr ""
 
 #: MsgProcessorStatusWidget#1
-#, fuzzy
 msgctxt "MsgProcessorStatusWidget#1"
 msgid "Form"
-msgstr "Forma"
+msgstr "Formulär"
 
 #: MsgProcessorStatusWidget#2
 msgid "Receiving Backlog"
@@ -3221,10 +3090,9 @@ msgid "Paste Protection"
 msgstr ""
 
 #: NetworkAddDlg#1
-#, fuzzy
 msgctxt "NetworkAddDlg#1"
 msgid "Add Network"
-msgstr "Hálózat Hozzáadása"
+msgstr "Lägg till nätverk"
 
 #: NetworkAddDlg#2
 msgid "Use preset:"
@@ -3232,88 +3100,79 @@ msgstr ""
 
 #: NetworkAddDlg#3
 msgid "Manually specify network settings"
-msgstr "Részletes Hálózati Beállítások"
+msgstr ""
 
 #: NetworkAddDlg#4
 msgid "Manual Settings"
-msgstr "Kézi Beállítások"
+msgstr "Manuella inställningar"
 
 #: NetworkAddDlg#5
-#, fuzzy
 msgctxt "NetworkAddDlg#5"
 msgid "Network name:"
-msgstr "Hálózat Neve:"
+msgstr "Nätverksnamn:"
 
 #: NetworkAddDlg#6
-#, fuzzy
 msgctxt "NetworkAddDlg#6"
 msgid "Server address:"
-msgstr "Kiszolgáló Címe:"
+msgstr "Serveradress:"
 
 #: NetworkAddDlg#7
-#, fuzzy
 msgctxt "NetworkAddDlg#7"
 msgid "Port:"
 msgstr "Port:"
 
 #: NetworkAddDlg#8
 msgid "Server password:"
-msgstr "Kiszolgáló Jelszó:"
+msgstr "Serverlösenord:"
 
 #: NetworkAddDlg#9
 msgid "Use secure connection"
-msgstr "Biztonsági Kapcsolat Használata"
+msgstr "Använd säker anslutning"
 
 #: NetworkEditDlg#1
-#, fuzzy
 msgctxt "NetworkEditDlg#1"
 msgid "Dialog"
-msgstr "Párbeszéd"
+msgstr "Dialogruta"
 
 #: NetworkEditDlg#2
 msgid "Please enter a network name:"
-msgstr "Hálózat nevének megadása:"
+msgstr "Ange ett nätverksnamn:"
 
 #: NetworkEditDlg#3
-#, fuzzy
 msgctxt "NetworkEditDlg#3"
 msgid "Add Network"
-msgstr "Hálózat Hozzáadása"
+msgstr "Lägg till nätverk"
 
 #: NetworkItem#1
 msgid "Server: %1"
-msgstr "Kiszolgáló: %1"
+msgstr "Server: %1"
 
 #: NetworkItem#2
-#, fuzzy
 msgctxt "NetworkItem#2"
 msgid "Users: %1"
-msgstr "Felhasználók: %1"
+msgstr "Användare: %1"
 
 #: NetworkItem#3
-#, fuzzy
 msgctxt "NetworkItem#3"
 msgid "Lag: %1 msecs"
-msgstr "Késés: %1 msec"
+msgstr ""
 
 #: NetworkModel#1
 msgid "Chat"
 msgstr ""
 
 #: NetworkModel#2
-#, fuzzy
 msgctxt "NetworkModel#2"
 msgid "Topic"
-msgstr "Téma"
+msgstr "Ämne"
 
 #: NetworkModel#3
 msgid "Nick Count"
-msgstr "Becenév Számoló"
+msgstr ""
 
 #: NetworkModelController#1
-#, fuzzy
 msgid "Do you want to delete the following buffer(s) permanently?"
-msgstr "Véglegesen törölni szeretnéd a következő puffert?"
+msgstr ""
 
 #: NetworkModelController#2
 msgid "<b>Note:</b> This will delete all related data, including all backlog data, from the core's database and cannot be undone."
@@ -3321,97 +3180,89 @@ msgstr ""
 
 #: NetworkModelController#3
 msgid "<br>Active channel buffers cannot be deleted, please part the channel first."
-msgstr "Aktív csatorna pufferek nem törölhetök, elsöként lépj ki a csatornáról."
+msgstr ""
 
 #: NetworkModelController#4
 msgid "Remove buffers permanently?"
-msgstr "Pufferok egyesítése véglegesen?"
+msgstr ""
 
 #: NetworkModelController::JoinDlg#1
 msgid "Join Channel"
-msgstr "Belépés Csatornára"
+msgstr "Gå in i kanal"
 
 #: NetworkModelController::JoinDlg#2
-#, fuzzy
 msgctxt "NetworkModelController::JoinDlg#2"
 msgid "Network:"
-msgstr "Hálózatok:"
+msgstr "Nätverk:"
 
 #: NetworkModelController::JoinDlg#3
 msgid "Channel:"
-msgstr "Csatorna:"
+msgstr "Kanal:"
 
 #: NetworkPage#1
 msgid "Setup Network Connection"
-msgstr ""
+msgstr "Konfigurera nätverksanslutning"
 
 #: NetworksSettingsPage#1
-#, fuzzy
 msgctxt "NetworksSettingsPage#1"
 msgid "Form"
-msgstr "Forma"
+msgstr "Formulär"
 
 #: NetworksSettingsPage#2
-#, fuzzy
 msgctxt "NetworksSettingsPage#2"
 msgid "Re&name..."
-msgstr "Át&nevezés..."
+msgstr "Byt na&mn..."
 
 #: NetworksSettingsPage#3
-#, fuzzy
 msgctxt "NetworksSettingsPage#3"
 msgid "&Add..."
-msgstr "&Hozzáadás..."
+msgstr "&Lägg till..."
 
 #: NetworksSettingsPage#4
-#, fuzzy
 msgctxt "NetworksSettingsPage#4"
 msgid "De&lete"
-msgstr "Tö&rlés"
+msgstr "Ta b&ort"
 
 #: NetworksSettingsPage#5
 msgid "Network Details"
-msgstr "Hálózat Részletei"
+msgstr ""
 
 #: NetworksSettingsPage#6
 msgid "Identity:"
-msgstr "Azonosító:"
+msgstr "Identitet:"
 
 #: NetworksSettingsPage#7
-#, fuzzy
 msgctxt "NetworksSettingsPage#7"
 msgid "..."
 msgstr "..."
 
 #: NetworksSettingsPage#8
-#, fuzzy
 msgctxt "NetworksSettingsPage#8"
 msgid "Servers"
-msgstr "Kiszolgálók"
+msgstr "Servrar"
 
 #: NetworksSettingsPage#9
 msgid "Manage servers for this network"
-msgstr ""
+msgstr "Hantera servrar för detta nätverket"
 
 #: NetworksSettingsPage#10
-#, fuzzy
 msgctxt "NetworksSettingsPage#10"
 msgid "&Edit..."
-msgstr "&Szerkesztés..."
+msgstr "R&edigera..."
 
 #: NetworksSettingsPage#11
 msgctxt "NetworksSettingsPage#11"
 msgid "Move upwards in list"
-msgstr ""
+msgstr "Flytta uppåt i listan"
 
 #: NetworksSettingsPage#12
 msgctxt "NetworksSettingsPage#12"
 msgid "Move downwards in list"
-msgstr ""
+msgstr "Flytta nedåt i listan"
 
 #: NetworksSettingsPage#13
 msgid "Commands"
-msgstr "Parancsok"
+msgstr "Kommandon"
 
 #: NetworksSettingsPage#14
 msgid "Configure automatic identification or misc. commands to be executed after connecting to a server"
@@ -3419,7 +3270,7 @@ msgstr ""
 
 #: NetworksSettingsPage#15
 msgid "Commands to execute on connect:"
-msgstr "Parancsok végrehajtása csatlakozáskor:"
+msgstr "Kommandon att köra vid anslutning:"
 
 #: NetworksSettingsPage#16
 msgid ""
@@ -3428,10 +3279,9 @@ msgid ""
 msgstr ""
 
 #: NetworksSettingsPage#17
-#, fuzzy
 msgctxt "NetworksSettingsPage#17"
 msgid "Connection"
-msgstr "Kapcsolat"
+msgstr "Anslutning"
 
 #: NetworksSettingsPage#18
 msgid "Control automatic reconnect to the network"
@@ -3439,60 +3289,58 @@ msgstr ""
 
 #: NetworksSettingsPage#19
 msgid "Automatic Reconnect"
-msgstr "Automatikus Újrakapcsolódás"
+msgstr ""
 
 #: NetworksSettingsPage#20
 msgid "Interval:"
-msgstr "Intervallum:"
+msgstr "Intervall:"
 
 #: NetworksSettingsPage#21
 msgctxt "NetworksSettingsPage#21"
 msgid " s"
-msgstr ""
+msgstr " s"
 
 #: NetworksSettingsPage#22
 msgid "Retries:"
-msgstr "Ismétel:"
+msgstr "Försök:"
 
 #: NetworksSettingsPage#23
-#, fuzzy
 msgctxt "NetworksSettingsPage#23"
 msgid "Unlimited"
-msgstr "Korlátlan"
+msgstr ""
 
 #: NetworksSettingsPage#24
 msgid "Rejoin all channels on reconnect"
-msgstr "Belépés minden csatornára újrakapcsolódáskor"
+msgstr ""
 
 #: NetworksSettingsPage#25
 msgid "Auto Identify"
-msgstr "Automatikus Azonosítás"
+msgstr "Automatisk identifiering"
 
 #: NetworksSettingsPage#26
 msgid "NickServ"
-msgstr "Becenév-kiszolgáló"
+msgstr "NickServ"
 
 #: NetworksSettingsPage#27
 msgid "Service:"
-msgstr "szolgáltatás:"
+msgstr "Tjänst:"
 
 #: NetworksSettingsPage#28
-#, fuzzy
 msgctxt "NetworksSettingsPage#28"
 msgid "Password:"
-msgstr "Jelszó:"
+msgstr "Lösenord:"
 
 #: NetworksSettingsPage#29
 msgid "Use SASL Authentication"
-msgstr ""
+msgstr "Använd SASL-autentisering"
 
 #: NetworksSettingsPage#30
 msgid "Account:"
-msgstr "Felhasználói Fiók:"
+msgstr "Konto:"
 
 #: NetworksSettingsPage#31
 msgid "Encodings"
-msgstr "Karakterkódolások"
+msgstr "Teckenkodningar"
 
 #: NetworksSettingsPage#32
 msgid "Configure advanced settings such as message encodings and automatic reconnect"
@@ -3504,7 +3352,7 @@ msgstr ""
 
 #: NetworksSettingsPage#34
 msgid "Use Custom Encodings"
-msgstr "Egyedi Karakterkódolás"
+msgstr ""
 
 #: NetworksSettingsPage#35
 msgid ""
@@ -3514,7 +3362,7 @@ msgstr ""
 
 #: NetworksSettingsPage#36
 msgid "Send messages in:"
-msgstr ""
+msgstr "Skicka meddelanden i:"
 
 #: NetworksSettingsPage#37
 msgid ""
@@ -3534,22 +3382,21 @@ msgstr ""
 
 #: NetworksSettingsPage#40
 msgid "Server encoding:"
-msgstr "Kiszolgáló Karakterkódolása:"
+msgstr ""
 
 #: NetworksSettingsPage#41
 msgctxt "NetworksSettingsPage#41"
 msgid "IRC"
-msgstr ""
+msgstr "IRC"
 
 #: NetworksSettingsPage#42
 msgid "Networks"
-msgstr "Hálózatok"
+msgstr "Nätverk"
 
 #: NetworksSettingsPage#43
-#, fuzzy
 msgctxt "NetworksSettingsPage#43"
 msgid "<b>The following problems need to be corrected before your changes can be applied:</b><ul>"
-msgstr "<b>A következő problémák javítása szükséges mielött változtatásaid alkalmazásra kerülnek:</b><ul>"
+msgstr ""
 
 #: NetworksSettingsPage#44
 msgid "<li>All networks need at least one server defined</li>"
@@ -3558,15 +3405,15 @@ msgstr ""
 #: NetworksSettingsPage#45
 msgctxt "NetworksSettingsPage#45"
 msgid "</ul>"
-msgstr ""
+msgstr "</ul>"
 
 #: NetworksSettingsPage#46
 msgid "Invalid Network Settings"
-msgstr "Érvénytelen Hálózati Beállítások"
+msgstr "Ogiltiga nätverksinställningar"
 
 #: NetworksSettingsPage#47
 msgid "Delete Network?"
-msgstr "Hálózat Törlése?"
+msgstr "Ta bort nätverk?"
 
 #: NetworksSettingsPage#48
 msgid "Do you really want to delete the network \"%1\" and all related settings, including the backlog?"
@@ -3574,49 +3421,46 @@ msgstr ""
 
 #: NickEditDlg#1
 msgid "Edit Nickname"
-msgstr "Becenév Szerkesztése"
+msgstr "Redigera smeknamn"
 
 #: NickEditDlg#2
 msgid "Please enter a valid nickname:"
-msgstr "Használj érvényes becenevet:"
+msgstr "Ange ett giltigt smeknamn:"
 
 #: NickEditDlg#3
 msgid "A valid nickname may contain letters from the English alphabet, digits, and the special characters {, }, [, ], \\, |, `, ^, _ and -."
 msgstr ""
 
 #: NickEditDlg#4
-#, fuzzy
 msgctxt "NickEditDlg#4"
 msgid "Add Nickname"
-msgstr "Becenév Hozzáadása"
+msgstr "Lägg till smeknamn"
 
 #: NotificationsSettingsPage#1
-#, fuzzy
 msgctxt "NotificationsSettingsPage#1"
 msgid "Interface"
-msgstr "Intervallum:"
+msgstr "Gränssnitt"
 
 #: NotificationsSettingsPage#2
 msgid "Notifications"
-msgstr "Értesítések"
+msgstr ""
 
 #: PhononNotificationBackend::ConfigWidget#1
 msgid "Select Audio File"
-msgstr "Hang Fájl Kiválasztása"
+msgstr "Välj ljudfil"
 
 #: PhononNotificationConfigWidget#1
-#, fuzzy
 msgctxt "PhononNotificationConfigWidget#1"
 msgid "Form"
-msgstr "Forma"
+msgstr "Formulär"
 
 #: PhononNotificationConfigWidget#2
 msgid "Audio Notification (via Phonon)"
-msgstr "Hang Értesítés (via Phonon)"
+msgstr ""
 
 #: PhononNotificationConfigWidget#3
 msgid "Play File:"
-msgstr "Lejátszás:"
+msgstr ""
 
 #: PostgreSqlStorage#1
 msgid "PostgreSQL Turbo Bomber HD!"
@@ -3636,7 +3480,7 @@ msgstr ""
 
 #: QObject#4
 msgid "Welcome to Quassel IRC"
-msgstr ""
+msgstr "Välkommen till Quassel IRC"
 
 #: QObject#5
 msgid "This wizard will help you to set up your default identity and your IRC network connection.<br>This only covers basic settings. You can cancel this wizard any time and use the settings dialog for more detailed changes."
@@ -3748,49 +3592,46 @@ msgstr ""
 
 #: Quassel::secondsToString()#1
 msgid "year"
-msgstr "év"
+msgstr "år"
 
 #: Quassel::secondsToString()#2
 msgid "day"
-msgstr "nap"
+msgstr "dag"
 
 #: Quassel::secondsToString()#3
 msgid "h"
-msgstr ""
+msgstr "h"
 
 #: Quassel::secondsToString()#4
 msgid "min"
-msgstr "perc"
+msgstr "min"
 
 #: Quassel::secondsToString()#5
 msgid "sec"
-msgstr "mp"
+msgstr "s"
 
 #: QueryBufferItem#1
 msgid "<b>Query with %1</b>"
 msgstr ""
 
 #: QueryBufferItem#2
-#, fuzzy
 msgctxt "QueryBufferItem#2"
 msgid "idling since %1"
-msgstr "bejelentkezési idő: %1"
+msgstr ""
 
 #: QueryBufferItem#3
-#, fuzzy
 msgctxt "QueryBufferItem#3"
 msgid "login time: %1"
-msgstr "bejelentkezési idő: %1"
+msgstr ""
 
 #: QueryBufferItem#4
-#, fuzzy
 msgctxt "QueryBufferItem#4"
 msgid "server: %1"
-msgstr "kiszolgáló: %1"
+msgstr "server: %1"
 
 #: SaveIdentitiesDlg#1
 msgid "Sync With Core"
-msgstr "Mag Szinkronizáció"
+msgstr ""
 
 #: SaveIdentitiesDlg#2
 msgid "Syncing data with core, please wait..."
@@ -3798,49 +3639,44 @@ msgstr ""
 
 #: SaveIdentitiesDlg#3
 msgid "Abort"
-msgstr "Megszakít"
+msgstr "Avbryt"
 
 #: ServerEditDlg#1
-#, fuzzy
 msgctxt "ServerEditDlg#1"
 msgid "Dialog"
-msgstr "Párbeszéd"
+msgstr "Dialogruta"
 
 #: ServerEditDlg#2
 msgid "Server Info"
 msgstr ""
 
 #: ServerEditDlg#3
-#, fuzzy
 msgctxt "ServerEditDlg#3"
 msgid "Server address:"
-msgstr "Kiszolgáló Címe:"
+msgstr "Serveradress:"
 
 #: ServerEditDlg#4
-#, fuzzy
 msgctxt "ServerEditDlg#4"
 msgid "Port:"
 msgstr "Port:"
 
 #: ServerEditDlg#5
-#, fuzzy
 msgctxt "ServerEditDlg#5"
 msgid "Password:"
-msgstr "Jelszó:"
+msgstr "Lösenord:"
 
 #: ServerEditDlg#6
 msgid "Use SSL"
-msgstr "SSl Használata"
+msgstr "Använd SSL"
 
 #: ServerEditDlg#7
-#, fuzzy
 msgctxt "ServerEditDlg#7"
 msgid "Advanced"
-msgstr "Haladó"
+msgstr "Avancerat"
 
 #: ServerEditDlg#8
 msgid "SSL Version:"
-msgstr "SSL Verzió:"
+msgstr "SSL-version:"
 
 #: ServerEditDlg#9
 msgid "Do not change unless you're going to connect to a server not supporting SSLv3!"
@@ -3848,147 +3684,130 @@ msgstr ""
 
 #: ServerEditDlg#10
 msgid "SSLv3 (default)"
-msgstr "SSLv3 (Alapértelmezett)"
+msgstr "SSLv3 (standard)"
 
 #: ServerEditDlg#11
 msgid "SSLv2"
-msgstr ""
+msgstr "SSLv2"
 
 #: ServerEditDlg#12
 msgid "TLSv1"
-msgstr ""
+msgstr "TLSv1"
 
 #: ServerEditDlg#13
-#, fuzzy
 msgctxt "ServerEditDlg#13"
 msgid "Use a Proxy"
-msgstr "Proxy Használata"
+msgstr "Använd en proxyserver"
 
 #: ServerEditDlg#14
-#, fuzzy
 msgctxt "ServerEditDlg#14"
 msgid "Proxy Type:"
-msgstr "Proxy Tipusa:"
+msgstr "Proxytyp:"
 
 #: ServerEditDlg#15
 msgctxt "ServerEditDlg#15"
 msgid "Socks 5"
-msgstr ""
+msgstr "Socks 5"
 
 #: ServerEditDlg#16
 msgctxt "ServerEditDlg#16"
 msgid "HTTP"
-msgstr ""
+msgstr "HTTP"
 
 #: ServerEditDlg#17
 msgid "Proxy Host:"
-msgstr "Proxy Kiszolgáló:"
+msgstr ""
 
 #: ServerEditDlg#18
-#, fuzzy
 msgctxt "ServerEditDlg#18"
 msgid "localhost"
-msgstr "Helyi Kiszolgáló"
+msgstr "localhost"
 
 #: ServerEditDlg#19
 msgid "Proxy Username:"
-msgstr "Proxy Felhasználónév:"
+msgstr ""
 
 #: ServerEditDlg#20
 msgid "Proxy Password:"
-msgstr "Proxy Jelszó:"
+msgstr ""
 
 #: SettingsDlg#1
-#, fuzzy
 msgctxt "SettingsDlg#1"
 msgid "Configure Quassel"
-msgstr "Quassel Beállítások"
+msgstr "Konfigurera Quassel"
 
 #: SettingsDlg#2
-#, fuzzy
 msgctxt "SettingsDlg#2"
 msgid "Settings"
-msgstr "Beállítások"
+msgstr "Inställningar"
 
 #: SettingsDlg#3
 msgid "Save changes"
-msgstr "Változtatások Mentése"
+msgstr "Spara ändringar"
 
 #: SettingsDlg#4
 msgid "There are unsaved changes on the current configuration page. Would you like to apply your changes now?"
-msgstr "Mentetlen változtatások vannak az aktuális konfigurációs oldalon. Szeretnéd most alkalmazni a változtatásaidat?"
+msgstr ""
 
 #: SettingsDlg#5
-#, fuzzy
 msgctxt "SettingsDlg#5"
 msgid "Configure %1"
-msgstr "%1 Beállítása"
+msgstr "Konfigurera %1"
 
 #: SettingsDlg#6
-#, fuzzy
 msgctxt "SettingsDlg#6"
 msgid "Reload Settings"
-msgstr "Beállítások Újratöltése"
+msgstr ""
 
 #: SettingsDlg#7
-#, fuzzy
 msgctxt "SettingsDlg#7"
 msgid "Do you like to reload the settings, undoing your changes on this page?"
-msgstr "Szereted újra betölteni a beállításokat, miközben elveted változtatásaidat ezen az oldalon?"
+msgstr ""
 
 #: SettingsDlg#8
-#, fuzzy
 msgctxt "SettingsDlg#8"
 msgid "Restore Defaults"
-msgstr "Alapértelmezések Helyreállítása"
+msgstr ""
 
 #: SettingsDlg#9
-#, fuzzy
 msgctxt "SettingsDlg#9"
 msgid "Do you like to restore the default values for this page?"
-msgstr "Szereted helyreállítani ennek az oldalnak az alapértelmezett értékeit?"
+msgstr ""
 
 #: SettingsPageDlg#1
-#, fuzzy
 msgctxt "SettingsPageDlg#1"
 msgid "Configure Quassel"
-msgstr "Quassel Beállítások"
+msgstr "Konfigurera Quassel"
 
 #: SettingsPageDlg#2
-#, fuzzy
 msgctxt "SettingsPageDlg#2"
 msgid "Settings"
-msgstr "Beállítások"
+msgstr "Inställningar"
 
 #: SettingsPageDlg#3
-#, fuzzy
 msgctxt "SettingsPageDlg#3"
 msgid "Configure %1"
-msgstr "%1 Beállítása"
+msgstr "Konfigurera %1"
 
 #: SettingsPageDlg#4
-#, fuzzy
 msgctxt "SettingsPageDlg#4"
 msgid "Reload Settings"
-msgstr "Beállítások Újratöltése"
+msgstr ""
 
 #: SettingsPageDlg#5
-#, fuzzy
 msgctxt "SettingsPageDlg#5"
 msgid "Do you like to reload the settings, undoing your changes on this page?"
-msgstr "Szereted újra betölteni a beállításokat, miközben elveted változtatásaidat ezen az oldalon?"
+msgstr ""
 
 #: SettingsPageDlg#6
-#, fuzzy
 msgctxt "SettingsPageDlg#6"
 msgid "Restore Defaults"
-msgstr "Alapértelmezések Helyreállítása"
+msgstr ""
 
 #: SettingsPageDlg#7
-#, fuzzy
 msgctxt "SettingsPageDlg#7"
 msgid "Do you like to restore the default values for this page?"
-msgstr "Szereted helyreállítani ennek az oldalnak az alapértelmezett értékeit?"
+msgstr ""
 
 #: SignalProxy#1
 msgid "Peer tried to send package larger than max package size!"
@@ -4008,23 +3827,21 @@ msgstr ""
 
 #: SignalProxy#5
 msgid "Disconnecting"
-msgstr "Kapcsolat bontása"
+msgstr "Kopplar från"
 
 #: SimpleNetworkEditor#1
-#, fuzzy
 msgctxt "SimpleNetworkEditor#1"
 msgid "Network name:"
-msgstr "Hálózat Neve:"
+msgstr "Nätverksnamn:"
 
 #: SimpleNetworkEditor#2
 msgid "The name of the IRC network you are configuring"
 msgstr ""
 
 #: SimpleNetworkEditor#3
-#, fuzzy
 msgctxt "SimpleNetworkEditor#3"
 msgid "Servers"
-msgstr "Kiszolgálók"
+msgstr "Servrar"
 
 #: SimpleNetworkEditor#4
 msgid "A list of IRC servers belonging to this network"
@@ -4035,30 +3852,27 @@ msgid "Edit this server entry"
 msgstr ""
 
 #: SimpleNetworkEditor#6
-#, fuzzy
 msgctxt "SimpleNetworkEditor#6"
 msgid "&Edit..."
-msgstr "&Szerkesztés..."
+msgstr "R&edigera..."
 
 #: SimpleNetworkEditor#7
 msgid "Add another IRC server"
 msgstr ""
 
 #: SimpleNetworkEditor#8
-#, fuzzy
 msgctxt "SimpleNetworkEditor#8"
 msgid "&Add..."
-msgstr "&Hozzáadás..."
+msgstr "&Lägg till..."
 
 #: SimpleNetworkEditor#9
 msgid "Remove this server entry from the list"
 msgstr ""
 
 #: SimpleNetworkEditor#10
-#, fuzzy
 msgctxt "SimpleNetworkEditor#10"
 msgid "De&lete"
-msgstr "Tö&rlés"
+msgstr ""
 
 #: SimpleNetworkEditor#11
 msgctxt "SimpleNetworkEditor#11"
@@ -4066,7 +3880,6 @@ msgid "Move upwards in list"
 msgstr ""
 
 #: SimpleNetworkEditor#12
-#, fuzzy
 msgctxt "SimpleNetworkEditor#12"
 msgid "..."
 msgstr "..."
@@ -4089,133 +3902,117 @@ msgid "SQLite is a file-based database engine that does not require any setup. I
 msgstr ""
 
 #: SslInfoDlg#1
-#, fuzzy
 msgid "Security Information"
-msgstr "Mag Információ"
+msgstr "Säkerhetsinformation"
 
 #: SslInfoDlg#2
-#, fuzzy
 msgid "<b>Hostname:</b>"
-msgstr "Kiszolgálónév:"
+msgstr "<b>Värdnamn:</b>"
 
 #: SslInfoDlg#3
-#, fuzzy
 msgid "<b>IP address:</b>"
-msgstr "<b>Mód:</b> %1"
+msgstr "<b>IP-adress:</b>"
 
 #: SslInfoDlg#4
 msgid "<b>Encryption:</b>"
-msgstr ""
+msgstr "<b>Kryptering:</b>"
 
 #: SslInfoDlg#5
-#, fuzzy
 msgid "<b>Protocol:</b>"
-msgstr "<b>Téma:</b> %1"
+msgstr "<b>Protokoll:</b>"
 
 #: SslInfoDlg#6
 msgid "<b>Certificate chain:</b>"
-msgstr ""
+msgstr "<b>Certifikatkedja:</b>"
 
 #: SslInfoDlg#7
 msgid "Subject"
 msgstr ""
 
 #: SslInfoDlg#8
-#, fuzzy
 msgid "<b>Common name:</b>"
-msgstr "<b>Csatorna %1</b>"
+msgstr ""
 
 #: SslInfoDlg#9
 msgid "<b>Organization:</b>"
-msgstr ""
+msgstr "<b>Organisation:</b>"
 
 #: SslInfoDlg#10
 msgid "<b>Organizational unit:</b>"
 msgstr ""
 
 #: SslInfoDlg#11
-#, fuzzy
 msgid "<b>Country:</b>"
-msgstr "<b>Mód:</b> %1"
+msgstr "<b>Land:</b>"
 
 #: SslInfoDlg#12
-#, fuzzy
 msgid "<b>State or province:</b>"
-msgstr "Állam vagy tartomány név:"
+msgstr ""
 
 #: SslInfoDlg#13
-#, fuzzy
 msgid "<b>Locality:</b>"
-msgstr "<b>Téma:</b> %1"
+msgstr ""
 
 #: SslInfoDlg#14
 msgid "Issuer"
-msgstr ""
+msgstr "Utfärdare"
 
 #: SslInfoDlg#15
 msgid "<b>Validity period:</b>"
 msgstr ""
 
 #: SslInfoDlg#16
-#, fuzzy
 msgid "<b>MD5 digest:</b>"
-msgstr "<b>Mód:</b> %1"
+msgstr ""
 
 #: SslInfoDlg#17
 msgid "<b>SHA1 digest:</b>"
 msgstr ""
 
 #: SslInfoDlg#18
-#, fuzzy
 msgid "<b>Trusted:</b>"
-msgstr "<b>Felhasználók:</b> %1"
+msgstr "<b>Pålitligt:</b>"
 
 #: SslInfoDlg#19
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: SslInfoDlg#20
 msgid "No, for the following reasons:<ul>"
-msgstr ""
+msgstr "Nej av följande anledningar:<ul>"
 
 #: SslInfoDlg#21
-#, fuzzy
 msgid "%1 to %2"
-msgstr "%1 - %2"
+msgstr "%1 till %2"
 
 #: StatusBufferItem#1
 msgid "Status Buffer"
-msgstr "Állapot Puffer"
+msgstr ""
 
 #: SystemTray#1
 msgid "&Minimize"
-msgstr ""
+msgstr "&Minimera"
 
 #: SystemTray#2
-#, fuzzy
 msgid "&Restore"
-msgstr "Ismétel:"
+msgstr ""
 
 #: SystrayNotificationBackend#1
-#, fuzzy
 msgctxt "SystrayNotificationBackend#1"
 msgid "%n pending highlights"
 msgstr ""
-"\n"
-"            \n"
-"        "
 
 #: SystrayNotificationBackend::ConfigWidget#1
 msgid "System Tray Icon"
-msgstr "Tálca Ikon"
+msgstr ""
 
 #: SystrayNotificationBackend::ConfigWidget#2
 msgid "Animate"
-msgstr "Animáció"
+msgstr ""
 
 #: SystrayNotificationBackend::ConfigWidget#3
 msgid "Show bubble"
-msgstr "Buborék Mutatása"
+msgstr ""
 
 #: TaskbarNotificationBackend::ConfigWidget#1
 msgid "Activate dock entry, timeout:"
@@ -4226,69 +4023,63 @@ msgid "Mark taskbar entry, timeout:"
 msgstr ""
 
 #: TaskbarNotificationBackend::ConfigWidget#3
-#, fuzzy
 msgctxt "TaskbarNotificationBackend::ConfigWidget#3"
 msgid "Unlimited"
-msgstr "Korlátlan"
+msgstr ""
 
 #: TaskbarNotificationBackend::ConfigWidget#4
 msgctxt "TaskbarNotificationBackend::ConfigWidget#4"
 msgid " s"
-msgstr ""
+msgstr " s"
 
 #: ToolBarActionProvider#1
-#, fuzzy
 msgctxt "ToolBarActionProvider#1"
 msgid "Connect"
-msgstr "Csatlakozás"
+msgstr "Anslut"
 
 #: ToolBarActionProvider#2
 msgid "Connect to IRC"
-msgstr "Kapcsolódás az IRC-hez"
+msgstr "Anslut till IRC"
 
 #: ToolBarActionProvider#3
-#, fuzzy
 msgctxt "ToolBarActionProvider#3"
 msgid "Disconnect"
-msgstr "Szétkapcsolás"
+msgstr "Koppla från"
 
 #: ToolBarActionProvider#4
 msgid "Disconnect from IRC"
-msgstr "Kapcsolat bontása az IRC-vel"
+msgstr ""
 
 #: ToolBarActionProvider#5
-#, fuzzy
 msgctxt "ToolBarActionProvider#5"
 msgid "Part"
-msgstr "Kilépés"
+msgstr ""
 
 #: ToolBarActionProvider#6
 msgid "Leave currently selected channel"
-msgstr "A kiválasztott csatorna elhagyása"
+msgstr ""
 
 #: ToolBarActionProvider#7
-#, fuzzy
 msgctxt "ToolBarActionProvider#7"
 msgid "Join"
-msgstr "Belépés"
+msgstr ""
 
 #: ToolBarActionProvider#8
 msgid "Join a channel"
-msgstr "Belépés Csatornára"
+msgstr ""
 
 #: ToolBarActionProvider#9
 msgid "Query"
-msgstr "Párbeszéd"
+msgstr ""
 
 #: ToolBarActionProvider#10
 msgid "Start a private conversation"
-msgstr "Privát párbeszéd indítása"
+msgstr ""
 
 #: ToolBarActionProvider#11
-#, fuzzy
 msgctxt "ToolBarActionProvider#11"
 msgid "Whois"
-msgstr "Belépések"
+msgstr "Whois"
 
 #: ToolBarActionProvider#12
 msgid "Request user information"
@@ -4308,7 +4099,7 @@ msgstr ""
 
 #: ToolBarActionProvider#16
 msgid "Take operator privileges from user"
-msgstr "Operátor Jog Elvétele"
+msgstr ""
 
 #: ToolBarActionProvider#17
 msgid "Voice"
@@ -4316,7 +4107,7 @@ msgstr ""
 
 #: ToolBarActionProvider#18
 msgid "Give voice to user"
-msgstr "Voice jog adása"
+msgstr ""
 
 #: ToolBarActionProvider#19
 msgid "Devoice"
@@ -4324,74 +4115,69 @@ msgstr ""
 
 #: ToolBarActionProvider#20
 msgid "Take voice from user"
-msgstr "Voice jog elvétele"
+msgstr ""
 
 #: ToolBarActionProvider#21
 msgid "Kick"
-msgstr "Kirúgás"
+msgstr ""
 
 #: ToolBarActionProvider#22
 msgid "Remove user from channel"
-msgstr "Felhasználó eltávolítasa a csatornáról"
+msgstr ""
 
 #: ToolBarActionProvider#23
 msgid "Ban"
-msgstr "Kitiltás"
+msgstr ""
 
 #: ToolBarActionProvider#24
 msgid "Ban user from channel"
-msgstr "Felhasználó kitiltása a csatornáról"
+msgstr ""
 
 #: ToolBarActionProvider#25
 msgid "Kick/Ban"
-msgstr "Kirúgás/kitiltás"
+msgstr ""
 
 #: ToolBarActionProvider#26
 msgid "Remove and ban user from channel"
-msgstr "Felhasználó eltávolítasa és kitiltása a csatornáról"
+msgstr ""
 
 #: ToolBarActionProvider#27
 msgid "Connect to all"
-msgstr "Kapcsolódás az összeshez"
+msgstr "Anslut till alla"
 
 #: ToolBarActionProvider#28
 msgid "Disconnect from all"
-msgstr ""
+msgstr "Koppla från alla"
 
 #: TopicWidget#1
-#, fuzzy
 msgctxt "TopicWidget#1"
 msgid "Form"
-msgstr "Forma"
+msgstr "Formulär"
 
 #: TopicWidget#2
-#, fuzzy
 msgctxt "TopicWidget#2"
 msgid "..."
 msgstr "..."
 
 #: TopicWidget#3
-#, fuzzy
 msgctxt "TopicWidget#3"
 msgid "Users: %1"
-msgstr "Felhasználók: %1"
+msgstr "Användare: %1"
 
 #: TopicWidget#4
-#, fuzzy
 msgctxt "TopicWidget#4"
 msgid "Lag: %1 msecs"
-msgstr "Késés: %1 msec"
+msgstr ""
 
 #: TopicWidgetSettingsPage#1
-#, fuzzy
 msgctxt "TopicWidgetSettingsPage#1"
 msgid "Form"
-msgstr "Forma"
+msgstr "Formulär"
 
 #: TopicWidgetSettingsPage#2
 msgctxt "TopicWidgetSettingsPage#2"
 msgid "Custom font:"
-msgstr ""
+msgstr "Anpassat typsnitt:"
 
 #: TopicWidgetSettingsPage#3
 msgid "Resize dynamically to fit contents"
@@ -4402,32 +4188,30 @@ msgid "On hover only"
 msgstr ""
 
 #: TopicWidgetSettingsPage#5
-#, fuzzy
 msgctxt "TopicWidgetSettingsPage#5"
 msgid "Interface"
-msgstr "Intervallum:"
+msgstr "Gränssnitt"
 
 #: TopicWidgetSettingsPage#6
 msgid "Topic Widget"
 msgstr ""
 
 #: UiStyle::StyledMessage#1
-#, fuzzy
 msgctxt "UiStyle::StyledMessage#1"
 msgid "%1"
 msgstr "%1"
 
 #: UiStyle::StyledMessage#2
 msgid "%DN%1%DN %2"
-msgstr ""
+msgstr "%DN%1%DN %2"
 
 #: UiStyle::StyledMessage#3
 msgid "You are now known as %DN%1%DN"
-msgstr ""
+msgstr "Du är nu känd som %DN%1%DN"
 
 #: UiStyle::StyledMessage#4
 msgid "%DN%1%DN is now known as %DN%2%DN"
-msgstr ""
+msgstr "%DN%1%DN är nu känd som %DN%2%DN"
 
 #: UiStyle::StyledMessage#5
 msgid "User mode: %DM%1%DM"
@@ -4479,590 +4263,69 @@ msgstr "<%1>"
 
 #: UiStyle::StyledMessage#17
 msgid "-*-"
-msgstr ""
+msgstr "-*-"
 
 #: UiStyle::StyledMessage#18
 msgid "<->"
-msgstr ""
+msgstr "<->"
 
 #: UiStyle::StyledMessage#19
 msgid "***"
-msgstr ""
+msgstr "***"
 
 #: UiStyle::StyledMessage#20
 msgid "-->"
-msgstr ""
+msgstr "-->"
 
 #: UiStyle::StyledMessage#21
 msgid "<--"
-msgstr ""
+msgstr "<--"
 
 #: UiStyle::StyledMessage#22
 msgid "<-*"
-msgstr ""
+msgstr "<-*"
 
 #: UiStyle::StyledMessage#23
 msgid "<-x"
-msgstr ""
+msgstr "<-x"
 
 #: UiStyle::StyledMessage#24
 msgid "*"
-msgstr ""
+msgstr "*"
 
 #: UiStyle::StyledMessage#25
 msgid "-"
-msgstr ""
+msgstr "-"
 
 #: UiStyle::StyledMessage#26
 msgid "=>"
-msgstr ""
+msgstr "=>"
 
 #: UiStyle::StyledMessage#27
 msgid "<="
-msgstr ""
+msgstr "<="
 
 #: UserCategoryItem#1
-#, fuzzy
 msgid "%n Owner(s)"
-msgstr "%n Owner"
+msgstr ""
 
 #: UserCategoryItem#2
-#, fuzzy
 msgid "%n Admin(s)"
-msgstr "%n Admin"
+msgstr ""
 
 #: UserCategoryItem#3
-#, fuzzy
 msgid "%n Operator(s)"
-msgstr "%n Operator"
+msgstr ""
 
 #: UserCategoryItem#4
-#, fuzzy
 msgid "%n Half-Op(s)"
-msgstr "%n Half-Op"
+msgstr ""
 
 #: UserCategoryItem#5
-#, fuzzy
 msgid "%n Voiced"
-msgstr "%n Voiced"
+msgstr ""
 
 #: UserCategoryItem#6
-#, fuzzy
 msgid "%n User(s)"
-msgstr "%n User"
+msgstr ""
 
-#~ msgid "<Original>"
-#~ msgstr "<Eredeti>"
-
-#~ msgid "Use secure connection (SSL)"
-#~ msgstr "Biztonságos Kapcsolat Használata (SSl)"
-
-#~ msgid "Use a proxy:"
-#~ msgstr "Proxy Használata:"
-
-#~ msgid "Proxy Port:"
-#~ msgstr "Proxy Port:"
-
-#~ msgid "Remove Account Settings"
-#~ msgstr "Profil Beállítások Eltávolítása"
-
-#~ msgid "Login"
-#~ msgstr "Belépés"
-
-#~ msgid "Always use this account"
-#~ msgstr "Mindig használd ezt a profilt"
-
-#~ msgid "Configure your Quassel Core"
-#~ msgstr "Quassel Mag Konfiguráció "
-
-#~ msgid "Launch Wizard"
-#~ msgstr "Varázsló Indítása"
-
-#~ msgid "<b>Please be patient while your client synchronizes with the Quassel Core!</b>"
-#~ msgstr "<b>Legyél türelmes amíg a kliens szinkronizál a Quassel Maggal!</b>"
-
-#~ msgid "Show System Tray Icon"
-#~ msgstr "Tálca Ikon Mutatása"
-
-#~ msgid "Tray Icon"
-#~ msgstr "Tálca Ikon"
-
-#~ msgid "Core Lag: %1"
-#~ msgstr "Mag Késés: %1"
-
-#~ msgid "Country Name:"
-#~ msgstr "Ország név:"
-
-#~ msgid "Hostname %1:"
-#~ msgstr "Kiszolgálónév %1:"
-
-#~ msgid "E-Mail Address %1:"
-#~ msgstr "E-Mail Cím %1:"
-
-#~ msgid "About"
-#~ msgstr "Névjegy"
-
-#~ msgid "Behaviour"
-#~ msgstr "Viselkedés"
-
-#~ msgid "Appearance"
-#~ msgstr "Megjelenítés"
-
-#~ msgid "Note: needs client restart for full effect!"
-#~ msgstr "Figyelmeztetés: A kliens újraindítása szükséges minden Változtatás megjelenítéséhez!"
-
-#~ msgid "Misc:"
-#~ msgstr "Egyebek:"
-
-#~ msgid "Show Web Previews"
-#~ msgstr "Hivatkozás Előnézete"
-
-#~ msgid "Use Icons to represent away state of Users"
-#~ msgstr "Ikon Használata Távollévő Felhasználók megjelenítésére"
-
-#~ msgid "<b>Status buffer of %1</b>"
-#~ msgstr "<b>Állapot puffer of %1</b>"
-
-#~ msgid "Away Message: %1"
-#~ msgstr "Távollét Üzenet: %1"
-
-#~ msgid "Delete buffer"
-#~ msgstr "Puffer törlése"
-
-#~ msgid "Input channel name:"
-#~ msgstr "Bemeneti csatorna neve:"
-
-#~ msgid "Remove buffer permanently?"
-#~ msgstr "Puffer Végleges Eltávolítása?"
-
-#~ msgid "Do you want to delete the buffer \"%1\" permanently? This will delete all related data, including all backlog data, from the core's database!"
-#~ msgstr "Véglegesen szeretnéd törölni a \"%1\" puffert? Ez törölni fog minden kapcsolódó adatot, minden restanciaadatot beleértve a mag adatbázisát!"
-
-#~ msgid "Hide buffers"
-#~ msgstr "Pufferok rejtése"
-
-#~ msgid "Hide buffers permanently"
-#~ msgstr "Pufferek Végleges rejtése"
-
-#~ msgid "All Buffers"
-#~ msgstr "Minden Puffer"
-
-#~ msgid "Please enter a name for the buffer view:"
-#~ msgstr "Irjon be egy nevet a puffer nézetbe:"
-
-#~ msgid "Add Buffer View"
-#~ msgstr "Puffer Nézet Hozzáadása"
-
-#~ msgid "Show / Hide buffers"
-#~ msgstr "Pufferok Mutatása / Rejtése"
-
-#~ msgid "Buffer Views"
-#~ msgstr "Puffer Nézetek"
-
-#~ msgid "Buffer View  Settings"
-#~ msgstr "Puffer Nézet Beállítások"
-
-#~ msgid "Status Buffers"
-#~ msgstr "Státuszpufferek"
-
-#~ msgid "Channel Buffers"
-#~ msgstr "Csatorna Pufferek"
-
-#~ msgid "Query Buffers"
-#~ msgstr "Parbeszéd Pufferek"
-
-#~ msgid "Add new Buffers automatically"
-#~ msgstr "Új Pufferek Autómatikus Hozzáadása"
-
-#~ msgid "Delete Buffer View?"
-#~ msgstr "Puffer Nézet Törlése?"
-
-#~ msgid "Do you really want to delete the buffer view \"%1\"?"
-#~ msgstr "Biztosan törölni akarod a puffer nézetet \"%1\"?"
-
-#~ msgid "Hide inactive Buffers"
-#~ msgstr "Inaktív Pufferek Rejtése"
-
-#~ msgid "Select Buffer"
-#~ msgstr "Puffer Választás"
-
-#~ msgid "Search Channels"
-#~ msgstr "Csatornák Keresése"
-
-#~ msgid "Available Buffers:"
-#~ msgstr "Rendelkezésre Álló Pufferek:"
-
-#~ msgid "Color settings"
-#~ msgstr "Színek"
-
-#~ msgid "Bufferview"
-#~ msgstr "Pufferek"
-
-#~ msgid "Activities:"
-#~ msgstr "Aktivitások:"
-
-#~ msgid "Use BG"
-#~ msgstr "BG Használata"
-
-#~ msgid "Default:"
-#~ msgstr "Alapértelmezett:"
-
-#~ msgid "New Message:"
-#~ msgstr "Új Üzenet:"
-
-#~ msgid "Other Activity:"
-#~ msgstr "Egyéb Aktivitás:"
-
-#~ msgid "Chatview"
-#~ msgstr "CsevegésFigyelő"
-
-#~ msgid "Server Activity"
-#~ msgstr "Kiszolgáló Aktivitás"
-
-#~ msgid "Foreground"
-#~ msgstr "Előtér"
-
-#~ msgid "Background"
-#~ msgstr "Háttér"
-
-#~ msgid "Error Message:"
-#~ msgstr "Hiba Üzenet:"
-
-#~ msgid "Notice Message:"
-#~ msgstr "Figyelmeztetés:"
-
-#~ msgid "Plain Message:"
-#~ msgstr "Egyszerű Szöveg:"
-
-#~ msgid "Server Message:"
-#~ msgstr "Kiszolgáló Üzenet:"
-
-#~ msgid "Highlight Message:"
-#~ msgstr "Kiemelt Üzenet:"
-
-#~ msgid "User Activity"
-#~ msgstr "Felhasználó Aktivitás"
-
-#~ msgid "Action Message:"
-#~ msgstr "Művelet Üzenet:"
-
-#~ msgid "Join Message:"
-#~ msgstr "Üzenet Belépéskor:"
-
-#~ msgid "Kick Message:"
-#~ msgstr "Üzenet Kirúgáskor:"
-
-#~ msgid "Mode Message:"
-#~ msgstr "Üzenet Mód Váltáskor:"
-
-#~ msgid "Part Message:"
-#~ msgstr "Üzenet Távozáskor:"
-
-#~ msgid "Quit Message:"
-#~ msgstr "Üzenet Kilépéskor:"
-
-#~ msgid "Rename Message:"
-#~ msgstr "Üzenet Átnevezéskor:"
-
-#~ msgid "Sender:"
-#~ msgstr "Küldő:"
-
-#~ msgid "Nick:"
-#~ msgstr "Becenév:"
-
-#~ msgid "Hostmask:"
-#~ msgstr "Kiszolgálómaszk:"
-
-#~ msgid "Channelname:"
-#~ msgstr "Csatorna neve:"
-
-#~ msgid "Mode flags:"
-#~ msgstr "Mód zászlók:"
-
-#~ msgid "Url:"
-#~ msgstr "Url:"
-
-#~ msgid "Mirc Color Codes"
-#~ msgstr "Mirc Színek"
-
-#~ msgid "Color Codes"
-#~ msgstr "Szín kódok"
-
-#~ msgid "Color 0:"
-#~ msgstr "Szín 0:"
-
-#~ msgid "Color 1:"
-#~ msgstr "Szín 1:"
-
-#~ msgid "Color 2:"
-#~ msgstr "Szín 2:"
-
-#~ msgid "Color 3:"
-#~ msgstr "Szín 3:"
-
-#~ msgid "Color 4:"
-#~ msgstr "Szín 4:"
-
-#~ msgid "Color 5:"
-#~ msgstr "Szín 5:"
-
-#~ msgid "Color 6:"
-#~ msgstr "Szín 6:"
-
-#~ msgid "Color 7:"
-#~ msgstr "Szín 7:"
-
-#~ msgid "Color 8:"
-#~ msgstr "Szín 8:"
-
-#~ msgid "Color 14:"
-#~ msgstr "Szín 14:"
-
-#~ msgid "Color 15:"
-#~ msgstr "Szín 15:"
-
-#~ msgid "Color 13:"
-#~ msgstr "Szín 13:"
-
-#~ msgid "Color 12:"
-#~ msgstr "Szín 12:"
-
-#~ msgid "Color 11:"
-#~ msgstr "Szín 11:"
-
-#~ msgid "Color 10:"
-#~ msgstr "Szín 10:"
-
-#~ msgid "Color 9:"
-#~ msgstr "Szín 9:"
-
-#~ msgid "Nickview"
-#~ msgstr "Becenév"
-
-#~ msgid "Nick status:"
-#~ msgstr "Becenév Státusz:"
-
-#~ msgid "New Message Marker:"
-#~ msgstr "Új üzenet jelző:"
-
-#~ msgid "Delete Buffer(s)..."
-#~ msgstr "Pufferek törlése..."
-
-#~ msgid "Show Buffer"
-#~ msgstr "Puffer Mutatása"
-
-#~ msgid "Hide Buffer(s) Temporarily"
-#~ msgstr "Puffer(ek) Ideiglenes Elrejtése"
-
-#~ msgid "Hide Buffer(s) Permanently"
-#~ msgstr "Puffer(ek) Végleges Elrejtése"
-
-#~ msgid "Properties..."
-#~ msgstr "Beállítások..."
-
-#~ msgid "Select Core Account"
-#~ msgstr "Mag Fiók Kiválasztása"
-
-#~ msgid "Available Quassel Core accounts:"
-#~ msgstr "Rendelkezésre Álló Quassel Mag Fiókok:"
-
-#~ msgid "add to known hosts"
-#~ msgstr "hozzáadás az ismert kiszolgálókhoz"
-
-#~ msgid "Session"
-#~ msgstr "Munkamenet"
-
-#~ msgid "Channels"
-#~ msgstr "Csatornák"
-
-#~ msgid "Disconnecting."
-#~ msgstr "Szétkapcsolódás."
-
-#~ msgid "Host:"
-#~ msgstr "Kiszolgáló:"
-
-#~ msgid "Fonts"
-#~ msgstr "Betűtípusok"
-
-#~ msgid "Custom Application Fonts"
-#~ msgstr "Egyedi Alkalmazások Betütipusai"
-
-#~ msgid "Font"
-#~ msgstr "Betükészlet"
-
-#~ msgid "Topic:"
-#~ msgstr "Téma:"
-
-#~ msgid "Buffer Views:"
-#~ msgstr "Puffer Nézetek:"
-
-#~ msgid "Nick List:"
-#~ msgstr "Becenév Lista:"
-
-#~ msgid "Inputline:"
-#~ msgstr "beviteli mező:"
-
-#~ msgid "General:"
-#~ msgstr "Általános:"
-
-#~ msgid "Nicks:"
-#~ msgstr "Becenevek:"
-
-#~ msgid "Some of these settings require a restart of the Quassel Client in order to take effect. We intend to fix this."
-#~ msgstr "Ezen beállítások közül néhány a Quassel kliens ujraindítását igényli."
-
-#~ msgid "Use system tray icon:"
-#~ msgstr "Tálca Ikon Használata:"
-
-#~ msgid "Minimize to tray on minimize button"
-#~ msgstr "Minimalizálás tálcara a minimalizáló gombbal"
-
-#~ msgid "Minimize to tray on close button"
-#~ msgstr "Minimalizálás tálcara a bezárás gombbal"
-
-#~ msgid "Tray icon:"
-#~ msgstr "Tálca Ikon:"
-
-#~ msgid "User Notification:"
-#~ msgstr "Felhasználói értesítés:"
-
-#~ msgid "Animate tray icon"
-#~ msgstr "Tálca ikon villogtatása"
-
-#~ msgid "Display pop-up messages"
-#~ msgstr "Pop-up üzenetek kijelzése"
-
-#~ msgid "Buffer view:"
-#~ msgstr "PufferNézet:"
-
-#~ msgid "Mouse wheel changes displayed buffers"
-#~ msgstr "Egérgörgővel történő Puffer váltás"
-
-#~ msgid "Current Buffer"
-#~ msgstr "Aktuális Puffer"
-
-#~ msgid "Buffer View"
-#~ msgstr "PufferNézet"
-
-#~ msgid "Input Line"
-#~ msgstr "Beviteli Mező"
-
-#~ msgid "Highlight nicks"
-#~ msgstr "Becenevek Kiemelése"
-
-#~ msgid "Away Reason"
-#~ msgstr "Távollét Oka"
-
-#~ msgid "Brought fish."
-#~ msgstr "Hoztam Halat."
-
-#~ msgid "background-color: rgba(220, 220, 255, 40%)"
-#~ msgstr "háttér-szin: rgba(220, 220, 255, 40%)"
-
-#~ msgid "Waiting for core..."
-#~ msgstr "Várakozás a magra..."
-
-#~ msgid "Edit &Networks..."
-#~ msgstr "Szerkesztés &Hálózatok..."
-
-#~ msgid "&Views"
-#~ msgstr "&Nézet"
-
-#~ msgid "&Network List..."
-#~ msgstr "&Hálózat Lista..."
-
-#~ msgid "Reconnect"
-#~ msgstr "Újracsatlakozás"
-
-#~ msgid "Quit..."
-#~ msgstr "Kilépés..."
-
-#~ msgid "About Qt..."
-#~ msgstr "Qt Néjegye..."
-
-#~ msgid "About Quassel IRC..."
-#~ msgstr "Quassel IRC Névjegye..."
-
-#~ msgid "&Configure Buffer Views..."
-#~ msgstr "&Puffer Nézet Konfigurálása..."
-
-#~ msgid "&Lock Dock Positions"
-#~ msgstr "&Dokk Pozíciók Zárolása"
-
-#~ msgid "&Buffer Views"
-#~ msgstr "&Puffer Nézetek"
-
-#~ msgid "Op %1"
-#~ msgstr "Op %1"
-
-#~ msgid "Deop %1"
-#~ msgstr "Deop %1"
-
-#~ msgid "Voice %1"
-#~ msgstr "Voice %1"
-
-#~ msgid "Kick %1"
-#~ msgstr "Kirúgás %1"
-
-#~ msgid "Send file"
-#~ msgstr "Fájl Küldése"
-
-#~ msgid "Ban %1"
-#~ msgstr "Kitiltás %1"
-
-#~ msgid "Show Toolbar"
-#~ msgstr "Eszköztár Mutatása"
-
-#~ msgid "Quit"
-#~ msgstr "Kilépés"
-
-#~ msgid "Show Buffers"
-#~ msgstr "Pufferek Mutatása"
-
-#~ msgid "Show Nicks"
-#~ msgstr "Becenevek Mutatása"
-
-#~ msgid "About..."
-#~ msgstr "Névjegy..."
-
-#~ msgid "%D0%1"
-#~ msgstr "%D0%1"
-
-#~ msgid "%Dn%1"
-#~ msgstr "%Dn%1"
-
-#~ msgid "%Ds%1"
-#~ msgstr "%Ds%1"
-
-#~ msgid "%De%1"
-#~ msgstr "%De%1"
-
-#~ msgid "%Dj%DN%1%DN %DH(%2@%3)%DH has joined %DC%4%DC"
-#~ msgstr "%Dj%DN%1%DN %DH(%2@%3)%DH csatlakozott a %DC%4%DC csatornához"
-
-#~ msgid "%Dp%DN%1%DN %DH(%2@%3)%DH has left %DC%4%DC"
-#~ msgstr "%Dp%DN%1%DN %DH(%2@%3)%DH kilépett innen %DC%4%DC"
-
-#~ msgid "%Dq%DN%1%DN %DH(%2@%3)%DH has quit"
-#~ msgstr "%Dq%DN%1%DN %DH(%2@%3)%DH kilépett"
-
-#~ msgid "%Dk%DN%1%DN has kicked %DN%2%DN from %DC%3%DC"
-#~ msgstr "%Dk%DN%1%DN kirúgta %DN%2%DN felhasználót a %DC%3%DC csatornáról"
-
-#~ msgid "%DrYou are now known as %DN%1%DN"
-#~ msgstr "%DrMostantól %DN%1%DN néven ismert"
-
-#~ msgid "%Dr%DN%1%DN is now known as %DN%2%DN"
-#~ msgstr "%Dr%DN%1%DN mostantól %DN%2%DN néven ismert"
-
-#~ msgid "%DmUser mode: %DM%1%DM"
-#~ msgstr "%DmUser mode: %DM%1%DM"
-
-#~ msgid "%DmMode %DM%1%DM by %DN%2%DN"
-#~ msgstr "%DmMode %DM%1%DM by %DN%2%DN"
-
-#~ msgid "%Da%DN%1%DN %2"
-#~ msgstr "%Da%DN%1%DN %2"
-
-#~ msgid "%De[%1]"
-#~ msgstr "%De[%1]"

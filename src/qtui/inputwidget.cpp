@@ -33,6 +33,8 @@
 #include "tabcompleter.h"
 #include <QPainter>
 
+const int leftMargin = 3;
+
 InputWidget::InputWidget(QWidget *parent)
   : AbstractItemView(parent),
     _networkId(0)
@@ -110,6 +112,9 @@ InputWidget::InputWidget(QWidget *parent)
   s.notify("ShowStyleButtons", this, SLOT(setShowStyleButtons(QVariant)));
   setShowStyleButtons(s.value("ShowStyleButtons", true));
 
+  s.notify("EnablePerChatHistory", this, SLOT(setEnablePerChatHistory(QVariant)));
+  setEnablePerChatHistory(s.value("EnablePerChatHistory", false));
+
   s.notify("MaxNumLines", this, SLOT(setMaxLines(QVariant)));
   setMaxLines(s.value("MaxNumLines", 5));
 
@@ -159,6 +164,10 @@ void InputWidget::setShowStyleButtons(const QVariant &v) {
   ui.showStyleButton->setVisible(v.toBool());
 }
 
+void InputWidget::setEnablePerChatHistory(const QVariant &v) {
+  _perChatHistory = v.toBool();
+}
+
 void InputWidget::setMaxLines(const QVariant &v) {
   ui.inputEdit->setMaxHeight(v.toInt());
 }
@@ -203,7 +212,29 @@ bool InputWidget::eventFilter(QObject *watched, QEvent *event) {
 }
 
 void InputWidget::currentChanged(const QModelIndex &current, const QModelIndex &previous) {
-  Q_UNUSED(previous)
+  BufferId currentBufferId = current.data(NetworkModel::BufferIdRole).value<BufferId>();
+  BufferId previousBufferId = previous.data(NetworkModel::BufferIdRole).value<BufferId>();
+
+  if (_perChatHistory) {
+    //backup
+    historyMap[previousBufferId].history = inputLine()->history();
+    historyMap[previousBufferId].tempHistory = inputLine()->tempHistory();
+    historyMap[previousBufferId].idx = inputLine()->idx();
+    historyMap[previousBufferId].inputLine = inputLine()->html();
+
+    //restore
+    inputLine()->setHistory(historyMap[currentBufferId].history);
+    inputLine()->setTempHistory(historyMap[currentBufferId].tempHistory);
+    inputLine()->setIdx(historyMap[currentBufferId].idx);
+    inputLine()->setHtml(historyMap[currentBufferId].inputLine);
+    inputLine()->moveCursor(QTextCursor::End,QTextCursor::MoveAnchor);
+
+    // FIXME this really should be in MultiLineEdit (and the const int on top removed)
+    QTextBlockFormat format = inputLine()->textCursor().blockFormat();
+    format.setLeftMargin(leftMargin); // we want a little space between the frame and the contents
+    inputLine()->textCursor().setBlockFormat(format);
+  }
+
   NetworkId networkId = current.data(NetworkModel::NetworkIdRole).value<NetworkId>();
   if(networkId == _networkId)
     return;

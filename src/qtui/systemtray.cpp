@@ -81,6 +81,9 @@ void SystemTray::init() {
   _trayMenu->addAction(coll->action("Quit"));
 
   connect(_trayMenu, SIGNAL(aboutToShow()), SLOT(trayMenuAboutToShow()));
+
+  NotificationSettings notificationSettings;
+  notificationSettings.initAndNotify("Systray/Animate", this, SLOT(enableAnimationChanged(QVariant)), true);
 }
 
 void SystemTray::trayMenuAboutToShow() {
@@ -144,11 +147,12 @@ void SystemTray::setToolTip(const QString &title, const QString &subtitle) {
   emit toolTipChanged(title, subtitle);
 }
 
-void SystemTray::showMessage(const QString &title, const QString &message, MessageIcon icon, int millisecondsTimeoutHint) {
+void SystemTray::showMessage(const QString &title, const QString &message, MessageIcon icon, int millisecondsTimeoutHint, uint id) {
   Q_UNUSED(title)
   Q_UNUSED(message)
   Q_UNUSED(icon)
   Q_UNUSED(millisecondsTimeoutHint)
+  Q_UNUSED(id)
 }
 
 void SystemTray::activate(SystemTray::ActivationReason reason) {
@@ -157,4 +161,9 @@ void SystemTray::activate(SystemTray::ActivationReason reason) {
 
 void SystemTray::minimizeRestore() {
   GraphicalUi::toggleMainWidget();
+}
+
+void SystemTray::enableAnimationChanged(const QVariant &v) {
+  _animationEnabled = v.toBool();
+  emit animationEnabledChanged(v.toBool());
 }

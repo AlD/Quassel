@@ -21,12 +21,14 @@
 #ifndef QT_NO_SYSTEMTRAYICON
 
 #include "legacysystemtray.h"
+#include "mainwin.h"
 #include "qtui.h"
 
 LegacySystemTray::LegacySystemTray(QWidget *parent)
   : SystemTray(parent),
   _blinkState(false),
-  _isVisible(true)
+  _isVisible(true),
+  _lastMessageId(0)
 {
 #ifndef HAVE_KDE
   _trayIcon = new QSystemTrayIcon(associatedWidget());
@@ -41,7 +43,7 @@ LegacySystemTray::LegacySystemTray(QWidget *parent)
                      SLOT(on_activated(QSystemTrayIcon::ActivationReason)));
 #endif
   connect(_trayIcon, SIGNAL(messageClicked()),
-                     SIGNAL(messageClicked()));
+                     SLOT(on_messageClicked()));
 
   _blinkTimer.setInterval(500);
   _blinkTimer.setSingleShot(false);
@@ -104,7 +106,7 @@ void LegacySystemTray::setState(State state_) {
   State oldstate = state();
   SystemTray::setState(state_);
   if(oldstate != state()) {
-    if(state() == NeedsAttention && mode() == Legacy)
+    if(state() == NeedsAttention && mode() == Legacy && animationEnabled())
       _blinkTimer.start();
     else {
       _blinkTimer.stop();
@@ -130,8 +132,24 @@ void LegacySystemTray::on_activated(QSystemTrayIcon::ActivationReason reason) {
   activate((SystemTray::ActivationReason)reason);
 }
 
-void LegacySystemTray::showMessage(const QString &title, const QString &message, SystemTray::MessageIcon icon, int millisecondsTimeoutHint) {
-  _trayIcon->showMessage(title, message, (QSystemTrayIcon::MessageIcon)icon, millisecondsTimeoutHint);
+void LegacySystemTray::on_messageClicked() {
+  emit messageClicked(_lastMessageId);
+}
+
+void LegacySystemTray::showMessage(const QString &title, const QString &message, SystemTray::MessageIcon icon, int msTimeout, uint id) {
+  // fancy stuff later: show messages in order
+  // for now, we just show the last message
+  _lastMessageId = id;
+  _trayIcon->showMessage(title, message, (QSystemTrayIcon::MessageIcon)icon, msTimeout);
+}
+
+void LegacySystemTray::closeMessage(uint notificationId) {
+  Q_UNUSED(notificationId)
+
+  // there really seems to be no sane way to close the bubble... :(
+#ifdef Q_WS_X11
+  showMessage("", "", NoIcon, 1);
+#endif
 }
 
 #endif /* QT_NO_SYSTEMTRAYICON */
