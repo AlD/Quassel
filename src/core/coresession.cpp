@@ -219,8 +219,15 @@ void CoreSession::recvMessageFromServer(NetworkId networkId, Message::Type type,
   // KDE's notifications), hence we remove those just to be safe.
   QString text = text_;
   text.remove(QChar(0xfdd0)).remove(QChar(0xfdd1));
+  RawMessage rawMsg(networkId, type, bufferType, target, text, sender, flags);
 
-  _messageQueue << RawMessage(networkId, type, bufferType, target, text, sender, flags);
+  // check for HardStrictness ignore
+  CoreNetwork *currentNetwork = network(networkId);
+  QString networkName = currentNetwork ? currentNetwork->networkName() : QString("");
+  if(_ignoreListManager.match(rawMsg, networkName) == IgnoreListManager::HardStrictness)
+    return;
+
+  _messageQueue << rawMsg;
   if(!_processMessages) {
     _processMessages = true;
     QCoreApplication::postEvent(this, new ProcessMessagesEvent());
@@ -246,40 +253,55 @@ void CoreSession::customEvent(QEvent *event) {
 }
 
 void CoreSession::processMessages() {
-  QString networkName;
   if(_messageQueue.count() == 1) {
     const RawMessage &rawMsg = _messageQueue.first();
-    BufferInfo bufferInfo = Core::bufferInfo(user(), rawMsg.networkId, rawMsg.bufferType, rawMsg.target);
-    Message msg(bufferInfo, rawMsg.type, rawMsg.text, rawMsg.sender, rawMsg.flags);
-
-    CoreNetwork *currentNetwork = network(bufferInfo.networkId());
-    networkName = currentNetwork ? currentNetwork->networkName() : QString("");
-    // if message is ignored with "HardStrictness" we discard it here
-    if(_ignoreListManager.match(msg, networkName) != IgnoreListManager::HardStrictness) {
-      Core::storeMessage(msg);
-      emit displayMsg(msg);
+    bool createBuffer = !(rawMsg.flags & Message::Redirected);
+    BufferInfo bufferInfo = Core::bufferInfo(user(), rawMsg.networkId, rawMsg.bufferType, rawMsg.target, createBuffer);
+    if(!bufferInfo.isValid()) {
+      Q_ASSERT(!createBuffer);
+      bufferInfo = Core::bufferInfo(user(), rawMsg.networkId, BufferInfo::StatusBuffer, "");
     }
+    Message msg(bufferInfo, rawMsg.type, rawMsg.text, rawMsg.sender, rawMsg.flags);
+    Core::storeMessage(msg);
+    emit displayMsg(msg);
   } else {
     QHash<NetworkId, QHash<QString, BufferInfo> > bufferInfoCache;
     MessageList messages;
+    QList<RawMessage> redirectedMessages; // list of Messages which don't enforce a buffer creation
     BufferInfo bufferInfo;
     for(int i = 0; i < _messageQueue.count(); i++) {
       const RawMessage &rawMsg = _messageQueue.at(i);
       if(bufferInfoCache.contains(rawMsg.networkId) && bufferInfoCache[rawMsg.networkId].contains(rawMsg.target)) {
         bufferInfo = bufferInfoCache[rawMsg.networkId][rawMsg.target];
       } else {
-        bufferInfo = Core::bufferInfo(user(), rawMsg.networkId, rawMsg.bufferType, rawMsg.target);
+        bool createBuffer = !(rawMsg.flags & Message::Redirected);
+        bufferInfo = Core::bufferInfo(user(), rawMsg.networkId, rawMsg.bufferType, rawMsg.target, createBuffer);
+        if(!bufferInfo.isValid()) {
+          Q_ASSERT(!createBuffer);
+          redirectedMessages << rawMsg;
+          continue;
+        }
         bufferInfoCache[rawMsg.networkId][rawMsg.target] = bufferInfo;
       }
-
       Message msg(bufferInfo, rawMsg.type, rawMsg.text, rawMsg.sender, rawMsg.flags);
-      CoreNetwork *currentNetwork = network(bufferInfo.networkId());
-      networkName = currentNetwork ? currentNetwork->networkName() : QString("");
-      // if message is ignored with "HardStrictness" we discard it here
-      if(_ignoreListManager.match(msg, networkName) == IgnoreListManager::HardStrictness)
-        continue;
       messages << msg;
     }
+
+    // recheck if there exists a buffer to store a redirected message in
+    for(int i = 0; i < redirectedMessages.count(); i++) {
+      const RawMessage &rawMsg = _messageQueue.at(i);
+      if(bufferInfoCache.contains(rawMsg.networkId) && bufferInfoCache[rawMsg.networkId].contains(rawMsg.target)) {
+        bufferInfo = bufferInfoCache[rawMsg.networkId][rawMsg.target];
+      } else {
+        // no luck -> we store them in the StatusBuffer
+        bufferInfo = Core::bufferInfo(user(), rawMsg.networkId, BufferInfo::StatusBuffer, "");
+        // add the StatusBuffer to the Cache in case there are more Messages for the original target
+        bufferInfoCache[rawMsg.networkId][rawMsg.target] = bufferInfo;
+      }
+      Message msg(bufferInfo, rawMsg.type, rawMsg.text, rawMsg.sender, rawMsg.flags);
+      messages << msg;
+    }
+
     Core::storeMessages(messages);
     // FIXME: extend protocol to a displayMessages(MessageList)
     for(int i = 0; i < messages.count(); i++) {
