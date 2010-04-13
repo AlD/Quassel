@@ -271,6 +271,8 @@ void SignalProxy::setProxyMode(ProxyMode mode) {
 }
 
 void SignalProxy::init() {
+  _heartBeatInterval = 0;
+  _maxHeartBeatCount = 0;
   _signalRelay = new SignalRelay(this);
   connect(&_heartBeatTimer, SIGNAL(timeout()), this, SLOT(sendHeartBeat()));
   setHeartBeatInterval(30);
