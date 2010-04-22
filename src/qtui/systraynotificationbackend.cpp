@@ -79,7 +79,7 @@ void SystrayNotificationBackend::close(uint notificationId) {
 
   QtUi::mainWindow()->systemTray()->closeMessage(notificationId);
 
-  if(!_notifications.count())
+  //if(!_notifications.count()) //FIXME make configurable
     QtUi::mainWindow()->systemTray()->setAlert(false);
 
   updateToolTip();
@@ -87,8 +87,9 @@ void SystrayNotificationBackend::close(uint notificationId) {
 
 void SystrayNotificationBackend::notificationActivated(uint notificationId) {
   if(!_blockActivation) {
-    if(QtUi::mainWindow()->systemTray()->isAlerted()) {
-      _blockActivation = true; // prevent double activation because both tray icon and bubble might send a signal
+    if(_notifications.count()) {
+      if(QtUi::mainWindow()->systemTray()->mode() == SystemTray::Legacy)
+        _blockActivation = true; // prevent double activation because both tray icon and bubble might send a signal
       if(!notificationId)
         notificationId = _notifications.count()? _notifications.last().notificationId : 0;
       emit activated(notificationId);

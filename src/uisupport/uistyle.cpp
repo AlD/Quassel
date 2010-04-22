@@ -484,6 +484,7 @@ UiStyle::StyledString UiStyle::styleString(const QString &s_, quint32 baseFormat
       if(s[pos+1] == 'D') code += s[pos+2];
       FormatType ftype = formatType(code);
       if(ftype == Invalid) {
+        pos++;
         qWarning() << (QString("Invalid format code in string: %1").arg(s));
         continue;
       }
@@ -503,6 +504,7 @@ UiStyle::StyledString UiStyle::styleString(const QString &s_, quint32 baseFormat
 QString UiStyle::mircToInternal(const QString &mirc_) {
   QString mirc = mirc_;
   mirc.replace('%', "%%");      // escape % just to be sure
+  mirc.replace('\t', "        ");      // tabs break layout, also this is italics in Konversation
   mirc.replace('\x02', "%B");
   mirc.replace('\x0f', "%O");
   mirc.replace('\x12', "%R");
@@ -562,7 +564,8 @@ void UiStyle::StyledMessage::style() const {
   QString bufferName = bufferInfo().bufferName();
   bufferName.replace('%', "%%"); // well, you _can_ have a % in a buffername apparently... -_-
   host.replace('%', "%%");       // hostnames too...
-  user.replace('%', "%%");       // and the username.
+  user.replace('%', "%%");       // and the username...
+  nick.replace('%', "%%");       // ... and then there's totally RFC-violating servers like justin.tv m(
   const int maxNetsplitNicks = 15;
 
   QString t;
