@@ -42,8 +42,6 @@ public:
   const QSet<BufferId> &removedBufferIds();
   const QSet<BufferId> &tempRemovedBufferIds();
 
-  bool addBuffersAutomatically();
-  bool hideInactiveBuffers();
   int allowedBufferTypes();
   int minimumActivity();
 
@@ -52,6 +50,10 @@ public:
 public slots:
   void addView(int viewId);
   void removeView(int viewId);
+
+  void reset();
+  void save();
+  void restore();
 
   // updates propagated from the actual views
   void update();
@@ -69,15 +71,14 @@ private slots:
 
 private:
   void updateHelper();
+  QSet<BufferId> filterBuffersByConfig(const QList<BufferId> &buffers, const BufferViewConfig *config);
+
   bool _aboutToUpdate;
 
   QSet<int> _bufferViewIds;
   int _uninitializedViewCount;
 
   QSet<NetworkId> _networkIds;
-
-  bool _addBuffersAutomatically;
-  bool _hideInactiveBuffers;
   int _allowedBufferTypes;
   int _minimumActivity;
 
