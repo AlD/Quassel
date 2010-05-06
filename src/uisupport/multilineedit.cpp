@@ -23,6 +23,7 @@
 #include <QMessageBox>
 #include <QScrollBar>
 
+#include "actioncollection.h"
 #include "bufferview.h"
 #include "graphicalui.h"
 #include "multilineedit.h"
@@ -31,12 +32,7 @@
 const int leftMargin = 3;
 
 MultiLineEdit::MultiLineEdit(QWidget *parent)
-  :
-#ifdef HAVE_KDE
-    KTextEdit(parent),
-#else
-    QTextEdit(parent),
-#endif
+  : MultiLineEditParent(parent),
     _idx(0),
     _mode(SingleLine),
     _singleLine(true),
@@ -44,6 +40,7 @@ MultiLineEdit::MultiLineEdit(QWidget *parent)
     _maxHeight(5),
     _scrollBarsEnabled(true),
     _pasteProtectionEnabled(true),
+    _emacsMode(false),
     _lastDocumentHeight(-1)
 {
 #if QT_VERSION >= 0x040500
@@ -172,6 +169,10 @@ QSize MultiLineEdit::minimumSizeHint() const {
   return sizeHint();
 }
 
+void MultiLineEdit::setEmacsMode(bool enable) {
+  _emacsMode = enable;
+}
+
 void MultiLineEdit::setSpellCheckEnabled(bool enable) {
 #ifdef HAVE_KDE
   setCheckSpellingEnabled(enable);
@@ -237,6 +238,22 @@ bool MultiLineEdit::addToHistory(const QString &text, bool temporary) {
   return false;
 }
 
+bool MultiLineEdit::event(QEvent *e) {
+  // We need to make sure that global shortcuts aren't eaten
+  if(e->type() == QEvent::ShortcutOverride) {
+    QKeyEvent* event = static_cast<QKeyEvent *>(e);
+    QKeySequence key = QKeySequence(event->key() | event->modifiers());
+    foreach(QAction *action, GraphicalUi::actionCollection()->actions()) {
+      if(action->shortcuts().contains(key)) {
+        e->ignore();
+        return false;
+      }
+    }
+  }
+
+  return MultiLineEditParent::event(e);
+}
+
 void MultiLineEdit::keyPressEvent(QKeyEvent *event) {
   // Workaround the fact that Qt < 4.5 doesn't know InsertLineSeparator yet
 #if QT_VERSION >= 0x040500
@@ -255,11 +272,7 @@ void MultiLineEdit::keyPressEvent(QKeyEvent *event) {
       on_returnPressed();
       return;
     }
-#ifdef HAVE_KDE
-    KTextEdit::keyPressEvent(event);
-#else
-    QTextEdit::keyPressEvent(event);
-#endif
+    MultiLineEditParent::keyPressEvent(event);
     return;
   }
 
@@ -310,6 +323,107 @@ void MultiLineEdit::keyPressEvent(QKeyEvent *event) {
     ;
   }
 
+  if(_emacsMode) {
+    if(event->modifiers() & Qt::ControlModifier) {
+      switch(event->key()) {
+        // move
+      case Qt::Key_A:
+        moveCursor(QTextCursor::StartOfLine);
+        return;
+      case Qt::Key_E:
+        moveCursor(QTextCursor::EndOfLine);
+        return;
+      case Qt::Key_F:
+        moveCursor(QTextCursor::Right);
+        return;
+      case Qt::Key_B:
+        moveCursor(QTextCursor::Left);
+        return;
+
+        // modify
+      case Qt::Key_Y:
+        paste();
+        return;
+      case Qt::Key_K:
+        moveCursor(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+        cut();
+        return;
+
+      default:
+        break;
+      }
+    }
+    else if(event->modifiers() & Qt::MetaModifier ||
+            event->modifiers() & Qt::AltModifier)
+    {
+      switch(event->key()) {
+      case Qt::Key_Right:
+        moveCursor(QTextCursor::WordRight);
+        return;
+      case Qt::Key_Left:
+        moveCursor(QTextCursor::WordLeft);
+        return;
+      case Qt::Key_F:
+        moveCursor(QTextCursor::WordRight);
+        return;
+      case Qt::Key_B:
+        moveCursor(QTextCursor::WordLeft);
+        return;
+      case Qt::Key_Less:
+        moveCursor(QTextCursor::Start);
+        return;
+      case Qt::Key_Greater:
+        moveCursor(QTextCursor::End);
+        return;
+
+        // modify
+      case Qt::Key_D:
+        moveCursor(QTextCursor::WordRight, QTextCursor::KeepAnchor);
+        cut();
+        return;
+
+      case Qt::Key_U: // uppercase word
+        moveCursor(QTextCursor::WordRight, QTextCursor::KeepAnchor);
+        textCursor().insertText(textCursor().selectedText().toUpper());
+        return;
+
+      case Qt::Key_L: // lowercase word
+        moveCursor(QTextCursor::WordRight, QTextCursor::KeepAnchor);
+        textCursor().insertText(textCursor().selectedText().toLower());
+        return;
+
+      case Qt::Key_C: { // capitalize word
+        moveCursor(QTextCursor::WordRight, QTextCursor::KeepAnchor);
+        QString const text = textCursor().selectedText();
+        textCursor().insertText(text.left(1).toUpper() + text.mid(1).toLower());
+        return;
+      }
+
+      case Qt::Key_T: { // transpose words
+        moveCursor(QTextCursor::StartOfWord);
+        moveCursor(QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
+        QString const word1 = textCursor().selectedText();
+        textCursor().clearSelection();
+        moveCursor(QTextCursor::WordRight);
+        moveCursor(QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
+        QString const word2 = textCursor().selectedText();
+        if(!word2.isEmpty() && !word1.isEmpty()) {
+          textCursor().insertText(word1);
+          moveCursor(QTextCursor::WordLeft);
+          moveCursor(QTextCursor::WordLeft);
+          moveCursor(QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
+          textCursor().insertText(word2);
+          moveCursor(QTextCursor::WordRight);
+          moveCursor(QTextCursor::EndOfWord);
+        }
+        return;
+      }
+
+      default:
+        break;
+      }
+    }
+  }
 
 #ifdef HAVE_KDE
   KTextEdit::keyPressEvent(event);

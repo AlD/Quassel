@@ -23,22 +23,19 @@
 
 #include <QKeyEvent>
 #include <QHash>
-#include <QTextEdit>
 
 #ifdef HAVE_KDE
 #  include <KDE/KTextEdit>
+#  define MultiLineEditParent KTextEdit
+#else
+#  include <QTextEdit>
+#  define MultiLineEditParent QTextEdit
 #endif
 
 class QKeyEvent;
 class TabCompleter;
 
-class MultiLineEdit : public
-#ifdef HAVE_KDE
-                  KTextEdit
-#else
-                  QTextEdit
-#endif
-{
+class MultiLineEdit : public MultiLineEditParent {
   Q_OBJECT
 
 public:
@@ -73,11 +70,13 @@ public:
   inline QStringList history() const { return _history; }
   inline QHash<int, QString> tempHistory() const { return _tempHistory; }
   inline qint32 idx() const { return _idx; }
+  inline bool emacsMode() const { return _emacsMode; }
 
 public slots:
   void setMode(Mode mode);
   void setMinHeight(int numLines);
   void setMaxHeight(int numLines);
+  void setEmacsMode(bool enable = true);
   void setScrollBarsEnabled(bool enable = true);
   void setSpellCheckEnabled(bool enable = true);
   void setPasteProtectionEnabled(bool enable = true, QWidget *msgBoxParent = 0);
@@ -94,6 +93,7 @@ signals:
   void noTextEntered();
 
 protected:
+  virtual bool event(QEvent *e);
   virtual void keyPressEvent(QKeyEvent * event);
   virtual void resizeEvent(QResizeEvent *event);
 
@@ -121,6 +121,7 @@ private:
   int _maxHeight;
   bool _scrollBarsEnabled;
   bool _pasteProtectionEnabled;
+  bool _emacsMode;
 
   QSize _sizeHint;
   qreal _lastDocumentHeight;

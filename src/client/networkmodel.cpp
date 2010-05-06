@@ -798,7 +798,7 @@ QString IrcUserItem::toolTip(int column) const {
   QStringList toolTip(QString("<b>%1</b>").arg(nickName()));
   if(_ircUser->userModes() != "") toolTip[0].append(QString(" (%1)").arg(_ircUser->userModes()));
   if(_ircUser->isAway()) {
-    toolTip[0].append(" is away");
+    toolTip[0].append(tr(" is away"));
     if(!_ircUser->awayMessage().isEmpty())
       toolTip[0].append(QString(" (%1)").arg(_ircUser->awayMessage()));
   }
@@ -1022,6 +1022,7 @@ void NetworkModel::setLastSeenMsgId(const BufferId &bufferId, const MsgId &msgId
     return;
   }
   bufferItem->setLastSeenMsgId(msgId);
+  emit lastSeenMsgSet(bufferId, msgId);
 }
 
 void NetworkModel::setMarkerLineMsgId(const BufferId &bufferId, const MsgId &msgId) {
@@ -1032,6 +1033,7 @@ void NetworkModel::setMarkerLineMsgId(const BufferId &bufferId, const MsgId &msg
     return;
   }
   bufferItem->setMarkerLineMsgId(msgId);
+  emit markerLineSet(bufferId, msgId);
 }
 
 void NetworkModel::updateBufferActivity(Message &msg) {
@@ -1087,7 +1089,7 @@ void NetworkModel::updateBufferActivity(BufferItem *bufferItem, const Message &m
 
   bufferItem->updateActivityLevel(msg);
   if(bufferItem->isCurrentBuffer())
-    emit setLastSeenMsg(bufferItem->bufferId(), msg.msgId());
+    emit requestSetLastSeenMsg(bufferItem->bufferId(), msg.msgId());
 }
 
 void NetworkModel::setBufferActivity(const BufferId &bufferId, BufferInfo::ActivityLevel level) {
