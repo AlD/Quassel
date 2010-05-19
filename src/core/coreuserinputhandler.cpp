@@ -51,14 +51,31 @@ void CoreUserInputHandler::handleUserInput(const BufferInfo &bufferInfo, const Q
 // ====================
 void CoreUserInputHandler::handleAway(const BufferInfo &bufferInfo, const QString &msg) {
   Q_UNUSED(bufferInfo)
+  if(msg.startsWith("-all")) {
+    if(msg.length() == 4) {
+      coreSession()->globalAway();
+      return;
+    }
+    Q_ASSERT(msg.length() > 4);
+    if(msg[4] == ' ') {
+      coreSession()->globalAway(msg.mid(5));
+      return;
+    }
+  }
+  issueAway(msg);
+}
 
+void CoreUserInputHandler::issueAway(const QString &msg, bool autoCheck) {
   QString awayMsg = msg;
   IrcUser *me = network()->me();
 
   // if there is no message supplied we have to check if we are already away or not
-  if(msg.isEmpty()) {
+  if(autoCheck && msg.isEmpty()) {
     if(me && !me->isAway()) {
-      awayMsg = network()->identityPtr()->awayReason();
+      Identity *identity = network()->identityPtr();
+      if(identity) {
+        awayMsg = identity->awayReason();
+      }
       if(awayMsg.isEmpty()) {
 	awayMsg = tr("away");
       }
@@ -257,8 +274,17 @@ void CoreUserInputHandler::handleMode(const BufferInfo &bufferInfo, const QStrin
 
   QStringList params = msg.split(' ', QString::SkipEmptyParts);
   // if the first argument is neither a channel nor us (user modes are only to oneself) the current buffer is assumed to be the target
-  if(!params.isEmpty() && !network()->isChannelName(params[0]) && !network()->isMyNick(params[0]))
-    params.prepend(bufferInfo.bufferName());
+  if(!params.isEmpty()) {
+    if(!network()->isChannelName(params[0]) && !network()->isMyNick(params[0]))
+      params.prepend(bufferInfo.bufferName());
+    if(network()->isMyNick(params[0]) && params.count() == 2)
+      network()->updateIssuedModes(params[1]);
+    if(params[0] == "-reset" && params.count() == 1) {
+      // FIXME: give feedback to the user (I don't want to add new strings right now)
+      network()->resetPersistentModes();
+      return;
+    }
+  }
 
   // TODO handle correct encoding for buffer modes (channelEncode())
   emit putCmd("MODE", serverEncode(params));
