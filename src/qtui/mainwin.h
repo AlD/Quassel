@@ -114,9 +114,8 @@ class MainWin
     void showSettingsDlg();
     void showNotificationsDlg();
     void showIgnoreList(QString newRule = QString());
-#ifdef HAVE_KDE
     void showShortcutsDlg();
-#endif
+
     void handleCoreConnectionError(const QString &errorMsg);
     void userAuthenticationRequired(CoreAccount *, bool *valid, const QString &errorMessage);
     void handleNoSslInClient(bool *accepted);
@@ -134,6 +133,9 @@ class MainWin
     void on_actionDebugMessageModel_triggered();
     void on_actionDebugHotList_triggered();
     void on_actionDebugLog_triggered();
+
+    void bindJumpKey();
+    void onJumpKey();
 
     void clientNetworkCreated(NetworkId);
     void clientNetworkRemoved(NetworkId);
@@ -198,6 +200,7 @@ class MainWin
     QPoint _normalPos; //!< Position of the non-maximized window
 
     BufferHotListFilter *_bufferHotList;
+    QHash<int, BufferId> _jumpKeyMap;
 
     friend class QtUi;
 };

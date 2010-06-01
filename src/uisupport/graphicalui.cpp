@@ -24,6 +24,7 @@
 #include "graphicalui.h"
 
 #include "actioncollection.h"
+#include "uisettings.h"
 #include "contextmenuactionprovider.h"
 #include "toolbaractionprovider.h"
 
@@ -58,14 +59,36 @@ void GraphicalUi::init() {
 #endif
 }
 
-ActionCollection *GraphicalUi::actionCollection(const QString &category) {
+ActionCollection *GraphicalUi::actionCollection(const QString &category, const QString &translatedCategory) {
   if(_actionCollections.contains(category))
     return _actionCollections.value(category);
   ActionCollection *coll = new ActionCollection(_mainWidget);
+
+  if(!translatedCategory.isEmpty())
+    coll->setProperty("Category", translatedCategory);
+  else
+    coll->setProperty("Category", category);
+
   if(_mainWidget)
     coll->addAssociatedWidget(_mainWidget);
   _actionCollections.insert(category, coll);
   return coll;
+}
+
+QHash<QString, ActionCollection *> GraphicalUi::actionCollections() {
+  return _actionCollections;
+}
+
+void GraphicalUi::loadShortcuts() {
+  foreach(ActionCollection *coll, actionCollections())
+    coll->readSettings();
+}
+
+void GraphicalUi::saveShortcuts() {
+  ShortcutSettings s;
+  s.clear();
+  foreach(ActionCollection *coll, actionCollections())
+    coll->writeSettings();
 }
 
 void GraphicalUi::setMainWidget(QWidget *widget) {

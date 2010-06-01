@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-09 by the Quassel Project                          *
+ *   Copyright (C) 2010 by the Quassel Project                             *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,28 +18,55 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef JUMPKEYHANDLER_H
-#define JUMPKEYHANDLER_H
+#ifndef SHORTCUTSSETTINGSPAGE_H
+#define SHORTCUTSSETTINGSPAGE_H
 
-#include <QObject>
-#include <QHash>
-#include "types.h"
+#include <QSortFilterProxyModel>
 
-class JumpKeyHandler : public QObject {
+#include "settingspage.h"
+
+#include "ui_shortcutssettingspage.h"
+
+class ActionCollection;
+class ShortcutsModel;
+
+class ShortcutsFilter : public QSortFilterProxyModel {
   Q_OBJECT
-
 public:
-  JumpKeyHandler(QObject *parent = 0);
+  ShortcutsFilter(QObject *parent = 0);
 
-  void jumpKey(int key);
-  void bindKey(int key);
+public slots:
+  void setFilterString(const QString &filterString);
 
-  virtual bool eventFilter(QObject *obj, QEvent *event);
+protected:
+  virtual bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
 
 private:
-  int bindModifier;
-  int jumpModifier;
-  QHash<int, BufferId> _keyboardJump;
+  QString _filterString;
 };
 
-#endif //JUMPKEYHANDLER_H
+class ShortcutsSettingsPage : public SettingsPage {
+  Q_OBJECT
+public:
+  ShortcutsSettingsPage(const QHash<QString, ActionCollection *> &actionCollections, QWidget *parent = 0);
+
+  inline bool hasDefaults() const { return true; }
+
+public slots:
+  void save();
+  void load();
+  void defaults();
+
+private slots:
+  void on_searchEdit_textChanged(const QString &text);
+  void keySequenceChanged(const QKeySequence &seq, const QModelIndex &conflicting);
+  void setWidgetStates();
+  void toggledCustomOrDefault();
+
+private:
+  Ui::ShortcutsSettingsPage ui;
+  ShortcutsModel *_shortcutsModel;
+  ShortcutsFilter *_shortcutsFilter;
+};
+
+#endif // SHORTCUTSSETTINGSPAGE_H
