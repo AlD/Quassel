@@ -1,5 +1,4 @@
 # Builds the common module
-
 set(QT_DONT_USE_QTGUI 1)
 set(QT_USE_QTNETWORK 1)
 include(${QT_USE_FILE})
@@ -27,13 +26,6 @@ set(SOURCES
     signalproxy.cpp
     syncableobject.cpp
     util.cpp)
-
-if(CMAKE_HOST_WIN32)
-    set(SOURCES ${SOURCES} logbacktrace_win.cpp)
-endif(CMAKE_HOST_WIN32)
-if(CMAKE_HOST_UNIX)
-    set(SOURCES ${SOURCES} logbacktrace_unix.cpp)
-endif(CMAKE_HOST_UNIX)
 
 set(MOC_HDRS
     aliasmanager.h
@@ -67,6 +59,13 @@ if(APPLE)
   set(SOURCES ${SOURCES} mac_utils.cpp)
   set(HEADERS ${HEADERS} mac_utils.h)
 endif(APPLE)
+
+if(CMAKE_HOST_WIN32)
+    set(SOURCES ${SOURCES} logbacktrace_win.cpp)
+endif(CMAKE_HOST_WIN32)
+if(CMAKE_HOST_UNIX)
+    set(SOURCES ${SOURCES} logbacktrace_unix.cpp)
+endif(CMAKE_HOST_UNIX)
 
 qt4_wrap_cpp(MOC ${MOC_HDRS})
 

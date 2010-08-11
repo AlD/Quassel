@@ -162,6 +162,9 @@ void CtcpHandler::parse(Message::Type messageType, const QString &prefix, const 
 }
 
 QByteArray CtcpHandler::pack(const QByteArray &ctcpTag, const QByteArray &message) {
+  if(message.isEmpty())
+    return XDELIM + ctcpTag + XDELIM;
+
   return XDELIM + ctcpTag + ' ' + xdelimQuote(message) + XDELIM;
 }
 
@@ -183,6 +186,20 @@ void CtcpHandler::reply(const QString &bufname, const QString &ctcpTag, const QS
 void CtcpHandler::handleAction(CtcpType ctcptype, const QString &prefix, const QString &target, const QString &param) {
   Q_UNUSED(ctcptype)
   emit displayMsg(Message::Action, typeByTarget(target), target, param, prefix);
+}
+
+void CtcpHandler::handleClientinfo(CtcpType ctcptype, const QString &prefix, const QString &target, const QString &param) {
+  Q_UNUSED(target)
+  if(ctcptype == CtcpQuery) {
+    if(_ignoreListManager->ctcpMatch(prefix, network()->networkName(), "CLIENTINFO"))
+      return;
+    reply(nickFromMask(prefix), "CLIENTINFO", QString("ACTION CLIENTINFO PING TIME VERSION"));
+    emit displayMsg(Message::Server, BufferInfo::StatusBuffer, "", tr("Received CTCP CLIENTINFO request from %1").arg(prefix));
+  } else {
+    // display clientinfo answer
+    emit displayMsg(Message::Server, BufferInfo::StatusBuffer, "", tr("Received CTCP CLIENTINFO answer from %1: %2")
+                    .arg(nickFromMask(prefix)).arg(param));
+  }
 }
 
 void CtcpHandler::handlePing(CtcpType ctcptype, const QString &prefix, const QString &target, const QString &param) {

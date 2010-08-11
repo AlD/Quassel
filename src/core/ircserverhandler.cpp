@@ -32,6 +32,10 @@
 
 #include <QDebug>
 
+#ifdef HAVE_QCA2
+#  include "cipher.h"
+#endif
+
 IrcServerHandler::IrcServerHandler(CoreNetwork *parent)
   : CoreBasicHandler(parent),
     _whois(false)
@@ -193,6 +197,21 @@ void IrcServerHandler::defaultHandler(QString cmd, const QString &prefix, const 
 //******************************/
 // IRC SERVER HANDLER
 //******************************/
+void IrcServerHandler::handleInvite(const QString &prefix, const QList<QByteArray> &params) {
+  if(!checkParamCount("IrcServerHandler::handleInvite()", params, 2))
+    return;
+//   qDebug() << "IrcServerHandler::handleInvite()" << prefix << params;
+
+  IrcUser *ircuser = network()->updateNickFromMask(prefix);
+  if(!ircuser) {
+    return;
+  }
+
+  QString channel = serverDecode(params[1]);
+
+  emit displayMsg(Message::Invite, BufferInfo::StatusBuffer, "", tr("%1 invited you to channel %2").arg(ircuser->nick()).arg(channel));
+}
+
 void IrcServerHandler::handleJoin(const QString &prefix, const QList<QByteArray> &params) {
   if(!checkParamCount("IrcServerHandler::handleJoin()", params, 1))
     return;
@@ -494,6 +513,9 @@ void IrcServerHandler::handlePrivmsg(const QString &prefix, const QList<QByteArr
       ? *targetIter
       : senderNick;
 
+#ifdef HAVE_QCA2
+    msg = decrypt(target, msg);
+#endif
     // it's possible to pack multiple privmsgs into one param using ctcp
     // - > we let the ctcpHandler do the work
     network()->ctcpHandler()->parse(Message::Plain, prefix, target, msg);
@@ -549,8 +571,13 @@ void IrcServerHandler::handleTopic(const QString &prefix, const QList<QByteArray
     return;
 
   QString topic;
-  if(params.count() > 1)
-    topic = channelDecode(channel->name(), params[1]);
+  if(params.count() > 1) {
+    QByteArray rawTopic = params[1];
+#ifdef HAVE_QCA2
+    rawTopic = decrypt(channel->name(), rawTopic, true);
+#endif
+    topic = channelDecode(channel->name(), rawTopic);
+  }
 
   channel->setTopic(topic);
 
@@ -623,6 +650,9 @@ void IrcServerHandler::handle005(const QString &prefix, const QList<QByteArray> 
     QString value = rawSupport.section("=", 1);
     network()->addSupport(key, value);
   }
+
+  /* determine our prefixes here to get an accurate result */
+  network()->determinePrefixes();
 }
 
 /* RPL_UMODEIS - "<user_modes> [<user_mode_params>]" */
@@ -771,7 +801,8 @@ void IrcServerHandler::handle311(const QString &prefix, const QList<QByteArray> 
     ircuser->setRealName(serverDecode(params.last()));
     emit displayMsg(Message::Server, BufferInfo::StatusBuffer, "", tr("[Whois] %1 is %2 (%3)") .arg(ircuser->nick()).arg(ircuser->hostmask()).arg(ircuser->realName()));
   } else {
-    emit displayMsg(Message::Server, BufferInfo::StatusBuffer, "", tr("[Whois] %1 is %2 (%3)") .arg(serverDecode(params[1])).arg(serverDecode(params[2])).arg(serverDecode(params.last())));
+    QString host = QString("%1!%2@%3").arg(serverDecode(params[0])).arg(serverDecode(params[1])).arg(serverDecode(params[2]));
+    emit displayMsg(Message::Server, BufferInfo::StatusBuffer, "", tr("[Whois] %1 is %2 (%3)") .arg(serverDecode(params[0])).arg(host).arg(serverDecode(params.last())));
   }
 }
 
@@ -842,10 +873,12 @@ void IrcServerHandler::handle317(const QString &prefix, const QList<QByteArray> 
 
   QString nick = serverDecode(params[0]);
   IrcUser *ircuser = network()->ircUser(nick);
+  
+  QDateTime now = QDateTime::currentDateTime();
+  int idleSecs = serverDecode(params[1]).toInt();
+  idleSecs *= -1;
+  
   if(ircuser) {
-    QDateTime now = QDateTime::currentDateTime();
-    int idleSecs = serverDecode(params[1]).toInt();
-    idleSecs *= -1;
     ircuser->setIdleTime(now.addSecs(idleSecs));
     if(params.size() > 3) { // if we have more then 3 params we have the above mentioned "real life" situation
       int loginTime = serverDecode(params[2]).toInt();
@@ -853,9 +886,14 @@ void IrcServerHandler::handle317(const QString &prefix, const QList<QByteArray> 
       emit displayMsg(Message::Server, BufferInfo::StatusBuffer, "", tr("[Whois] %1 is logged in since %2").arg(ircuser->nick()).arg(ircuser->loginTime().toString()));
     }
     emit displayMsg(Message::Server, BufferInfo::StatusBuffer, "", tr("[Whois] %1 is idling for %2 (%3)").arg(ircuser->nick()).arg(secondsToString(ircuser->idleTime().secsTo(now))).arg(ircuser->idleTime().toString()));
-
   } else {
-    emit displayMsg(Message::Server, BufferInfo::StatusBuffer, "", tr("[Whois] idle message: %1").arg(userDecode(nick, params).join(" ")));
+    QDateTime idleSince = now.addSecs(idleSecs);
+    if (params.size() > 3) { // we have a signon time
+      int loginTime = serverDecode(params[2]).toInt();
+      QDateTime datetime = QDateTime::fromTime_t(loginTime);
+      emit displayMsg(Message::Server, BufferInfo::StatusBuffer, "", tr("[Whois] %1 is logged in since %2").arg(nick).arg(datetime.toString()));
+    }
+    emit displayMsg(Message::Server, BufferInfo::StatusBuffer, "", tr("[Whois] %1 is idling for %2 (%3)").arg(nick).arg(secondsToString(idleSince.secsTo(now))).arg(idleSince.toString()));
   }
 }
 
@@ -988,7 +1026,12 @@ void IrcServerHandler::handle332(const QString &prefix, const QList<QByteArray> 
     return;
 
   QString channel = serverDecode(params[0]);
-  QString topic = channelDecode(channel, params[1]);
+  QByteArray rawTopic = params[1];
+#ifdef HAVE_QCA2
+  rawTopic = decrypt(channel, rawTopic, true);
+#endif
+  QString topic = channelDecode(channel, rawTopic);
+
   IrcChannel *chan = network()->ircChannel(channel);
   if(chan)
     chan->setTopic(topic);
@@ -1005,6 +1048,23 @@ void IrcServerHandler::handle333(const QString &prefix, const QList<QByteArray> 
   QString channel = serverDecode(params[0]);
   emit displayMsg(Message::Topic, BufferInfo::ChannelBuffer, channel,
                   tr("Topic set by %1 on %2") .arg(serverDecode(params[1]), QDateTime::fromTime_t(channelDecode(channel, params[2]).toUInt()).toString()));
+}
+
+/* RPL_INVITING - "<nick> <channel>*/
+void IrcServerHandler::handle341(const QString &prefix, const QList<QByteArray> &params) {
+  Q_UNUSED(prefix);
+  if(!checkParamCount("IrcServerHandler::handle341()", params, 2))
+    return;
+
+  QString nick = serverDecode(params[0]);
+
+  IrcChannel *channel = network()->ircChannel(serverDecode(params[1]));
+  if(!channel) {
+    qWarning() << "IrcServerHandler::handle341(): unknown channel:" << params[1];
+    return;
+  }
+  
+  emit displayMsg(Message::Server, BufferInfo::ChannelBuffer, channel->name(), tr("%1 has been invited to %2").arg(nick).arg(channel->name()));
 }
 
 /*  RPL_WHOREPLY: "<channel> <user> <host> <server> <nick>
@@ -1230,6 +1290,17 @@ void IrcServerHandler::destroyNetsplits() {
   _netsplits.clear();
 }
 
-/***********************************************************************************/
+#ifdef HAVE_QCA2
+QByteArray IrcServerHandler::decrypt(const QString &bufferName, const QByteArray &message_, bool isTopic) {
+  if(message_.isEmpty())
+    return message_;
 
+  Cipher *cipher = network()->cipher(bufferName);
+  if(!cipher)
+    return message_;
 
+  QByteArray message = message_;
+  message = isTopic? cipher->decryptTopic(message) : cipher->decrypt(message);
+  return message;
+}
+#endif

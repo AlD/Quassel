@@ -50,6 +50,7 @@ public:
   inline QString name() const { return _name; }
   inline QString topic() const { return _topic; }
   inline QString password() const { return _password; }
+  inline Network *network() const { return _network; }
 
   inline QList<IrcUser *> ircUsers() const { return _userModes.keys(); }
 
@@ -60,7 +61,7 @@ public:
   QString modeValue(const QChar &mode) const;
   QStringList modeValueList(const QChar &mode) const;
   QString channelModeString() const;
-  
+
   inline QTextCodec *codecForEncoding() const { return _codecForEncoding; }
   inline QTextCodec *codecForDecoding() const { return _codecForDecoding; }
   void setCodecForEncoding(const QString &codecName);
@@ -110,7 +111,7 @@ signals:
 //   void userModeRemoved(QString nick, QString mode);
 //   void channelModeAdded(const QChar &mode, const QString &value);
 //   void channelModeRemoved(const QChar &mode, const QString &value);
-  
+
   void ircUsersJoined(QList<IrcUser *> ircusers);
 //   void ircUsersJoined(QStringList nicks, QStringList modes);
   void ircUserParted(IrcUser *ircuser);
@@ -133,7 +134,7 @@ private:
 
   QHash<IrcUser *, QString> _userModes;
 
-  Network *network;
+  Network *_network;
 
   QTextCodec *_codecForEncoding;
   QTextCodec *_codecForDecoding;
@@ -142,7 +143,6 @@ private:
   QHash<QChar, QString> _B_channelModes;
   QHash<QChar, QString> _C_channelModes;
   QSet<QChar> _D_channelModes;
-
 };
 
 #endif

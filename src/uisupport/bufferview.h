@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-09 by the Quassel Project                          *
+ *   Copyright (C) 2005-2010 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -41,6 +41,11 @@ class BufferView : public QTreeView {
   Q_OBJECT
 
 public:
+  enum Direction {
+    Forward = 1,
+    Backward = -1
+  };
+
   BufferView(QWidget *parent = 0);
   void init();
 
@@ -58,6 +63,8 @@ public slots:
   void setRootIndexForNetworkId(const NetworkId &networkId);
   void removeSelectedBuffers(bool permanently = false);
   void menuActionTriggered(QAction *);
+  void nextBuffer();
+  void previousBuffer();
 
 signals:
   void removeBuffer(const QModelIndex &);
@@ -82,6 +89,8 @@ private slots:
 
   void on_configChanged();
   void on_layoutChanged();
+
+  void changeBuffer(Direction direction);
 
 private:
   QPointer<BufferViewConfig> _config;
@@ -114,6 +123,7 @@ protected:
 // ==============================
 class BufferViewDock : public QDockWidget {
   Q_OBJECT
+  Q_PROPERTY(bool active READ isActive WRITE setActive STORED true)
 
 public:
   BufferViewDock(BufferViewConfig *config, QWidget *parent);
@@ -121,9 +131,19 @@ public:
   int bufferViewId() const;
   BufferViewConfig *config() const;
   inline BufferView *bufferView() const { return qobject_cast<BufferView *>(widget()); }
+  inline bool isActive() const { return _active; }
 
 public slots:
+  void setActive(bool active = true);
+
+private slots:
   void bufferViewRenamed(const QString &newName);
+  void updateTitle();
+
+private:
+
+  bool _active;
+  QString _title;
 };
 
 #endif

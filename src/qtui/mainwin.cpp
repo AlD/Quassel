@@ -134,7 +134,8 @@ MainWin::MainWin(QWidget *parent)
     _coreConnectionStatusWidget(new CoreConnectionStatusWidget(Client::coreConnection(), this)),
     _titleSetter(this),
     _awayLog(0),
-    _layoutLoaded(false)
+    _layoutLoaded(false),
+    _activeBufferViewIndex(-1)
 {
   setAttribute(Qt::WA_DeleteOnClose, false);  // we delete the mainwin manually
 
@@ -183,6 +184,7 @@ void MainWin::init() {
   setupNickWidget();
   setupInputWidget();
   setupChatMonitor();
+  setupViewMenuTail();
   setupStatusBar();
   setupToolBars();
   setupSystray();
@@ -338,6 +340,8 @@ void MainWin::setupActions() {
 
   coll->addAction("ToggleStatusBar", new Action(tr("Show Status &Bar"), coll,
                                                 0, 0))->setCheckable(true);
+  coll->addAction("ToggleFullscreen", new Action(SmallIcon("window_fullscreen"), tr("&Fullscreen mode"), coll,
+                                                  this, SLOT(toggleFullscreen()), QKeySequence(Qt::Key_F11)));
 
   // Settings
   coll->addAction("ConfigureShortcuts", new Action(SmallIcon("configure-shortcuts"), tr("Configure &Shortcuts..."), coll,
@@ -419,6 +423,16 @@ void MainWin::setupActions() {
                                          QKeySequence(jumpModifier + Qt::Key_8)))->setProperty("Index", 8);
   coll->addAction("JumpKey9", new Action(tr("Quick Access #9"), coll, this, SLOT(onJumpKey()),
                                          QKeySequence(jumpModifier + Qt::Key_9)))->setProperty("Index", 9);
+
+  // Buffer navigation
+  coll->addAction("NextBufferView", new Action(SmallIcon("go-next-view"), tr("Activate Next Chat List"), coll,
+                                               this, SLOT(nextBufferView()), QKeySequence(QKeySequence::Forward)));
+  coll->addAction("PreviousBufferView", new Action(SmallIcon("go-previous-view"), tr("Activate Previous Chat List"), coll,
+                                                   this, SLOT(previousBufferView()), QKeySequence::Back));
+  coll->addAction("NextBuffer", new Action(SmallIcon("go-down"), tr("Go to Next Chat"), coll,
+                                           this, SLOT(nextBuffer()), QKeySequence(Qt::ALT + Qt::Key_Down)));
+  coll->addAction("PreviousBuffer", new Action(SmallIcon("go-up"), tr("Go to Previous Chat"), coll,
+                                               this, SLOT(previousBuffer()), QKeySequence(Qt::ALT + Qt::Key_Up)));
 }
 
 void MainWin::setupMenus() {
@@ -530,7 +544,11 @@ void MainWin::addBufferView(ClientBufferViewConfig *config) {
   _bufferViewsMenu->addAction(dock->toggleViewAction());
 
   connect(dock->toggleViewAction(), SIGNAL(toggled(bool)), this, SLOT(bufferViewToggled(bool)));
+  connect(dock, SIGNAL(visibilityChanged(bool)), SLOT(bufferViewVisibilityChanged(bool)));
   _bufferViews.append(dock);
+
+  if(!activeBufferView())
+    nextBufferView();
 }
 
 void MainWin::removeBufferView(int bufferViewConfigId) {
@@ -544,8 +562,15 @@ void MainWin::removeBufferView(int bufferViewConfigId) {
     dock = qobject_cast<BufferViewDock *>(action->parent());
     if(dock && actionData.toInt() == bufferViewConfigId) {
       removeAction(action);
-      _bufferViews.removeAll(dock);
       Client::bufferViewOverlay()->removeView(dock->bufferViewId());
+      _bufferViews.removeAll(dock);
+
+      if(dock->isActive()) {
+        dock->setActive(false);
+        _activeBufferViewIndex = -1;
+        nextBufferView();
+      }
+
       dock->deleteLater();
     }
   }
@@ -566,11 +591,18 @@ void MainWin::bufferViewToggled(bool enabled) {
   if(!_bufferViews.contains(dock))
     return;
 
-  if(enabled) {
+  if(enabled)
     Client::bufferViewOverlay()->addView(dock->bufferViewId());
-  } else {
+  else
     Client::bufferViewOverlay()->removeView(dock->bufferViewId());
-  }
+}
+
+void MainWin::bufferViewVisibilityChanged(bool visible) {
+  Q_UNUSED(visible);
+  BufferViewDock *dock = qobject_cast<BufferViewDock *>(sender());
+  Q_ASSERT(dock);
+  if((!dock->isHidden() && !activeBufferView()) || (dock->isHidden() && dock->isActive()))
+    nextBufferView();
 }
 
 BufferView *MainWin::allBuffersView() const {
@@ -578,6 +610,84 @@ BufferView *MainWin::allBuffersView() const {
   if(_bufferViews.count() > 0)
     return _bufferViews[0]->bufferView();
   return 0;
+}
+
+BufferView *MainWin::activeBufferView() const {
+  if(_activeBufferViewIndex < 0 || _activeBufferViewIndex >= _bufferViews.count())
+    return 0;
+  BufferViewDock *dock = _bufferViews.at(_activeBufferViewIndex);
+  return dock->isActive() ? qobject_cast<BufferView*>(dock->widget()) : 0;
+}
+
+void MainWin::changeActiveBufferView(int bufferViewId) {
+  if(bufferViewId < 0)
+    return;
+
+  BufferView *current = activeBufferView();
+  if(current) {
+    qobject_cast<BufferViewDock*>(current->parent())->setActive(false);
+    _activeBufferViewIndex = -1;
+  }
+
+  for(int i = 0; i < _bufferViews.count(); i++) {
+    BufferViewDock *dock = _bufferViews.at(i);
+    if(dock->bufferViewId() == bufferViewId && !dock->isHidden()) {
+      _activeBufferViewIndex = i;
+      dock->setActive(true);
+      return;
+    }
+  }
+
+  nextBufferView(); // fallback
+}
+
+void MainWin::changeActiveBufferView(bool backwards) {
+  BufferView *current = activeBufferView();
+  if(current)
+    qobject_cast<BufferViewDock*>(current->parent())->setActive(false);
+
+  if(!_bufferViews.count())
+    return;
+
+  int c = _bufferViews.count();
+  while(c--) { // yes, this will reactivate the current active one if all others fail
+    if(backwards) {
+      if(--_activeBufferViewIndex < 0)
+        _activeBufferViewIndex = _bufferViews.count()-1;
+    } else {
+      if(++_activeBufferViewIndex >= _bufferViews.count())
+        _activeBufferViewIndex = 0;
+    }
+
+    BufferViewDock *dock = _bufferViews.at(_activeBufferViewIndex);
+    if(dock->isHidden())
+      continue;
+
+    dock->setActive(true);
+    return;
+  }
+
+  _activeBufferViewIndex = -1;
+}
+
+void MainWin::nextBufferView() {
+  changeActiveBufferView(false);
+}
+
+void MainWin::previousBufferView() {
+  changeActiveBufferView(true);
+}
+
+void MainWin::nextBuffer() {
+  BufferView *view = activeBufferView();
+  if(view)
+    view->nextBuffer();
+}
+
+void MainWin::previousBuffer() {
+  BufferView *view = activeBufferView();
+  if(view)
+    view->previousBuffer();
 }
 
 void MainWin::showNotificationsDlg() {
@@ -681,6 +791,11 @@ void MainWin::setupTopicWidget() {
 
   _viewMenu->addAction(dock->toggleViewAction());
   dock->toggleViewAction()->setText(tr("Show Topic Line"));
+}
+
+void MainWin::setupViewMenuTail() {
+  _viewMenu->addSeparator();
+  _viewMenu->addAction(QtUi::actionCollection("General")->action("ToggleFullscreen"));
 }
 
 void MainWin::setupTitleSetter() {
@@ -805,10 +920,13 @@ void MainWin::setConnectedState() {
     wizard->show();
   }
   else {
-    QtUiSettings s;
-    BufferId lastUsedBufferId(s.value("LastUsedBufferId").toInt());
-    if(lastUsedBufferId.isValid())
-      Client::bufferModel()->switchToBuffer(lastUsedBufferId);
+    // Monolithic always preselects last used buffer - Client only if the connection died
+    if(Client::coreConnection()->wasReconnect() || Quassel::runMode() == Quassel::Monolithic) {
+      QtUiSettings s;
+      BufferId lastUsedBufferId(s.value("LastUsedBufferId").toInt());
+      if(lastUsedBufferId.isValid())
+        Client::bufferModel()->switchToBuffer(lastUsedBufferId);
+    }
   }
 }
 
@@ -824,14 +942,21 @@ void MainWin::loadLayout() {
   }
 
   restoreState(state, accountId);
+  int bufferViewId = s.value(QString("ActiveBufferView-%1").arg(accountId), -1).toInt();
+  if(bufferViewId >= 0)
+    changeActiveBufferView(bufferViewId);
+
   _layoutLoaded = true;
 }
 
 void MainWin::saveLayout() {
   QtUiSettings s;
   int accountId = _bufferViews.count()? Client::currentCoreAccount().accountId().toInt() : 0; // only save if we still have a layout!
-  if(accountId > 0)
+  if(accountId > 0) {
     s.setValue(QString("MainWinState-%1").arg(accountId) , saveState(accountId));
+    BufferView *view = activeBufferView();
+    s.setValue(QString("ActiveBufferView-%1").arg(accountId), view ? view->config()->bufferViewId() : -1);
+  }
 }
 
 void MainWin::disconnectedFromCore() {
@@ -854,7 +979,14 @@ void MainWin::disconnectedFromCore() {
     }
   }
 
+  // store last active buffer
   QtUiSettings s;
+  BufferId lastBufId = _bufferWidget->currentBuffer();
+  if(lastBufId.isValid()) {
+    s.setValue("LastUsedBufferId", lastBufId.toInt());
+    // clear the current selection
+    Client::bufferModel()->standardSelectionModel()->clearSelection();
+  }
   restoreState(s.value("MainWinState").toByteArray());
   setDisconnectedState();
 }
@@ -1044,6 +1176,21 @@ void MainWin::showShortcutsDlg() {
 #endif
 }
 
+void MainWin::toggleFullscreen() {
+  QAction *action = QtUi::actionCollection("General")->action("ToggleFullscreen");
+
+  if(isFullScreen()) {
+    showNormal();
+    action->setIcon(SmallIcon("window_fullscreen"));
+    action->setText(tr("&Fullscreen mode"));
+  }
+  else {
+    showFullScreen();
+    action->setIcon(SmallIcon("window_nofullscreen"));
+    action->setText(tr("&Normal mode"));
+  }
+}
+
 /********************************************************************************************************/
 
 bool MainWin::event(QEvent *event) {
@@ -1165,6 +1312,14 @@ void MainWin::clientNetworkUpdated() {
   switch(net->connectionState()) {
   case Network::Initialized:
     action->setIcon(SmallIcon("network-connect"));
+    // if we have no currently selected buffer, jump to the first connecting statusbuffer
+    if(!bufferWidget()->currentBuffer().isValid()) {
+      QModelIndex idx = Client::networkModel()->networkIndex(net->networkId());
+      if(idx.isValid()) {
+        BufferId statusBufferId = idx.data(NetworkModel::BufferIdRole).value<BufferId>();
+        Client::bufferModel()->switchToBuffer(statusBufferId);
+      }
+    }
     break;
   case Network::Disconnected:
     action->setIcon(SmallIcon("network-disconnect"));

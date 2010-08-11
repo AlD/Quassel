@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-09 by the Quassel Project                          *
+ *   Copyright (C) 2005-2010 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -194,7 +194,7 @@ QString Network::support(const QString &param) const {
 IrcUser *Network::newIrcUser(const QString &hostmask, const QVariantMap &initData) {
   QString nick(nickFromMask(hostmask).toLower());
   if(!_ircUsers.contains(nick)) {
-    IrcUser *ircuser = new IrcUser(hostmask, this);
+    IrcUser *ircuser = ircUserFactory(hostmask);
     if(!initData.isEmpty()) {
       ircuser->fromVariantMap(initData);
       ircuser->setInitialized();
@@ -475,7 +475,6 @@ NetworkInfo Network::networkInfoFromPreset(const QString &networkName) {
   return info;
 }
 
-
 // ====================
 //  Public Slots:
 // ====================
@@ -749,12 +748,15 @@ void Network::determinePrefixes() {
       _prefixModes = defaultPrefixModes;
       return;
     }
+    // clear the existing modes, just in case we're run multiple times
+    _prefixes = QString();
+    _prefixModes = QString();
 
     // we just assume that in PREFIX are only prefix chars stored
     for(int i = 0; i < defaultPrefixes.size(); i++) {
       if(prefix.contains(defaultPrefixes[i])) {
-	_prefixes += defaultPrefixes[i];
-	_prefixModes += defaultPrefixModes[i];
+        _prefixes += defaultPrefixes[i];
+        _prefixModes += defaultPrefixModes[i];
       }
     }
     // check for success
@@ -765,8 +767,8 @@ void Network::determinePrefixes() {
     // check if it's only prefix modes
     for(int i = 0; i < defaultPrefixes.size(); i++) {
       if(prefix.contains(defaultPrefixModes[i])) {
-	_prefixes += defaultPrefixes[i];
-	_prefixModes += defaultPrefixModes[i];
+        _prefixes += defaultPrefixes[i];
+        _prefixModes += defaultPrefixModes[i];
       }
     }
     // now we've done all we've could...
@@ -875,13 +877,13 @@ QDataStream &operator>>(QDataStream &in, NetworkInfo &info) {
 
 QDebug operator<<(QDebug dbg, const NetworkInfo &i) {
   dbg.nospace() << "(id = " << i.networkId << " name = " << i.networkName << " identity = " << i.identity
-		<< " codecForServer = " << i.codecForServer << " codecForEncoding = " << i.codecForEncoding << " codecForDecoding = " << i.codecForDecoding
-		<< " serverList = " << i.serverList << " useRandomServer = " << i.useRandomServer << " perform = " << i.perform
-		<< " useAutoIdentify = " << i.useAutoIdentify << " autoIdentifyService = " << i.autoIdentifyService << " autoIdentifyPassword = " << i.autoIdentifyPassword
+                << " codecForServer = " << i.codecForServer << " codecForEncoding = " << i.codecForEncoding << " codecForDecoding = " << i.codecForDecoding
+                << " serverList = " << i.serverList << " useRandomServer = " << i.useRandomServer << " perform = " << i.perform
+                << " useAutoIdentify = " << i.useAutoIdentify << " autoIdentifyService = " << i.autoIdentifyService << " autoIdentifyPassword = " << i.autoIdentifyPassword
                 << " useSasl = " << i.useSasl << " saslAccount = " << i.saslAccount << " saslPassword = " << i.saslPassword
                 << " useAutoReconnect = " << i.useAutoReconnect << " autoReconnectInterval = " << i.autoReconnectInterval
-		<< " autoReconnectRetries = " << i.autoReconnectRetries << " unlimitedReconnectRetries = " << i.unlimitedReconnectRetries
-		<< " rejoinChannels = " << i.rejoinChannels << ")";
+                << " autoReconnectRetries = " << i.autoReconnectRetries << " unlimitedReconnectRetries = " << i.unlimitedReconnectRetries
+                << " rejoinChannels = " << i.rejoinChannels << ")";
   return dbg.space();
 }
 

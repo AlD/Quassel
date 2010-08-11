@@ -66,6 +66,9 @@ void AbstractBufferContainer::removeBuffer(BufferId bufferId) {
   _chatViews.take(bufferId);
 }
 
+/*
+  Switching to first buffer is now handled in MainWin::clientNetworkUpdated()
+
 void AbstractBufferContainer::rowsInserted(const QModelIndex &parent, int start, int end) {
   Q_UNUSED(end)
 
@@ -80,12 +83,14 @@ void AbstractBufferContainer::rowsInserted(const QModelIndex &parent, int start,
       setCurrentBuffer(id);
   }
 }
+*/
 
 void AbstractBufferContainer::currentChanged(const QModelIndex &current, const QModelIndex &previous) {
   Q_UNUSED(previous)
 
   BufferId newBufferId = current.data(NetworkModel::BufferIdRole).value<BufferId>();
-  if(newBufferId.isValid() && currentBuffer() != newBufferId) {
+  // To be able to reset the selected buffer, we don't check if buffer/index is valid here
+  if(currentBuffer() != newBufferId) {
     setCurrentBuffer(newBufferId);
     emit currentChanged(newBufferId);
     emit currentChanged(current);

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-10 by the Quassel Project                          *
+ *   Copyright (C) 2005-2010 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -22,11 +22,12 @@
 #include "util.h"
 
 #include "ctcphandler.h"
-#include "coreidentity.h"
-#include "ircuser.h"
 
-#include <QDebug>
 #include <QRegExp>
+
+#ifdef HAVE_QCA2
+#  include "cipher.h"
+#endif
 
 CoreUserInputHandler::CoreUserInputHandler(CoreNetwork *parent)
   : CoreBasicHandler(parent)
@@ -77,7 +78,7 @@ void CoreUserInputHandler::issueAway(const QString &msg, bool autoCheck) {
         awayMsg = identity->awayReason();
       }
       if(awayMsg.isEmpty()) {
-	awayMsg = tr("away");
+        awayMsg = tr("away");
       }
     }
   }
@@ -155,6 +156,49 @@ void CoreUserInputHandler::handleCtcp(const BufferInfo &bufferInfo, const QStrin
 
   network()->ctcpHandler()->query(nick, ctcpTag, message);
   emit displayMsg(Message::Action, BufferInfo::StatusBuffer, "", verboseMessage, network()->myNick());
+}
+
+void CoreUserInputHandler::handleDelkey(const BufferInfo &bufferInfo, const QString &msg) {
+#ifdef HAVE_QCA2
+  if(!bufferInfo.isValid())
+    return;
+
+  QStringList parms = msg.split(' ', QString::SkipEmptyParts);
+
+  if(parms.isEmpty() && !bufferInfo.bufferName().isEmpty())
+    parms.prepend(bufferInfo.bufferName());
+
+  if(parms.isEmpty()) {
+    emit displayMsg(Message::Info, bufferInfo.bufferName(), "",
+                    tr("[usage] /delkey <nick|channel> deletes the encryption key for nick or channel or just /delkey when in a channel or query."));
+    return;
+  }
+
+  QString target = parms.at(0);
+
+  if(network()->cipherKey(target).isEmpty()) {
+    emit displayMsg(Message::Info, bufferInfo.bufferName(), tr("No key has been set for %1.").arg(target));
+    return;
+  }
+
+  network()->setCipherKey(target, QByteArray());
+
+  if(network()->isChannelName(target) && network()->channels().contains(target)) {
+    qobject_cast<CoreIrcChannel *>(network()->ircChannel(target))->setEncrypted(false);
+  }
+  else if(network()->nicks().contains(target)) {
+    qobject_cast<CoreIrcUser *>(network()->ircUser(target))->setEncrypted(false);
+  }
+
+  emit displayMsg(Message::Info, bufferInfo.bufferName(), tr("The key for %1 has been deleted.").arg(target));
+
+#else
+  Q_UNUSED(msg)
+  emit displayMsg(Message::Error, bufferInfo.bufferName(), "", tr("Error: Setting an encryption key requires Quassel to have been built "
+                                                                  "with support for the Qt Cryptographic Architecture (QCA2) library. "
+                                                                  "Contact your distributor about a Quassel package with QCA2 "
+                                                                  "support, or rebuild Quassel with QCA2 present."));
+#endif
 }
 
 void CoreUserInputHandler::handleDeop(const BufferInfo &bufferInfo, const QString &msg) {
@@ -296,8 +340,14 @@ void CoreUserInputHandler::handleMsg(const BufferInfo &bufferInfo, const QString
   if(!msg.contains(' '))
     return;
 
-  QByteArray target = serverEncode(msg.section(' ', 0, 0));
-  putPrivmsg(target, userEncode(target, msg.section(' ', 1)));
+  QString target = msg.section(' ', 0, 0);
+  QByteArray encMsg = userEncode(target, msg.section(' ', 1));
+
+#ifdef HAVE_QCA2
+  putPrivmsg(serverEncode(target), encMsg, network()->cipher(target));
+#else
+  putPrivmsg(serverEncode(target), encMsg);
+#endif
 }
 
 void CoreUserInputHandler::handleNick(const BufferInfo &bufferInfo, const QString &msg) {
@@ -387,16 +437,67 @@ void CoreUserInputHandler::handleQuote(const BufferInfo &bufferInfo, const QStri
 void CoreUserInputHandler::handleSay(const BufferInfo &bufferInfo, const QString &msg) {
   if(bufferInfo.bufferName().isEmpty())
     return;  // server buffer
-  putPrivmsg(serverEncode(bufferInfo.bufferName()), channelEncode(bufferInfo.bufferName(), msg));
+
+  QByteArray encMsg = channelEncode(bufferInfo.bufferName(), msg);
+#ifdef HAVE_QCA2
+  putPrivmsg(serverEncode(bufferInfo.bufferName()), encMsg, network()->cipher(bufferInfo.bufferName()));
+#else
+  putPrivmsg(serverEncode(bufferInfo.bufferName()), encMsg);
+#endif
   emit displayMsg(Message::Plain, bufferInfo.type(), bufferInfo.bufferName(), msg, network()->myNick(), Message::Self);
 }
 
+void CoreUserInputHandler::handleSetkey(const BufferInfo &bufferInfo, const QString &msg) {
+#ifdef HAVE_QCA2
+  if(!bufferInfo.isValid())
+    return;
+
+  QStringList parms = msg.split(' ', QString::SkipEmptyParts);
+
+  if(parms.count() == 1 && !bufferInfo.bufferName().isEmpty())
+    parms.prepend(bufferInfo.bufferName());
+  else if(parms.count() != 2) {
+    emit displayMsg(Message::Info, bufferInfo.bufferName(),
+                    tr("[usage] /setkey <nick|channel> <key> sets the encryption key for nick or channel. "
+                       "/setkey <key> when in a channel or query buffer sets the key for it."));
+    return;
+  }
+
+  QString target = parms.at(0);
+  QByteArray key = parms.at(1).toLocal8Bit();
+
+  network()->setCipherKey(target, key);
+
+  if(network()->isChannelName(target) && network()->channels().contains(target))
+    qobject_cast<CoreIrcChannel *>(network()->ircChannel(target))->setEncrypted(true);
+  else if(network()->nicks().contains(target))
+    qobject_cast<CoreIrcUser *>(network()->ircUser(target))->setEncrypted(true);
+
+  emit displayMsg(Message::Info, bufferInfo.bufferName(), tr("The key for %1 has been set.").arg(target));
+#else
+  Q_UNUSED(msg)
+  emit displayMsg(Message::Error, bufferInfo.bufferName(), tr("Error: Setting an encryption key requires Quassel to have been built "
+                                                              "with support for the Qt Cryptographic Architecture (QCA) library. "
+                                                              "Contact your distributor about a Quassel package with QCA "
+                                                              "support, or rebuild Quassel with QCA present."));
+#endif
+}
+
 void CoreUserInputHandler::handleTopic(const BufferInfo &bufferInfo, const QString &msg) {
-  if(bufferInfo.bufferName().isEmpty()) return;
+  if(bufferInfo.bufferName().isEmpty())
+    return;
+
   QList<QByteArray> params;
   params << serverEncode(bufferInfo.bufferName());
-  if(!msg.isEmpty())
-    params << channelEncode(bufferInfo.bufferName(), msg);
+
+  if(!msg.isEmpty()) {
+#   ifdef HAVE_QCA2
+      params << encrypt(bufferInfo.bufferName(), channelEncode(bufferInfo.bufferName(), msg));
+#   else
+      params << channelEncode(bufferInfo.bufferName(), msg);
+#   endif
+  }
+
   emit putCmd("TOPIC", params);
 }
 
@@ -447,24 +548,54 @@ void CoreUserInputHandler::defaultHandler(QString cmd, const BufferInfo &bufferI
   emit putCmd(serverEncode(cmd.toUpper()), serverEncode(msg.split(" ")));
 }
 
-void CoreUserInputHandler::putPrivmsg(const QByteArray &target, const QByteArray &message) {
+void CoreUserInputHandler::putPrivmsg(const QByteArray &target, const QByteArray &message, Cipher *cipher) {
+  // Encrypted messages need special care. There's no clear relation between cleartext and encrypted message length,
+  // so we can't just compute the maxSplitPos. Instead, we need to loop through the splitpoints until the crypted
+  // version is short enough...
+  // TODO: check out how the various possible encryption methods behave length-wise and make
+  //       this clean by predicting the length of the crypted msg.
+  //       For example, blowfish-ebc seems to create 8-char chunks.
+
   static const char *cmd = "PRIVMSG";
-  int overrun = lastParamOverrun(cmd, QList<QByteArray>() << target << message);
-  if(overrun) {
-    static const char *splitter = " .,-";
-    int maxSplitPos = message.count() - overrun;
-    int splitPos = -1;
-    for(const char *splitChar = splitter; *splitChar != 0; splitChar++) {
-      splitPos = qMax(splitPos, message.lastIndexOf(*splitChar, maxSplitPos));
+  static const char *splitter = " .,-";
+
+  int maxSplitPos = message.count();
+  int splitPos = maxSplitPos;
+  forever {
+    QByteArray crypted = message.left(splitPos);
+    bool isEncrypted = false;
+#ifdef HAVE_QCA2
+    if(cipher && !message.isEmpty()) {
+      isEncrypted = cipher->encrypt(crypted);
     }
-    if(splitPos <= 0) {
-      splitPos = maxSplitPos;
+#endif
+    int overrun = lastParamOverrun(cmd, QList<QByteArray>() << target << crypted);
+    if(overrun) {
+      // In case this is not an encrypted msg, we can just cut off at the end
+      if(!isEncrypted)
+        maxSplitPos = message.count() - overrun;
+
+      splitPos = -1;
+      for(const char *splitChar = splitter; *splitChar != 0; splitChar++) {
+        splitPos = qMax(splitPos, message.lastIndexOf(*splitChar, maxSplitPos) + 1); // keep split char on old line
+      }
+      if(splitPos <= 0 || splitPos > maxSplitPos)
+        splitPos = maxSplitPos;
+
+      maxSplitPos = splitPos - 1;
+      if(maxSplitPos <= 0) { // this should never happen, but who knows...
+        qWarning() << tr("[Error] Could not encrypt your message: %1").arg(message.data());
+        return;
+      }
+      continue;  // we never come back here for !encrypted!
     }
-    putCmd(cmd, QList<QByteArray>() << target << message.left(splitPos));
-    putPrivmsg(target, message.mid(splitPos));
+
+    // now we have found a valid splitpos (or didn't need to split to begin with)
+    putCmd(cmd, QList<QByteArray>() << target << crypted);
+    if(splitPos < message.count())
+      putPrivmsg(target, message.mid(splitPos), cipher);
+
     return;
-  } else {
-    putCmd(cmd, QList<QByteArray>() << target << message);
   }
 }
 
@@ -496,6 +627,27 @@ int CoreUserInputHandler::lastParamOverrun(const QString &cmd, const QList<QByte
     return 0;
   }
 }
+
+#ifdef HAVE_QCA2
+QByteArray CoreUserInputHandler::encrypt(const QString &target, const QByteArray &message_, bool *didEncrypt) const {
+  if(didEncrypt)
+    *didEncrypt = false;
+
+  if(message_.isEmpty())
+    return message_;
+
+  Cipher *cipher = network()->cipher(target);
+  if(!cipher)
+    return message_;
+
+  QByteArray message = message_;
+  bool result = cipher->encrypt(message);
+  if(didEncrypt)
+    *didEncrypt = result;
+
+  return message;
+}
+#endif
 
 void CoreUserInputHandler::timerEvent(QTimerEvent *event) {
   if(!_delayedCommands.contains(event->timerId())) {

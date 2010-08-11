@@ -47,6 +47,7 @@ IrcUser::IrcUser(const QString &hostmask, Network *network) : SyncableObject(net
     _codecForDecoding(0)
 {
   updateObjectName();
+
 }
 
 IrcUser::~IrcUser() {

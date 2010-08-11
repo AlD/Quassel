@@ -23,6 +23,7 @@
 
 #include "corebasichandler.h"
 
+class Cipher;
 class Server;
 
 class CoreUserInputHandler : public CoreBasicHandler {
@@ -38,6 +39,7 @@ public slots:
   void handleBan(const BufferInfo &bufferInfo, const QString &text);
   void handleUnban(const BufferInfo &bufferInfo, const QString &text);
   void handleCtcp(const BufferInfo &bufferInfo, const QString &text);
+  void handleDelkey(const BufferInfo &bufferInfo, const QString &text);
   void handleDeop(const BufferInfo &bufferInfo, const QString &text);
   void handleDevoice(const BufferInfo &bufferInfo, const QString &text);
   void handleInvite(const BufferInfo &bufferInfo, const QString &text);
@@ -58,6 +60,7 @@ public slots:
   void handleQuit(const BufferInfo &bufferInfo, const QString &text);
   void handleQuote(const BufferInfo &bufferInfo, const QString &text);
   void handleSay(const BufferInfo &bufferInfo, const QString &text);
+  void handleSetkey(const BufferInfo &bufferInfo, const QString &text);
   void handleTopic(const BufferInfo &bufferInfo, const QString &text);
   void handleVoice(const BufferInfo &bufferInfo, const QString &text);
   void handleWait(const BufferInfo &bufferInfo, const QString &text);
@@ -75,8 +78,12 @@ protected:
 
 private:
   void banOrUnban(const BufferInfo &bufferInfo, const QString &text, bool ban);
-  void putPrivmsg(const QByteArray &target, const QByteArray &message);
+  void putPrivmsg(const QByteArray &target, const QByteArray &message, Cipher *cipher = 0);
   int lastParamOverrun(const QString &cmd, const QList<QByteArray> &params);
+
+#ifdef HAVE_QCA2
+  QByteArray encrypt(const QString &target, const QByteArray &message, bool *didEncrypt = 0) const;
+#endif
 
   struct Command {
     BufferInfo bufferInfo;

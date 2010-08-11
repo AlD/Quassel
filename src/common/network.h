@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-09 by the Quassel Project                          *
+ *   Copyright (C) 2005-2010 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -29,6 +29,7 @@
 #include <QVariantMap>
 #include <QPointer>
 #include <QMutex>
+#include <QByteArray>
 
 #include "types.h"
 #include "util.h"
@@ -111,7 +112,7 @@ public:
     Server() : port(6667), useSsl(false), sslVersion(0), useProxy(false), proxyType(QNetworkProxy::Socks5Proxy), proxyHost("localhost"), proxyPort(8080) {}
     Server(const QString &host, uint port, const QString &password, bool useSsl)
       : host(host), port(port), password(password), useSsl(useSsl), sslVersion(0),
-	useProxy(false), proxyType(QNetworkProxy::Socks5Proxy), proxyHost("localhost"), proxyPort(8080) {}
+        useProxy(false), proxyType(QNetworkProxy::Socks5Proxy), proxyHost("localhost"), proxyPort(8080) {}
     bool operator==(const Server &other) const;
     bool operator!=(const Server &other) const;
   };
@@ -170,6 +171,7 @@ public:
 
   QString prefixes();
   QString prefixModes();
+  void determinePrefixes();
 
   bool supports(const QString &param) const { return _supports.contains(param); }
   QString support(const QString &param) const;
@@ -270,10 +272,10 @@ public slots:
 
   void emitConnectionError(const QString &);
 
-private slots:
-  void removeIrcUser(IrcUser *ircuser);
-  void removeIrcChannel(IrcChannel *ircChannel);
-  void removeChansAndUsers();
+protected slots:
+  virtual void removeIrcUser(IrcUser *ircuser);
+  virtual void removeIrcChannel(IrcChannel *ircChannel);
+  virtual void removeChansAndUsers();
 
 signals:
   void aboutToBeDestroyed();
@@ -319,6 +321,7 @@ signals:
 
 protected:
   inline virtual IrcChannel *ircChannelFactory(const QString &channelname) { return new IrcChannel(channelname, this); }
+  inline virtual IrcUser *ircUserFactory(const QString &hostmask) { return new IrcUser(hostmask, this); }
 
 private:
   QPointer<SignalProxy> _proxy;
@@ -357,8 +360,6 @@ private:
   quint16 _autoReconnectRetries;
   bool _unlimitedReconnectRetries;
   bool _rejoinChannels;
-
-  void determinePrefixes();
 
   QTextCodec *_codecForServer;
   QTextCodec *_codecForEncoding;

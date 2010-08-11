@@ -34,6 +34,7 @@ public:
   void handleServerMsg(QByteArray rawMsg);
 
 public slots:
+  void handleInvite(const QString &prefix, const QList<QByteArray> &params);
   void handleJoin(const QString &prefix, const QList<QByteArray> &params);
   void handleKick(const QString &prefix, const QList<QByteArray> &params);
   void handleMode(const QString &prefix, const QList<QByteArray> &params);
@@ -75,6 +76,7 @@ public slots:
   void handle331(const QString &prefix, const QList<QByteArray> &params);   // RPL_NOTOPIC
   void handle332(const QString &prefix, const QList<QByteArray> &params);   // RPL_TOPIC
   void handle333(const QString &prefix, const QList<QByteArray> &params);   // Topic set by...
+  void handle341(const QString &prefix, const QList<QByteArray> &params);   // RPL_INVITING
   void handle352(const QString &prefix, const QList<QByteArray> &params);   // RPL_WHOREPLY
   void handle353(const QString &prefix, const QList<QByteArray> &params);   // RPL_NAMREPLY
   void handle369(const QString &prefix, const QList<QByteArray> &params);   // RPL_ENDOFWHOWAS
@@ -129,7 +131,10 @@ private:
   // key: quit message
   // value: the corresponding netsplit object
   QHash<QString, Netsplit*> _netsplits;
-};
 
+#ifdef HAVE_QCA2
+  QByteArray decrypt(const QString &target, const QByteArray &message, bool isTopic = false);
+#endif
+};
 
 #endif
