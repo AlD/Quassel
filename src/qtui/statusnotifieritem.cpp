@@ -5,10 +5,10 @@
  *   This contains code from KStatusNotifierItem, part of the KDE libs     *
  *   Copyright (C) 2009 Marco Martin <notmart@gmail.com>                   *
  *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) version 3.                                           *
+ *   This file is free software; you can redistribute it and/or modify     *
+ *   it under the terms of the GNU Library General Public License (LGPL)   *
+ *   as published by the Free Software Foundation; either version 2 of the *
+ *   License, or (at your option) any later version.                       *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -33,6 +33,7 @@
 #include "statusnotifieritemdbus.h"
 
 const int StatusNotifierItem::_protocolVersion = 0;
+const QString StatusNotifierItem::_statusNotifierWatcherServiceName("org.kde.StatusNotifierWatcher");
 
 #ifdef HAVE_DBUSMENU
 #  include "dbusmenuexporter.h"
@@ -87,8 +88,11 @@ void StatusNotifierItem::init() {
   connect(this, SIGNAL(toolTipChanged(QString,QString)), _statusNotifierItemDBus, SIGNAL(NewToolTip()));
   connect(this, SIGNAL(animationEnabledChanged(bool)), _statusNotifierItemDBus, SIGNAL(NewAttentionIcon()));
 
-  connect(QDBusConnection::sessionBus().interface(), SIGNAL(serviceOwnerChanged(QString,QString,QString)),
-                                                     SLOT(serviceChange(QString,QString,QString)));
+  QDBusServiceWatcher *watcher = new QDBusServiceWatcher(_statusNotifierWatcherServiceName,
+                                                         QDBusConnection::sessionBus(),
+                                                         QDBusServiceWatcher::WatchForOwnerChange,
+                                                         this);
+  connect(watcher, SIGNAL(serviceOwnerChanged(QString,QString,QString)), SLOT(serviceChange(QString,QString,QString)));
 
   setMode(StatusNotifier);
 
@@ -101,6 +105,7 @@ void StatusNotifierItem::init() {
   if(_notificationsClient->isValid()) {
     QStringList desktopCapabilities = _notificationsClient->GetCapabilities();
     _notificationsClientSupportsMarkup = desktopCapabilities.contains("body-markup");
+    _notificationsClientSupportsActions = desktopCapabilities.contains("actions");
   }
 
   StatusNotifierItemParent::init();
@@ -117,13 +122,17 @@ void StatusNotifierItem::init() {
 
 void StatusNotifierItem::registerToDaemon() {
   if(!_statusNotifierWatcher) {
-    QString interface("org.kde.StatusNotifierWatcher");
-    _statusNotifierWatcher = new org::kde::StatusNotifierWatcher(interface, "/StatusNotifierWatcher", QDBusConnection::sessionBus());
+    _statusNotifierWatcher = new org::kde::StatusNotifierWatcher(_statusNotifierWatcherServiceName,
+                                                                 "/StatusNotifierWatcher",
+                                                                 QDBusConnection::sessionBus());
+    connect(_statusNotifierWatcher, SIGNAL(StatusNotifierHostRegistered()), SLOT(checkForRegisteredHosts()));
+    connect(_statusNotifierWatcher, SIGNAL(StatusNotifierHostUnregistered()), SLOT(checkForRegisteredHosts()));
   }
   if(_statusNotifierWatcher->isValid()
     && _statusNotifierWatcher->property("ProtocolVersion").toInt() == _protocolVersion) {
 
     _statusNotifierWatcher->RegisterStatusNotifierItem(_statusNotifierItemDBus->service());
+    checkForRegisteredHosts();
 
   } else {
     //qDebug() << "StatusNotifierWatcher not reachable!";
@@ -131,44 +140,25 @@ void StatusNotifierItem::registerToDaemon() {
   }
 }
 
-// FIXME remove deprecated slot with Qt 4.6
 void StatusNotifierItem::serviceChange(const QString& name, const QString& oldOwner, const QString& newOwner) {
-  bool legacy = false;
-  if(name == "org.kde.StatusNotifierWatcher") {
-    if(newOwner.isEmpty()) {
-      //unregistered
-      //qDebug() << "Connection to the StatusNotifierWatcher lost";
-      legacy = true;
-    } else if(oldOwner.isEmpty()) {
-      //registered
-      legacy = false;
-    }
-  } else if(name.startsWith(QLatin1String("org.kde.StatusNotifierHost-"))) {
-    if(newOwner.isEmpty() && (!_statusNotifierWatcher ||
-                              !_statusNotifierWatcher->property("IsStatusNotifierHostRegistered").toBool())) {
-      //qDebug() << "Connection to the last StatusNotifierHost lost";
-      legacy = true;
-    } else if(oldOwner.isEmpty()) {
-      //qDebug() << "New StatusNotifierHost";
-      legacy = false;
-    }
-  } else {
-    return;
-  }
-
-  // qDebug() << "Service " << name << "status change, old owner:" << oldOwner << "new:" << newOwner;
-
-  if(legacy == (mode() == Legacy)) {
-    return;
-  }
-
-  if(legacy) {
+  Q_UNUSED(name);
+  if(newOwner.isEmpty()) {
     //unregistered
+    //qDebug() << "Connection to the StatusNotifierWatcher lost";
+    delete _statusNotifierWatcher;
+    _statusNotifierWatcher = 0;
     setMode(Legacy);
-  } else {
+  } else if(oldOwner.isEmpty()) {
     //registered
     setMode(StatusNotifier);
   }
+}
+
+void StatusNotifierItem::checkForRegisteredHosts() {
+  if(!_statusNotifierWatcher || !_statusNotifierWatcher->property("IsStatusNotifierHostRegistered").toBool())
+    setMode(Legacy);
+  else
+    setMode(StatusNotifier);
 }
 
 bool StatusNotifierItem::isSystemTrayAvailable() const {
@@ -186,9 +176,17 @@ bool StatusNotifierItem::isVisible() const {
 }
 
 void StatusNotifierItem::setMode(Mode mode_) {
+  if(mode_ == mode())
+    return;
+
+  if(mode_ != StatusNotifier) {
+    _statusNotifierItemDBus->unregisterService();
+  }
+
   StatusNotifierItemParent::setMode(mode_);
 
   if(mode() == StatusNotifier) {
+    _statusNotifierItemDBus->registerService();
     registerToDaemon();
   }
 }
@@ -201,6 +199,9 @@ void StatusNotifierItem::setState(State state_) {
 }
 
 void StatusNotifierItem::setVisible(bool visible) {
+  if(visible == isVisible())
+    return;
+
   LegacySystemTray::setVisible(visible);
 
   if(mode() == StatusNotifier) {
@@ -274,7 +275,9 @@ void StatusNotifierItem::showMessage(const QString &title, const QString &messag
     if(_notificationsClientSupportsMarkup)
       message = Qt::escape(message);
 
-    QStringList actions = QStringList() << "activate" << "View";
+    QStringList actions;
+    if(_notificationsClientSupportsActions)
+      actions << "activate" << "View";
 
     // we always queue notifications right now
     QDBusReply<uint> reply = _notificationsClient->Notify(title, 0, "quassel", title, message, actions, QVariantMap(), timeout);

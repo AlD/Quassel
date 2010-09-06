@@ -5,10 +5,10 @@
  *   This contains code from KStatusNotifierItem, part of the KDE libs     *
  *   Copyright (C) 2009 Marco Martin <notmart@gmail.com>                   *
  *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) version 3.                                           *
+ *   This file is free software; you can redistribute it and/or modify     *
+ *   it under the terms of the GNU Library General Public License (LGPL)   *
+ *   as published by the Free Software Foundation; either version 2 of the *
+ *   License, or (at your option) any later version.                       *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -71,6 +71,7 @@ protected:
 private slots:
   void activated(const QPoint &pos);
   void serviceChange(const QString& name, const QString& oldOwner, const QString& newOwner);
+  void checkForRegisteredHosts();
 
   void notificationClosed(uint id, uint reason);
   void notificationInvoked(uint id, const QString &action);
@@ -79,11 +80,13 @@ private:
   void registerToDaemon();
 
   static const int _protocolVersion;
+  static const QString _statusNotifierWatcherServiceName;
   StatusNotifierItemDBus *_statusNotifierItemDBus;
 
   org::kde::StatusNotifierWatcher *_statusNotifierWatcher;
   org::freedesktop::Notifications *_notificationsClient;
   bool _notificationsClientSupportsMarkup;
+  bool _notificationsClientSupportsActions;
   quint32 _lastNotificationsDBusId;
   QHash<uint, uint> _notificationsIdMap; ///< Maps our own notification ID to the D-Bus one
 
