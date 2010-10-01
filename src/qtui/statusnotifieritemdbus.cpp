@@ -4,9 +4,9 @@
  *   Quasselfied 2010 by Manuel Nickschas <sputnick@quassel-irc.org>       *
  *                                                                         *
  *   This file is free software; you can redistribute it and/or modify     *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   it under the terms of the GNU Library General Public License (LGPL)   *
+ *   as published by the Free Software Foundation; either version 2 of the *
+ *   License, or (at your option) any later version.                       *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
@@ -39,18 +39,18 @@
 #include "statusnotifierwatcher.h"
 #include "statusnotifieritemadaptor.h"
 
-#ifdef Q_OS_WIN64    
-__inline int toInt(WId wid) 
+#ifdef Q_OS_WIN64
+__inline int toInt(WId wid)
 {
         return (int)((__int64)wid);
 }
 
 #else
-__inline int toInt(WId wid) 
+__inline int toInt(WId wid)
 {
         return (int)wid;
 }
-#endif        
+#endif
 
 // Marshall the ImageStruct data into a D-BUS argument
 const QDBusArgument &operator<<(QDBusArgument &argument, const DBusImageStruct &icon)
@@ -162,12 +162,16 @@ StatusNotifierItemDBus::StatusNotifierItemDBus(StatusNotifierItem *parent)
    new StatusNotifierItemAdaptor(this);
    //qDebug() << "service is" << m_service;
    registerService();
-   m_dbus.registerObject("/StatusNotifierItem", this);
 }
 
 StatusNotifierItemDBus::~StatusNotifierItemDBus()
 {
     unregisterService();
+}
+
+QDBusConnection StatusNotifierItemDBus::dbusConnection() const
+{
+    return m_dbus;
 }
 
 // FIXME: prevent double registrations, also test this on platforms != KDE
@@ -176,6 +180,7 @@ void StatusNotifierItemDBus::registerService()
 {
     //qDebug() << "registering to" << m_service;
     m_dbus.registerService(m_service);
+    m_dbus.registerObject("/StatusNotifierItem", this);
 }
 
 // FIXME: see above
@@ -183,6 +188,7 @@ void StatusNotifierItemDBus::unregisterService()
 {
     //qDebug() << "unregistering from" << m_service;
     if(m_dbus.isConnected()) {
+        m_dbus.unregisterObject("/StatusNotifierItem");
         m_dbus.unregisterService(m_service);
     }
 }
@@ -274,6 +280,19 @@ DBusToolTipStruct StatusNotifierItemDBus::ToolTip() const
 
     return toolTip;
 }
+
+QString StatusNotifierItemDBus::IconThemePath() const
+{
+    return m_statusNotifierItem->iconThemePath();
+}
+
+//Menu
+
+QDBusObjectPath StatusNotifierItemDBus::Menu() const
+{
+    return QDBusObjectPath(m_statusNotifierItem->menuObjectPath());
+}
+
 
 //Interaction
 
