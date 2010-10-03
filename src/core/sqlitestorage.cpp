@@ -110,8 +110,8 @@ UserId SqliteStorage::addUser(const QString &user, const QString &password) {
   // this ensures that our thread doesn't hold a internal after unlock is called
   // (see sqlites doc on implicit locking for details)
   {
-    QSqlQuery query(db);
-    query.prepare(queryString("insert_quasseluser"));
+    QuasselSqlQuery query(db);
+    query.prepare("insert_quasseluser");
     query.bindValue(":username", user);
     query.bindValue(":password", cryptedPassword(password));
     lockForWrite();
@@ -136,8 +136,8 @@ bool SqliteStorage::updateUser(UserId user, const QString &password) {
 
   db.transaction();
   {
-    QSqlQuery query(db);
-    query.prepare(queryString("update_userpassword"));
+    QuasselSqlQuery query(db);
+    query.prepare("update_userpassword");
     query.bindValue(":userid", user.toInt());
     query.bindValue(":password", cryptedPassword(password));
     lockForWrite();
@@ -153,8 +153,8 @@ void SqliteStorage::renameUser(UserId user, const QString &newName) {
   QSqlDatabase db = logDb();
   db.transaction();
   {
-    QSqlQuery query(db);
-    query.prepare(queryString("update_username"));
+    QuasselSqlQuery query(db);
+    query.prepare("update_username");
     query.bindValue(":userid", user.toInt());
     query.bindValue(":username", newName);
     lockForWrite();
@@ -169,8 +169,8 @@ UserId SqliteStorage::validateUser(const QString &user, const QString &password)
   UserId userId;
 
   {
-    QSqlQuery query(logDb());
-    query.prepare(queryString("select_authuser"));
+    QuasselSqlQuery query(logDb());
+    query.prepare("select_authuser");
     query.bindValue(":username", user);
     query.bindValue(":password", cryptedPassword(password));
 
@@ -190,8 +190,8 @@ UserId SqliteStorage::getUserId(const QString &username) {
   UserId userId;
 
   {
-    QSqlQuery query(logDb());
-    query.prepare(queryString("select_userid"));
+    QuasselSqlQuery query(logDb());
+    query.prepare("select_userid");
     query.bindValue(":username", username);
 
     lockForRead();
@@ -210,8 +210,8 @@ UserId SqliteStorage::internalUser() {
   UserId userId;
 
   {
-    QSqlQuery query(logDb());
-    query.prepare(queryString("select_internaluser"));
+    QuasselSqlQuery query(logDb());
+    query.prepare("select_internaluser");
     lockForRead();
     safeExec(query);
 
@@ -230,20 +230,20 @@ void SqliteStorage::delUser(UserId user) {
 
   lockForWrite();
   {
-    QSqlQuery query(db);
-    query.prepare(queryString("delete_backlog_by_uid"));
+    QuasselSqlQuery query(db);
+    query.prepare("delete_backlog_by_uid");
     query.bindValue(":userid", user.toInt());
     safeExec(query);
 
-    query.prepare(queryString("delete_buffers_by_uid"));
+    query.prepare("delete_buffers_by_uid");
     query.bindValue(":userid", user.toInt());
     safeExec(query);
 
-    query.prepare(queryString("delete_networks_by_uid"));
+    query.prepare("delete_networks_by_uid");
     query.bindValue(":userid", user.toInt());
     safeExec(query);
 
-    query.prepare(queryString("delete_quasseluser"));
+    query.prepare("delete_quasseluser");
     query.bindValue(":userid", user.toInt());
     safeExec(query);
     // I hate the lack of foreign keys and on delete cascade... :(
@@ -263,8 +263,8 @@ void SqliteStorage::setUserSetting(UserId userId, const QString &settingName, co
   QSqlDatabase db = logDb();
   db.transaction();
   {
-    QSqlQuery query(db);
-    query.prepare(queryString("insert_user_setting"));
+    QuasselSqlQuery query(db);
+    query.prepare("insert_user_setting");
     query.bindValue(":userid", userId.toInt());
     query.bindValue(":settingname", settingName);
     query.bindValue(":settingvalue", rawData);
@@ -272,8 +272,8 @@ void SqliteStorage::setUserSetting(UserId userId, const QString &settingName, co
     safeExec(query);
 
     if(query.lastError().isValid()) {
-      QSqlQuery updateQuery(db);
-      updateQuery.prepare(queryString("update_user_setting"));
+      QuasselSqlQuery updateQuery(db);
+      updateQuery.prepare("update_user_setting");
       updateQuery.bindValue(":userid", userId.toInt());
       updateQuery.bindValue(":settingname", settingName);
       updateQuery.bindValue(":settingvalue", rawData);
@@ -287,8 +287,8 @@ void SqliteStorage::setUserSetting(UserId userId, const QString &settingName, co
 QVariant SqliteStorage::getUserSetting(UserId userId, const QString &settingName, const QVariant &defaultData) {
   QVariant data = defaultData;
   {
-    QSqlQuery query(logDb());
-    query.prepare(queryString("select_user_setting"));
+    QuasselSqlQuery query(logDb());
+    query.prepare("select_user_setting");
     query.bindValue(":userid", userId.toInt());
     query.bindValue(":settingname", settingName);
     lockForRead();
@@ -312,8 +312,8 @@ IdentityId SqliteStorage::createIdentity(UserId user, CoreIdentity &identity) {
   db.transaction();
 
   {
-    QSqlQuery query(db);
-    query.prepare(queryString("insert_identity"));
+    QuasselSqlQuery query(db);
+    query.prepare("insert_identity");
     query.bindValue(":userid", user.toInt());
     query.bindValue(":identityname", identity.identityName());
     query.bindValue(":realname", identity.realName());
@@ -347,13 +347,13 @@ IdentityId SqliteStorage::createIdentity(UserId user, CoreIdentity &identity) {
     if(!identityId.isValid()) {
       watchQuery(query);
     } else {
-      QSqlQuery deleteNickQuery(db);
-      deleteNickQuery.prepare(queryString("delete_nicks"));
+      QuasselSqlQuery deleteNickQuery(db);
+      deleteNickQuery.prepare("delete_nicks");
       deleteNickQuery.bindValue(":identityid", identityId.toInt());
       safeExec(deleteNickQuery);
 
-      QSqlQuery insertNickQuery(db);
-      insertNickQuery.prepare(queryString("insert_nick"));
+      QuasselSqlQuery insertNickQuery(db);
+      insertNickQuery.prepare("insert_nick");
       foreach(QString nick, identity.nicks()) {
         insertNickQuery.bindValue(":identityid", identityId.toInt());
         insertNickQuery.bindValue(":nick", nick);
@@ -373,8 +373,8 @@ bool SqliteStorage::updateIdentity(UserId user, const CoreIdentity &identity) {
   db.transaction();
 
   {
-    QSqlQuery checkQuery(db);
-    checkQuery.prepare(queryString("select_checkidentity"));
+    QuasselSqlQuery checkQuery(db);
+    checkQuery.prepare("select_checkidentity");
     checkQuery.bindValue(":identityid", identity.id().toInt());
     checkQuery.bindValue(":userid", user.toInt());
     lockForRead();
@@ -389,8 +389,8 @@ bool SqliteStorage::updateIdentity(UserId user, const CoreIdentity &identity) {
   }
 
   {
-    QSqlQuery query(db);
-    query.prepare(queryString("update_identity"));
+    QuasselSqlQuery query(db);
+    query.prepare("update_identity");
     query.bindValue(":identityname", identity.identityName());
     query.bindValue(":realname", identity.realName());
     query.bindValue(":awaynick", identity.awayNick());
@@ -419,14 +419,14 @@ bool SqliteStorage::updateIdentity(UserId user, const CoreIdentity &identity) {
     safeExec(query);
     watchQuery(query);
 
-    QSqlQuery deleteNickQuery(db);
-    deleteNickQuery.prepare(queryString("delete_nicks"));
+    QuasselSqlQuery deleteNickQuery(db);
+    deleteNickQuery.prepare("delete_nicks");
     deleteNickQuery.bindValue(":identityid", identity.id().toInt());
     safeExec(deleteNickQuery);
     watchQuery(deleteNickQuery);
 
-    QSqlQuery insertNickQuery(db);
-    insertNickQuery.prepare(queryString("insert_nick"));
+    QuasselSqlQuery insertNickQuery(db);
+    insertNickQuery.prepare("insert_nick");
     foreach(QString nick, identity.nicks()) {
       insertNickQuery.bindValue(":identityid", identity.id().toInt());
       insertNickQuery.bindValue(":nick", nick);
@@ -445,8 +445,8 @@ void SqliteStorage::removeIdentity(UserId user, IdentityId identityId) {
 
   bool error = false;
   {
-    QSqlQuery checkQuery(db);
-    checkQuery.prepare(queryString("select_checkidentity"));
+    QuasselSqlQuery checkQuery(db);
+    checkQuery.prepare("select_checkidentity");
     checkQuery.bindValue(":identityid", identityId.toInt());
     checkQuery.bindValue(":userid", user.toInt());
     lockForRead();
@@ -461,13 +461,13 @@ void SqliteStorage::removeIdentity(UserId user, IdentityId identityId) {
   }
 
   {
-    QSqlQuery deleteNickQuery(db);
-    deleteNickQuery.prepare(queryString("delete_nicks"));
+    QuasselSqlQuery deleteNickQuery(db);
+    deleteNickQuery.prepare("delete_nicks");
     deleteNickQuery.bindValue(":identityid", identityId.toInt());
     safeExec(deleteNickQuery);
 
-    QSqlQuery deleteIdentityQuery(db);
-    deleteIdentityQuery.prepare(queryString("delete_identity"));
+    QuasselSqlQuery deleteIdentityQuery(db);
+    deleteIdentityQuery.prepare("delete_identity");
     deleteIdentityQuery.bindValue(":identityid", identityId.toInt());
     deleteIdentityQuery.bindValue(":userid", user.toInt());
     safeExec(deleteIdentityQuery);
@@ -482,12 +482,12 @@ QList<CoreIdentity> SqliteStorage::identities(UserId user) {
   db.transaction();
 
   {
-    QSqlQuery query(db);
-    query.prepare(queryString("select_identities"));
+    QuasselSqlQuery query(db);
+    query.prepare("select_identities");
     query.bindValue(":userid", user.toInt());
 
-    QSqlQuery nickQuery(db);
-    nickQuery.prepare(queryString("select_nicks"));
+    QuasselSqlQuery nickQuery(db);
+    nickQuery.prepare("select_nicks");
 
     lockForRead();
     safeExec(query);
@@ -541,8 +541,8 @@ NetworkId SqliteStorage::createNetwork(UserId user, const NetworkInfo &info) {
 
   bool error = false;
   {
-    QSqlQuery query(db);
-    query.prepare(queryString("insert_network"));
+    QuasselSqlQuery query(db);
+    query.prepare("insert_network");
     query.bindValue(":userid", user.toInt());
     bindNetworkInfo(query, info);
     lockForWrite();
@@ -560,8 +560,8 @@ NetworkId SqliteStorage::createNetwork(UserId user, const NetworkInfo &info) {
   }
 
   {
-    QSqlQuery insertServersQuery(db);
-    insertServersQuery.prepare(queryString("insert_server"));
+    QuasselSqlQuery insertServersQuery(db);
+    insertServersQuery.prepare("insert_server");
     foreach(Network::Server server, info.serverList) {
       insertServersQuery.bindValue(":userid", user.toInt());
       insertServersQuery.bindValue(":networkid", networkId.toInt());
@@ -583,7 +583,7 @@ NetworkId SqliteStorage::createNetwork(UserId user, const NetworkInfo &info) {
     return networkId;
 }
 
-void SqliteStorage::bindNetworkInfo(QSqlQuery &query, const NetworkInfo &info) {
+void SqliteStorage::bindNetworkInfo(QuasselSqlQuery &query, const NetworkInfo &info) {
   query.bindValue(":networkname", info.networkName);
   query.bindValue(":identityid", info.identity.toInt());
   query.bindValue(":encodingcodec", QString(info.codecForEncoding));
@@ -606,7 +606,7 @@ void SqliteStorage::bindNetworkInfo(QSqlQuery &query, const NetworkInfo &info) {
     query.bindValue(":networkid", info.networkId.toInt());
 }
 
-void SqliteStorage::bindServerInfo(QSqlQuery &query, const Network::Server &server) {
+void SqliteStorage::bindServerInfo(QuasselSqlQuery &query, const Network::Server &server) {
   query.bindValue(":hostname", server.host);
   query.bindValue(":port", server.port);
   query.bindValue(":password", server.password);
@@ -626,8 +626,8 @@ bool SqliteStorage::updateNetwork(UserId user, const NetworkInfo &info) {
   db.transaction();
 
   {
-    QSqlQuery updateQuery(db);
-    updateQuery.prepare(queryString("update_network"));
+    QuasselSqlQuery updateQuery(db);
+    updateQuery.prepare("update_network");
     updateQuery.bindValue(":userid", user.toInt());
     bindNetworkInfo(updateQuery, info);
 
@@ -644,7 +644,7 @@ bool SqliteStorage::updateNetwork(UserId user, const NetworkInfo &info) {
   }
 
   {
-    QSqlQuery dropServersQuery(db);
+    QuasselSqlQuery dropServersQuery(db);
     dropServersQuery.prepare("DELETE FROM ircserver WHERE networkid = :networkid");
     dropServersQuery.bindValue(":networkid", info.networkId.toInt());
     safeExec(dropServersQuery);
@@ -659,8 +659,8 @@ bool SqliteStorage::updateNetwork(UserId user, const NetworkInfo &info) {
   }
 
   {
-    QSqlQuery insertServersQuery(db);
-    insertServersQuery.prepare(queryString("insert_server"));
+    QuasselSqlQuery insertServersQuery(db);
+    insertServersQuery.prepare("insert_server");
     foreach(Network::Server server, info.serverList) {
       insertServersQuery.bindValue(":userid", user.toInt());
       insertServersQuery.bindValue(":networkid", info.networkId.toInt());
@@ -685,8 +685,8 @@ bool SqliteStorage::removeNetwork(UserId user, const NetworkId &networkId) {
   db.transaction();
 
   {
-    QSqlQuery deleteNetworkQuery(db);
-    deleteNetworkQuery.prepare(queryString("delete_network"));
+    QuasselSqlQuery deleteNetworkQuery(db);
+    deleteNetworkQuery.prepare("delete_network");
     deleteNetworkQuery.bindValue(":networkid", networkId.toInt());
     deleteNetworkQuery.bindValue(":userid", user.toInt());
     lockForWrite();
@@ -702,8 +702,8 @@ bool SqliteStorage::removeNetwork(UserId user, const NetworkId &networkId) {
   }
 
   {
-    QSqlQuery deleteBacklogQuery(db);
-    deleteBacklogQuery.prepare(queryString("delete_backlog_for_network"));
+    QuasselSqlQuery deleteBacklogQuery(db);
+    deleteBacklogQuery.prepare("delete_backlog_for_network");
     deleteBacklogQuery.bindValue(":networkid", networkId.toInt());
     safeExec(deleteBacklogQuery);
     if(!watchQuery(deleteBacklogQuery)) {
@@ -717,8 +717,8 @@ bool SqliteStorage::removeNetwork(UserId user, const NetworkId &networkId) {
   }
 
   {
-    QSqlQuery deleteBuffersQuery(db);
-    deleteBuffersQuery.prepare(queryString("delete_buffers_for_network"));
+    QuasselSqlQuery deleteBuffersQuery(db);
+    deleteBuffersQuery.prepare("delete_buffers_for_network");
     deleteBuffersQuery.bindValue(":networkid", networkId.toInt());
     safeExec(deleteBuffersQuery);
     if(!watchQuery(deleteBuffersQuery)) {
@@ -732,8 +732,8 @@ bool SqliteStorage::removeNetwork(UserId user, const NetworkId &networkId) {
   }
 
   {
-    QSqlQuery deleteServersQuery(db);
-    deleteServersQuery.prepare(queryString("delete_ircservers_for_network"));
+    QuasselSqlQuery deleteServersQuery(db);
+    deleteServersQuery.prepare("delete_ircservers_for_network");
     deleteServersQuery.bindValue(":networkid", networkId.toInt());
     safeExec(deleteServersQuery);
     if(!watchQuery(deleteServersQuery)) {
@@ -758,12 +758,12 @@ QList<NetworkInfo> SqliteStorage::networks(UserId user) {
   db.transaction();
 
   {
-    QSqlQuery networksQuery(db);
-    networksQuery.prepare(queryString("select_networks_for_user"));
+    QuasselSqlQuery networksQuery(db);
+    networksQuery.prepare("select_networks_for_user");
     networksQuery.bindValue(":userid", user.toInt());
 
-    QSqlQuery serversQuery(db);
-    serversQuery.prepare(queryString("select_servers_for_network"));
+    QuasselSqlQuery serversQuery(db);
+    serversQuery.prepare("select_servers_for_network");
 
     lockForRead();
     safeExec(networksQuery);
@@ -830,8 +830,8 @@ QList<NetworkId> SqliteStorage::connectedNetworks(UserId user) {
   db.transaction();
 
   {
-    QSqlQuery query(db);
-    query.prepare(queryString("select_connected_networks"));
+    QuasselSqlQuery query(db);
+    query.prepare("select_connected_networks");
     query.bindValue(":userid", user.toInt());
     lockForRead();
     safeExec(query);
@@ -851,8 +851,8 @@ void SqliteStorage::setNetworkConnected(UserId user, const NetworkId &networkId,
   db.transaction();
 
   {
-    QSqlQuery query(db);
-    query.prepare(queryString("update_network_connected"));
+    QuasselSqlQuery query(db);
+    query.prepare("update_network_connected");
     query.bindValue(":userid", user.toInt());
     query.bindValue(":networkid", networkId.toInt());
     query.bindValue(":connected", isConnected ? 1 : 0);
@@ -871,8 +871,8 @@ QHash<QString, QString> SqliteStorage::persistentChannels(UserId user, const Net
   QSqlDatabase db = logDb();
   db.transaction();
   {
-    QSqlQuery query(db);
-    query.prepare(queryString("select_persistent_channels"));
+    QuasselSqlQuery query(db);
+    query.prepare("select_persistent_channels");
     query.bindValue(":userid", user.toInt());
     query.bindValue(":networkid", networkId.toInt());
 
@@ -892,8 +892,8 @@ void SqliteStorage::setChannelPersistent(UserId user, const NetworkId &networkId
   db.transaction();
 
   {
-    QSqlQuery query(db);
-    query.prepare(queryString("update_buffer_persistent_channel"));
+    QuasselSqlQuery query(db);
+    query.prepare("update_buffer_persistent_channel");
     query.bindValue(":userid", user.toInt());
     query.bindValue(":networkId", networkId.toInt());
     query.bindValue(":buffercname", channel.toLower());
@@ -912,8 +912,8 @@ void SqliteStorage::setPersistentChannelKey(UserId user, const NetworkId &networ
   db.transaction();
 
   {
-    QSqlQuery query(db);
-    query.prepare(queryString("update_buffer_set_channel_key"));
+    QuasselSqlQuery query(db);
+    query.prepare("update_buffer_set_channel_key");
     query.bindValue(":userid", user.toInt());
     query.bindValue(":networkId", networkId.toInt());
     query.bindValue(":buffercname", channel.toLower());
@@ -933,8 +933,8 @@ QString SqliteStorage::awayMessage(UserId user, NetworkId networkId) {
 
   QString awayMsg;
   {
-    QSqlQuery query(db);
-    query.prepare(queryString("select_network_awaymsg"));
+    QuasselSqlQuery query(db);
+    query.prepare("select_network_awaymsg");
     query.bindValue(":userid", user.toInt());
     query.bindValue(":networkid", networkId.toInt());
 
@@ -955,8 +955,8 @@ void SqliteStorage::setAwayMessage(UserId user, NetworkId networkId, const QStri
   db.transaction();
 
   {
-    QSqlQuery query(db);
-    query.prepare(queryString("update_network_set_awaymsg"));
+    QuasselSqlQuery query(db);
+    query.prepare("update_network_set_awaymsg");
     query.bindValue(":userid", user.toInt());
     query.bindValue(":networkid", networkId.toInt());
     query.bindValue(":awaymsg", awayMsg);
@@ -975,8 +975,8 @@ QString SqliteStorage::userModes(UserId user, NetworkId networkId) {
 
   QString modes;
   {
-    QSqlQuery query(db);
-    query.prepare(queryString("select_network_usermode"));
+    QuasselSqlQuery query(db);
+    query.prepare("select_network_usermode");
     query.bindValue(":userid", user.toInt());
     query.bindValue(":networkid", networkId.toInt());
 
@@ -997,8 +997,8 @@ void SqliteStorage::setUserModes(UserId user, NetworkId networkId, const QString
   db.transaction();
 
   {
-    QSqlQuery query(db);
-    query.prepare(queryString("update_network_set_usermode"));
+    QuasselSqlQuery query(db);
+    query.prepare("update_network_set_usermode");
     query.bindValue(":userid", user.toInt());
     query.bindValue(":networkid", networkId.toInt());
     query.bindValue(":usermode", userModes);
@@ -1017,8 +1017,8 @@ BufferInfo SqliteStorage::bufferInfo(UserId user, const NetworkId &networkId, Bu
 
   BufferInfo bufferInfo;
   {
-    QSqlQuery query(db);
-    query.prepare(queryString("select_bufferByName"));
+    QuasselSqlQuery query(db);
+    query.prepare("select_bufferByName");
     query.bindValue(":networkid", networkId.toInt());
     query.bindValue(":userid", user.toInt());
     query.bindValue(":buffercname", buffer.toLower());
@@ -1039,8 +1039,8 @@ BufferInfo SqliteStorage::bufferInfo(UserId user, const NetworkId &networkId, Bu
       }
     } else if(create) {
       // let's create the buffer
-      QSqlQuery createQuery(db);
-      createQuery.prepare(queryString("insert_buffer"));
+      QuasselSqlQuery createQuery(db);
+      createQuery.prepare("insert_buffer");
       createQuery.bindValue(":userid", user.toInt());
       createQuery.bindValue(":networkid", networkId.toInt());
       createQuery.bindValue(":buffertype", (int)type);
@@ -1066,8 +1066,8 @@ BufferInfo SqliteStorage::getBufferInfo(UserId user, const BufferId &bufferId) {
 
   BufferInfo bufferInfo;
   {
-    QSqlQuery query(db);
-    query.prepare(queryString("select_buffer_by_id"));
+    QuasselSqlQuery query(db);
+    query.prepare("select_buffer_by_id");
     query.bindValue(":userid", user.toInt());
     query.bindValue(":bufferid", bufferId.toInt());
 
@@ -1091,8 +1091,8 @@ QList<BufferInfo> SqliteStorage::requestBuffers(UserId user) {
   db.transaction();
 
   {
-    QSqlQuery query(db);
-    query.prepare(queryString("select_buffers"));
+    QuasselSqlQuery query(db);
+    query.prepare("select_buffers");
     query.bindValue(":userid", user.toInt());
 
     lockForRead();
@@ -1115,8 +1115,8 @@ QList<BufferId> SqliteStorage::requestBufferIdsForNetwork(UserId user, NetworkId
   db.transaction();
 
   {
-    QSqlQuery query(db);
-    query.prepare(queryString("select_buffers_for_network"));
+    QuasselSqlQuery query(db);
+    query.prepare("select_buffers_for_network");
     query.bindValue(":networkid", networkId.toInt());
     query.bindValue(":userid", user.toInt());
 
@@ -1139,8 +1139,8 @@ bool SqliteStorage::removeBuffer(const UserId &user, const BufferId &bufferId) {
 
   bool error = false;
   {
-    QSqlQuery delBufferQuery(db);
-    delBufferQuery.prepare(queryString("delete_buffer_for_bufferid"));
+    QuasselSqlQuery delBufferQuery(db);
+    delBufferQuery.prepare("delete_buffer_for_bufferid");
     delBufferQuery.bindValue(":bufferid", bufferId.toInt());
     delBufferQuery.bindValue(":userid", user.toInt());
 
@@ -1157,8 +1157,8 @@ bool SqliteStorage::removeBuffer(const UserId &user, const BufferId &bufferId) {
   }
 
   {
-    QSqlQuery delBacklogQuery(db);
-    delBacklogQuery.prepare(queryString("delete_backlog_for_buffer"));
+    QuasselSqlQuery delBacklogQuery(db);
+    delBacklogQuery.prepare("delete_backlog_for_buffer");
     delBacklogQuery.bindValue(":bufferid", bufferId.toInt());
 
     safeExec(delBacklogQuery);
@@ -1180,8 +1180,8 @@ bool SqliteStorage::renameBuffer(const UserId &user, const BufferId &bufferId, c
 
   bool error = false;
   {
-    QSqlQuery query(db);
-    query.prepare(queryString("update_buffer_name"));
+    QuasselSqlQuery query(db);
+    query.prepare("update_buffer_name");
     query.bindValue(":buffername", newName);
     query.bindValue(":buffercname", newName.toLower());
     query.bindValue(":bufferid", bufferId.toInt());
@@ -1213,8 +1213,8 @@ bool SqliteStorage::mergeBuffersPermanently(const UserId &user, const BufferId &
 
   bool error = false;
   {
-    QSqlQuery checkQuery(db);
-    checkQuery.prepare(queryString("select_buffers_for_merge"));
+    QuasselSqlQuery checkQuery(db);
+    checkQuery.prepare("select_buffers_for_merge");
     checkQuery.bindValue(":oldbufferid", bufferId2.toInt());
     checkQuery.bindValue(":newbufferid", bufferId1.toInt());
     checkQuery.bindValue(":userid", user.toInt());
@@ -1230,8 +1230,8 @@ bool SqliteStorage::mergeBuffersPermanently(const UserId &user, const BufferId &
   }
 
   {
-    QSqlQuery query(db);
-    query.prepare(queryString("update_backlog_bufferid"));
+    QuasselSqlQuery query(db);
+    query.prepare("update_backlog_bufferid");
     query.bindValue(":oldbufferid", bufferId2.toInt());
     query.bindValue(":newbufferid", bufferId1.toInt());
     safeExec(query);
@@ -1244,8 +1244,8 @@ bool SqliteStorage::mergeBuffersPermanently(const UserId &user, const BufferId &
   }
 
   {
-    QSqlQuery delBufferQuery(db);
-    delBufferQuery.prepare(queryString("delete_buffer_for_bufferid"));
+    QuasselSqlQuery delBufferQuery(db);
+    delBufferQuery.prepare("delete_buffer_for_bufferid");
     delBufferQuery.bindValue(":bufferid", bufferId2.toInt());
     delBufferQuery.bindValue(":userid", user.toInt());
     safeExec(delBufferQuery);
@@ -1266,8 +1266,8 @@ void SqliteStorage::setBufferLastSeenMsg(UserId user, const BufferId &bufferId, 
   db.transaction();
 
   {
-    QSqlQuery query(db);
-    query.prepare(queryString("update_buffer_lastseen"));
+    QuasselSqlQuery query(db);
+    query.prepare("update_buffer_lastseen");
     query.bindValue(":userid", user.toInt());
     query.bindValue(":bufferid", bufferId.toInt());
     query.bindValue(":lastseenmsgid", msgId.toInt());
@@ -1288,8 +1288,8 @@ QHash<BufferId, MsgId> SqliteStorage::bufferLastSeenMsgIds(UserId user) {
 
   bool error = false;
   {
-    QSqlQuery query(db);
-    query.prepare(queryString("select_buffer_lastseen_messages"));
+    QuasselSqlQuery query(db);
+    query.prepare("select_buffer_lastseen_messages");
     query.bindValue(":userid", user.toInt());
 
     lockForRead();
@@ -1312,8 +1312,8 @@ void SqliteStorage::setBufferMarkerLineMsg(UserId user, const BufferId &bufferId
   db.transaction();
 
   {
-    QSqlQuery query(db);
-    query.prepare(queryString("update_buffer_markerlinemsgid"));
+    QuasselSqlQuery query(db);
+    query.prepare("update_buffer_markerlinemsgid");
     query.bindValue(":userid", user.toInt());
     query.bindValue(":bufferid", bufferId.toInt());
     query.bindValue(":markerlinemsgid", msgId.toInt());
@@ -1334,8 +1334,8 @@ QHash<BufferId, MsgId> SqliteStorage::bufferMarkerLineMsgIds(UserId user) {
 
   bool error = false;
   {
-    QSqlQuery query(db);
-    query.prepare(queryString("select_buffer_markerlinemsgids"));
+    QuasselSqlQuery query(db);
+    query.prepare("select_buffer_markerlinemsgids");
     query.bindValue(":userid", user.toInt());
 
     lockForRead();
@@ -1359,8 +1359,8 @@ bool SqliteStorage::logMessage(Message &msg) {
 
   bool error = false;
   {
-    QSqlQuery logMessageQuery(db);
-    logMessageQuery.prepare(queryString("insert_message"));
+    QuasselSqlQuery logMessageQuery(db);
+    logMessageQuery.prepare("insert_message");
 
     logMessageQuery.bindValue(":time", msg.timestamp().toTime_t());
     logMessageQuery.bindValue(":bufferid", msg.bufferInfo().bufferId().toInt());
@@ -1375,8 +1375,8 @@ bool SqliteStorage::logMessage(Message &msg) {
     if(logMessageQuery.lastError().isValid()) {
       // constraint violation - must be NOT NULL constraint - probably the sender is missing...
       if(logMessageQuery.lastError().number() == 19) {
-        QSqlQuery addSenderQuery(db);
-        addSenderQuery.prepare(queryString("insert_sender"));
+        QuasselSqlQuery addSenderQuery(db);
+        addSenderQuery.prepare("insert_sender");
         addSenderQuery.bindValue(":sender", msg.sender());
         safeExec(addSenderQuery);
         safeExec(logMessageQuery);
@@ -1411,8 +1411,8 @@ bool SqliteStorage::logMessages(MessageList &msgs) {
 
   {
     QSet<QString> senders;
-    QSqlQuery addSenderQuery(db);
-    addSenderQuery.prepare(queryString("insert_sender"));
+    QuasselSqlQuery addSenderQuery(db);
+    addSenderQuery.prepare("insert_sender");
     lockForWrite();
     for(int i = 0; i < msgs.count(); i++) {
       const QString &sender = msgs.at(i).sender();
@@ -1427,8 +1427,8 @@ bool SqliteStorage::logMessages(MessageList &msgs) {
 
   bool error = false;
   {
-    QSqlQuery logMessageQuery(db);
-    logMessageQuery.prepare(queryString("insert_message"));
+    QuasselSqlQuery logMessageQuery(db);
+    logMessageQuery.prepare("insert_message");
     for(int i = 0; i < msgs.count(); i++) {
       Message &msg = msgs[i];
 
@@ -1472,10 +1472,10 @@ QList<Message> SqliteStorage::requestMsgs(UserId user, BufferId bufferId, MsgId 
   bool error = false;
   BufferInfo bufferInfo;
   {
-    // code dupication from getBufferInfo:
+    // code duplication from getBufferInfo:
     // this is due to the impossibility of nesting transactions and recursive locking
-    QSqlQuery bufferInfoQuery(db);
-    bufferInfoQuery.prepare(queryString("select_buffer_by_id"));
+    QuasselSqlQuery bufferInfoQuery(db);
+    bufferInfoQuery.prepare("select_buffer_by_id");
     bufferInfoQuery.bindValue(":userid", user.toInt());
     bufferInfoQuery.bindValue(":bufferid", bufferId.toInt());
 
@@ -1494,14 +1494,14 @@ QList<Message> SqliteStorage::requestMsgs(UserId user, BufferId bufferId, MsgId 
   }
 
   {
-    QSqlQuery query(db);
+    QuasselSqlQuery query(db);
     if(last == -1 && first == -1) {
-      query.prepare(queryString("select_messagesNewestK"));
+      query.prepare("select_messagesNewestK");
     } else if(last == -1) {
-      query.prepare(queryString("select_messagesNewerThan"));
+      query.prepare("select_messagesNewerThan");
       query.bindValue(":firstmsg", first.toInt());
     } else {
-      query.prepare(queryString("select_messages"));
+      query.prepare("select_messages");
       query.bindValue(":lastmsg", last.toInt());
       query.bindValue(":firstmsg", first.toInt());
     }
@@ -1536,8 +1536,8 @@ QList<Message> SqliteStorage::requestAllMsgs(UserId user, MsgId first, MsgId las
 
   QHash<BufferId, BufferInfo> bufferInfoHash;
   {
-    QSqlQuery bufferInfoQuery(db);
-    bufferInfoQuery.prepare(queryString("select_buffers"));
+    QuasselSqlQuery bufferInfoQuery(db);
+    bufferInfoQuery.prepare("select_buffers");
     bufferInfoQuery.bindValue(":userid", user.toInt());
 
     lockForRead();
@@ -1548,11 +1548,11 @@ QList<Message> SqliteStorage::requestAllMsgs(UserId user, MsgId first, MsgId las
       bufferInfoHash[bufferInfo.bufferId()] = bufferInfo;
     }
 
-    QSqlQuery query(db);
+    QuasselSqlQuery query(db);
     if(last == -1) {
-      query.prepare(queryString("select_messagesAllNew"));
+      query.prepare("select_messagesAllNew");
     } else {
-      query.prepare(queryString("select_messagesAll"));
+      query.prepare("select_messagesAll");
       query.bindValue(":lastmsg", last.toInt());
     }
     query.bindValue(":userid", user.toInt());
@@ -1582,7 +1582,7 @@ QString SqliteStorage::backlogFile() {
   return Quassel::configDirPath() + "quassel-storage.sqlite";
 }
 
-bool SqliteStorage::safeExec(QSqlQuery &query, int retryCount) {
+bool SqliteStorage::safeExec(QuasselSqlQuery &query, int retryCount) {
   query.exec();
 
   if(!query.lastError().isValid())
@@ -1597,7 +1597,6 @@ bool SqliteStorage::safeExec(QSqlQuery &query, int retryCount) {
     return false;
   }
 }
-
 
 // ========================================
 //  SqliteMigration
@@ -1836,4 +1835,22 @@ bool SqliteMigrationReader::readMo(UserSettingMO &userSetting) {
   userSetting.settingvalue = value(2).toByteArray();
 
   return true;
+}
+
+// ========================================
+//  QuasselSqlQuery
+// ========================================
+
+bool QuasselSqlQuery::exec() {
+  QTime t;
+  int _elapsed;
+  t.start();
+
+  bool _result = QSqlQuery::exec();
+
+  _elapsed = t.elapsed();
+  ++_numExecs;
+  _totalTimeMsec += _elapsed;
+
+  return _result;
 }

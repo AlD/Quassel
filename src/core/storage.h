@@ -399,6 +399,8 @@ public slots:
    */
   virtual QList<Message> requestAllMsgs(UserId user, MsgId first = -1, MsgId last = -1, int limit = -1) = 0;
 
+  virtual QString queryString(const QString &queryName) = 0;
+
 signals:
   //! Sent when a new BufferInfo is created, or an existing one changed somehow.
   void bufferInfoUpdated(UserId user, const BufferInfo &);

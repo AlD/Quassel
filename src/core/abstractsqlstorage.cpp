@@ -28,6 +28,7 @@
 #include <QSqlError>
 #include <QSqlField>
 #include <QSqlQuery>
+#include <QDebug>
 
 int AbstractSqlStorage::_nextConnectionId = 0;
 AbstractSqlStorage::AbstractSqlStorage(QObject *parent)
@@ -42,6 +43,14 @@ AbstractSqlStorage::~AbstractSqlStorage() {
   for(conIter = _connectionPool.begin(); conIter != _connectionPool.end(); conIter++) {
     QSqlDatabase::removeDatabase(conIter.value()->name());
     disconnect(conIter.value(), 0, this, 0);
+  }
+  QHashIterator<QString, _dbProfData> i(_dbProf);
+  while (i.hasNext()) {
+    i.next();
+    qDebug() << i.key();
+    qDebug() << "Executions: " << i.value().executions;
+    qDebug() << "Total Time (ms): " << i.value().totalTimeMsec << endl;
+    qDebug() << "ms/execs: " << i.value().totalTimeMsec / i.value().executions << endl;
   }
 }
 
@@ -241,28 +250,29 @@ bool AbstractSqlStorage::watchQuery(QSqlQuery &query) {
       QString value;
       QSqlField field;
       if(query.driver()) {
-	// let the driver do the formatting
-	field.setType(iter.value().type());
-	if(iter.value().isNull())
-	  field.clear();
-	else
-	  field.setValue(iter.value());
-	value =  query.driver()->formatValue(field);
+        // let the driver do the formatting
+        field.setType(iter.value().type());
+        if(iter.value().isNull())
+          field.clear();
+        else
+          field.setValue(iter.value());
+        value =  query.driver()->formatValue(field);
       } else {
-	switch(iter.value().type()) {
-	case QVariant::Invalid:
-	  value = "NULL";
-	  break;
-	case QVariant::Int:
-	  value = iter.value().toString();
-	  break;
-	default:
-	  value = QString("'%1'").arg(iter.value().toString());
-	}
+        switch(iter.value().type()) {
+        case QVariant::Invalid:
+          value = "NULL";
+          break;
+        case QVariant::Int:
+          value = iter.value().toString();
+          break;
+        default:
+          value = QString("'%1'").arg(iter.value().toString());
+        }
       }
       valueStrings << QString("%1=%2").arg(iter.key(), value);
     }
     qCritical() << "                bound Values:" << qPrintable(valueStrings.join(", "));
+    qCritical() << "      rows returned/affected:" << query.size() << query.numRowsAffected();
     qCritical() << "                Error Number:" << query.lastError().number();
     qCritical() << "               Error Message:" << qPrintable(query.lastError().text());
     qCritical() << "              Driver Message:" << qPrintable(query.lastError().driverText());
@@ -271,6 +281,14 @@ bool AbstractSqlStorage::watchQuery(QSqlQuery &query) {
     return !queryError;
   }
   return true;
+}
+
+bool AbstractSqlStorage::watchQuery(QuasselSqlQuery & query) {
+  _dbProfData &_profData = _dbProf[query.getShortName()];
+  _profData.executions += query.getNumExecs();
+  _profData.totalTimeMsec += query.getTotalTimeMsec();
+
+  return AbstractSqlStorage::watchQuery((QSqlQuery&) query);
 }
 
 void AbstractSqlStorage::connectionDestroyed() {

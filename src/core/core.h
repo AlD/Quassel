@@ -400,6 +400,10 @@ public:
     return instance()->_storage->bufferMarkerLineMsgIds(user);
   }
 
+  inline QString queryString(const QString &queryName) {
+    return instance()->_storage->queryString(queryName);
+  }
+
   const QDateTime &startTime() const { return _startTime; }
 
   static inline QTimer &syncTimer() { return instance()->_storageSyncTimer; }

@@ -109,12 +109,12 @@ protected:
   virtual int installedSchemaVersion();
   virtual bool updateSchemaVersion(int newVersion);
   virtual bool setupSchemaVersion(int version);
-  bool safeExec(QSqlQuery &query, int retryCount = 0);
+  bool safeExec(QuasselSqlQuery &query, int retryCount = 0);
 
 private:
   static QString backlogFile();
-  void bindNetworkInfo(QSqlQuery &query, const NetworkInfo &info);
-  void bindServerInfo(QSqlQuery &query, const Network::Server &server);
+  void bindNetworkInfo(QuasselSqlQuery &query, const NetworkInfo &info);
+  void bindServerInfo(QuasselSqlQuery &query, const Network::Server &server);
 
   inline void lockForRead() { _dbLock.lockForRead(); }
   inline void lockForWrite() { _dbLock.lockForWrite(); }

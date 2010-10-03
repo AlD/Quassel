@@ -22,6 +22,7 @@
 #define ABSTRACTSQLSTORAGE_H
 
 #include "storage.h"
+#include "core.h"
 
 #include <QSqlDatabase>
 #include <QSqlQuery>
@@ -29,6 +30,7 @@
 
 class AbstractSqlMigrationReader;
 class AbstractSqlMigrationWriter;
+class QuasselSqlQuery;
 
 class AbstractSqlStorage : public Storage {
   Q_OBJECT
@@ -39,6 +41,13 @@ public:
 
   virtual inline AbstractSqlMigrationReader *createMigrationReader() { return 0; }
   virtual inline AbstractSqlMigrationWriter *createMigrationWriter() { return 0; }
+
+  struct _dbProfData {
+    QString queryShortName;
+    int executions;
+    int totalTimeMsec;
+  };
+  QHash<QString, _dbProfData> _dbProf;
 
 public slots:
   virtual State init(const QVariantMap &settings = QVariantMap());
@@ -58,6 +67,7 @@ protected:
   bool upgradeDb();
 
   bool watchQuery(QSqlQuery &query);
+  bool watchQuery(QuasselSqlQuery &query);
 
   int schemaVersion();
   virtual int installedSchemaVersion() { return -1; };
@@ -322,6 +332,23 @@ public:
   // called after migration process
   virtual inline bool postProcess() { return true; }
   friend class AbstractSqlMigrationReader;
+};
+
+class QuasselSqlQuery : public QSqlQuery {
+
+public:
+  inline QuasselSqlQuery(QSqlDatabase db) : QSqlQuery(db), _totalTimeMsec(0), _numExecs(0) {};
+  inline QString getShortName() const { return _shortName; }
+  inline void setShortName(QString _shortName) { this->_shortName = _shortName; }
+  inline bool prepare(const QString& query) { setShortName(query); return QSqlQuery::prepare(Core::instance()->queryString(query)); }
+  bool exec();
+
+  int getTotalTimeMsec() const { return _totalTimeMsec; }
+  int getNumExecs() const { return _numExecs; }
+
+private:
+  QString _shortName;
+  int _totalTimeMsec, _numExecs;
 };
 
 #endif
