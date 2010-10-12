@@ -76,6 +76,7 @@ public:
   inline const BufferInfo &bufferInfo() const { return _bufferInfo; }
   inline const BufferId &bufferId() const { return _bufferInfo.bufferId(); }
   inline void setBufferId(BufferId id) { _bufferInfo.setBufferId(id); }
+  inline void setLastStoredMsgId(MsgId id) { _bufferInfo.setLastStoredMsgId(id); }
   inline const QString &contents() const { return _contents; }
   inline const QString &sender() const { return _sender; }
   inline Type type() const { return _type; }

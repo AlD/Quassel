@@ -48,9 +48,14 @@ AbstractSqlStorage::~AbstractSqlStorage() {
   while (i.hasNext()) {
     i.next();
     qDebug() << i.key();
-    qDebug() << "Executions: " << i.value().executions;
-    qDebug() << "Total Time (ms): " << i.value().totalTimeMsec << endl;
-    qDebug() << "ms/execs: " << i.value().totalTimeMsec / i.value().executions << endl;
+    qDebug() << "     Executions: " << i.value().executions;
+    qDebug() << "Total Time (ms): " << i.value().totalTimeExecMsec;
+    if (i.value().executions)
+      qDebug() << "        ms/exec: " << i.value().totalTimeExecMsec/ i.value().executions;
+    qDebug() << "  Rows accessed: " << i.value().rowsReturned;
+    qDebug() << "Total Time (ms): " << i.value().totalTimeAccessMsec;
+    if (i.value().rowsReturned)
+      qDebug() << "         ms/row: " << i.value().totalTimeAccessMsec / i.value().rowsReturned;
   }
 }
 
@@ -286,7 +291,9 @@ bool AbstractSqlStorage::watchQuery(QSqlQuery &query) {
 bool AbstractSqlStorage::watchQuery(QuasselSqlQuery & query) {
   _dbProfData &_profData = _dbProf[query.getShortName()];
   _profData.executions += query.getNumExecs();
-  _profData.totalTimeMsec += query.getTotalTimeMsec();
+  _profData.totalTimeExecMsec += query.getTotalTimeExecMsec();
+  _profData.rowsReturned += query.getRowsReturned();
+  _profData.totalTimeAccessMsec += query.getTotalTimeAccessMsec();
 
   return AbstractSqlStorage::watchQuery((QSqlQuery&) query);
 }

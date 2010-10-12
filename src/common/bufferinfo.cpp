@@ -29,6 +29,7 @@
 
 BufferInfo::BufferInfo()
   : _bufferId(0),
+    _lastStoredMsgId(0),
     _netid(0),
     _type(InvalidBuffer),
     _groupId(0),
@@ -36,8 +37,9 @@ BufferInfo::BufferInfo()
 {
 }
 
-BufferInfo::BufferInfo(BufferId id,  NetworkId networkid, Type type, uint gid, QString buf)
+BufferInfo::BufferInfo(BufferId id, MsgId msgid, NetworkId networkid, Type type, uint gid, QString buf)
   : _bufferId(id),
+    _lastStoredMsgId(msgid),
     _netid(networkid),
     _type(type),
     _groupId(gid),

@@ -45,13 +45,15 @@ public:
   Q_DECLARE_FLAGS(ActivityLevel, Activity)
 
   BufferInfo();
-  BufferInfo(BufferId id, NetworkId networkid, Type type, uint gid = 0, QString buf = QString());
+  BufferInfo(BufferId id, MsgId msgid, NetworkId networkid, Type type, uint gid = 0, QString buf = QString());
 
   static BufferInfo fakeStatusBuffer(NetworkId networkId);
 
   inline bool isValid() const { return _bufferId != 0; }
   inline const BufferId &bufferId() const { return _bufferId; }
   inline void setBufferId(BufferId id) { _bufferId = id; }
+  inline const MsgId &lastStoredMsgId() const { return _lastStoredMsgId; }
+  inline void setLastStoredMsgId(MsgId msgid) { _lastStoredMsgId = msgid; }
   inline const NetworkId &networkId() const { return _netid; }
   inline const Type &type() const { return _type; }
   inline const uint &groupId() const { return _groupId; }
@@ -63,6 +65,7 @@ public:
 
 private:
   BufferId _bufferId;
+  MsgId _lastStoredMsgId;
   NetworkId _netid;
   Type _type;
   uint _groupId;

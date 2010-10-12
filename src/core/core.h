@@ -259,7 +259,7 @@ public:
     return instance()->_storage->getBufferInfo(user, bufferId);
   }
 
-  //! Store a Message in the storage backend and set it's unique Id.
+  //! Store a Message in the storage backend and set its unique Id.
   /** \note This method is threadsafe.
    *
    *  \param message The message object to be stored

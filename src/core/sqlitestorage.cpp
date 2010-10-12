@@ -1353,7 +1353,7 @@ QHash<BufferId, MsgId> SqliteStorage::bufferMarkerLineMsgIds(UserId user) {
   return markerLineHash;
 }
 
-bool SqliteStorage::logMessage(Message &msg) {
+bool SqliteStorage::storeMessage(Message &msg) {
   QSqlDatabase db = logDb();
   db.transaction();
 
@@ -1389,6 +1389,7 @@ bool SqliteStorage::logMessage(Message &msg) {
       MsgId msgId = logMessageQuery.lastInsertId().toInt();
       if(msgId.isValid()) {
         msg.setMsgId(msgId);
+        msg.bufferInfo().setLastStoredMsgId(msgId);
       } else {
         error = true;
       }
@@ -1405,7 +1406,7 @@ bool SqliteStorage::logMessage(Message &msg) {
   return !error;
 }
 
-bool SqliteStorage::logMessages(MessageList &msgs) {
+bool SqliteStorage::storeMessages(MessageList &msgs) {
   QSqlDatabase db = logDb();
   db.transaction();
 
@@ -1444,7 +1445,9 @@ bool SqliteStorage::logMessages(MessageList &msgs) {
         error = true;
         break;
       } else {
-        msg.setMsgId(logMessageQuery.lastInsertId().toInt());
+        MsgId msgId = logMessageQuery.lastInsertId().toInt();
+        msg.setMsgId(msgId);
+        msg.bufferInfo().setLastStoredMsgId(msgId);
       }
     }
   }
@@ -1497,10 +1500,10 @@ QList<Message> SqliteStorage::requestMsgs(UserId user, BufferId bufferId, MsgId 
     QuasselSqlQuery query(db);
     if(last == -1 && first == -1) {
       query.prepare("select_messagesNewestK");
-    } else if(last == -1) {
+    } else if(last == -1) { //
       query.prepare("select_messagesNewerThan");
       query.bindValue(":firstmsg", first.toInt());
-    } else {
+    } else { // additional
       query.prepare("select_messages");
       query.bindValue(":lastmsg", last.toInt());
       query.bindValue(":firstmsg", first.toInt());
@@ -1843,14 +1846,24 @@ bool SqliteMigrationReader::readMo(UserSettingMO &userSetting) {
 
 bool QuasselSqlQuery::exec() {
   QTime t;
-  int _elapsed;
   t.start();
 
   bool _result = QSqlQuery::exec();
 
-  _elapsed = t.elapsed();
+  _totalTimeExecMsec += t.elapsed();
   ++_numExecs;
-  _totalTimeMsec += _elapsed;
+
+  return _result;
+}
+
+bool QuasselSqlQuery::next() {
+  QTime t;
+  t.start();
+
+  bool _result = QSqlQuery::next();
+
+  _totalTimeAccessMsec += t.elapsed();
+  ++_rowsReturned;
 
   return _result;
 }

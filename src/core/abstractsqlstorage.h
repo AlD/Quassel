@@ -45,13 +45,18 @@ public:
   struct _dbProfData {
     QString queryShortName;
     int executions;
-    int totalTimeMsec;
+    long totalTimeExecMsec;
+    long rowsReturned;
+    long totalTimeAccessMsec;
   };
   QHash<QString, _dbProfData> _dbProf;
 
 public slots:
   virtual State init(const QVariantMap &settings = QVariantMap());
   virtual bool setup(const QVariantMap &settings = QVariantMap());
+
+  virtual bool logMessage(Message &msg);
+  virtual bool logMessages(MessageList &msgs);
 
 protected:
   inline virtual void sync() {};
@@ -94,6 +99,10 @@ protected:
 
 private slots:
   void connectionDestroyed();
+
+  virtual bool storeMessage(Message &msg);
+  virtual bool storeMessages(MessageList &msgs);
+  virtual void recordLastStoredMsgId(BufferInfo, Message) = 0;
 
 private:
   void addConnectionToPool();
@@ -337,18 +346,21 @@ public:
 class QuasselSqlQuery : public QSqlQuery {
 
 public:
-  inline QuasselSqlQuery(QSqlDatabase db) : QSqlQuery(db), _totalTimeMsec(0), _numExecs(0) {};
+  inline QuasselSqlQuery(QSqlDatabase db) : QSqlQuery(db), _totalTimeExecMsec(0), _numExecs(0), _totalTimeAccessMsec(0), _rowsReturned(0) {};
   inline QString getShortName() const { return _shortName; }
   inline void setShortName(QString _shortName) { this->_shortName = _shortName; }
   inline bool prepare(const QString& query) { setShortName(query); return QSqlQuery::prepare(Core::instance()->queryString(query)); }
   bool exec();
+  bool next();
 
-  int getTotalTimeMsec() const { return _totalTimeMsec; }
+  int getTotalTimeExecMsec() const { return _totalTimeExecMsec; }
   int getNumExecs() const { return _numExecs; }
+  int getTotalTimeAccessMsec() const { return _totalTimeAccessMsec; }
+  int getRowsReturned() const { return _rowsReturned; }
 
 private:
   QString _shortName;
-  int _totalTimeMsec, _numExecs;
+  long _totalTimeExecMsec, _numExecs, _totalTimeAccessMsec, _rowsReturned;
 };
 
 #endif
