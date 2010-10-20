@@ -33,14 +33,20 @@
 class CoreBacklogManager;
 class CoreBufferSyncer;
 class CoreBufferViewManager;
-class CoreIrcListHelper;
-class CoreNetworkConfig;
-class Identity;
 class CoreIdentity;
-class NetworkConnection;
+class CoreIrcListHelper;
 class CoreNetwork;
-struct NetworkInfo;
+class CoreNetworkConfig;
+class CoreSessionEventProcessor;
+class CtcpParser;
+class EventManager;
+class EventStringifier;
+class IrcParser;
+class MessageEvent;
+class NetworkConnection;
 class SignalProxy;
+
+struct NetworkInfo;
 
 class QScriptEngine;
 
@@ -64,6 +70,12 @@ public:
 
   const AliasManager &aliasManager() const { return _aliasManager; }
   AliasManager &aliasManager() { return _aliasManager; }
+
+  inline EventManager *eventManager() const { return _eventManager; }
+  inline EventStringifier *eventStringifier() const { return _eventStringifier; }
+  inline CoreSessionEventProcessor *sessionEventProcessor() const { return _sessionEventProcessor; }
+  inline CtcpParser *ctcpParser() const { return _ctcpParser; }
+  inline IrcParser *ircParser() const { return _ircParser; }
 
   inline CoreIrcListHelper *ircListHelper() const { return _ircListHelper; }
 
@@ -136,6 +148,7 @@ signals:
 
   void networkCreated(NetworkId);
   void networkRemoved(NetworkId);
+  void networkDisconnected(NetworkId);
 
 private slots:
   void removeClient(QIODevice *dev);
@@ -162,6 +175,9 @@ private:
   void initScriptEngine();
   void processMessages();
 
+  /// Hook for converting events to the old displayMsg() handlers
+  Q_INVOKABLE void processMessageEvent(MessageEvent *event);
+
   UserId _user;
 
   SignalProxy *_signalProxy;
@@ -177,6 +193,12 @@ private:
   CoreIrcListHelper *_ircListHelper;
   CoreNetworkConfig *_networkConfig;
   CoreCoreInfo _coreInfo;
+
+  EventManager *_eventManager;
+  EventStringifier *_eventStringifier; // should eventually move into client
+  CoreSessionEventProcessor *_sessionEventProcessor;
+  CtcpParser *_ctcpParser;
+  IrcParser *_ircParser;
 
   QScriptEngine *scriptEngine;
 

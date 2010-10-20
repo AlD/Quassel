@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-10 by the Quassel Project                          *
+ *   Copyright (C) 2005-2010 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,36 +18,42 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef BASICHANDLER_H
-#define BASICHANDLER_H
+#include "messageevent.h"
 
-#include <QObject>
-#include <QString>
-#include <QStringList>
-#include <QHash>
-#include <QGenericArgument>
 
-class BasicHandler : public QObject {
-  Q_OBJECT
+MessageEvent::MessageEvent(Message::Type msgType, Network *net, const QString &msg, const QString &sender, const QString &target,
+                           Message::Flags flags, const QDateTime &timestamp)
+    : NetworkEvent(EventManager::MessageEvent, net),
+      _msgType(msgType),
+      _text(msg),
+      _sender(sender),
+      _target(target),
+      _msgFlags(flags)
+{
+  IrcChannel *channel = network()->ircChannel(_target);
+  if(!channel) {
+    if(!_target.isEmpty() && network()->prefixes().contains(_target.at(0)))
+      _target = _target.mid(1);
 
-public:
-  BasicHandler(QObject *parent = 0);
-  BasicHandler(const QString &methodPrefix, QObject *parent = 0);
+    if(_target.startsWith('$') || _target.startsWith('#'))
+      _target = nickFromMask(sender);
+  }
 
-  QStringList providesHandlers();
+  _bufferType = bufferTypeByTarget(_target);
 
-protected:
-  virtual void handle(const QString &member, QGenericArgument val0 = QGenericArgument(0),
-                      QGenericArgument val1 = QGenericArgument(), QGenericArgument val2 = QGenericArgument(),
-                      QGenericArgument val3 = QGenericArgument(), QGenericArgument val4 = QGenericArgument(),
-                      QGenericArgument val5 = QGenericArgument(), QGenericArgument val6 = QGenericArgument(),
-                      QGenericArgument val7 = QGenericArgument(), QGenericArgument val8 = QGenericArgument());
+  if(timestamp.isValid())
+    setTimestamp(timestamp);
+  else
+    setTimestamp(QDateTime::currentDateTime());
+}
 
-private:
-  const QHash<QString, int> &handlerHash();
-  QHash<QString, int> _handlerHash;
-  int _defaultHandler;
-  bool _initDone;
-  QString _methodPrefix;
-};
-#endif
+BufferInfo::Type MessageEvent::bufferTypeByTarget(const QString &target) const {
+  if(target.isEmpty())
+    return BufferInfo::StatusBuffer;
+
+  if(network()->isChannelName(target))
+    return BufferInfo::ChannelBuffer;
+
+  return BufferInfo::QueryBuffer;
+}
+

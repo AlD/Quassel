@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-10 by the Quassel Project                          *
+ *   Copyright (C) 2005-2010 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,36 +18,35 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef BASICHANDLER_H
-#define BASICHANDLER_H
+#ifndef IRCPARSER_H
+#define IRCPARSER_H
 
-#include <QObject>
-#include <QString>
-#include <QStringList>
-#include <QHash>
-#include <QGenericArgument>
+#include "coresession.h"
 
-class BasicHandler : public QObject {
+class Event;
+class EventManager;
+class IrcEvent;
+class NetworkDataEvent;
+
+class IrcParser : public QObject {
   Q_OBJECT
 
 public:
-  BasicHandler(QObject *parent = 0);
-  BasicHandler(const QString &methodPrefix, QObject *parent = 0);
+  IrcParser(CoreSession *session);
 
-  QStringList providesHandlers();
+  inline CoreSession *coreSession() const { return _coreSession; }
+  inline EventManager *eventManager() const { return coreSession()->eventManager(); }
 
 protected:
-  virtual void handle(const QString &member, QGenericArgument val0 = QGenericArgument(0),
-                      QGenericArgument val1 = QGenericArgument(), QGenericArgument val2 = QGenericArgument(),
-                      QGenericArgument val3 = QGenericArgument(), QGenericArgument val4 = QGenericArgument(),
-                      QGenericArgument val5 = QGenericArgument(), QGenericArgument val6 = QGenericArgument(),
-                      QGenericArgument val7 = QGenericArgument(), QGenericArgument val8 = QGenericArgument());
+  Q_INVOKABLE void processNetworkIncoming(NetworkDataEvent *e);
+
+  bool checkParamCount(const QString &cmd, const QList<QByteArray> &params, int minParams);
+
+  // no-op if we don't have crypto support!
+  QByteArray decrypt(Network *network, const QString &target, const QByteArray &message, bool isTopic = false);
 
 private:
-  const QHash<QString, int> &handlerHash();
-  QHash<QString, int> _handlerHash;
-  int _defaultHandler;
-  bool _initDone;
-  QString _methodPrefix;
+  CoreSession *_coreSession;
 };
+
 #endif

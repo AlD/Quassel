@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-10 by the Quassel Project                          *
+ *   Copyright (C) 2005-2010 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,36 +18,51 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef BASICHANDLER_H
-#define BASICHANDLER_H
+#ifndef EVENT_H
+#define EVENT_H
 
-#include <QObject>
-#include <QString>
-#include <QStringList>
-#include <QHash>
-#include <QGenericArgument>
+#include <QDateTime>
+#include <QDebug>
 
-class BasicHandler : public QObject {
-  Q_OBJECT
+#include "eventmanager.h"
+
+class Event {
 
 public:
-  BasicHandler(QObject *parent = 0);
-  BasicHandler(const QString &methodPrefix, QObject *parent = 0);
+  explicit Event(EventManager::EventType type = EventManager::Invalid);
+  virtual ~Event() {};
 
-  QStringList providesHandlers();
+  inline EventManager::EventType type() const { return _type; }
+
+  inline void setFlag(EventManager::EventFlag flag) { _flags |= flag; }
+  inline void setFlags(EventManager::EventFlags flags) { _flags = flags; }
+  inline bool testFlag(EventManager::EventFlag flag) { return _flags.testFlag(flag); }
+  inline EventManager::EventFlags flags() const { return _flags; }
+
+  inline void stop() { setFlag(EventManager::Stopped); }
+  inline bool isStopped() { return _flags.testFlag(EventManager::Stopped); }
+
+  inline void setTimestamp(const QDateTime &time) { _timestamp = time; }
+  inline QDateTime timestamp() const { return _timestamp; }
+
+  //inline void setData(const QVariant &data) { _data = data; }
+  //inline QVariant data() const { return _data; }
 
 protected:
-  virtual void handle(const QString &member, QGenericArgument val0 = QGenericArgument(0),
-                      QGenericArgument val1 = QGenericArgument(), QGenericArgument val2 = QGenericArgument(),
-                      QGenericArgument val3 = QGenericArgument(), QGenericArgument val4 = QGenericArgument(),
-                      QGenericArgument val5 = QGenericArgument(), QGenericArgument val6 = QGenericArgument(),
-                      QGenericArgument val7 = QGenericArgument(), QGenericArgument val8 = QGenericArgument());
+  virtual inline QString className() const { return "Event"; }
+  virtual inline void debugInfo(QDebug &dbg) const { Q_UNUSED(dbg); }
 
 private:
-  const QHash<QString, int> &handlerHash();
-  QHash<QString, int> _handlerHash;
-  int _defaultHandler;
-  bool _initDone;
-  QString _methodPrefix;
+  EventManager::EventType _type;
+  EventManager::EventFlags _flags;
+  QDateTime _timestamp;
+  //QVariant _data;
+
+  friend QDebug operator<<(QDebug dbg, Event *e);
 };
+
+QDebug operator<<(QDebug dbg, Event *e);
+
+/*******/
+
 #endif
