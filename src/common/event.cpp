@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-10 by the Quassel Project                          *
+ *   Copyright (C) 2005-2010 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,36 +18,21 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef BASICHANDLER_H
-#define BASICHANDLER_H
+#include "event.h"
 
-#include <QObject>
-#include <QString>
-#include <QStringList>
-#include <QHash>
-#include <QGenericArgument>
+Event::Event(EventManager::EventType type)
+  : _type(type)
+{
 
-class BasicHandler : public QObject {
-  Q_OBJECT
+}
 
-public:
-  BasicHandler(QObject *parent = 0);
-  BasicHandler(const QString &methodPrefix, QObject *parent = 0);
+QDebug operator<<(QDebug dbg, Event *e) {
+  dbg.nospace() << qPrintable(e->className()) << "("
+                << "type = 0x" << qPrintable(QString::number(e->type(), 16));
+  e->debugInfo(dbg);
+                //<< ", data = " << e->data(); // we don't use data anywhere yet
+  dbg.nospace() << ", flags = 0x" << qPrintable(QString::number(e->flags(), 16))
+                << ")";
+  return dbg.space();
+}
 
-  QStringList providesHandlers();
-
-protected:
-  virtual void handle(const QString &member, QGenericArgument val0 = QGenericArgument(0),
-                      QGenericArgument val1 = QGenericArgument(), QGenericArgument val2 = QGenericArgument(),
-                      QGenericArgument val3 = QGenericArgument(), QGenericArgument val4 = QGenericArgument(),
-                      QGenericArgument val5 = QGenericArgument(), QGenericArgument val6 = QGenericArgument(),
-                      QGenericArgument val7 = QGenericArgument(), QGenericArgument val8 = QGenericArgument());
-
-private:
-  const QHash<QString, int> &handlerHash();
-  QHash<QString, int> _handlerHash;
-  int _defaultHandler;
-  bool _initDone;
-  QString _methodPrefix;
-};
-#endif

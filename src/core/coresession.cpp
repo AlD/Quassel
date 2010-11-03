@@ -18,28 +18,33 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "coresession.h"
+
 #include <QtScript>
 
 #include "core.h"
-#include "coresession.h"
 #include "coreuserinputhandler.h"
-#include "signalproxy.h"
 #include "corebuffersyncer.h"
 #include "corebacklogmanager.h"
 #include "corebufferviewmanager.h"
-#include "coreirclisthelper.h"
-#include "corenetworkconfig.h"
-#include "storage.h"
-
 #include "coreidentity.h"
-#include "corenetwork.h"
-#include "ircuser.h"
-#include "ircchannel.h"
-
-#include "util.h"
-#include "coreusersettings.h"
-#include "logger.h"
 #include "coreignorelistmanager.h"
+#include "coreirclisthelper.h"
+#include "corenetwork.h"
+#include "corenetworkconfig.h"
+#include "coresessioneventprocessor.h"
+#include "coreusersettings.h"
+#include "ctcpparser.h"
+#include "eventmanager.h"
+#include "eventstringifier.h"
+#include "ircchannel.h"
+#include "ircparser.h"
+#include "ircuser.h"
+#include "logger.h"
+#include "messageevent.h"
+#include "signalproxy.h"
+#include "storage.h"
+#include "util.h"
 
 class ProcessMessagesEvent : public QEvent {
 public:
@@ -57,8 +62,12 @@ CoreSession::CoreSession(UserId uid, bool restoreState, QObject *parent)
     _ircListHelper(new CoreIrcListHelper(this)),
     _networkConfig(new CoreNetworkConfig("GlobalNetworkConfig", this)),
     _coreInfo(this),
+    _eventManager(new EventManager(this)),
+    _eventStringifier(new EventStringifier(this)),
+    _sessionEventProcessor(new CoreSessionEventProcessor(this)),
+    _ctcpParser(new CtcpParser(this)),
+    _ircParser(new IrcParser(this)),
     scriptEngine(new QScriptEngine(this)),
-    _processMessages(false),
     _ignoreListManager(this)
 {
   SignalProxy *p = signalProxy();
@@ -86,6 +95,16 @@ CoreSession::CoreSession(UserId uid, bool restoreState, QObject *parent)
 
   loadSettings();
   initScriptEngine();
+
+  connect(eventManager(), SIGNAL(eventQueueEmptied()), SLOT(processMessages()));
+  eventManager()->registerObject(ircParser(), EventManager::NormalPriority);
+  eventManager()->registerObject(sessionEventProcessor(), EventManager::HighPriority); // needs to process events *before* the stringifier!
+  eventManager()->registerObject(ctcpParser(), EventManager::NormalPriority);
+  eventManager()->registerObject(eventStringifier(), EventManager::NormalPriority);
+  eventManager()->registerObject(this, EventManager::LowPriority); // for sending MessageEvents to the client
+   // some events need to be handled after msg generation
+  eventManager()->registerObject(sessionEventProcessor(), EventManager::LowPriority, "lateProcess");
+  eventManager()->registerObject(ctcpParser(), EventManager::LowPriority, "send");
 
   // periodically save our session state
   connect(&(Core::instance()->syncTimer()), SIGNAL(timeout()), this, SLOT(saveSessionState()));
@@ -204,6 +223,9 @@ void CoreSession::msgFromClient(BufferInfo bufinfo, QString msg) {
   CoreNetwork *net = network(bufinfo.networkId());
   if(net) {
     net->userInput(bufinfo, msg);
+    // FIXME as soon as user input is event-based
+    // until then, user input doesn't trigger a message queue flush!
+    processMessages();
   } else {
     qWarning() << "Trying to send to unconnected network:" << msg;
   }
@@ -228,10 +250,6 @@ void CoreSession::recvMessageFromServer(NetworkId networkId, Message::Type type,
     return;
 
   _messageQueue << rawMsg;
-  if(!_processMessages) {
-    _processMessages = true;
-    QCoreApplication::postEvent(this, new ProcessMessagesEvent());
-  }
 }
 
 void CoreSession::recvStatusMsgFromServer(QString msg) {
@@ -240,19 +258,22 @@ void CoreSession::recvStatusMsgFromServer(QString msg) {
   emit displayStatusMsg(net->networkName(), msg);
 }
 
+void CoreSession::processMessageEvent(MessageEvent *event) {
+  recvMessageFromServer(event->networkId(), event->msgType(), event->bufferType(),
+                        event->target().isNull()? "" : event->target(),
+                        event->text().isNull()? "" : event->text(),
+                        event->sender().isNull()? "" : event->sender(),
+                        event->msgFlags());
+}
+
 QList<BufferInfo> CoreSession::buffers() const {
   return Core::requestBuffers(user());
 }
 
-void CoreSession::customEvent(QEvent *event) {
-  if(event->type() != QEvent::User)
+void CoreSession::processMessages() {
+  if(_messageQueue.isEmpty())
     return;
 
-  processMessages();
-  event->accept();
-}
-
-void CoreSession::processMessages() {
   if(_messageQueue.count() == 1) {
     const RawMessage &rawMsg = _messageQueue.first();
     bool createBuffer = !(rawMsg.flags & Message::Redirected);
@@ -308,7 +329,6 @@ void CoreSession::processMessages() {
       emit displayMsg(messages[i]);
     }
   }
-  _processMessages = false;
   _messageQueue.clear();
 }
 
@@ -434,6 +454,7 @@ void CoreSession::createNetwork(const NetworkInfo &info_, const QStringList &per
     connect(net, SIGNAL(displayMsg(NetworkId, Message::Type, BufferInfo::Type, const QString &, const QString &, const QString &, Message::Flags)),
                  SLOT(recvMessageFromServer(NetworkId, Message::Type, BufferInfo::Type, const QString &, const QString &, const QString &, Message::Flags)));
     connect(net, SIGNAL(displayStatusMsg(QString)), SLOT(recvStatusMsgFromServer(QString)));
+    connect(net, SIGNAL(disconnected(NetworkId)), SIGNAL(networkDisconnected(NetworkId)));
 
     net->setNetworkInfo(info);
     net->setProxy(signalProxy());
@@ -453,7 +474,7 @@ void CoreSession::removeNetwork(NetworkId id) {
     return;
 
   if(net->connectionState() != Network::Disconnected) {
-    connect(net, SIGNAL(disconnected(NetworkId)), this, SLOT(destroyNetwork(NetworkId)));
+    connect(net, SIGNAL(disconnected(NetworkId)), SLOT(destroyNetwork(NetworkId)));
     net->disconnectFromIrc();
   } else {
     destroyNetwork(id);

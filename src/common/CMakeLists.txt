@@ -12,15 +12,21 @@ set(SOURCES
     bufferviewconfig.cpp
     bufferviewmanager.cpp
     cliparser.cpp
+    ctcpevent.cpp
+    event.cpp
+    eventmanager.cpp
     identity.cpp
     ignorelistmanager.cpp
     ircchannel.cpp
+    ircevent.cpp
     irclisthelper.cpp
     ircuser.cpp
     logger.cpp
     message.cpp
+    messageevent.cpp
     network.cpp
     networkconfig.cpp
+    networkevent.cpp
     quassel.cpp
     settings.cpp
     signalproxy.cpp
@@ -35,6 +41,7 @@ set(MOC_HDRS
     bufferviewconfig.h
     bufferviewmanager.h
     coreinfo.h
+    eventmanager.h
     identity.h
     ignorelistmanager.h
     ircchannel.h
@@ -50,6 +57,11 @@ set(HEADERS ${MOC_HDRS}
     abstractcliparser.h
     bufferinfo.h
     cliparser.h
+    ctcpevent.h
+    event.h
+    ircevent.h
+    networkevent.h
+    messageevent.h
     logger.h
     message.h
     types.h
