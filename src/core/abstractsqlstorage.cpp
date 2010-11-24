@@ -52,6 +52,16 @@ QSqlDatabase AbstractSqlStorage::logDb() {
   return QSqlDatabase::database(_connectionPool[QThread::currentThread()]->name());
 }
 
+bool AbstractSqlStorage::logMessage(Message &msg) {
+  bool _result = storeMessage(msg);
+  setLastStoredMsgId(msg.bufferId(), msg.msgId());
+  return _result;
+}
+
+bool AbstractSqlStorage::logMessages(MessageList &msgs) {
+  return storeMessages(msgs);
+}
+
 void AbstractSqlStorage::addConnectionToPool() {
   QMutexLocker locker(&_connectionPoolMutex);
   // we have to recheck if the connection pool already contains a connection for

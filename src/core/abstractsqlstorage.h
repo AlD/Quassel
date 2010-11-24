@@ -44,6 +44,9 @@ public slots:
   virtual State init(const QVariantMap &settings = QVariantMap());
   virtual bool setup(const QVariantMap &settings = QVariantMap());
 
+  virtual bool logMessage(Message &msg);
+  virtual bool logMessages(MessageList &msgs);
+
 protected:
   inline virtual void sync() {};
 
@@ -84,6 +87,11 @@ protected:
 
 private slots:
   void connectionDestroyed();
+
+  virtual bool storeMessage(Message &msg) = 0;
+  virtual bool storeMessages(MessageList &msgs) = 0;
+  virtual bool setLastStoredMsgId(const BufferId &bufferid, const MsgId &msgid);
+  virtual bool setLastStoredMsgIds(QList<MsgId> &msgids);
 
 private:
   void addConnectionToPool();

@@ -1190,7 +1190,7 @@ QHash<BufferId, MsgId> PostgreSqlStorage::bufferMarkerLineMsgIds(UserId user) {
   return markerLineHash;
 }
 
-bool PostgreSqlStorage::logMessage(Message &msg) {
+bool PostgreSqlStorage::storeMessage(Message &msg) {
   QSqlDatabase db = logDb();
   if(!db.transaction()) {
     qWarning() << "PostgreSqlStorage::logMessage(): cannot start transaction!";
@@ -1250,7 +1250,7 @@ bool PostgreSqlStorage::logMessage(Message &msg) {
   }
 }
 
-bool PostgreSqlStorage::logMessages(MessageList &msgs) {
+bool PostgreSqlStorage::storeMessages(MessageList &msgs) {
   QSqlDatabase db = logDb();
   if(!db.transaction()) {
     qWarning() << "PostgreSqlStorage::logMessage(): cannot start transaction!";

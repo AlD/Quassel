@@ -97,8 +97,8 @@ public slots:
   virtual QHash<BufferId, MsgId> bufferMarkerLineMsgIds(UserId user);
 
   /* Message handling */
-  virtual bool logMessage(Message &msg);
-  virtual bool logMessages(MessageList &msgs);
+  virtual bool storeMessage(Message &msg);
+  virtual bool storeMessages(MessageList &msgs);
   virtual QList<Message> requestMsgs(UserId user, BufferId bufferId, MsgId first = -1, MsgId last = -1, int limit = -1);
   virtual QList<Message> requestAllMsgs(UserId user, MsgId first = -1, MsgId last = -1, int limit = -1);
 

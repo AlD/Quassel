@@ -1353,7 +1353,7 @@ QHash<BufferId, MsgId> SqliteStorage::bufferMarkerLineMsgIds(UserId user) {
   return markerLineHash;
 }
 
-bool SqliteStorage::logMessage(Message &msg) {
+bool SqliteStorage::storeMessage(Message &msg) {
   QSqlDatabase db = logDb();
   db.transaction();
 
@@ -1405,7 +1405,7 @@ bool SqliteStorage::logMessage(Message &msg) {
   return !error;
 }
 
-bool SqliteStorage::logMessages(MessageList &msgs) {
+bool SqliteStorage::storeMessages(MessageList &msgs) {
   QSqlDatabase db = logDb();
   db.transaction();
 
