@@ -112,6 +112,7 @@ class PerBufferUnreadBacklogRequester : public BacklogRequester
 public:
     PerBufferUnreadBacklogRequester(ClientBacklogManager *backlogManager);
     virtual void requestBacklog(const BufferIdList &bufferIds);
+  virtual void requestInitialBacklog();
 
 private:
     int _limit;
