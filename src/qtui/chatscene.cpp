@@ -459,7 +459,7 @@ void ChatScene::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int e
   if(_selectionStart >= 0) {
     int offset = end - start + 1;
     if(_selectionStart >= start)
-      _selectionStart = qMax(_selectionStart -= offset, start);
+      _selectionStart = qMax(_selectionStart - offset, start);
     if(_selectionEnd >= start)
       _selectionEnd -= offset;
     if(_firstSelectionRow >= start)
