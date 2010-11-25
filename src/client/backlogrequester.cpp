@@ -125,3 +125,13 @@ void PerBufferUnreadBacklogRequester::requestBacklog(const BufferIdList &bufferI
     backlogManager->requestBacklog(bufferId, Client::networkModel()->lastSeenMsgId(bufferId), -1, _limit, _additional);
   }
 }
+
+void PerBufferUnreadBacklogRequester::requestInitialBacklog() {
+  QSet<BufferId> bufferIds;
+  bufferIds = Client::bufferViewOverlay()->bufferIds();
+  requestBacklog(bufferIds.toList());
+
+  bufferIds = Client::bufferViewOverlay()->tempRemovedBufferIds();
+  _additional = 0;
+  requestBacklog(bufferIds.toList());
+}
