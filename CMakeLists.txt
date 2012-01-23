@@ -11,6 +11,7 @@
 # -DWITH_KDE=ON          : Enable KDE4 support
 # -DWITH_CRYPT=OFF       : Disable encryption support
 # -DWITH_OXYGEN=(ON|OFF) : Whether to install Oxygen icons (default: yes, unless KDE > 4.3.0 is present and enabled)
+# -DWITH_SYSLOG=OFF      : Disable syslog support
 #
 # -DEMBED_DATA=ON        : Embed all data files in icons the binary, rather than installing them separately
 #
@@ -21,6 +22,8 @@
 # NOTE: You should remove CMakeCache.txt if you plan to change any of these values!
 
 project(QuasselIRC)
+
+include(CheckIncludeFile)
 
 # cmake 2.6.2 is required for KDE >=4.2 and should be widespread enough now
 cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
@@ -46,6 +49,7 @@ option(WITH_PHONON   "Enable Phonon support (for audio notifications)"	ON)
 option(WITH_LIBINDICATE "Enable Ayatana notification support"           ON)
 option(WITH_KDE      "Enable KDE4 integration"				OFF)
 option(WITH_CRYPT    "Enable encryption support if present on system"	ON)
+option(WITH_SYSLOG   "Use syslog for storing log data"			ON)
 
 # We use icon paths from KDE 4.3.x, which are partially invalid on older and possibly
 # even on newer KDE versions. Do not disable this unless you are sure that your Quassel will
@@ -314,6 +318,20 @@ if(BUILD_CORE)
   else(WITH_CRYPT)
     message(STATUS "Not enabling encryption support")
   endif(WITH_CRYPT)
+
+  # Setup syslog support
+  if(WITH_SYSLOG)
+    check_include_file(syslog.h HAVE_SYSLOG_H)
+    if(HAVE_SYSLOG_H)
+      message(STATUS "Enabling syslog support")
+      set(HAVE_SYSLOG true)
+      add_definitions(-DHAVE_SYSLOG)
+    else(HAVE_SYSLOG_H)
+      message(STATUS "Disabling syslog support")
+    endif(HAVE_SYSLOG_H)
+  else(WITH_SYSLOG)
+    message(STATUS "Not enabling syslog support")
+  endif(WITH_SYSLOG)
 
 endif(BUILD_CORE)
 

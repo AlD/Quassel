@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by the Quassel Project                             *
+ *   Copyright (C) 2005-2012 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,61 +18,93 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "logger.h"
-#include "quassel.h"
-
 #include <QFile>
 #include <QTextStream>
 #include <QDateTime>
 
+#ifdef HAVE_SYSLOG
+#  include <syslog.h>
+#endif
+
+#include "logger.h"
+#include "quassel.h"
+
 Logger::~Logger() {
-  QDateTime date = QDateTime::currentDateTime();
-  if(_logLevel == DebugLevel) _buffer.prepend("Debug: ");
-  else if (_logLevel == InfoLevel) _buffer.prepend("Info: ");
-  else if (_logLevel == WarningLevel) _buffer.prepend("Warning: ");
-  else if (_logLevel == ErrorLevel) _buffer.prepend("Error: ");
-  _buffer.prepend(date.toString("yyyy-MM-dd hh:mm:ss "));
   log();
 }
 
 void Logger::log() {
-  LogLevel lvl;
-  if (Quassel::optionValue("loglevel") == "Debug") lvl = DebugLevel;
-  else if (Quassel::optionValue("loglevel") == "Info") lvl = InfoLevel;
-  else if (Quassel::optionValue("loglevel") == "Warning") lvl = WarningLevel;
-  else if (Quassel::optionValue("loglevel") == "Error") lvl = ErrorLevel;
-  else lvl = InfoLevel;
+  if(_logLevel < Quassel::logLevel())
+    return;
 
-  if(_logLevel < lvl) return;
-
-  // if we can't open logfile we log to stdout
-  QTextStream out(stdout);
-  QFile file;
-  if(!Quassel::optionValue("logfile").isEmpty()) {
-    file.setFileName(Quassel::optionValue("logfile"));
-    if (file.open(QIODevice::Append | QIODevice::Text)) {
-      out.setDevice(&file);
-      _buffer.remove(QChar('\n'));
-    }
+  switch(_logLevel) {
+  case Quassel::DebugLevel:
+    _buffer.prepend("Debug: ");
+    break;
+  case Quassel::InfoLevel:
+    _buffer.prepend("Info: ");
+    break;
+    case Quassel::WarningLevel:
+    _buffer.prepend("Warning: ");
+    break;
+  case Quassel::ErrorLevel:
+    _buffer.prepend("Error: ");
+    break;
+  default:
+    break;
   }
+
+#ifdef HAVE_SYSLOG
+  if(Quassel::logToSyslog()) {
+    int prio;
+    switch(_logLevel) {
+    case Quassel::DebugLevel:
+      prio = LOG_DEBUG;
+      break;
+    case Quassel::InfoLevel:
+      prio = LOG_INFO;
+      break;
+    case Quassel::WarningLevel:
+      prio = LOG_WARNING;
+      break;
+    case Quassel::ErrorLevel:
+      prio = LOG_ERR;
+      break;
+    default:
+      prio = LOG_INFO;
+      break;
+    }
+    syslog(LOG_USER & prio, "%s", qPrintable(_buffer));
+  }
+#endif
+
+  _buffer.prepend(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss "));
+
+  // if we don't have a logfile we log to stdout
+
+  QTextStream out(stdout);
+  if(Quassel::logFile() && Quassel::logFile()->isOpen()) {
+    _buffer.remove(QChar('\n'));
+    out.setDevice(Quassel::logFile());
+  }
+
   out << _buffer << endl;
-  if(file.isOpen()) file.close();
 }
 
 
 void Logger::logMessage(QtMsgType type, const char *msg) {
   switch (type) {
   case QtDebugMsg:
-    Logger(Logger::DebugLevel) << msg;
+    Logger(Quassel::DebugLevel) << msg;
     break;
   case QtWarningMsg:
-    Logger(Logger::WarningLevel) << msg;
+    Logger(Quassel::WarningLevel) << msg;
     break;
   case QtCriticalMsg:
-    Logger(Logger::ErrorLevel) << msg;
+    Logger(Quassel::ErrorLevel) << msg;
     break;
   case QtFatalMsg:
-    Logger(Logger::ErrorLevel) << msg;
+    Logger(Quassel::ErrorLevel) << msg;
     Quassel::logFatalMessage(msg);
     return;
   }

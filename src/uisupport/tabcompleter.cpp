@@ -28,6 +28,9 @@
 #include "network.h"
 #include "networkmodel.h"
 #include "uisettings.h"
+#include "action.h"
+#include "actioncollection.h"
+#include "graphicalui.h"
 
 #include <QRegExp>
 
@@ -42,7 +45,16 @@ TabCompleter::TabCompleter(MultiLineEdit *_lineEdit)
     _enabled(false),
     _nickSuffix(": ")
 {
+  // use both an Action and generic eventFilter, to make the shortcut configurable
+  // yet still be able to reset() when required
   _lineEdit->installEventFilter(this);
+  ActionCollection *coll = GraphicalUi::actionCollection("General");
+  coll->addAction("TabCompletionKey", new Action(tr("Tab completion"), coll,
+                                              this, SLOT(onTabCompletionKey()), QKeySequence(Qt::Key_Tab)));
+}
+
+void TabCompleter::onTabCompletionKey() {
+  complete();
 }
 
 void TabCompleter::buildCompletionList() {
@@ -130,6 +142,8 @@ void TabCompleter::complete() {
     if(_completionType == UserTab && _lineEdit->cursorPosition() == _lastCompletionLength) {
       _lineEdit->insert(_nickSuffix);
       _lastCompletionLength += _nickSuffix.length();
+    } else if (s.addSpaceMidSentence()) {
+      _lineEdit->insert(" ");
     }
 
   // we're at the end of the list -> start over again
@@ -151,13 +165,10 @@ bool TabCompleter::eventFilter(QObject *obj, QEvent *event) {
 
   QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
 
-  if(keyEvent->key() == Qt::Key_Tab) {
-    complete();
-    return true;
-  } else {
+  if(keyEvent->key() != GraphicalUi::actionCollection("General")->action("TabCompletionKey")->shortcut()) {
     reset();
-    return false;
   }
+  return false;
 }
 
 // this determines the sort order

@@ -164,6 +164,9 @@ void CoreUserInputHandler::handleDelkey(const BufferInfo &bufferInfo, const QStr
   if(!bufferInfo.isValid())
     return;
 
+  if(!Cipher::neededFeaturesAvailable())
+    return;
+
   QStringList parms = msg.split(' ', QString::SkipEmptyParts);
 
   if(parms.isEmpty() && !bufferInfo.bufferName().isEmpty())
@@ -454,6 +457,9 @@ void CoreUserInputHandler::handleSetkey(const BufferInfo &bufferInfo, const QStr
   if(!bufferInfo.isValid())
     return;
 
+  if(!Cipher::neededFeaturesAvailable())
+    return;
+
   QStringList parms = msg.split(' ', QString::SkipEmptyParts);
 
   if(parms.count() == 1 && !bufferInfo.bufferName().isEmpty())
@@ -482,6 +488,44 @@ void CoreUserInputHandler::handleSetkey(const BufferInfo &bufferInfo, const QStr
                                                               "with support for the Qt Cryptographic Architecture (QCA) library. "
                                                               "Contact your distributor about a Quassel package with QCA "
                                                               "support, or rebuild Quassel with QCA present."));
+#endif
+}
+
+void CoreUserInputHandler::handleShowkey(const BufferInfo &bufferInfo, const QString &msg) {
+#ifdef HAVE_QCA2
+  if(!bufferInfo.isValid())
+    return;
+
+  if(!Cipher::neededFeaturesAvailable())
+    return;
+
+  QStringList parms = msg.split(' ', QString::SkipEmptyParts);
+
+  if(parms.isEmpty() && !bufferInfo.bufferName().isEmpty())
+    parms.prepend(bufferInfo.bufferName());
+
+  if(parms.isEmpty()) {
+    emit displayMsg(Message::Info, bufferInfo.bufferName(), "",
+                    tr("[usage] /showkey <nick|channel> shows the encryption key for nick or channel or just /showkey when in a channel or query."));
+    return;
+  }
+
+  QString target = parms.at(0);
+  QByteArray key = network()->cipherKey(target);
+
+  if(key.isEmpty()) {
+    emit displayMsg(Message::Info, bufferInfo.bufferName(), tr("No key has been set for %1.").arg(target));
+    return;
+  }
+
+  emit displayMsg(Message::Info, bufferInfo.bufferName(), tr("The key for %1 is %2").arg(target).arg(QString(key)));
+
+#else
+  Q_UNUSED(msg)
+  emit displayMsg(Message::Error, bufferInfo.bufferName(), "", tr("Error: Setting an encryption key requires Quassel to have been built "
+                                                                  "with support for the Qt Cryptographic Architecture (QCA2) library. "
+                                                                  "Contact your distributor about a Quassel package with QCA2 "
+                                                                  "support, or rebuild Quassel with QCA2 present."));
 #endif
 }
 
@@ -636,6 +680,9 @@ QByteArray CoreUserInputHandler::encrypt(const QString &target, const QByteArray
     *didEncrypt = false;
 
   if(message_.isEmpty())
+    return message_;
+
+  if(!Cipher::neededFeaturesAvailable())
     return message_;
 
   Cipher *cipher = network()->cipher(target);

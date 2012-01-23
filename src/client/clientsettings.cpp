@@ -178,7 +178,6 @@ void CoreAccountSettings::setBufferViewOverlay(const QSet<int> &viewIds) {
 QSet<int> CoreAccountSettings::bufferViewOverlay() {
   QSet<int> viewIds;
   QVariantList variants = accountValue("BufferViewOverlay").toList();
-  QVariantList::const_iterator iter = variants.constBegin();
   for(QVariantList::const_iterator iter = variants.constBegin(); iter != variants.constEnd(); iter++) {
     viewIds << iter->toInt();
   }
@@ -279,6 +278,14 @@ void TabCompletionSettings::setCompletionSuffix(const QString &suffix) {
 
 QString TabCompletionSettings::completionSuffix() {
   return localValue("CompletionSuffix", ": ").toString();
+}
+
+void TabCompletionSettings::setAddSpaceMidSentence(bool space) {
+  setLocalValue("AddSpaceMidSentence", space);
+}
+
+bool TabCompletionSettings::addSpaceMidSentence() {
+  return localValue("AddSpaceMidSentence", false).toBool();
 }
 
 void TabCompletionSettings::setSortMode(SortMode mode) {
