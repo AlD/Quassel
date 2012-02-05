@@ -141,8 +141,9 @@ bool Quassel::init() {
         _logFile = 0;
       }
     }
-
+#ifdef HAVE_SYSLOG
     _logToSyslog = isOptionSet("syslog");
+#endif
   }
 
   return true;
