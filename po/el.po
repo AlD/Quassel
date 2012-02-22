@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Quassel IRC\n"
 "Report-Msgid-Bugs-To: http://bugs.quassel-irc.org/\n"
-"PO-Revision-Date: 2012-02-18 16:09+0000\n"
+"PO-Revision-Date: 2012-02-21 09:12+0000\n"
 "Last-Translator: differentreality <differentreality@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -1702,7 +1702,7 @@ msgstr "Εισαγωγή"
 #: ../src/qtui/coreconfigwizard.cpp:182
 msgctxt "CoreConfigWizardPages::StorageSelectionPage|"
 msgid "Select Storage Backend"
-msgstr ""
+msgstr "Επιλογή Συστήματος Αποθήκευσης"
 
 #: ../src/qtui/coreconfigwizard.cpp:183
 msgctxt "CoreConfigWizardPages::StorageSelectionPage|"
@@ -2289,7 +2289,7 @@ msgstr ""
 #: ../src/qtui/debugbufferviewoverlay.cpp:50
 msgctxt "DebugBufferViewOverlay|"
 msgid "BufferViews:"
-msgstr ""
+msgstr "ΠροβολήΣυνομιλίας:"
 
 #: ../src/qtui/debugbufferviewoverlay.cpp:51
 msgctxt "DebugBufferViewOverlay|"
@@ -2304,22 +2304,22 @@ msgstr "Δίκτυα:"
 #: ../src/qtui/debugbufferviewoverlay.cpp:53
 msgctxt "DebugBufferViewOverlay|"
 msgid "Buffers:"
-msgstr ""
+msgstr "Αποθηκευμένες Συνομιλίες:"
 
 #: ../src/qtui/debugbufferviewoverlay.cpp:54
 msgctxt "DebugBufferViewOverlay|"
 msgid "Removed buffers:"
-msgstr ""
+msgstr "Διεγραμμένες συνομιλίες:"
 
 #: ../src/qtui/debugbufferviewoverlay.cpp:55
 msgctxt "DebugBufferViewOverlay|"
 msgid "Temp. removed buffers:"
-msgstr ""
+msgstr "Προσωρινά διεγραμμένες συνομιλίες:"
 
 #: ../src/qtui/debugbufferviewoverlay.cpp:57
 msgctxt "DebugBufferViewOverlay|"
 msgid "Allowed buffer types:"
-msgstr ""
+msgstr "Επιτρεπόμενοι τύποι συνομιλιών:"
 
 #: ../src/qtui/debugbufferviewoverlay.cpp:58
 msgctxt "DebugBufferViewOverlay|"
@@ -2600,19 +2600,19 @@ msgstr "Αδυναμία εύρεσης του προγράμματος \"%1\""
 #, qt-format
 msgctxt "ExecWrapper|"
 msgid "Script \"%1\" crashed with exit code %2."
-msgstr ""
+msgstr "Απρόσμενος τερματισμός του προγράμματος \"%1\" με κωδικό εξόδου %2."
 
 #: ../src/client/execwrapper.cpp:98
 #, qt-format
 msgctxt "ExecWrapper|"
 msgid "Script \"%1\" could not start."
-msgstr ""
+msgstr "Αδυναμία έναρξης του προγράμματος \"%1\"."
 
 #: ../src/client/execwrapper.cpp:100
 #, qt-format
 msgctxt "ExecWrapper|"
 msgid "Script \"%1\" caused error %2."
-msgstr ""
+msgstr "Το πρόγραμμα \"%1\" προκάλεσε σφάλμα %2."
 
 #: ../src/uisupport/fontselector.cpp:31
 msgctxt "FontSelector|"
@@ -2996,14 +2996,14 @@ msgstr "Αιτία Απομάκρυνσης:"
 msgctxt "IdentityEditWidget|"
 msgid ""
 "You need an SSL Capable Client to edit your Cores SSL Key and Certificate"
-msgstr ""
+msgstr "Απαιτείται πελάτης με δυνατότητες SSL για να μπορέσετε να επεξεργαστείτε το κλειδί και το πιστοποιητικό SSL του πυρήνα σας"
 
 #: ../src/qtui/settingspages/identityeditwidget.ui:517
 msgctxt "IdentityEditWidget|"
 msgid ""
 "Warning: you are not connected with a secured connection to the Quassel Core!\n"
 "Proceeding will cause an unencrypted transfer of your SSL Key and SSL Certificate!"
-msgstr ""
+msgstr "Προσοχή: δεν είστε συνδεδεμένος μέσω ασφαλής σύνδεσης στο πυρήνα Quassel!\nΑν συνεχίσετε το κλειδί και το πιστοποιητικό SSL θα μεταδοθούν μη-κρυπτογραφημένα!"
 
 #: ../src/qtui/settingspages/identityeditwidget.ui:546
 msgctxt "IdentityEditWidget|"
@@ -3339,7 +3339,7 @@ msgid ""
 "There is already a rule\n"
 "\"%1\"\n"
 "Please choose another rule."
-msgstr ""
+msgstr "Υπάρχει ήδη ένας κανόνας\n\"%1\"\nΠαρακαλώ επιλέξτε άλλον κανόνα."
 
 #: ../src/qtui/ui/indicatornotificationconfigwidget.ui:14
 msgctxt "IndicatorNotificationConfigWidget|"
@@ -3356,7 +3356,7 @@ msgstr ""
 #: ../src/qtui/ui/indicatornotificationconfigwidget.ui:23
 msgctxt "IndicatorNotificationConfigWidget|"
 msgid "Show messages in application indicator"
-msgstr ""
+msgstr "Εμφάνιση μηνυμάτων στο πίνακα εφαρμογών"
 
 #: ../src/qtui/ui/inputwidget.ui:26
 msgctxt "InputWidget|"
@@ -3446,7 +3446,7 @@ msgstr "Ανοιχτό γκρι"
 #: ../src/qtui/inputwidget.cpp:84 ../src/qtui/inputwidget.cpp:85
 msgctxt "InputWidget|"
 msgid "Clear Color"
-msgstr ""
+msgstr "Αφαίρεση Χρώματος"
 
 #: ../src/qtui/inputwidget.cpp:132
 msgctxt "InputWidget|"
@@ -3496,7 +3496,7 @@ msgstr ""
 #: ../src/qtui/settingspages/inputwidgetsettingspage.ui:127
 msgctxt "InputWidgetSettingsPage|"
 msgid "Multi-Line Editing"
-msgstr ""
+msgstr "Επεξεργασία σε πολλαπλές γραμμές"
 
 #: ../src/qtui/settingspages/inputwidgetsettingspage.ui:144
 msgctxt "InputWidgetSettingsPage|"
@@ -3511,7 +3511,7 @@ msgstr "γραμμές"
 #: ../src/qtui/settingspages/inputwidgetsettingspage.ui:192
 msgctxt "InputWidgetSettingsPage|"
 msgid "Enable scrollbars"
-msgstr ""
+msgstr "Ενεργοποίηση μπάρας κύλισης"
 
 #: ../src/qtui/settingspages/inputwidgetsettingspage.ui:211
 msgctxt "InputWidgetSettingsPage|"
@@ -3614,7 +3614,7 @@ msgstr ""
 #: ../src/qtui/settingspages/itemviewsettingspage.ui:85
 msgctxt "ItemViewSettingsPage|"
 msgid "Mouse wheel changes selected chat"
-msgstr ""
+msgstr "Αλλαγή επιλεγμένης συνομιλίας με τη ροδέλα του ποντικιού"
 
 #: ../src/qtui/settingspages/itemviewsettingspage.ui:101
 msgctxt "ItemViewSettingsPage|"
@@ -3735,7 +3735,7 @@ msgctxt "KeySequenceWidget|"
 msgid ""
 "Click on the button, then enter the shortcut like you would in the program.\n"
 "Example for Ctrl+a: hold the Ctrl key and press a."
-msgstr ""
+msgstr "Πατήστε το κουμπί και εισάγετε τη συντόμευση όπως θα το κάνατε στο πρόγραμμα.\nΠαράδειγμα για Ctrl+α: κρατήστε πατημένο το Ctrl και πατήστε το α."
 
 #: ../src/qtui/settingspages/keysequencewidget.cpp:259
 msgctxt "KeySequenceWidget|Meta key"
@@ -3761,7 +3761,7 @@ msgstr "Shift"
 msgctxt ""
 "KeySequenceWidget|What the user inputs now will be taken as the new shortcut"
 msgid "Input"
-msgstr ""
+msgstr "Είσοδος"
 
 #: ../src/qtui/settingspages/keysequencewidget.cpp:272
 msgctxt "KeySequenceWidget|No shortcut defined"
@@ -3780,19 +3780,19 @@ msgctxt "KeySequenceWidget|"
 msgid ""
 "The \"%1\" shortcut is already in use, and cannot be configured.\n"
 "Please choose another one."
-msgstr ""
+msgstr "Η συντόμευση \"%1\" χρησιμοποιείται ήδη.\nΠαρακαλώ επιλέξτε μια διαφορετική συντόμευση."
 
 #: ../src/qtui/settingspages/keysequencewidget.cpp:362
 #, qt-format
 msgctxt "KeySequenceWidget|"
 msgid ""
 "The \"%1\" shortcut is ambiguous with the shortcut for the following action:"
-msgstr ""
+msgstr "Η συντόμευση \"%1\" δεν είναι ξεκάθαρη για την ακόλουθη ενέργεια:"
 
 #: ../src/qtui/settingspages/keysequencewidget.cpp:364
 msgctxt "KeySequenceWidget|"
 msgid "Do you want to reassign this shortcut to the selected action?"
-msgstr ""
+msgstr "Θέλετε να δηλώσετε άλλη συντόμευση για την επιλεγμένη ενέργεια;"
 
 #: ../src/qtui/settingspages/keysequencewidget.cpp:367
 msgctxt "KeySequenceWidget|"
@@ -3887,7 +3887,7 @@ msgstr "Περί &Qt"
 #: ../src/qtui/mainwin.cpp:380
 msgctxt "MainWin|"
 msgid "Debug &NetworkModel"
-msgstr ""
+msgstr "Αποσφαλμάτωση &Δικτύου"
 
 #: ../src/qtui/mainwin.cpp:382
 msgctxt "MainWin|"
@@ -3897,7 +3897,7 @@ msgstr ""
 #: ../src/qtui/mainwin.cpp:384
 msgctxt "MainWin|"
 msgid "Debug &MessageModel"
-msgstr ""
+msgstr "Αποσφαλμάτωση &Μηνυμάτων"
 
 #: ../src/qtui/mainwin.cpp:386
 msgctxt "MainWin|"
@@ -3907,7 +3907,7 @@ msgstr ""
 #: ../src/qtui/mainwin.cpp:388
 msgctxt "MainWin|"
 msgid "Debug &Log"
-msgstr ""
+msgstr "Αποσφαλμάτωση &Καταγραφής"
 
 #: ../src/qtui/mainwin.cpp:390
 msgctxt "MainWin|"
@@ -4224,7 +4224,7 @@ msgstr "Μορφή"
 #: ../src/qtui/ui/msgprocessorstatuswidget.ui:34
 msgctxt "MsgProcessorStatusWidget|"
 msgid "Receiving Backlog"
-msgstr ""
+msgstr "Λήψη Αποθηκευμένων Συνομιλιών"
 
 #: ../src/uisupport/multilineedit.cpp:661
 #, qt-format
@@ -4287,7 +4287,7 @@ msgstr "Χρήση ασφαλής σύνδεσης"
 #: ../src/qtui/settingspages/networkeditdlg.ui:13
 msgctxt "NetworkEditDlg|"
 msgid "Dialog"
-msgstr ""
+msgstr "Παράθυρο"
 
 #: ../src/qtui/settingspages/networkeditdlg.ui:21
 msgctxt "NetworkEditDlg|"
@@ -4350,13 +4350,13 @@ msgctxt "NetworkModelController|"
 msgid ""
 "<b>Note:</b> This will delete all related data, including all backlog data, "
 "from the core's database and cannot be undone."
-msgstr ""
+msgstr "<b>Σημείωση:</b> Αυτή η ενέργεια θα διαγράψει όλα τα σχετικά δεδομένα, συμπεριλαμβανομένου των αποθηκευμένων συνομιλιών, από τη βάση δεδομένων του πυρήνα και δεν μπορεί να αναιρεθεί."
 
 #: ../src/uisupport/networkmodelcontroller.cpp:170
 msgctxt "NetworkModelController|"
 msgid ""
 "<br>Active channel buffers cannot be deleted, please part the channel first."
-msgstr ""
+msgstr "<br>Αδυναμία διαγραφής ενεργών συνομιλιών, παρακαλώ αποχωρήστε πρώτα από το κανάλι."
 
 #: ../src/uisupport/networkmodelcontroller.cpp:172
 msgctxt "NetworkModelController|"
@@ -4474,7 +4474,7 @@ msgctxt "NetworksSettingsPage|"
 msgid ""
 "Specify a list of IRC commands to be executed upon connect.\n"
 "Note that Quassel IRC automatically rejoins channels, so /join will rarely be needed here!"
-msgstr ""
+msgstr "Προσδιορίστε μια λίστα εντολών του IRC που θα εκτελούνται κατά τη σύνδεση.\nΣημειώστε ότι το Quassel εισέρχεται αυτόματα στα κανάλια, οπότε η εντολή /join χρειάζεται σπάνια εδώ!"
 
 #: ../src/qtui/settingspages/networkssettingspage.ui:374
 msgctxt "NetworksSettingsPage|"
@@ -4581,7 +4581,7 @@ msgctxt "NetworksSettingsPage|"
 msgid ""
 "Specify which encoding your messages will be sent in.\n"
 "UTF-8 should be a sane choice for most networks."
-msgstr ""
+msgstr "Προσδιορίστε την κωδικοποίηση με την οποία θα αποστέλλονται τα μηνύματά σας.\nΤο UTF-8 είναι μια ασφαλής επιλογή για τα περισσότερα δίκτυα."
 
 #: ../src/qtui/settingspages/networkssettingspage.ui:679
 msgctxt "NetworksSettingsPage|"
@@ -4594,7 +4594,7 @@ msgctxt "NetworksSettingsPage|"
 msgid ""
 "Incoming messages encoded in Utf8 will always be treated as such.\n"
 "This setting defines the encoding for messages that are not Utf8."
-msgstr ""
+msgstr "Τα εισερχόμενα μηνύματα κωδικοποιημένα σε Utf8 θα αντιμετωπίζονται ως τέτοια.\nΑυτή η ρύθμιση ορίζει την κωδικοποίηση των μηνυμάτων που δεν είναι Utf8."
 
 #: ../src/qtui/settingspages/networkssettingspage.ui:710
 msgctxt "NetworksSettingsPage|"
@@ -4629,7 +4629,7 @@ msgctxt "NetworksSettingsPage|"
 msgid ""
 "<b>The following problems need to be corrected before your changes can be "
 "applied:</b><ul>"
-msgstr ""
+msgstr "<b>Τα ακόλουθα προβλήματα πρέπει να διορθωθούν πριν την εφαρμογή των αλλαγών:</b><ul>"
 
 #: ../src/qtui/settingspages/networkssettingspage.cpp:168
 msgctxt "NetworksSettingsPage|"
@@ -4657,7 +4657,7 @@ msgctxt "NetworksSettingsPage|"
 msgid ""
 "Do you really want to delete the network \"%1\" and all related settings, "
 "including the backlog?"
-msgstr ""
+msgstr "Σίγουρα επιθυμείτε τη διαγραφή του δικτύου\"%1\" και όλων των σχετικών ρυθμίσεων, συμπεριλαμβανομένου των αποθηκευμένων συνομιλιών;"
 
 #: ../src/qtui/settingspages/nickeditdlg.ui:13
 msgctxt "NickEditDlg|"
@@ -4674,7 +4674,7 @@ msgctxt "NickEditDlg|"
 msgid ""
 "A valid nickname may contain letters from the English alphabet, digits, and "
 "the special characters {, }, [, ], \\, |, `, ^, _ and -."
-msgstr ""
+msgstr "Ένα έγκυρο ψευδώνυμο μπορεί να περιέχει γράμματα της αγγλικής αλφαβήτας, αριθμούς και τους ειδικούς χαρακτήρες {, }, [, ], \\, |, `, ^, _ και -."
 
 #: ../src/qtui/settingspages/identitiessettingspage.cpp:420
 msgctxt "NickEditDlg|"
@@ -4726,20 +4726,20 @@ msgstr ""
 #, qt-format
 msgctxt "QObject|"
 msgid "Requesting a total of up to %1 backlog messages for %2 buffers"
-msgstr ""
+msgstr "Ζήτηση έως %1 αποθηκευμένων μηνυμάτων για %2 συνομιλίες"
 
 #: ../src/client/backlogrequester.cpp:106
 #, qt-format
 msgctxt "QObject|"
 msgid ""
 "Requesting up to %1 of all unread backlog messages (plus additional %2)"
-msgstr ""
+msgstr "Ζήτηση έως %1 όλων των μη αναγνωσμένων αποθηκευμένων μηνυμάτων (συν %2 επιπλέον)"
 
 #: ../src/client/backlogrequester.cpp:123
 #, qt-format
 msgctxt "QObject|"
 msgid "Requesting a total of up to %1 unread backlog messages for %2 buffers"
-msgstr ""
+msgstr "Ζήτηση έως %1 μη αναγνωσμένων αποθηκευμένων μηνυμάτων για %2 συνομιλίες"
 
 #: ../src/qtui/ircconnectionwizard.cpp:56
 msgctxt "QObject|"
@@ -4752,7 +4752,7 @@ msgid ""
 "This wizard will help you to set up your default identity and your IRC "
 "network connection.<br>This only covers basic settings. You can cancel this "
 "wizard any time and use the settings dialog for more detailed changes."
-msgstr ""
+msgstr "Αυτός ο οδηγός θα σας βοηθήσει να ρυθμίσετε την προεπιλεγμένη ταυτότητα και τη σύνδεση στο δίκτυο IRC.<br>Περιλαμβάνει μόνο βασικές ρυθμίσεις. Μπορείτε να ακυρώσετε τον οδηγό οποιαδήποτε στιγμή και να χρησιμοποιήσετε το παράθυρο ρυθμίσεων για πιο λεπτομερείς αλλαγές."
 
 #: ../src/uisupport/qssparser.cpp:121 ../src/uisupport/qssparser.cpp:166
 #: ../src/uisupport/qssparser.cpp:316
@@ -4795,7 +4795,7 @@ msgstr "Μη έγκυρη συνθήκη %1"
 #, qt-format
 msgctxt "QssParser|"
 msgid "Invalid message label: %1"
-msgstr ""
+msgstr "Άκυρη ετικέτα μηνύματος: %1"
 
 #: ../src/uisupport/qssparser.cpp:268
 #, qt-format
@@ -4818,7 +4818,7 @@ msgstr "Μη έγκυρη μορφή ονόματος: %1"
 #, qt-format
 msgctxt "QssParser|"
 msgid "Illegal IRC color specification (must be between 00 and 0f): %1"
-msgstr ""
+msgstr "Μη έγκυρο χρώμα για το IRC (πρέπει να είναι ανάμεσα σε 00 και 0f): %1"
 
 #: ../src/uisupport/qssparser.cpp:302
 #, qt-format
@@ -4842,25 +4842,25 @@ msgstr ""
 #, qt-format
 msgctxt "QssParser|"
 msgid "Invalid chatlist state %1"
-msgstr ""
+msgstr "Μη έγκυρη κατάσταση λίστας συνομιλιών %1"
 
 #: ../src/uisupport/qssparser.cpp:392
 #, qt-format
 msgctxt "QssParser|"
 msgid "Invalid property declaration: %1"
-msgstr ""
+msgstr "Μη έγκυρη δήλωση ιδιότητας: %1"
 
 #: ../src/uisupport/qssparser.cpp:416
 #, qt-format
 msgctxt "QssParser|"
 msgid "Invalid font property: %1"
-msgstr ""
+msgstr "Μη έγκυρη ιδιότητα γραμματοσειράς: %1"
 
 #: ../src/uisupport/qssparser.cpp:422
 #, qt-format
 msgctxt "QssParser|"
 msgid "Unknown ChatLine property: %1"
-msgstr ""
+msgstr "Άγνωση ιδιότητα Γραμμής-Συνομιλίας: %1"
 
 #: ../src/uisupport/qssparser.cpp:444
 #, qt-format
@@ -4904,7 +4904,7 @@ msgstr "Μη έγκυρος προσδιορισμός στυλ γραμματο
 #, qt-format
 msgctxt "QssParser|"
 msgid "Invalid font weight specification: %1"
-msgstr ""
+msgstr "Μη έγκυρο βάρος γραμματοσειράς: %1"
 
 #: ../src/uisupport/qssparser.cpp:672
 #, qt-format
@@ -5224,17 +5224,17 @@ msgstr ""
 #: ../src/common/signalproxy.cpp:885
 msgctxt "SignalProxy|"
 msgid "Peer tried to send 0 byte package!"
-msgstr ""
+msgstr "Προσπάθεια αποστολής πακέτου 0 byte!"
 
 #: ../src/common/signalproxy.cpp:902
 msgctxt "SignalProxy|"
 msgid "Peer sent corrupted compressed data!"
-msgstr ""
+msgstr "Αποστολή κατεστραμένων συμπιεσμένων δεδομένων!"
 
 #: ../src/common/signalproxy.cpp:917
 msgctxt "SignalProxy|"
 msgid "Peer sent corrupt data: unable to load QVariant!"
-msgstr ""
+msgstr "Αποστολή κατεστραμένων δεδομένων: αδυναμία φόρτωσης QVariant!"
 
 #: ../src/common/signalproxy.cpp:1050
 msgctxt "SignalProxy|"
@@ -5259,12 +5259,12 @@ msgstr "Εξυπηρετητές:"
 #: ../src/qtui/ui/simplenetworkeditor.ui:81
 msgctxt "SimpleNetworkEditor|"
 msgid "A list of IRC servers belonging to this network"
-msgstr ""
+msgstr "Λίστα IRC εξυπηρετητών που ανήκουν σε αυτό το δίκτυο"
 
 #: ../src/qtui/ui/simplenetworkeditor.ui:96
 msgctxt "SimpleNetworkEditor|"
 msgid "Edit this server entry"
-msgstr ""
+msgstr "Επεξεργασία αυτού του εξυπηρετητή"
 
 #: ../src/qtui/ui/simplenetworkeditor.ui:99
 msgctxt "SimpleNetworkEditor|"
@@ -5284,7 +5284,7 @@ msgstr "&Προσθήκη"
 #: ../src/qtui/ui/simplenetworkeditor.ui:136
 msgctxt "SimpleNetworkEditor|"
 msgid "Remove this server entry from the list"
-msgstr ""
+msgstr "Αφαίρεση του εξυπηρετητή από τη λίστα"
 
 #: ../src/qtui/ui/simplenetworkeditor.ui:139
 msgctxt "SimpleNetworkEditor|"
@@ -5305,7 +5305,7 @@ msgstr "..."
 #: ../src/qtui/ui/simplenetworkeditor.ui:179
 msgctxt "SimpleNetworkEditor|"
 msgid "Move downwards in list"
-msgstr ""
+msgstr "Μετακίνηση προς τα κάτω στη λίστα"
 
 #: ../src/qtui/ui/simplenetworkeditor.ui:226
 msgctxt "SimpleNetworkEditor|"
@@ -5433,7 +5433,7 @@ msgstr "Όχι, για τους ακόλουθους λόγους:<ul>"
 #, qt-format
 msgctxt "SslInfoDlg|"
 msgid "%1 to %2"
-msgstr ""
+msgstr "%1 σε %2"
 
 #: ../src/client/networkmodel.h:144
 msgctxt "StatusBufferItem|"
@@ -5663,7 +5663,7 @@ msgstr "Προσαρμοσμένη γραμματοσειρά:"
 #: ../src/qtui/settingspages/topicwidgetsettingspage.ui:50
 msgctxt "TopicWidgetSettingsPage|"
 msgid "Resize dynamically to fit contents"
-msgstr ""
+msgstr "Δυναμική προσαρμογή μεγέθους για να χωράει το περιεχόμενο"
 
 #: ../src/qtui/settingspages/topicwidgetsettingspage.ui:84
 msgctxt "TopicWidgetSettingsPage|"
@@ -5700,68 +5700,68 @@ msgstr ""
 #, qt-format
 msgctxt "UiStyle::StyledMessage|"
 msgid "%1"
-msgstr ""
+msgstr "%1"
 
 #. Action Message
 #: ../src/uisupport/uistyle.cpp:583
 #, qt-format
 msgctxt "UiStyle::StyledMessage|"
 msgid "%DN%1%DN %2"
-msgstr ""
+msgstr "%DN%1%DN %2"
 
 #. Nick Message
 #: ../src/uisupport/uistyle.cpp:587
 #, qt-format
 msgctxt "UiStyle::StyledMessage|"
 msgid "You are now known as %DN%1%DN"
-msgstr ""
+msgstr "Μετονομαστήκατε σε %DN%1%DN"
 
 #: ../src/uisupport/uistyle.cpp:588
 #, qt-format
 msgctxt "UiStyle::StyledMessage|"
 msgid "%DN%1%DN is now known as %DN%2%DN"
-msgstr ""
+msgstr "Ο χρήστης %DN%1%DN μετονομάστηκε σε %DN%2%DN"
 
 #. Mode Message
 #: ../src/uisupport/uistyle.cpp:592
 #, qt-format
 msgctxt "UiStyle::StyledMessage|"
 msgid "User mode: %DM%1%DM"
-msgstr ""
+msgstr "Λειτουργία χρήστη: %DM%1%DM"
 
 #: ../src/uisupport/uistyle.cpp:593
 #, qt-format
 msgctxt "UiStyle::StyledMessage|"
 msgid "Mode %DM%1%DM by %DN%2%DN"
-msgstr ""
+msgstr "Λειτουργία %DM%1%DM από τον %DN%2%DN"
 
 #. Join Message
 #: ../src/uisupport/uistyle.cpp:597
 #, qt-format
 msgctxt "UiStyle::StyledMessage|"
 msgid "%DN%1%DN %DH(%2@%3)%DH has joined %DC%4%DC"
-msgstr ""
+msgstr "Ο χρήστης %DN%1%DN %DH(%2@%3)%DH εισήλθε στο %DC%4%DC"
 
 #. Part Message
 #: ../src/uisupport/uistyle.cpp:600
 #, qt-format
 msgctxt "UiStyle::StyledMessage|"
 msgid "%DN%1%DN %DH(%2@%3)%DH has left %DC%4%DC"
-msgstr ""
+msgstr "Ο χρήστης %DN%1%DN %DH(%2@%3)%DH αποχώρησε από το %DC%4%DC"
 
 #. Quit Message
 #: ../src/uisupport/uistyle.cpp:605
 #, qt-format
 msgctxt "UiStyle::StyledMessage|"
 msgid "%DN%1%DN %DH(%2@%3)%DH has quit"
-msgstr ""
+msgstr "Ο Χρήστης %DN%1%DN %DH(%2@%3)%DH αποσυνδέθηκε"
 
 #. Kick Message
 #: ../src/uisupport/uistyle.cpp:612
 #, qt-format
 msgctxt "UiStyle::StyledMessage|"
 msgid "%DN%1%DN has kicked %DN%2%DN from %DC%3%DC"
-msgstr ""
+msgstr "Ο χρήστης %DN%1%DN έδιωξε τον %DN%2%DN από το κανάλι %DC%3%DC"
 
 #. Day Change Message
 #: ../src/uisupport/uistyle.cpp:629
@@ -5780,13 +5780,13 @@ msgstr ""
 #, qt-format
 msgctxt "UiStyle::StyledMessage|"
 msgid "%DN%1%DN (%2 more)"
-msgstr ""
+msgstr "%DN%1%DN (%2 περισσότεροι)"
 
 #: ../src/uisupport/uistyle.cpp:655
 #, qt-format
 msgctxt "UiStyle::StyledMessage|"
 msgid "Netsplit between %DH%1%DH and %DH%2%DH. Users quit: "
-msgstr ""
+msgstr "Netsplit ανάμεσα σε %DH%1%DH και %DH%2%DH. Οι χρήστες που αποσυνδέθηκαν: "
 
 #: ../src/uisupport/uistyle.cpp:667 ../src/uisupport/uistyle.cpp:705
 #, qt-format
@@ -5829,8 +5829,8 @@ msgstr[1] "%n Διαχειριστές"
 msgctxt "UserCategoryItem|"
 msgid "%n Half-Op(s)"
 msgid_plural "%n Half-Op(s)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n Μισός-Διαχειριστής"
+msgstr[1] "%n Μισοί-Διαχειριστές"
 
 #: ../src/client/networkmodel.cpp:701
 #, qt-format
