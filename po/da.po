@@ -1,13 +1,15 @@
 # 
 # Translators:
 # Adam Tulinius <mail@adamtulinius.dk>, 2010.
+# Daniel Albers <daniel@lbe.rs>, 2012.
 # Daniel Albers <daniel@lbers.com>, 2011.
+# Per Nielsen <>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: Quassel IRC\n"
 "Report-Msgid-Bugs-To: http://bugs.quassel-irc.org/\n"
-"PO-Revision-Date: 2012-02-14 23:41+0000\n"
-"Last-Translator: Daniel Albers <daniel@lbe.rs>\n"
+"PO-Revision-Date: 2012-03-21 22:40+0000\n"
+"Last-Translator: Per Nielsen <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -115,12 +117,12 @@ msgstr ""
 msgctxt "AbstractSqlStorage|"
 msgid ""
 "Installed Schema (version %1) is not up to date. Upgrading to version %2..."
-msgstr ""
+msgstr "Det installerede tema (version %1) er ikke nyeste version. Opgradere til version %2..."
 
 #: ../src/core/abstractsqlstorage.cpp:117
 msgctxt "AbstractSqlStorage|"
 msgid "Upgrade failed..."
-msgstr ""
+msgstr "Opgradering mislykkedes..."
 
 #: ../src/qtui/settingspages/aliasesmodel.cpp:55
 msgctxt "AliasesModel|"
@@ -163,17 +165,17 @@ msgstr ""
 #: ../src/qtui/settingspages/aliasessettingspage.ui:27
 msgctxt "AliasesSettingsPage|"
 msgid "New"
-msgstr ""
+msgstr "Ny"
 
 #: ../src/qtui/settingspages/aliasessettingspage.ui:41
 msgctxt "AliasesSettingsPage|"
 msgid "Delete"
-msgstr ""
+msgstr "Slet"
 
 #: ../src/qtui/settingspages/aliasessettingspage.cpp:29
 msgctxt "AliasesSettingsPage|"
 msgid "IRC"
-msgstr ""
+msgstr "IRC"
 
 #: ../src/qtui/settingspages/aliasessettingspage.cpp:29
 msgctxt "AliasesSettingsPage|"
@@ -203,7 +205,7 @@ msgstr "Sprog:"
 #: ../src/qtui/settingspages/appearancesettingspage.ui:43
 msgctxt "AppearanceSettingsPage|"
 msgid "Set the application language. Requires restart!"
-msgstr ""
+msgstr "Vælg sprog. Genstart nødvendig."
 
 #: ../src/qtui/settingspages/appearancesettingspage.ui:47
 msgctxt "AppearanceSettingsPage|"
@@ -219,12 +221,12 @@ msgstr "<Systemets standard>"
 #: ../src/qtui/settingspages/appearancesettingspage.ui:75
 msgctxt "AppearanceSettingsPage|"
 msgid "Use custom stylesheet"
-msgstr ""
+msgstr "Vælg brugerdefineret stylesheet"
 
 #: ../src/qtui/settingspages/appearancesettingspage.ui:109
 msgctxt "AppearanceSettingsPage|"
 msgid "Path:"
-msgstr ""
+msgstr "Sti:"
 
 #: ../src/qtui/settingspages/appearancesettingspage.ui:141
 msgctxt "AppearanceSettingsPage|"
@@ -239,17 +241,17 @@ msgstr "Vis tray ikon"
 #: ../src/qtui/settingspages/appearancesettingspage.ui:184
 msgctxt "AppearanceSettingsPage|"
 msgid "Hide to tray on close button"
-msgstr ""
+msgstr "Skjul til menulinje ved brug af luk"
 
 #: ../src/qtui/settingspages/appearancesettingspage.ui:216
 msgctxt "AppearanceSettingsPage|"
 msgid "Enable animations"
-msgstr ""
+msgstr "Vis animationer"
 
 #: ../src/qtui/settingspages/appearancesettingspage.ui:231
 msgctxt "AppearanceSettingsPage|"
 msgid "Message Redirection"
-msgstr ""
+msgstr "Besked omdirigering"
 
 #: ../src/qtui/settingspages/appearancesettingspage.ui:237
 msgctxt "AppearanceSettingsPage|"
@@ -269,7 +271,7 @@ msgstr "Default away-årsag"
 #: ../src/qtui/settingspages/appearancesettingspage.ui:301
 msgctxt "AppearanceSettingsPage|"
 msgid "Status Window"
-msgstr ""
+msgstr "Statusvindue"
 
 #: ../src/qtui/settingspages/appearancesettingspage.ui:308
 msgctxt "AppearanceSettingsPage|"
@@ -289,7 +291,7 @@ msgstr ""
 #: ../src/qtui/settingspages/appearancesettingspage.cpp:225
 msgctxt "AppearanceSettingsPage|"
 msgid "Please choose a stylesheet file"
-msgstr ""
+msgstr "Vælg en stylesheet fil"
 
 #: ../src/qtui/awaylogview.cpp:33
 msgctxt "AwayLogView|"
@@ -299,7 +301,7 @@ msgstr "Væk:"
 #: ../src/qtui/awaylogview.cpp:44
 msgctxt "AwayLogView|"
 msgid "Show Network Name"
-msgstr ""
+msgstr "Vis netværk navn"
 
 #: ../src/qtui/awaylogview.cpp:49
 msgctxt "AwayLogView|"
@@ -435,7 +437,7 @@ msgstr ""
 #, qt-format
 msgctxt "BufferItem|"
 msgid "<p> %1 - %2 </p>"
-msgstr ""
+msgstr "<p> %1 - %2 </p>"
 
 #: ../src/uisupport/bufferview.cpp:251
 msgctxt "BufferView|"
@@ -478,17 +480,17 @@ msgstr ""
 #: ../src/qtui/settingspages/bufferviewsettingspage.ui:31
 msgctxt "BufferViewSettingsPage|"
 msgid "Re&name..."
-msgstr ""
+msgstr "Omd&øb..."
 
 #: ../src/qtui/settingspages/bufferviewsettingspage.ui:48
 msgctxt "BufferViewSettingsPage|"
 msgid "&Add..."
-msgstr ""
+msgstr "&Tilføj..."
 
 #: ../src/qtui/settingspages/bufferviewsettingspage.ui:71
 msgctxt "BufferViewSettingsPage|"
 msgid "De&lete"
-msgstr ""
+msgstr "S&let"
 
 #: ../src/qtui/settingspages/bufferviewsettingspage.ui:84
 msgctxt "BufferViewSettingsPage|"
@@ -511,7 +513,7 @@ msgctxt "BufferViewSettingsPage|"
 msgid ""
 "This option is not available when all Networks are visible.\n"
 "In this mode no separate status buffer is displayed."
-msgstr ""
+msgstr "Denne valgmulighed er ikke mulig når alle netværk er synlige.\nMed denne indstilling er der ingen status buffer vist."
 
 #: ../src/qtui/settingspages/bufferviewsettingspage.ui:114
 msgctxt "BufferViewSettingsPage|"
@@ -602,17 +604,17 @@ msgstr "Buffer visning"
 #: ../src/qtui/bufferwidget.cpp:79
 msgctxt "BufferWidget|"
 msgid "Zoom In"
-msgstr ""
+msgstr "Zoom ind"
 
 #: ../src/qtui/bufferwidget.cpp:85
 msgctxt "BufferWidget|"
 msgid "Zoom Out"
-msgstr ""
+msgstr "Zoom ud"
 
 #: ../src/qtui/bufferwidget.cpp:90
 msgctxt "BufferWidget|"
 msgid "Actual Size"
-msgstr ""
+msgstr "Faktisk størrelse"
 
 #: ../src/qtui/bufferwidget.cpp:94
 msgctxt "BufferWidget|"
@@ -628,7 +630,7 @@ msgstr ""
 #, qt-format
 msgctxt "ChannelBufferItem|"
 msgid "<b>Channel %1</b>"
-msgstr ""
+msgstr "<b>Kanal %1</b>"
 
 #: ../src/client/networkmodel.cpp:506
 #, qt-format
@@ -804,7 +806,7 @@ msgstr ""
 #: ../src/qtui/chatmonitorview.cpp:71
 msgctxt "ChatMonitorView|"
 msgid "Configure..."
-msgstr "&Konfigurer Quassel..."
+msgstr "Konfigurer..."
 
 #: ../src/qtui/chatscene.cpp:743
 msgctxt "ChatScene|"
@@ -856,7 +858,7 @@ msgstr "Tidsstempel:"
 #: ../src/qtui/settingspages/chatviewsettingspage.ui:32
 msgctxt "ChatViewSettingsPage|"
 msgid "[hh:mm:ss]"
-msgstr ""
+msgstr "[hh:mm:ss]"
 
 #: ../src/qtui/settingspages/chatviewsettingspage.ui:59
 msgctxt "ChatViewSettingsPage|"
@@ -871,7 +873,7 @@ msgstr ""
 #: ../src/qtui/settingspages/chatviewsettingspage.ui:95
 msgctxt "ChatViewSettingsPage|"
 msgid "Allow colored text (mIRC color codes)"
-msgstr ""
+msgstr "Tillad farvet text (mIRC farve koder)"
 
 #: ../src/qtui/settingspages/chatviewsettingspage.ui:111
 msgctxt "ChatViewSettingsPage|"
@@ -980,7 +982,7 @@ msgstr "søg i besked"
 #: ../src/qtui/settingspages/chatviewsettingspage.ui:379
 msgctxt "ChatViewSettingsPage|"
 msgid "Background:"
-msgstr ""
+msgstr "Baggrund:"
 
 #: ../src/qtui/settingspages/chatviewsettingspage.ui:423
 msgctxt "ChatViewSettingsPage|"
@@ -1053,7 +1055,7 @@ msgstr ""
 #: ../src/qtui/settingspages/connectionsettingspage.ui:213
 msgctxt "ConnectionSettingsPage|"
 msgid " seconds"
-msgstr ""
+msgstr "sekunder"
 
 #: ../src/qtui/settingspages/connectionsettingspage.ui:80
 msgctxt "ConnectionSettingsPage|"
@@ -1080,7 +1082,7 @@ msgstr ""
 #: ../src/qtui/settingspages/connectionsettingspage.ui:148
 msgctxt "ConnectionSettingsPage|"
 msgid "Update interval:"
-msgstr ""
+msgstr "Opdaterings interval:"
 
 #: ../src/qtui/settingspages/connectionsettingspage.ui:177
 msgctxt "ConnectionSettingsPage|"
@@ -1100,7 +1102,7 @@ msgstr ""
 #: ../src/qtui/settingspages/connectionsettingspage.cpp:27
 msgctxt "ConnectionSettingsPage|"
 msgid "IRC"
-msgstr ""
+msgstr "IRC"
 
 #: ../src/qtui/chatitem.cpp:683
 msgctxt "ContentsChatItem|"
@@ -1120,12 +1122,12 @@ msgstr "Af&bryd fra server"
 #: ../src/uisupport/contextmenuactionprovider.cpp:41
 msgctxt "ContextMenuActionProvider|"
 msgid "Join"
-msgstr ""
+msgstr "Log på"
 
 #: ../src/uisupport/contextmenuactionprovider.cpp:42
 msgctxt "ContextMenuActionProvider|"
 msgid "Part"
-msgstr ""
+msgstr "Forlad"
 
 #: ../src/uisupport/contextmenuactionprovider.cpp:43
 msgctxt "ContextMenuActionProvider|"
@@ -1135,17 +1137,17 @@ msgstr ""
 #: ../src/uisupport/contextmenuactionprovider.cpp:44
 msgctxt "ContextMenuActionProvider|"
 msgid "Go to Chat"
-msgstr ""
+msgstr "Gå til chat"
 
 #: ../src/uisupport/contextmenuactionprovider.cpp:46
 msgctxt "ContextMenuActionProvider|"
 msgid "Joins"
-msgstr ""
+msgstr "Logger på"
 
 #: ../src/uisupport/contextmenuactionprovider.cpp:47
 msgctxt "ContextMenuActionProvider|"
 msgid "Parts"
-msgstr ""
+msgstr "Forlader"
 
 #: ../src/uisupport/contextmenuactionprovider.cpp:48
 msgctxt "ContextMenuActionProvider|"
@@ -1205,7 +1207,7 @@ msgstr "[Whois] %1"
 #: ../src/uisupport/contextmenuactionprovider.cpp:62
 msgctxt "ContextMenuActionProvider|"
 msgid "Version"
-msgstr ""
+msgstr "Version"
 
 #: ../src/uisupport/contextmenuactionprovider.cpp:63
 msgctxt "ContextMenuActionProvider|"
@@ -2355,7 +2357,7 @@ msgstr "Debug konsol"
 #: ../src/qtui/ui/debuglogwidget.ui:43
 msgctxt "DebugLogWidget|"
 msgid "Close"
-msgstr ""
+msgstr "Luk"
 
 #: ../src/core/eventstringifier.cpp:142 ../src/core/eventstringifier.cpp:259
 msgctxt "EventStringifier|"
@@ -2366,7 +2368,7 @@ msgstr "[Whois] %1"
 #, qt-format
 msgctxt "EventStringifier|"
 msgid "%1 invited you to channel %2"
-msgstr ""
+msgstr "%1 inviterede dig til kanalen %2"
 
 #: ../src/core/eventstringifier.cpp:239
 #, qt-format
@@ -2554,7 +2556,7 @@ msgstr ""
 #: ../src/core/eventstringifier.cpp:540
 msgctxt "EventStringifier|"
 msgid "unknown"
-msgstr ""
+msgstr "ukendt"
 
 #: ../src/core/eventstringifier.cpp:541
 #, qt-format
@@ -2578,7 +2580,7 @@ msgstr "Modtog CTCP PING svar fra %1 med %2 sekunders svartid"
 #, qt-format
 msgctxt "ExecWrapper|"
 msgid "Invalid command string for /exec: %1"
-msgstr ""
+msgstr "Invalid kommando streng for /exec: %1"
 
 #: ../src/client/execwrapper.cpp:53
 #, qt-format
@@ -2590,7 +2592,7 @@ msgstr ""
 #, qt-format
 msgctxt "ExecWrapper|"
 msgid "Could not find script \"%1\""
-msgstr ""
+msgstr "Kunne ikke finde scriptet \"%1\""
 
 #: ../src/client/execwrapper.cpp:82
 #, qt-format
@@ -2602,13 +2604,13 @@ msgstr ""
 #, qt-format
 msgctxt "ExecWrapper|"
 msgid "Script \"%1\" could not start."
-msgstr ""
+msgstr "Scriptet \"%1\" kunne ikke starte."
 
 #: ../src/client/execwrapper.cpp:100
 #, qt-format
 msgctxt "ExecWrapper|"
 msgid "Script \"%1\" caused error %2."
-msgstr ""
+msgstr "Scriptet \"%1\" lavede fejl %2."
 
 #: ../src/uisupport/fontselector.cpp:31
 msgctxt "FontSelector|"
@@ -2654,7 +2656,7 @@ msgstr "Tilføj"
 #: ../src/qtui/settingspages/highlightsettingspage.ui:62
 msgctxt "HighlightSettingsPage|"
 msgid "Remove"
-msgstr ""
+msgstr "Fjern"
 
 #: ../src/qtui/settingspages/highlightsettingspage.ui:85
 msgctxt "HighlightSettingsPage|"
@@ -2716,7 +2718,7 @@ msgstr "Tilføj identitet"
 #: ../src/qtui/settingspages/identitiessettingspage.ui:54
 msgctxt "IdentitiesSettingsPage|"
 msgid "Add..."
-msgstr ""
+msgstr "Tilføj..."
 
 #: ../src/qtui/settingspages/identitiessettingspage.ui:74
 msgctxt "IdentitiesSettingsPage|"
@@ -2726,7 +2728,7 @@ msgstr "Fjern identitet"
 #: ../src/qtui/settingspages/identitiessettingspage.cpp:31
 msgctxt "IdentitiesSettingsPage|"
 msgid "IRC"
-msgstr ""
+msgstr "IRC"
 
 #: ../src/qtui/settingspages/identitiessettingspage.cpp:31
 msgctxt "IdentitiesSettingsPage|"
@@ -2795,12 +2797,12 @@ msgstr "Quassel IRC bruger"
 #: ../src/common/identity.cpp:162
 msgctxt "Identity|"
 msgid "<empty>"
-msgstr ""
+msgstr "<tom>"
 
 #: ../src/common/identity.cpp:168
 msgctxt "Identity|"
 msgid "Gone fishing."
-msgstr ""
+msgstr "Ude at fiske."
 
 #: ../src/common/identity.cpp:172
 msgctxt "Identity|"
@@ -3818,7 +3820,7 @@ msgstr "Server &information..."
 #: ../src/qtui/mainwin.cpp:321
 msgctxt "MainWin|"
 msgid "Configure &Networks..."
-msgstr "&Konfigurer Quassel..."
+msgstr ""
 
 #: ../src/qtui/mainwin.cpp:324
 msgctxt "MainWin|"
@@ -3828,7 +3830,7 @@ msgstr "&Afslut"
 #: ../src/qtui/mainwin.cpp:328
 msgctxt "MainWin|"
 msgid "&Configure Chat Lists..."
-msgstr "&Konfigurer Quassel..."
+msgstr ""
 
 #: ../src/qtui/mainwin.cpp:331
 msgctxt "MainWin|"
@@ -3863,7 +3865,7 @@ msgstr ""
 #: ../src/qtui/mainwin.cpp:355
 msgctxt "MainWin|"
 msgid "Configure &Shortcuts..."
-msgstr "&Konfigurer Quassel..."
+msgstr ""
 
 #: ../src/qtui/mainwin.cpp:361 ../src/qtui/mainwin.cpp:365
 msgctxt "MainWin|"
@@ -4227,8 +4229,8 @@ msgstr ""
 msgctxt "MultiLineEdit|"
 msgid "Do you really want to paste %n line(s)?"
 msgid_plural "Do you really want to paste %n line(s)?"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ønsker du virkelig at sende %n linje(r)"
+msgstr[1] "Ønsker du virkelig at sende %n linje(r)"
 
 #: ../src/uisupport/multilineedit.cpp:670
 msgctxt "MultiLineEdit|"
@@ -5078,7 +5080,7 @@ msgstr "Proxy password:"
 #: ../src/qtui/ui/settingsdlg.ui:14
 msgctxt "SettingsDlg|"
 msgid "Configure Quassel"
-msgstr "&Konfigurer Quassel..."
+msgstr "Konfigurer Quassel"
 
 #: ../src/qtui/ui/settingsdlg.ui:35 ../src/qtui/ui/settingsdlg.ui:50
 #: ../src/qtui/settingsdlg.cpp:99
@@ -5127,7 +5129,7 @@ msgstr ""
 #: ../src/qtui/ui/settingspagedlg.ui:14
 msgctxt "SettingsPageDlg|"
 msgid "Configure Quassel"
-msgstr "&Konfigurer Quassel..."
+msgstr "Konfigurer Quassel"
 
 #: ../src/qtui/ui/settingspagedlg.ui:30
 msgctxt "SettingsPageDlg|"
@@ -5210,7 +5212,7 @@ msgstr ""
 #: ../src/qtui/settingspages/shortcutssettingspage.cpp:60
 msgctxt "ShortcutsSettingsPage|"
 msgid "Shortcuts"
-msgstr ""
+msgstr "Genveje"
 
 #: ../src/common/signalproxy.cpp:880
 msgctxt "SignalProxy|"
@@ -5358,7 +5360,7 @@ msgstr ""
 #: ../src/qtui/ui/sslinfodlg.ui:120
 msgctxt "SslInfoDlg|"
 msgid "Subject"
-msgstr ""
+msgstr "Emne"
 
 #: ../src/qtui/ui/sslinfodlg.ui:126 ../src/qtui/ui/sslinfodlg.ui:248
 msgctxt "SslInfoDlg|"
@@ -5418,7 +5420,7 @@ msgstr "<b>Brugere:</b> %1"
 #: ../src/qtui/sslinfodlg.cpp:69
 msgctxt "SslInfoDlg|"
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: ../src/qtui/sslinfodlg.cpp:71
 msgctxt "SslInfoDlg|"
@@ -5644,7 +5646,7 @@ msgstr "<b>Brugere:</b> %1"
 #, qt-format
 msgctxt "TopicWidget|"
 msgid "Lag: %1 msecs"
-msgstr ""
+msgstr "Lag: %1 msecs"
 
 #: ../src/qtui/settingspages/topicwidgetsettingspage.ui:14
 msgctxt "TopicWidgetSettingsPage|"
@@ -5664,7 +5666,7 @@ msgstr ""
 #: ../src/qtui/settingspages/topicwidgetsettingspage.ui:84
 msgctxt "TopicWidgetSettingsPage|"
 msgid "On hover only"
-msgstr ""
+msgstr "Kun ved markering"
 
 #: ../src/qtui/settingspages/topicwidgetsettingspage.cpp:23
 msgctxt "TopicWidgetSettingsPage|"
@@ -5788,13 +5790,13 @@ msgstr ""
 #, qt-format
 msgctxt "UiStyle::StyledMessage|"
 msgid "[%1]"
-msgstr ""
+msgstr "[%1]"
 
 #: ../src/uisupport/uistyle.cpp:703
 #, qt-format
 msgctxt "UiStyle::StyledMessage|"
 msgid "<%1>"
-msgstr ""
+msgstr "<%1>"
 
 #: ../src/client/networkmodel.cpp:697
 #, qt-format
