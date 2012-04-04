@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Quassel IRC\n"
 "Report-Msgid-Bugs-To: http://bugs.quassel-irc.org/\n"
-"PO-Revision-Date: 2012-03-22 17:07+0000\n"
+"PO-Revision-Date: 2012-04-03 16:45+0000\n"
 "Last-Translator: sfionov <fionov@gmail.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -5762,7 +5762,7 @@ msgstr ""
 #, qt-format
 msgctxt "UiStyle::StyledMessage|"
 msgid "%DN%1%DN has kicked %DN%2%DN from %DC%3%DC"
-msgstr "%DN%1%DN был выкинут %DN%2%DN из %DC%3%DC"
+msgstr "%DN%1%DN выкинул %DN%2%DN из %DC%3%DC"
 
 #. Day Change Message
 #: ../src/uisupport/uistyle.cpp:629
