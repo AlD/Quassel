@@ -198,8 +198,7 @@ private slots:
 
 private:
     CoreSession *_coreSession;
-
-    QString _userName;
+    inline QString _userName() const { return _coreSession->userName(); }
 
 #ifdef HAVE_SSL
     QSslSocket socket;

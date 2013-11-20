@@ -158,9 +158,6 @@ void CoreNetwork::connectToIrc(bool reconnecting)
     // cleaning up old quit reason
     _quitReason.clear();
 
-    // update username
-    _userName = _coreSession->userName();
-
     // use a random server?
     if (useRandomServer()) {
         _lastUsedServerIndex = qrand() % serverList().size();
@@ -448,7 +445,7 @@ void CoreNetwork::socketInitialized()
         return;
     }
 
-    emit socketInitialized(identity, _userName, localAddress(), localPort(), peerAddress(), peerPort());
+    emit socketInitialized(identity, _userName(), localAddress(), localPort(), peerAddress(), peerPort());
 
     enablePingTimeout();
 
@@ -499,7 +496,7 @@ void CoreNetwork::socketDisconnected()
 
     setConnected(false);
     emit disconnected(networkId());
-    emit socketDisconnected(identityPtr(), _userName, localAddress(), localPort(), peerAddress(), peerPort());
+    emit socketDisconnected(identityPtr(), _userName(), localAddress(), localPort(), peerAddress(), peerPort());
     if (_quitRequested) {
         _quitRequested = false;
         setConnectionState(Network::Disconnected);
