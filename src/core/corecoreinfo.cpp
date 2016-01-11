@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2015 by the Quassel Project                        *
+ *   Copyright (C) 2005-2016 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -37,7 +37,7 @@ QVariantMap CoreCoreInfo::coreData() const
 {
     QVariantMap data;
     data["quasselVersion"] = Quassel::buildInfo().fancyVersionString;
-    data["quasselBuildDate"] = Quassel::buildInfo().buildDate;
+    data["quasselBuildDate"] = Quassel::buildInfo().commitDate; // "BuildDate" for compatibility
     data["startTime"] = Core::instance()->startTime();
     data["sessionConnectedClients"] = _coreSession->signalProxy()->peerCount();
     return data;

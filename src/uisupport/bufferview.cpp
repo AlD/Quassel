@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2015 by the Quassel Project                        *
+ *   Copyright (C) 2005-2016 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -155,21 +155,6 @@ void BufferView::setFilteredModel(QAbstractItemModel *model_, BufferViewConfig *
         connect(filter, SIGNAL(configChanged()), this, SLOT(on_configChanged()));
     }
     setConfig(config);
-}
-
-
-void BufferView::setSelectionModel(QItemSelectionModel *selectionModel)
-{
-    if (QTreeView::selectionModel())
-        disconnect(selectionModel, SIGNAL(currentChanged(QModelIndex, QModelIndex)),
-            model(), SIGNAL(checkPreviousCurrentForRemoval(QModelIndex, QModelIndex)));
-
-    QTreeView::setSelectionModel(selectionModel);
-    BufferViewFilter *filter = qobject_cast<BufferViewFilter *>(model());
-    if (filter) {
-        connect(selectionModel, SIGNAL(currentChanged(QModelIndex, QModelIndex)),
-            filter, SLOT(checkPreviousCurrentForRemoval(QModelIndex, QModelIndex)));
-    }
 }
 
 

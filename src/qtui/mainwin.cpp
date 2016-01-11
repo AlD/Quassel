@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2015 by the Quassel Project                        *
+ *   Copyright (C) 2005-2016 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -152,6 +152,11 @@
 #ifndef HAVE_KDE
 #  include "settingspages/shortcutssettingspage.h"
 #endif
+
+#ifdef HAVE_SONNET
+#  include "settingspages/sonnetsettingspage.h"
+#endif
+
 
 MainWin::MainWin(QWidget *parent)
 #ifdef HAVE_KDE
@@ -879,6 +884,8 @@ void MainWin::setupNickWidget()
     // attach the NickListWidget to the BufferModel and the default selection
     _nickListWidget->setModel(Client::bufferModel());
     _nickListWidget->setSelectionModel(Client::bufferModel()->standardSelectionModel());
+
+    _nickListWidget->setVisible(false);
 }
 
 
@@ -1065,7 +1072,7 @@ void MainWin::connectedToCore()
     connect(Client::bufferViewManager(), SIGNAL(bufferViewConfigDeleted(int)), this, SLOT(removeBufferView(int)));
     connect(Client::bufferViewManager(), SIGNAL(initDone()), this, SLOT(loadLayout()));
 
-    connect(Client::transferManager(), SIGNAL(transferAdded(const ClientTransfer*)), SLOT(showNewTransferDlg(const ClientTransfer*)));
+    connect(Client::transferManager(), SIGNAL(transferAdded(QUuid)), SLOT(showNewTransferDlg(QUuid)));
 
     setConnectedState();
 }
@@ -1131,7 +1138,7 @@ void MainWin::loadLayout()
         _layoutLoaded = true;
         return;
     }
-
+    _nickListWidget->setVisible(true);
     restoreState(state, accountId);
     int bufferViewId = s.value(QString("ActiveBufferView-%1").arg(accountId), -1).toInt();
     if (bufferViewId >= 0)
@@ -1201,6 +1208,7 @@ void MainWin::setDisconnectedState()
         _msgProcessorStatusWidget->setProgress(0, 0);
     updateIcon();
     systemTray()->setState(SystemTray::Passive);
+    _nickListWidget->setVisible(false);
 }
 
 
@@ -1364,6 +1372,9 @@ void MainWin::showSettingsDlg()
     dlg->registerSettingsPage(new BufferViewSettingsPage(dlg));
     dlg->registerSettingsPage(new InputWidgetSettingsPage(dlg));
     dlg->registerSettingsPage(new TopicWidgetSettingsPage(dlg));
+#ifdef HAVE_SONNET
+    dlg->registerSettingsPage(new SonnetSettingsPage(dlg));
+#endif
     dlg->registerSettingsPage(new HighlightSettingsPage(dlg));
     dlg->registerSettingsPage(new NotificationsSettingsPage(dlg));
     dlg->registerSettingsPage(new BacklogSettingsPage(dlg));
@@ -1405,10 +1416,16 @@ void MainWin::showShortcutsDlg()
 }
 
 
-void MainWin::showNewTransferDlg(const ClientTransfer *transfer)
+void MainWin::showNewTransferDlg(const QUuid &transferId)
 {
-    ReceiveFileDlg *dlg = new ReceiveFileDlg(transfer, this);
-    dlg->show();
+    auto transfer = Client::transferManager()->transfer(transferId);
+    if (transfer) {
+        ReceiveFileDlg *dlg = new ReceiveFileDlg(transfer, this);
+        dlg->show();
+    }
+    else {
+        qWarning() << "Unknown transfer ID" << transferId;
+    }
 }
 
 

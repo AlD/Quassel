@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2015 by the Quassel Project                        *
+ *   Copyright (C) 2005-2016 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -255,6 +255,13 @@ void SelectionModelSynchronizer::currentChanged(const QModelIndex &current, cons
         ++iter;
     }
     _changeCurrentEnabled = true;
+
+    // Trigger a dataChanged() signal from the base model to update all proxy models (e.g. filters).
+    // Since signals are protected, we have to use invokeMethod for faking signal emission.
+    if (previous.isValid()) {
+        QMetaObject::invokeMethod(model(), "dataChanged", Qt::DirectConnection,
+                                  Q_ARG(QModelIndex, previous), Q_ARG(QModelIndex, previous));
+    }
 }
 
 

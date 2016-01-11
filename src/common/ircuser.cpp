@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2015 by the Quassel Project                        *
+ *   Copyright (C) 2005-2016 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -346,9 +346,11 @@ void IrcUser::channelDestroyed()
 
 void IrcUser::setUserModes(const QString &modes)
 {
-    _userModes = modes;
-    SYNC(ARG(modes))
-    emit userModesSet(modes);
+    if (_userModes != modes) {
+        _userModes = modes;
+        SYNC(ARG(modes))
+        emit userModesSet(modes);
+    }
 }
 
 
@@ -357,13 +359,19 @@ void IrcUser::addUserModes(const QString &modes)
     if (modes.isEmpty())
         return;
 
+    // Don't needlessly sync when no changes are made
+    bool changesMade = false;
     for (int i = 0; i < modes.count(); i++) {
-        if (!_userModes.contains(modes[i]))
+        if (!_userModes.contains(modes[i])) {
             _userModes += modes[i];
+            changesMade = true;
+        }
     }
 
-    SYNC(ARG(modes))
-    emit userModesAdded(modes);
+    if (changesMade) {
+        SYNC(ARG(modes))
+        emit userModesAdded(modes);
+    }
 }
 
 

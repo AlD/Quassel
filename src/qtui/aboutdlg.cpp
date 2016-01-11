@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2015 by the Quassel Project                        *
+ *   Copyright (C) 2005-2016 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -35,10 +35,10 @@ AboutDlg::AboutDlg(QWidget *parent)
     ui.setupUi(this);
     ui.quasselLogo->setPixmap(QIcon(":/icons/quassel-64.png").pixmap(64)); // don't let the icon theme affect our logo here
 
-    ui.versionLabel->setText(QString(tr("<b>Version:</b> %1<br><b>Protocol version:</b> %2<br><b>Built:</b> %3"))
+    ui.versionLabel->setText(QString(tr("<b>Version:</b> %1<br><b>Version date:</b> %2<br><b>Protocol version:</b> %3"))
         .arg(Quassel::buildInfo().fancyVersionString)
-        .arg(Quassel::buildInfo().protocolVersion)
-        .arg(Quassel::buildInfo().buildDate));
+        .arg(Quassel::buildInfo().commitDate)
+        .arg(Quassel::buildInfo().protocolVersion));
     ui.aboutTextBrowser->setHtml(about());
     ui.authorTextBrowser->setHtml(authors());
     ui.contributorTextBrowser->setHtml(contributors());
@@ -60,7 +60,7 @@ QString AboutDlg::about() const
              "Most icons are &copy; by the <a href=\"http://www.oxygen-icons.org\">Oxygen Team</a> and used under the "
              "<a href=\"http://www.gnu.org/licenses/lgpl.html\">LGPL</a>.<br><br>"
              "Please use <a href=\"http://bugs.quassel-irc.org\">http://bugs.quassel-irc.org</a> to report bugs."
-        ).arg("2005-2015");
+        ).arg("2005-2016");
 
     return res;
 }

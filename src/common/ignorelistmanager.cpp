@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2015 by the Quassel Project                        *
+ *   Copyright (C) 2005-2016 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -91,7 +91,7 @@ void IgnoreListManager::initSetIgnoreList(const QVariantMap &ignoreList)
     int count = ignoreRule.count();
     if (count != scopeRule.count() || count != isRegEx.count() ||
         count != scope.count() || count != strictness.count() || count != ignoreType.count() || count != isActive.count()) {
-        qWarning() << "Corrupted IgnoreList settings! (Count missmatch)";
+        qWarning() << "Corrupted IgnoreList settings! (Count mismatch)";
         return;
     }
 

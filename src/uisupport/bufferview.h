@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2015 by the Quassel Project                        *
+ *   Copyright (C) 2005-2016 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -52,7 +52,6 @@ public:
 
     void setModel(QAbstractItemModel *model);
     void setFilteredModel(QAbstractItemModel *model, BufferViewConfig *config);
-    virtual void setSelectionModel(QItemSelectionModel *selectionModel);
 
     void setConfig(BufferViewConfig *config);
     inline BufferViewConfig *config() { return _config; }

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2015 by the Quassel Project                        *
+ *   Copyright (C) 2005-2016 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,11 +18,9 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef CORETRANSFERMANAGER_H
-#define CORETRANSFERMANAGER_H
+#pragma once
 
 #include "transfermanager.h"
-#include "types.h"
 
 class CoreTransfer;
 
@@ -32,19 +30,8 @@ class CoreTransferManager : public TransferManager
     SYNCABLE_OBJECT
 
 public:
-    CoreTransferManager(QObject *parent = 0);
+    using TransferManager::TransferManager;
 
-    CoreTransfer *transfer(const QUuid &uuid) const;
-
-public slots:
-    void addTransfer(CoreTransfer *transfer);
-
-signals:
-    void transferAdded(CoreTransfer *transfer);
-
-private slots:
-    void onTransferAdded(const Transfer *transfer);
-
+    // make available unprotected
+    using TransferManager::addTransfer;
 };
-
-#endif

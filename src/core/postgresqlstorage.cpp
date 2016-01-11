@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2015 by the Quassel Project                        *
+ *   Copyright (C) 2005-2016 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -944,7 +944,7 @@ void PostgreSqlStorage::setChannelPersistent(UserId user, const NetworkId &netwo
     QSqlQuery query(logDb());
     query.prepare(queryString("update_buffer_persistent_channel"));
     query.bindValue(":userid", user.toInt());
-    query.bindValue(":networkId", networkId.toInt());
+    query.bindValue(":networkid", networkId.toInt());
     query.bindValue(":buffercname", channel.toLower());
     query.bindValue(":joined", isJoined);
     safeExec(query);
@@ -957,7 +957,7 @@ void PostgreSqlStorage::setPersistentChannelKey(UserId user, const NetworkId &ne
     QSqlQuery query(logDb());
     query.prepare(queryString("update_buffer_set_channel_key"));
     query.bindValue(":userid", user.toInt());
-    query.bindValue(":networkId", networkId.toInt());
+    query.bindValue(":networkid", networkId.toInt());
     query.bindValue(":buffercname", channel.toLower());
     query.bindValue(":key", key);
     safeExec(query);
@@ -1841,6 +1841,7 @@ bool PostgreSqlMigrationWriter::writeMo(const QuasselUserMO &user)
     bindValue(0, user.id.toInt());
     bindValue(1, user.username);
     bindValue(2, user.password);
+    bindValue(3, user.hashversion);
     return exec();
 }
 

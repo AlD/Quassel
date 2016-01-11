@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2015 by the Quassel Project                        *
+ *   Copyright (C) 2005-2016 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -23,20 +23,7 @@
 #include "client.h"
 #include "clienttransfer.h"
 
-
 INIT_SYNCABLE_OBJECT(ClientTransferManager)
-ClientTransferManager::ClientTransferManager(QObject *parent)
-    : TransferManager(parent)
-{
-    connect(this, SIGNAL(transferAdded(const Transfer*)), SLOT(onTransferAdded(const Transfer*)));
-}
-
-
-const ClientTransfer *ClientTransferManager::transfer(const QUuid &uuid) const
-{
-    return qobject_cast<const ClientTransfer *>(transfer_(uuid));
-}
-
 
 void ClientTransferManager::onCoreTransferAdded(const QUuid &uuid)
 {
@@ -45,7 +32,7 @@ void ClientTransferManager::onCoreTransferAdded(const QUuid &uuid)
         return;
     }
 
-    ClientTransfer *transfer = new ClientTransfer(uuid, this);
+    auto transfer = new ClientTransfer(uuid, this);
     connect(transfer, SIGNAL(initDone()), SLOT(onTransferInitDone())); // we only want to add initialized transfers
     Client::signalProxy()->synchronize(transfer);
 }
@@ -56,16 +43,4 @@ void ClientTransferManager::onTransferInitDone()
     Transfer *transfer = qobject_cast<Transfer *>(sender());
     Q_ASSERT(transfer);
     addTransfer(transfer);
-}
-
-
-void ClientTransferManager::onTransferAdded(const Transfer *transfer)
-{
-    const ClientTransfer *t = qobject_cast<const ClientTransfer *>(transfer);
-    if (!t) {
-        qWarning() << "Invalid Transfer added to ClientTransferManager!";
-        return;
-    }
-
-    emit transferAdded(t);
 }

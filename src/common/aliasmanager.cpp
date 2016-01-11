@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2015 by the Quassel Project                        *
+ *   Copyright (C) 2005-2016 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -128,11 +128,14 @@ void AliasManager::processInput(const BufferInfo &info, const QString &msg_, Com
     QString msg = msg_;
 
     // leading slashes indicate there's a command to call unless there is another one in the first section (like a path /proc/cpuinfo)
+    // For those habitally tied to irssi, "/ " also makes the rest of the line a literal message
     int secondSlashPos = msg.indexOf('/', 1);
     int firstSpacePos = msg.indexOf(' ');
-    if (!msg.startsWith('/') || (secondSlashPos != -1 && (secondSlashPos < firstSpacePos || firstSpacePos == -1))) {
+    if (!msg.startsWith('/') || firstSpacePos == 1 || (secondSlashPos != -1 && (secondSlashPos < firstSpacePos || firstSpacePos == -1))) {
         if (msg.startsWith("//"))
-            msg.remove(0, 1);  // //asdf is transformed to /asdf
+            msg.remove(0, 1);  // "//asdf" is transformed to "/asdf"
+        else if (msg.startsWith("/ "))
+            msg.remove(0, 2);  // "/ /asdf" is transformed to "/asdf"
         msg.prepend("/SAY "); // make sure we only send proper commands to the core
     }
     else {
@@ -198,7 +201,7 @@ void AliasManager::expand(const QString &alias, const BufferInfo &bufferInfo, co
 
     while (!expandedCommands.isEmpty()) {
         QString command;
-        if (expandedCommands[0].trimmed().toLower().startsWith("/wait")) {
+        if (expandedCommands[0].trimmed().toLower().startsWith("/wait ")) {
             command = expandedCommands.join("; ");
             expandedCommands.clear();
         }

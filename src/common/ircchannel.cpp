@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2015 by the Quassel Project                        *
+ *   Copyright (C) 2005-2016 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -178,7 +178,15 @@ void IrcChannel::joinIrcUsers(const QList<IrcUser *> &users, const QStringList &
     for (int i = 0; i < users.count(); i++) {
         ircuser = users[i];
         if (!ircuser || _userModes.contains(ircuser)) {
-            addUserMode(ircuser, modes[i]);
+            if (modes[i].count() > 1) {
+                // Multiple modes received, do it one at a time
+                // TODO Better way of syncing this without breaking protocol?
+                for (int i_m = 0; i_m < modes[i].count(); ++i_m) {
+                    addUserMode(ircuser, modes[i][i_m]);
+                }
+            } else {
+                addUserMode(ircuser, modes[i]);
+            }
             continue;
         }
 

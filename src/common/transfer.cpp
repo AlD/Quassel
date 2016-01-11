@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2015 by the Quassel Project                        *
+ *   Copyright (C) 2005-2016 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -23,8 +23,8 @@
 INIT_SYNCABLE_OBJECT(Transfer)
 Transfer::Transfer(const QUuid &uuid, QObject *parent)
     : SyncableObject(parent),
-    _state(New),
-    _direction(Receive),
+    _status(Status::New),
+    _direction(Direction::Receive),
     _port(0),
     _fileSize(0),
     _uuid(uuid)
@@ -34,7 +34,7 @@ Transfer::Transfer(const QUuid &uuid, QObject *parent)
 
 Transfer::Transfer(Direction direction, const QString &nick, const QString &fileName, const QHostAddress &address, quint16 port, quint64 fileSize, QObject *parent)
     : SyncableObject(parent),
-    _state(New),
+    _status(Status::New),
     _direction(direction),
     _fileName(fileName),
     _address(address),
@@ -49,6 +49,15 @@ Transfer::Transfer(Direction direction, const QString &nick, const QString &file
 
 void Transfer::init()
 {
+    static auto regTypes = []() -> bool {
+        qRegisterMetaType<Status>("Transfer::Status");
+        qRegisterMetaType<Direction>("Transfer::Direction");
+        qRegisterMetaTypeStreamOperators<Status>("Transfer::Status");
+        qRegisterMetaTypeStreamOperators<Direction>("Transfer::Direction");
+        return true;
+    }();
+    Q_UNUSED(regTypes);
+
     renameObject(QString("Transfer/%1").arg(_uuid.toString()));
     setAllowClientUpdates(true);
 }
@@ -60,19 +69,44 @@ QUuid Transfer::uuid() const
 }
 
 
-Transfer::State Transfer::state() const
+Transfer::Status Transfer::status() const
 {
-    return _state;
+    return _status;
 }
 
 
-void Transfer::setState(Transfer::State state)
+void Transfer::setStatus(Transfer::Status status)
 {
-    if (_state != state) {
-        _state = state;
-        SYNC(ARG(state));
-        emit stateChanged(state);
+    if (_status != status) {
+        _status = status;
+        SYNC(ARG(status));
+        emit statusChanged(status);
     }
+}
+
+
+QString Transfer::prettyStatus() const
+{
+    switch(status()) {
+        case Status::New:
+            return tr("New");
+        case Status::Pending:
+            return tr("Pending");
+        case Status::Connecting:
+            return tr("Connecting");
+        case Status::Transferring:
+            return tr("Transferring");
+        case Status::Paused:
+            return tr("Paused");
+        case Status::Completed:
+            return tr("Completed");
+        case Status::Failed:
+            return tr("Failed");
+        case Status::Rejected:
+            return tr("Rejected");
+    }
+
+    return QString();
 }
 
 
@@ -177,6 +211,31 @@ void Transfer::setError(const QString &errorString)
 {
     qWarning() << Q_FUNC_INFO << errorString;
     emit error(errorString);
-    setState(Failed);
+    setStatus(Status::Failed);
     cleanUp();
+}
+
+
+QDataStream &operator<<(QDataStream &out, Transfer::Status state) {
+    out << static_cast<qint8>(state);
+    return out;
+}
+
+QDataStream &operator>>(QDataStream &in, Transfer::Status &state) {
+    qint8 s;
+    in >> s;
+    state = static_cast<Transfer::Status>(s);
+    return in;
+}
+
+QDataStream &operator<<(QDataStream &out, Transfer::Direction direction) {
+    out << static_cast<qint8>(direction);
+    return out;
+}
+
+QDataStream &operator>>(QDataStream &in, Transfer::Direction &direction) {
+    qint8 d;
+    in >> d;
+    direction = static_cast<Transfer::Direction>(d);
+    return in;
 }

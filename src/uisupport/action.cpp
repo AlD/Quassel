@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2015 by the Quassel Project                        *
+ *   Copyright (C) 2005-2016 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -98,11 +98,16 @@ void Action::setShortcutConfigurable(bool b)
 QKeySequence Action::shortcut(ShortcutTypes type) const
 {
     Q_ASSERT(type);
-    if (type == DefaultShortcut)
+    if (type == DefaultShortcut) {
+#if QT_VERSION < 0x050000
         return property("defaultShortcut").value<QKeySequence>();
+#else
+        auto sequence = property("defaultShortcuts").value<QList<QKeySequence>>();
+        return sequence.isEmpty() ? QKeySequence() : sequence.first();
+#endif
+    }
 
-    if (shortcuts().count()) return shortcuts().value(0);
-    return QKeySequence();
+    return shortcuts().isEmpty() ? QKeySequence() : shortcuts().first();
 }
 
 
@@ -116,9 +121,13 @@ void Action::setShortcut(const QKeySequence &key, ShortcutTypes type)
 {
     Q_ASSERT(type);
 
-    if (type & DefaultShortcut)
+    if (type & DefaultShortcut) {
+#if QT_VERSION < 0x050000
         setProperty("defaultShortcut", key);
-
+#else
+        setProperty("defaultShortcuts", QVariant::fromValue(QList<QKeySequence>() << key));
+#endif
+    }
     if (type & ActiveShortcut)
         QAction::setShortcut(key);
 }

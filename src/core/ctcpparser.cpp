@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2015 by the Quassel Project                        *
+ *   Copyright (C) 2005-2016 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -170,6 +170,27 @@ void CtcpParser::parse(IrcEventRawMessage *e, Message::Type messagetype)
     Message::Flags flags = (ctcptype == CtcpEvent::Reply && !e->network()->isChannelName(e->target()))
                            ? Message::Redirected
                            : Message::None;
+
+    bool isStatusMsg = false;
+
+    // First remove all statusmsg prefix characters that are not also channel prefix characters.
+    while (e->network()->isStatusMsg(e->target()) && !e->network()->isChannelName(e->target())) {
+        isStatusMsg = true;
+        e->setTarget(e->target().remove(0, 1));
+    }
+
+    // Then continue removing statusmsg characters as long as removing the character will still result in a
+    // valid channel name.  This prevents removing the channel prefix character if said character is in the
+    // overlap between the statusmsg characters and the channel prefix characters.
+    while (e->network()->isStatusMsg(e->target()) && e->network()->isChannelName(e->target().remove(0, 1))) {
+        isStatusMsg = true;
+        e->setTarget(e->target().remove(0, 1));
+    }
+
+    // If any statusmsg characters were removed, Flag the message as a StatusMsg.
+    if (isStatusMsg) {
+        flags |= Message::StatusMsg;
+    }
 
     if (coreSession()->networkConfig()->standardCtcp())
         parseStandard(e, messagetype, dequotedMessage, ctcptype, flags);

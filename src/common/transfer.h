@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2015 by the Quassel Project                        *
+ *   Copyright (C) 2005-2016 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -33,8 +33,8 @@ class Transfer : public SyncableObject
     SYNCABLE_OBJECT
 
     Q_PROPERTY(QUuid uuid READ uuid);
-    Q_PROPERTY(State state READ state WRITE setState NOTIFY stateChanged);
-    Q_PROPERTY(Direction direction READ direction WRITE setDirection NOTIFY directionChanged);
+    Q_PROPERTY(Transfer::Status status READ status WRITE setStatus NOTIFY statusChanged);
+    Q_PROPERTY(Transfer::Direction direction READ direction WRITE setDirection NOTIFY directionChanged);
     Q_PROPERTY(QHostAddress address READ address WRITE setAddress NOTIFY addressChanged);
     Q_PROPERTY(quint16 port READ port WRITE setPort NOTIFY portChanged);
     Q_PROPERTY(QString fileName READ fileName WRITE setFileName NOTIFY fileNameChanged);
@@ -42,7 +42,7 @@ class Transfer : public SyncableObject
     Q_PROPERTY(QString nick READ nick WRITE setNick NOTIFY nickChanged);
 
 public:
-    enum State {
+    enum class Status {
         New,
         Pending,
         Connecting,
@@ -54,7 +54,7 @@ public:
     };
     Q_ENUMS(State)
 
-    enum Direction {
+    enum class Direction {
         Send,
         Receive
     };
@@ -62,16 +62,19 @@ public:
 
     Transfer(const QUuid &uuid, QObject *parent = 0); // for creating a syncable object client-side
     Transfer(Direction direction, const QString &nick, const QString &fileName, const QHostAddress &address, quint16 port, quint64 size = 0, QObject *parent = 0);
-    inline virtual const QMetaObject *syncMetaObject() const { return &staticMetaObject; }
+    inline const QMetaObject *syncMetaObject() const override { return &staticMetaObject; }
 
     QUuid uuid() const;
-    State state() const;
+    Status status() const;
+    QString prettyStatus() const;
     Direction direction() const;
     QString fileName() const;
     QHostAddress address() const;
     quint16 port() const;
     quint64 fileSize() const;
     QString nick() const;
+
+    virtual quint64 transferred() const = 0;
 
 public slots:
     // called on the client side
@@ -83,12 +86,13 @@ public slots:
     virtual void requestRejected(PeerPtr peer) { Q_UNUSED(peer); }
 
 signals:
-    void stateChanged(State state);
-    void directionChanged(Direction direction);
+    void statusChanged(Transfer::Status state);
+    void directionChanged(Transfer::Direction direction);
     void addressChanged(const QHostAddress &address);
     void portChanged(quint16 port);
     void fileNameChanged(const QString &fileName);
     void fileSizeChanged(quint64 fileSize);
+    void transferredChanged(quint64 transferred);
     void nickChanged(const QString &nick);
 
     void error(const QString &errorString);
@@ -97,7 +101,7 @@ signals:
     void rejected(PeerPtr peer = 0) const;
 
 protected slots:
-    void setState(State state);
+    void setStatus(Transfer::Status status);
     void setError(const QString &errorString);
 
     // called on the client side through sync calls
@@ -116,7 +120,7 @@ private:
     void setNick(const QString &nick);
 
 
-    State _state;
+    Status _status;
     Direction _direction;
     QString _fileName;
     QHostAddress _address;
@@ -125,5 +129,13 @@ private:
     QString _nick;
     QUuid _uuid;
 };
+
+Q_DECLARE_METATYPE(Transfer::Status)
+Q_DECLARE_METATYPE(Transfer::Direction)
+
+QDataStream &operator<<(QDataStream &out, Transfer::Status state);
+QDataStream &operator>>(QDataStream &in, Transfer::Status &state);
+QDataStream &operator<<(QDataStream &out, Transfer::Direction direction);
+QDataStream &operator>>(QDataStream &in, Transfer::Direction &direction);
 
 #endif

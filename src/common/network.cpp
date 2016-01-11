@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2015 by the Quassel Project                        *
+ *   Copyright (C) 2005-2016 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -74,6 +74,18 @@ bool Network::isChannelName(const QString &channelname) const
         return support("CHANTYPES").contains(channelname[0]);
     else
         return QString("#&!+").contains(channelname[0]);
+}
+
+
+bool Network::isStatusMsg(const QString &target) const
+{
+    if (target.isEmpty())
+        return false;
+
+    if (supports("STATUSMSG"))
+        return support("STATUSMSG").contains(target[0]);
+    else
+        return QString("@+").contains(target[0]);
 }
 
 

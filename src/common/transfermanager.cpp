@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2015 by the Quassel Project                        *
+ *   Copyright (C) 2005-2016 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -24,16 +24,10 @@
 
 
 INIT_SYNCABLE_OBJECT(TransferManager)
-TransferManager::TransferManager(QObject *parent)
-    : SyncableObject(parent)
+
+Transfer *TransferManager::transfer(const QUuid &uuid) const
 {
-
-}
-
-
-Transfer *TransferManager::transfer_(const QUuid &uuid) const
-{
-    return _transfers.value(uuid, 0);
+    return _transfers.value(uuid, nullptr);
 }
 
 
@@ -55,5 +49,17 @@ void TransferManager::addTransfer(Transfer *transfer)
     _transfers[uuid] = transfer;
 
     SYNC_OTHER(onCoreTransferAdded, ARG(uuid));
-    emit transferAdded(transfer);
+    emit transferAdded(uuid);
+}
+
+
+void TransferManager::removeTransfer(const QUuid& uuid)
+{
+    if (!_transfers.contains(uuid)) {
+        qWarning() << "Can not find transfer" << uuid << "to remove!";
+        return;
+    }
+    emit transferRemoved(uuid);
+    auto transfer = _transfers.take(uuid);
+    transfer->deleteLater();
 }

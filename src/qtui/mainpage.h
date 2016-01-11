@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2015 by the Quassel Project                        *
+ *   Copyright (C) 2005-2016 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -23,6 +23,8 @@
 
 #include <QWidget>
 
+class QPushButton;
+
 class MainPage : public QWidget
 {
     Q_OBJECT
@@ -30,8 +32,12 @@ class MainPage : public QWidget
 public:
     MainPage(QWidget *parent = 0);
 
-protected:
-    void paintEvent(QPaintEvent *event);
+private slots:
+    void showCoreConnectionDlg();
+    void coreConnectionStateChanged();
+
+private:
+    QPushButton *_connectButton;
 };
 
 

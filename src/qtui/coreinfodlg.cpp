@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2015 by the Quassel Project                        *
+ *   Copyright (C) 2005-2016 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -38,7 +38,7 @@ CoreInfoDlg::CoreInfoDlg(QWidget *parent)
 void CoreInfoDlg::coreInfoAvailable()
 {
     ui.labelCoreVersion->setText(_coreInfo["quasselVersion"].toString());
-    ui.labelCoreBuildDate->setText(_coreInfo["quasselBuildDate"].toString());
+    ui.labelCoreVersionDate->setText(_coreInfo["quasselBuildDate"].toString()); // "BuildDate" for compatibility
     ui.labelClientCount->setNum(_coreInfo["sessionConnectedClients"].toInt());
     updateUptime();
     startTimer(1000);

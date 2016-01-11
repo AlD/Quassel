@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2015 by the Quassel Project                        *
+ *   Copyright (C) 2005-2016 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -61,6 +61,7 @@ public:
         Highlight = 0x02,
         Redirected = 0x04,
         ServerMsg = 0x08,
+        StatusMsg = 0x10,
         Backlog = 0x80
     };
     Q_DECLARE_FLAGS(Flags, Flag)

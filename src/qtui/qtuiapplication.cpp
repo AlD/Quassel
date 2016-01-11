@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2015 by the Quassel Project                        *
+ *   Copyright (C) 2005-2016 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -32,7 +32,6 @@
 #include "mainwin.h"
 #include "qtui.h"
 #include "qtuisettings.h"
-
 
 QtUiApplication::QtUiApplication(int &argc, char **argv)
 #ifdef HAVE_KDE4
@@ -91,6 +90,12 @@ QtUiApplication::QtUiApplication(int &argc, char **argv)
     qInstallMsgHandler(Client::logMessage);
 #else
     qInstallMessageHandler(Client::logMessage);
+    connect(this, &QGuiApplication::commitDataRequest, this, &QtUiApplication::commitData, Qt::DirectConnection);
+    connect(this, &QGuiApplication::saveStateRequest, this, &QtUiApplication::saveState, Qt::DirectConnection);
+#endif
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 6, 0))
+    QGuiApplication::setFallbackSessionManagementEnabled(false);
 #endif
 }
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2015 by the Quassel Project                        *
+ *   Copyright (C) 2005-2016 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -131,6 +131,18 @@ public :
     inline bool isMe(IrcUser *ircuser) const { return (ircuser->nick().toLower() == myNick().toLower()); }
 
     bool isChannelName(const QString &channelname) const;
+
+    /**
+     * Checks if the target counts as a STATUSMSG
+     *
+     * Status messages are prefixed with one or more characters from the server-provided STATUSMSG
+     * if available, otherwise "@" and "+" are assumed.  Generally, status messages sent to a
+     * channel are only visible to those with the same or higher permissions, e.g. voiced.
+     *
+     * @param[in] target Name of destination, e.g. a channel or query
+     * @returns True if a STATUSMSG, otherwise false
+     */
+    bool isStatusMsg(const QString &target) const;
 
     inline bool isConnected() const { return _connected; }
     //Network::ConnectionState connectionState() const;

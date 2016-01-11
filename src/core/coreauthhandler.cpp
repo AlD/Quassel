@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2015 by the Quassel Project                        *
+ *   Copyright (C) 2005-2016 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -81,7 +81,7 @@ void CoreAuthHandler::onReadyRead()
     }
 
     // read the list of protocols supported by the client
-    while (socket()->bytesAvailable() >= 4) {
+    while (socket()->bytesAvailable() >= 4 && _supportedProtos.size() < 16) { // sanity check
         quint32 data;
         socket()->read((char*)&data, 4);
         data = qFromBigEndian<quint32>(data);
@@ -98,6 +98,12 @@ void CoreAuthHandler::onReadyRead()
                 level = Compressor::NoCompression;
 
             RemotePeer *peer = PeerFactory::createPeer(_supportedProtos, this, socket(), level, this);
+            if (!peer) {
+                qWarning() << "Received invalid handshake data from client" << socket()->peerAddress().toString();
+                close();
+                return;
+            }
+
             if (peer->protocol() == Protocol::LegacyProtocol) {
                 _legacy = true;
                 connect(peer, SIGNAL(protocolVersionMismatch(int,int)), SLOT(onProtocolVersionMismatch(int,int)));
@@ -175,9 +181,9 @@ void CoreAuthHandler::handle(const RegisterClient &msg)
     int uphours = uptime / 3600; uptime %= 3600;
     int upmins = uptime / 60;
     QString coreInfo = tr("<b>Quassel Core Version %1</b><br>"
-                          "Built: %2<br>"
+                          "Version date: %2<br>"
                           "Up %3d%4h%5m (since %6)").arg(Quassel::buildInfo().fancyVersionString)
-                          .arg(Quassel::buildInfo().buildDate)
+                          .arg(Quassel::buildInfo().commitDate)
                           .arg(updays).arg(uphours, 2, 10, QChar('0')).arg(upmins, 2, 10, QChar('0')).arg(Core::instance()->startTime().toString(Qt::TextDate));
 
     // useSsl and coreInfo are only used for the legacy protocol

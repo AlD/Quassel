@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2015 by the Quassel Project                        *
+ *   Copyright (C) 2005-2016 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -37,17 +37,19 @@ public:
 
     QString savePath() const;
 
+    quint64 transferred() const override;
+
 public slots:
     // called on the client side
-    void accept(const QString &savePath) const;
-    void reject() const;
+    void accept(const QString &savePath) const override;
+    void reject() const override;
 
 private slots:
-    void dataReceived(PeerPtr peer, const QByteArray &data);
-    void onStateChanged(State state);
+    void dataReceived(PeerPtr peer, const QByteArray &data) override;
+    void onStatusChanged(Transfer::Status status);
 
 private:
-    virtual void cleanUp();
+    void cleanUp() override;
 
     mutable QString _savePath;
 
