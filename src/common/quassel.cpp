@@ -363,8 +363,8 @@ void Quassel::handleSignal(int sig)
         exit(EXIT_FAILURE);
 #ifndef Q_OS_WIN
     case SIGQUIT:
-	logBacktrace(coreDumpFileName());
-	break;
+        instance()->logBacktrace(instance()->coreDumpFileName());
+        break;
 #endif
     default:
         ;
