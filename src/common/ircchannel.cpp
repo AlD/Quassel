@@ -61,7 +61,7 @@ bool IrcChannel::isKnownUser(IrcUser *ircuser) const
     }
 
     if (!_userModes.contains(ircuser)) {
-        qWarning() << "Channel" << name() << "received data for unknown User" << ircuser->nick();
+        // This can happen e.g. when disconnecting from a network, so don't log a warning
         return false;
     }
 
@@ -180,7 +180,9 @@ void IrcChannel::joinIrcUsers(const QList<IrcUser *> &users, const QStringList &
     IrcUser *ircuser;
     for (int i = 0; i < users.count(); i++) {
         ircuser = users[i];
-        if (!ircuser || _userModes.contains(ircuser)) {
+        if (!ircuser)
+            continue;
+        if (_userModes.contains(ircuser)) {
             if (sortedModes[i].count() > 1) {
                 // Multiple modes received, do it one at a time
                 // TODO Better way of syncing this without breaking protocol?

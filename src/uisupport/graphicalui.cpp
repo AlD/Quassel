@@ -36,7 +36,6 @@
 #  include <KWindowSystem>
 #endif
 
-GraphicalUi *GraphicalUi::_instance = 0;
 QWidget *GraphicalUi::_mainWidget = 0;
 QHash<QString, ActionCollection *> GraphicalUi::_actionCollections;
 ContextMenuActionProvider *GraphicalUi::_contextMenuActionProvider = 0;
@@ -44,11 +43,9 @@ ToolBarActionProvider *GraphicalUi::_toolBarActionProvider = 0;
 UiStyle *GraphicalUi::_uiStyle = 0;
 bool GraphicalUi::_onAllDesktops = false;
 
-GraphicalUi::GraphicalUi(QObject *parent) : AbstractUi(parent)
-{
-    Q_ASSERT(!_instance);
-    _instance = this;
 
+GraphicalUi::GraphicalUi(QObject *parent) : AbstractUi(parent), Singleton<GraphicalUi>(this)
+{
 #ifdef Q_OS_WIN
     _dwTickCount = 0;
 #endif

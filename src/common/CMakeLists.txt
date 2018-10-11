@@ -15,6 +15,8 @@ set(SOURCES
     dccconfig.cpp
     event.cpp
     eventmanager.cpp
+    expressionmatch.cpp
+    # expressionmatchtests.cpp
     highlightrulemanager.cpp
     identity.cpp
     ignorelistmanager.cpp
@@ -30,6 +32,7 @@ set(SOURCES
     network.cpp
     networkconfig.cpp
     networkevent.cpp
+    nickhighlightmatcher.cpp
     peer.cpp
     peerfactory.cpp
     presetnetworks.cpp
@@ -37,6 +40,7 @@ set(SOURCES
     remotepeer.cpp
     settings.cpp
     signalproxy.cpp
+    singleton.h
     syncableobject.cpp
     transfer.cpp
     transfermanager.cpp

@@ -80,7 +80,7 @@ int main(int argc, char **argv)
 #endif
 
     // Instantiate early, so log messages are handled
-    Quassel::instance();
+    Quassel quassel;
 
 #if QT_VERSION < 0x050000
     // All our source files are in UTF-8, and Qt5 even requires that
@@ -202,6 +202,12 @@ int main(int argc, char **argv)
     cliParser->addOption("ssl-cert", 0, "Specify the path to the SSL Certificate", "path", "configdir/quasselCert.pem");
     cliParser->addOption("ssl-key", 0, "Specify the path to the SSL key", "path", "ssl-cert-path");
 #endif
+    cliParser->addSwitch("debug-irc", 0,
+                         "Enable logging of all raw IRC messages to debug log, including "
+                         "passwords!  In most cases you should also set --loglevel Debug");
+    cliParser->addOption("debug-irc-id", 0,
+                         "Limit raw IRC logging to this network ID.  Implies --debug-irc",
+                         "database network ID", "-1");
     cliParser->addSwitch("enable-experimental-dcc", 0, "Enable highly experimental and unfinished support for CTCP DCC (DANGEROUS)");
 #endif
 

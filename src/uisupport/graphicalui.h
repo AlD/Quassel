@@ -22,6 +22,7 @@
 #define GRAPHICALUI_H_
 
 #include "abstractui.h"
+#include "singleton.h"
 
 class ActionCollection;
 class ContextMenuActionProvider;
@@ -35,14 +36,11 @@ class UiStyle;
 #include <Carbon/Carbon.h>
 #endif
 
-class GraphicalUi : public AbstractUi
+class GraphicalUi : public AbstractUi, protected Singleton<GraphicalUi>
 {
     Q_OBJECT
 
 public:
-    GraphicalUi(QObject *parent = 0);
-    virtual void init();
-
     //! Access global ActionCollections.
     /** These ActionCollections are associated with the main window, i.e. they contain global
     *  actions (and thus, shortcuts). Widgets providing application-wide shortcuts should
@@ -78,6 +76,9 @@ public:
     static bool isMainWidgetVisible();
 
 protected:
+    GraphicalUi(QObject *parent = 0);
+    virtual void init();
+
     //! This is the widget we associate global actions with, typically the main window
     void setMainWidget(QWidget *);
 
@@ -109,9 +110,6 @@ protected slots:
     virtual void disconnectedFromCore();
 
 private:
-    static inline GraphicalUi *instance();
-
-    static GraphicalUi *_instance;
     static QWidget *_mainWidget;
     static QHash<QString, ActionCollection *> _actionCollections;
     static ContextMenuActionProvider *_contextMenuActionProvider;
@@ -130,7 +128,6 @@ private:
 
 // inlines
 
-GraphicalUi *GraphicalUi::instance() { return _instance; }
 ContextMenuActionProvider *GraphicalUi::contextMenuActionProvider() { return _contextMenuActionProvider; }
 ToolBarActionProvider *GraphicalUi::toolBarActionProvider() { return _toolBarActionProvider; }
 UiStyle *GraphicalUi::uiStyle() { return _uiStyle; }

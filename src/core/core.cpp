@@ -67,22 +67,10 @@ public:
 // ==============================
 //  Core
 // ==============================
-Core *Core::_instance{nullptr};
-
-Core *Core::instance()
-{
-    return _instance;
-}
-
 
 Core::Core()
+    : Singleton<Core>{this}
 {
-    if (_instance) {
-        qWarning() << "Recreating core instance!";
-        delete _instance;
-    }
-    _instance = this;
-
     // Parent all QObject-derived attributes, so when the Core instance gets moved into another
     // thread, they get moved with it
     _server.setParent(this);
@@ -93,11 +81,9 @@ Core::Core()
 
 Core::~Core()
 {
-    saveState();
     qDeleteAll(_connectingClients);
     qDeleteAll(_sessions);
     syncStorage();
-    _instance = nullptr;
 }
 
 
@@ -269,6 +255,39 @@ void Core::initAsync()
     }
     catch (ExitException e) {
         emit exitRequested(e.exitCode, e.errorString);
+    }
+}
+
+
+void Core::shutdown()
+{
+    quInfo() << "Core shutting down...";
+
+    saveState();
+
+    for (auto &&client : _connectingClients) {
+        client->deleteLater();
+    }
+    _connectingClients.clear();
+
+    if (_sessions.isEmpty()) {
+        emit shutdownComplete();
+        return;
+    }
+
+    for (auto &&session : _sessions) {
+        connect(session, SIGNAL(shutdownComplete(SessionThread*)), this, SLOT(onSessionShutdown(SessionThread*)));
+        session->shutdown();
+    }
+}
+
+
+void Core::onSessionShutdown(SessionThread *session)
+{
+    _sessions.take(_sessions.key(session))->deleteLater();
+    if (_sessions.isEmpty()) {
+        quInfo() << "Core shutdown complete!";
+        emit shutdownComplete();
     }
 }
 
@@ -850,10 +869,7 @@ SessionThread *Core::sessionForUser(UserId uid, bool restore)
     if (_sessions.contains(uid))
         return _sessions[uid];
 
-    SessionThread *session = new SessionThread(uid, restore, strictIdentEnabled(), this);
-    _sessions[uid] = session;
-    session->start();
-    return session;
+    return (_sessions[uid] = new SessionThread(uid, restore, strictIdentEnabled(), this));
 }
 
 

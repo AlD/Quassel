@@ -32,12 +32,13 @@
 #include <QStringList>
 
 #include "abstractcliparser.h"
+#include "singleton.h"
 
 class QFile;
 
 class Logger;
 
-class Quassel : public QObject
+class Quassel : public QObject, public Singleton<Quassel>
 {
     // TODO Qt5: Use Q_GADGET
     Q_OBJECT
@@ -146,7 +147,7 @@ public:
 
     class Features;
 
-    static Quassel *instance();
+    Quassel();
 
     /**
      * Provides access to the Logger instance.
@@ -197,16 +198,31 @@ public:
 
     using QuitHandler = std::function<void()>;
 
+    /**
+     * Registers a handler that is called when the application is supposed to quit.
+     *
+     * @note If multiple handlers are registered, they are processed in order of registration.
+     * @note If any handler is registered, quit() will not call QCoreApplication::quit(). It relies
+     *       on one of the handlers doing so, instead.
+     * @param quitHandler Handler to register
+     */
     static void registerQuitHandler(QuitHandler quitHandler);
 
     const QString &coreDumpFileName();
+
+public slots:
+    /**
+     * Requests to quit the application.
+     *
+     * Calls any registered quit handlers. If no handlers are registered, calls QCoreApplication::quit().
+     */
+    void quit();
 
 signals:
     void messageLogged(const QDateTime &timeStamp, const QString &msg);
 
 protected:
     static bool init();
-    static void destroy();
 
     static void setRunMode(Quassel::RunMode runMode);
 
@@ -219,7 +235,6 @@ protected:
     friend class MonolithicApplication;
 
 private:
-    Quassel();
     void setupEnvironment();
     void registerMetaTypes();
 
@@ -233,13 +248,6 @@ private:
      */
     bool reloadConfig();
 
-    /**
-     * Requests to quit the application.
-     *
-     * Calls any registered quit handlers. If no handlers are registered, calls QCoreApplication::quit().
-     */
-    void quit();
-
     void logBacktrace(const QString &filename);
 
     static void handleSignal(int signal);
@@ -249,6 +257,7 @@ private:
     RunMode _runMode;
     bool _initialized{false};
     bool _handleCrashes{true};
+    bool _quitting{false};
 
     QString _coreDumpFileName;
     QString _configDirPath;

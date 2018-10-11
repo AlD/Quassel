@@ -22,6 +22,7 @@
 
 #include <QDebug>
 
+#include "expressionmatch.h"
 #include "util.h"
 
 INIT_SYNCABLE_OBJECT(HighlightRuleManager)
@@ -42,7 +43,7 @@ HighlightRuleManager &HighlightRuleManager::operator=(const HighlightRuleManager
 int HighlightRuleManager::indexOf(int id) const
 {
     for (int i = 0; i < _highlightRuleList.count(); i++) {
-        if (_highlightRuleList[i].id == id)
+        if (_highlightRuleList[i].id() == id)
             return i;
     }
     return -1;
@@ -53,7 +54,7 @@ int HighlightRuleManager::nextId()
 {
     int max = 0;
     for (int i = 0; i < _highlightRuleList.count(); i++) {
-        int id = _highlightRuleList[i].id;
+        int id = _highlightRuleList[i].id();
         if (id > max) {
             max = id;
         }
@@ -75,14 +76,14 @@ QVariantMap HighlightRuleManager::initHighlightRuleList() const
     QStringList channel;
 
     for (int i = 0; i < _highlightRuleList.count(); i++) {
-        id << _highlightRuleList[i].id;
-        name << _highlightRuleList[i].name;
-        isRegEx << _highlightRuleList[i].isRegEx;
-        isCaseSensitive << _highlightRuleList[i].isCaseSensitive;
-        isActive << _highlightRuleList[i].isEnabled;
-        isInverse << _highlightRuleList[i].isInverse;
-        sender << _highlightRuleList[i].sender;
-        channel << _highlightRuleList[i].chanName;
+        id << _highlightRuleList[i].id();
+        name << _highlightRuleList[i].contents();
+        isRegEx << _highlightRuleList[i].isRegEx();
+        isCaseSensitive << _highlightRuleList[i].isCaseSensitive();
+        isActive << _highlightRuleList[i].isEnabled();
+        isInverse << _highlightRuleList[i].isInverse();
+        sender << _highlightRuleList[i].sender();
+        channel << _highlightRuleList[i].chanName();
     }
 
     highlightRuleListMap["id"] = id;
@@ -140,13 +141,14 @@ void HighlightRuleManager::addHighlightRule(int id, const QString &name, bool is
 }
 
 
-bool HighlightRuleManager::match(const QString &msgContents,
+bool HighlightRuleManager::match(const NetworkId &netId,
+                                 const QString &msgContents,
                                  const QString &msgSender,
                                  Message::Type msgType,
                                  Message::Flags msgFlags,
                                  const QString &bufferName,
                                  const QString &currentNick,
-                                 const QStringList identityNicks)
+                                 const QStringList &identityNicks)
 {
     if (!((msgType & (Message::Plain | Message::Notice | Message::Action)) && !(msgFlags & Message::Self))) {
        return false;
@@ -155,47 +157,34 @@ bool HighlightRuleManager::match(const QString &msgContents,
     bool matches = false;
 
     for (int i = 0; i < _highlightRuleList.count(); i++) {
-        const HighlightRule &rule = _highlightRuleList.at(i);
-        if (!rule.isEnabled)
+        auto &rule = _highlightRuleList.at(i);
+        if (!rule.isEnabled())
             continue;
 
-        if (!rule.chanName.isEmpty()
-                && !scopeMatch(bufferName, rule.chanName, rule.isRegEx, rule.isCaseSensitive)) {
+        // Skip if channel name doesn't match and channel rule is not empty
+        //
+        // Match succeeds if...
+        //   Channel name matches a defined rule
+        //   Defined rule is empty
+        // And take the inverse of the above
+        if (!rule.chanNameMatcher().match(bufferName, true)) {
             // A channel name rule is specified and does NOT match the current buffer name, skip
             // this rule
             continue;
         }
 
-        bool nameMatch = false;
-        if (rule.name.isEmpty()) {
-            // Empty rule, matches any message
-            nameMatch = true;
-        } else {
-            // Check according to specified rule
-            QRegExp rx;
-            if (rule.isRegEx) {
-                rx = QRegExp(rule.name,
-                             rule.isCaseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive);
-            } else {
-                rx = QRegExp("(^|\\W)" + QRegExp::escape(rule.name) + "(\\W|$)",
-                             rule.isCaseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive);
-            }
-            nameMatch = (rx.indexIn(stripFormatCodes(msgContents)) >= 0);
-        }
+        // Check message according to specified rule, allowing empty rules to match
+        bool contentsMatch = rule.contentsMatcher().match(stripFormatCodes(msgContents), true);
 
-        bool senderMatch;
-        if (rule.sender.isEmpty()) {
-            senderMatch = true;
-        } else {
-            // A sender name rule is specified, match according to scope rules.
-            senderMatch = scopeMatch(msgSender, rule.sender, rule.isRegEx, rule.isCaseSensitive);
-        }
+        // Check sender according to specified rule, allowing empty rules to match
+        bool senderMatch = rule.senderMatcher().match(msgSender, true);
 
-        if (nameMatch && senderMatch) {
+        if (contentsMatch && senderMatch) {
             // If an inverse rule matches, then we know that we never want to return a highlight.
-            if (rule.isInverse) {
+            if (rule.isInverse()) {
                 return false;
-            } else {
+            }
+            else {
                 matches = true;
             }
         }
@@ -204,22 +193,12 @@ bool HighlightRuleManager::match(const QString &msgContents,
     if (matches)
         return true;
 
-    if (!currentNick.isEmpty()) {
-        QStringList nickList;
-        if (_highlightNick == CurrentNick) {
-            nickList << currentNick;
-        }
-        else if (_highlightNick == AllNicks) {
-            nickList = identityNicks;
-            if (!nickList.contains(currentNick))
-                nickList.prepend(currentNick);
-        }
-
-        for(const QString &nickname : nickList) {
-            QRegExp nickRegExp("(^|\\W)" + QRegExp::escape(nickname) + "(\\W|$)", _nicksCaseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive);
-            if (nickRegExp.indexIn(stripFormatCodes(msgContents)) >= 0) {
-                return true;
-            }
+    // Check nicknames
+    if (_highlightNick != HighlightNickType::NoNick && !currentNick.isEmpty()) {
+        // Nickname matching allowed and current nickname is known
+        // Run the nickname matcher on the unformatted string
+        if (_nickMatcher.match(stripFormatCodes(msgContents), netId, currentNick, identityNicks)) {
+            return true;
         }
     }
 
@@ -239,12 +218,55 @@ void HighlightRuleManager::toggleHighlightRule(int highlightRule)
     int idx = indexOf(highlightRule);
     if (idx == -1)
         return;
-    _highlightRuleList[idx].isEnabled = !_highlightRuleList[idx].isEnabled;
+    _highlightRuleList[idx].setIsEnabled(!_highlightRuleList[idx].isEnabled());
     SYNC(ARG(highlightRule))
 }
 
 
 bool HighlightRuleManager::match(const Message &msg, const QString &currentNick, const QStringList &identityNicks)
 {
-    return match(msg.contents(), msg.sender(), msg.type(), msg.flags(), msg.bufferInfo().bufferName(), currentNick, identityNicks);
+    return match(msg.bufferInfo().networkId(), msg.contents(), msg.sender(), msg.type(), msg.flags(),
+                 msg.bufferInfo().bufferName(), currentNick, identityNicks);
+}
+
+
+/**************************************************************************
+ * HighlightRule
+ *************************************************************************/
+bool HighlightRuleManager::HighlightRule::operator!=(const HighlightRule &other) const
+{
+    return (_id != other._id ||
+            _contents != other._contents ||
+            _isRegEx != other._isRegEx ||
+            _isCaseSensitive != other._isCaseSensitive ||
+            _isEnabled != other._isEnabled ||
+            _isInverse != other._isInverse ||
+            _sender != other._sender ||
+            _chanName != other._chanName);
+    // Don't compare ExpressionMatch objects as they are created as needed from the above
+}
+
+
+void HighlightRuleManager::HighlightRule::determineExpressions() const
+{
+    // Don't update if not needed
+    if (!_cacheInvalid) {
+        return;
+    }
+
+    // Set up matching rules
+    // Message is either phrase or regex
+    ExpressionMatch::MatchMode contentsMode =
+            _isRegEx ? ExpressionMatch::MatchMode::MatchRegEx :
+                       ExpressionMatch::MatchMode::MatchPhrase;
+    // Sender and channel are either multiple wildcard entries or regex
+    ExpressionMatch::MatchMode scopeMode =
+            _isRegEx ? ExpressionMatch::MatchMode::MatchRegEx :
+                       ExpressionMatch::MatchMode::MatchMultiWildcard;
+
+    _contentsMatch = ExpressionMatch(_contents, contentsMode, _isCaseSensitive);
+    _senderMatch = ExpressionMatch(_sender, scopeMode, _isCaseSensitive);
+    _chanNameMatch = ExpressionMatch(_chanName, scopeMode, _isCaseSensitive);
+
+    _cacheInvalid = false;
 }

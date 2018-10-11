@@ -57,7 +57,8 @@ class CoreNetwork : public Network
 
 public:
     CoreNetwork(const NetworkId &networkid, CoreSession *session);
-    ~CoreNetwork();
+    ~CoreNetwork() override;
+
     inline virtual const QMetaObject *syncMetaObject() const { return &Network::staticMetaObject; }
 
     inline CoreIdentity *identityPtr() const { return coreSession()->identity(identity()); }
@@ -90,7 +91,16 @@ public:
     inline QByteArray readChannelCipherKey(const QString &channel) const { return _cipherKeys.value(channel.toLower()); }
     inline void storeChannelCipherKey(const QString &channel, const QByteArray &key) { _cipherKeys[channel.toLower()] = key; }
 
-    inline bool isAutoWhoInProgress(const QString &channel) const { return _autoWhoPending.value(channel.toLower(), 0); }
+    /**
+     * Checks if the given target has an automatic WHO in progress
+     *
+     * @param name Channel or nickname
+     * @return True if an automatic WHO is in progress, otherwise false
+     */
+    inline bool isAutoWhoInProgress(const QString &name) const
+    {
+        return _autoWhoPending.value(name.toLower(), 0);
+    }
 
     inline UserId userId() const { return _coreSession->user(); }
 
@@ -220,6 +230,13 @@ public slots:
      */
     void setPongTimestampValid(bool validTimestamp);
 
+    /**
+     * Indicates that the CoreSession is shutting down.
+     *
+     * Disconnects the network if connected, and sets a flag that prevents reconnections.
+     */
+    void shutdown();
+
     void connectToIrc(bool reconnecting = false);
     /**
      * Disconnect from the IRC server.
@@ -229,16 +246,14 @@ public slots:
      * @param requested       If true, user requested this disconnect; don't try to reconnect
      * @param reason          Reason for quitting, defaulting to the user-configured quit reason
      * @param withReconnect   Reconnect to the network after disconnecting (e.g. ping timeout)
-     * @param forceImmediate  Immediately disconnect from network, skipping queue of other commands
      */
-    void disconnectFromIrc(bool requested = true, const QString &reason = QString(),
-                           bool withReconnect = false, bool forceImmediate = false);
+    void disconnectFromIrc(bool requested = true, const QString &reason = QString(), bool withReconnect = false);
 
     /**
      * Forcibly close the IRC server socket, waiting for it to close.
      *
      * Call CoreNetwork::disconnectFromIrc() first, allow the event loop to run, then if you need to
-     * be sure the network's disconencted (e.g. clean-up), call this.
+     * be sure the network's disconnected (e.g. clean-up), call this.
      *
      * @param msecs  Maximum time to wait for socket to close, in milliseconds.
      * @return True if socket closes successfully; false if error occurs or timeout reached
@@ -388,11 +403,17 @@ public slots:
      * When 'away-notify' is enabled, this will trigger an immediate AutoWho since regular
      * who-cycles are disabled as per IRCv3 specifications.
      *
-     * @param[in] channelOrNick Channel or nickname to WHO
+     * @param[in] name Channel or nickname
      */
-    void queueAutoWhoOneshot(const QString &channelOrNick);
+    void queueAutoWhoOneshot(const QString &name);
 
-    bool setAutoWhoDone(const QString &channel);
+    /**
+     * Checks if the given target has an automatic WHO in progress, and sets it as done if so
+     *
+     * @param name Channel or nickname
+     * @return True if an automatic WHO is in progress (and should be silenced), otherwise false
+     */
+    bool setAutoWhoDone(const QString &name);
 
     void updateIssuedModes(const QString &requestedModes);
     void updatePersistentModes(QString addModes, QString removeModes);
@@ -441,7 +462,7 @@ private slots:
     void socketHasData();
     void socketError(QAbstractSocket::SocketError);
     void socketInitialized();
-    inline void socketCloseTimeout() { socket.abort(); }
+    void socketCloseTimeout();
     void socketDisconnected();
     void socketStateChanged(QAbstractSocket::SocketState);
     void networkInitialized();
@@ -483,6 +504,9 @@ private slots:
 private:
     CoreSession *_coreSession;
 
+    bool _debugLogRawIrc;     ///< If true, include raw IRC socket messages in the debug log
+    qint32 _debugLogRawNetId; ///< Network ID for logging raw IRC socket messages, or -1 for all
+
 #ifdef HAVE_SSL
     QSslSocket socket;
 #else
@@ -508,6 +532,8 @@ private:
     bool _disconnectExpected;  /// If true, connection is quitting, expect a socket close
     // This avoids logging a spurious RemoteHostClosedError whenever disconnect is called without
     // specifying a permanent (saved to core session) disconnect.
+
+    bool _shuttingDown{false};  ///< If true, we're shutting down and ignore requests to (dis)connect networks
 
     bool _previousConnectionAttemptFailed;
     int _lastUsedServerIndex;

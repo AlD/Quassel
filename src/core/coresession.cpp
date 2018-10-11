@@ -142,6 +142,9 @@ CoreSession::CoreSession(UserId uid, bool restoreState, bool strictIdentEnabled,
     p->synchronize(_coreInfo);
     p->synchronize(&_ignoreListManager);
     p->synchronize(&_highlightRuleManager);
+    // Listen to network removed events
+    connect(this, SIGNAL(networkRemoved(NetworkId)),
+        &_highlightRuleManager, SLOT(networkRemoved(NetworkId)));
     p->synchronize(transferManager());
     // Restore session state
     if (restoreState)
@@ -151,51 +154,33 @@ CoreSession::CoreSession(UserId uid, bool restoreState, bool strictIdentEnabled,
 }
 
 
-CoreSession::~CoreSession()
+void CoreSession::shutdown()
 {
     saveSessionState();
 
-    /* Why partially duplicate CoreNetwork destructor?  When each CoreNetwork quits in the
-     * destructor, disconnections are processed in sequence for each object.  For many IRC servers
-     * on a slow network, this could significantly delay core shutdown [msecs wait * network count].
-     *
-     * Here, CoreSession first calls disconnect on all networks, letting them all start
-     * disconnecting before beginning to sequentially wait for each network.  Ideally, after the
-     * first network is disconnected, the other networks will have already closed.  Worst-case may
-     * still wait [msecs wait time * num. of networks], but the risk should be much lower.
-     *
-     * CoreNetwork should still do cleanup in its own destructor in case a network is deleted
-     * outside of deleting the whole CoreSession.
-     *
-     * If this proves to be problematic in the future, there's an alternative Qt signal-based system
-     * implemented in another pull request that guarentees a maximum amount of time to disconnect,
-     * but at the cost of more complex code.
-     *
-     * See https://github.com/quassel/quassel/pull/203
-     */
-
-    foreach(CoreNetwork *net, _networks.values()) {
-        // Request each network properly disconnect, but don't count as user-requested disconnect
-        if (net->socketConnected()) {
-            // Only try if the socket's fully connected (not initializing or disconnecting).
-            // Force an immediate disconnect, jumping the command queue.  Ensures the proper QUIT is
-            // shown even if other messages are queued.
-            net->disconnectFromIrc(false, QString(), false, true);
+    // Request disconnect from all connected networks in parallel, and wait until every network
+    // has emitted the disconnected() signal before deleting the session itself
+    for (CoreNetwork *net : _networks.values()) {
+        if (net->socketState() != QAbstractSocket::UnconnectedState) {
+            _networksPendingDisconnect.insert(net->networkId());
+            connect(net, SIGNAL(disconnected(NetworkId)), this, SLOT(onNetworkDisconnected(NetworkId)));
+            net->shutdown();
         }
     }
 
-    // Process the putCmd events that trigger the quit.  Without this, shutting down the core
-    // results in abrubtly closing the socket rather than sending the QUIT as expected.
-    QCoreApplication::processEvents();
+    if (_networksPendingDisconnect.isEmpty()) {
+        // Nothing to do, suicide so the core can shut down
+        deleteLater();
+    }
+}
 
-    foreach(CoreNetwork *net, _networks.values()) {
-        // Wait briefly for each network to disconnect.  Sometimes it takes a little while to send.
-        if (!net->forceDisconnect()) {
-            qWarning() << "Timed out quitting network" << net->networkName() <<
-                          "(user ID " << net->userId() << ")";
-        }
-        // Delete the network now that it's closed
-        delete net;
+
+void CoreSession::onNetworkDisconnected(NetworkId networkId)
+{
+    _networksPendingDisconnect.remove(networkId);
+    if (_networksPendingDisconnect.isEmpty()) {
+        // We're done, suicide so the core can shut down
+        deleteLater();
     }
 }
 
@@ -345,7 +330,8 @@ void CoreSession::recvMessageFromServer(NetworkId networkId, Message::Type type,
     if (_ignoreListManager.match(rawMsg, networkName) == IgnoreListManager::HardStrictness)
         return;
 
-    if (_highlightRuleManager.match(rawMsg, currentNetwork->myNick(), currentNetwork->identityPtr()->nicks()))
+
+    if (currentNetwork && _highlightRuleManager.match(rawMsg, currentNetwork->myNick(), currentNetwork->identityPtr()->nicks()))
         rawMsg.flags |= Message::Flag::Highlight;
 
     _messageQueue << rawMsg;

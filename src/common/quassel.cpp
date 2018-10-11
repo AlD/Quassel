@@ -54,15 +54,9 @@
 
 #include "../../version.h"
 
-Quassel *Quassel::instance()
-{
-    static Quassel instance;
-    return &instance;
-}
-
-
 Quassel::Quassel()
-    : _logger{new Logger{this}}
+    : Singleton<Quassel>{this}
+    , _logger{new Logger{this}}
 {
 }
 
@@ -133,11 +127,6 @@ bool Quassel::init()
 }
 
 
-void Quassel::destroy()
-{
-}
-
-
 Logger *Quassel::logger() const
 {
     return _logger;
@@ -151,12 +140,17 @@ void Quassel::registerQuitHandler(QuitHandler handler)
 
 void Quassel::quit()
 {
-    if (_quitHandlers.empty()) {
-        QCoreApplication::quit();
-    }
-    else {
-        for (auto &&handler : _quitHandlers) {
-            handler();
+    // Protect against multiple invocations (e.g. triggered by MainWin::closeEvent())
+    if (!_quitting) {
+        _quitting = true;
+        if (_quitHandlers.empty()) {
+            QCoreApplication::quit();
+        }
+        else {
+            // Note: We expect one of the registered handlers to call QCoreApplication::quit()
+            for (auto &&handler : _quitHandlers) {
+                handler();
+            }
         }
     }
 }
