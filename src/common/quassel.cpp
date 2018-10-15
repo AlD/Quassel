@@ -23,13 +23,6 @@
 #include <algorithm>
 #include <iostream>
 
-#include <signal.h>
-#if !defined Q_OS_WIN && !defined Q_OS_MAC
-#  include <sys/types.h>
-#  include <sys/time.h>
-#  include <sys/resource.h>
-#endif
-
 #include <QCoreApplication>
 #include <QDateTime>
 #include <QDir>
@@ -52,6 +45,12 @@
 #include "syncableobject.h"
 #include "types.h"
 
+#ifndef Q_OS_WIN
+#    include "posixsignalwatcher.h"
+#else
+#    include "windowssignalwatcher.h"
+#endif
+
 #include "../../version.h"
 
 Quassel::Quassel()
@@ -66,47 +65,13 @@ bool Quassel::init()
     if (instance()->_initialized)
         return true;  // allow multiple invocations because of MonolithicApplication
 
-    // Setup signal handling
-    // TODO: Don't use unsafe methods, see handleSignal()
-
-    // We catch SIGTERM and SIGINT (caused by Ctrl+C) to graceful shutdown Quassel.
-    signal(SIGTERM, handleSignal);
-    signal(SIGINT, handleSignal);
-    signal(SIGQUIT, handleSignal);
-#ifndef Q_OS_WIN
-    // SIGHUP is used to reload configuration (i.e. SSL certificates)
-    // Windows does not support SIGHUP
-    signal(SIGHUP, handleSignal);
-#endif
-
-    if (instance()->_handleCrashes) {
-        // we have crashhandler for win32 and unix (based on execinfo).
-#if defined(Q_OS_WIN) || defined(HAVE_EXECINFO)
-# ifndef Q_OS_WIN
-        // we only handle crashes ourselves if coredumps are disabled
-        struct rlimit *limit = (rlimit *)malloc(sizeof(struct rlimit));
-        int rc = getrlimit(RLIMIT_CORE, limit);
-
-        if (rc == -1 || !((long)limit->rlim_cur > 0 || limit->rlim_cur == RLIM_INFINITY)) {
-# endif /* Q_OS_WIN */
-            signal(SIGABRT, handleSignal);
-            signal(SIGSEGV, handleSignal);
-# ifndef Q_OS_WIN
-            signal(SIGBUS, handleSignal);
-        }
-        free(limit);
-# endif /* Q_OS_WIN */
-#endif /* Q_OS_WIN || HAVE_EXECINFO */
-#ifndef Q_OS_WIN
-    signal(SIGQUIT, handleSignal);
-#endif /* Q_OS_WIN */
-    }
-
-    instance()->_initialized = true;
     qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()));
 
+    instance()->setupSignalHandling();
     instance()->setupEnvironment();
     instance()->registerMetaTypes();
+
+    instance()->_initialized = true;
 
     Network::setDefaultCodecForServer("UTF-8");
     Network::setDefaultCodecForEncoding("UTF-8");
@@ -143,6 +108,7 @@ void Quassel::quit()
     // Protect against multiple invocations (e.g. triggered by MainWin::closeEvent())
     if (!_quitting) {
         _quitting = true;
+        quInfo() << "Quitting...";
         if (_quitHandlers.empty()) {
             QCoreApplication::quit();
         }
@@ -326,49 +292,41 @@ const Quassel::BuildInfo &Quassel::buildInfo()
 }
 
 
-//! Signal handler for graceful shutdown.
-//! @todo: Ensure this doesn't use unsafe methods (it does currently)
-//!        cf. QSocketNotifier, UnixSignalWatcher
-void Quassel::handleSignal(int sig)
+void Quassel::setupSignalHandling()
 {
-    switch (sig) {
-    case SIGTERM:
-    case SIGINT:
-        qWarning("%s", qPrintable(QString("Caught signal %1 - exiting.").arg(sig)));
-        instance()->quit();
-        break;
 #ifndef Q_OS_WIN
-// Windows does not support SIGHUP
-    case SIGHUP:
-        // Most applications use this as the 'configuration reload' command, e.g. nginx uses it for
-        // graceful reloading of processes.
-        quInfo() << "Caught signal" << SIGHUP << "- reloading configuration";
-        if (instance()->reloadConfig()) {
-            quInfo() << "Successfully reloaded configuration";
-        }
-        break;
+    _signalWatcher = new PosixSignalWatcher(this);
+#else
+    _signalWatcher = new WindowsSignalWatcher(this);
 #endif
-    case SIGABRT:
-    case SIGSEGV:
-#ifndef Q_OS_WIN
-    case SIGBUS:
-#endif
-        instance()->logBacktrace(instance()->coreDumpFileName());
-        exit(EXIT_FAILURE);
-#ifndef Q_OS_WIN
-    case SIGQUIT:
-        instance()->logBacktrace(instance()->coreDumpFileName());
-        break;
-#endif
-    default:
-        ;
-    }
+    connect(_signalWatcher, SIGNAL(handleSignal(AbstractSignalWatcher::Action)), this, SLOT(handleSignal(AbstractSignalWatcher::Action)));
 }
 
 
-void Quassel::disableCrashHandler()
+void Quassel::handleSignal(AbstractSignalWatcher::Action action)
 {
-    instance()->_handleCrashes = false;
+    switch (action) {
+    case AbstractSignalWatcher::Action::Reload:
+        // Most applications use this as the 'configuration reload' command, e.g. nginx uses it for graceful reloading of processes.
+        if (!_reloadHandlers.empty()) {
+            quInfo() << "Reloading configuration";
+            if (reloadConfig()) {
+                quInfo() << "Successfully reloaded configuration";
+            }
+        }
+        break;
+    case AbstractSignalWatcher::Action::Terminate:
+        if (!_quitting) {
+            quit();
+        }
+        else {
+            quInfo() << "Already shutting down, ignoring signal";
+        }
+        break;
+    case AbstractSignalWatcher::Action::HandleCrash:
+        logBacktrace(instance()->coreDumpFileName());
+        exit(EXIT_FAILURE);
+    }
 }
 
 
